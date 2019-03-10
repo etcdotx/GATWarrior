@@ -20,11 +20,13 @@ public class Player : MonoBehaviour {
     public int[] inventory;
     public List<Item> item = new List<Item>();
 
+    public GameObject[] needToBeLoad;
     // Use this for initialization
     void Start () {
         gdb = GameObject.FindGameObjectWithTag("GDB").GetComponent<GameDataBase>();
         ss = GameObject.Find("SaveSlot").GetComponent<SaveSlot>();
-	}
+        RefreshItem();
+    }
 
     public void SavePlayer()
     {
@@ -33,6 +35,12 @@ public class Player : MonoBehaviour {
 
     public void LoadPlayer()
     {
+        //start new game/scene
+        for (int i = 0; i < needToBeLoad.Length; i++)
+        {
+            needToBeLoad[i].SetActive(true);
+        }
+
         PlayerData data = SaveSystem.LoadPlayer(ss.saveSlot.ToString());
 
         characterAppearance = new int[data.characterAppearance.Length];
@@ -89,6 +97,7 @@ public class Player : MonoBehaviour {
             {
                 item[i].quantity++;
                 itemExist = true;
+                RefreshItem();
                 break;
             }
         }
@@ -112,7 +121,16 @@ public class Player : MonoBehaviour {
     {
         for (int i = 0; i < inventoryIndicator.Length; i++)
         {
-            inventoryIndicator[i].sprite = item[i].itemImage;
+            try
+            {
+                inventoryIndicator[i].transform.GetChild(0).gameObject.SetActive(false);
+                if (item[i].quantity != 0)
+                {
+                    inventoryIndicator[i].sprite = item[i].itemImage;
+                    inventoryIndicator[i].transform.GetChild(0).GetComponent<Text>().text = item[i].quantity.ToString();
+                    inventoryIndicator[i].transform.GetChild(0).gameObject.SetActive(true);
+                }
+            } catch { }
         }
     }
 }

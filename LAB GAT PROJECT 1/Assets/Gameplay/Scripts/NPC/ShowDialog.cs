@@ -12,6 +12,7 @@ public class ShowDialog : MonoBehaviour
 
     public void Start()
     {
+        conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Text>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
     }
 
@@ -23,6 +24,9 @@ public class ShowDialog : MonoBehaviour
             {
                 nextDialogue();
             }
+        }
+        else {
+            conversation.gameObject.SetActive(false);
         }
     }
 

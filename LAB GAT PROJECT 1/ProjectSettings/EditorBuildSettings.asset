@@ -12,6 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/CharacterEditor.unity
     guid: cdb8bcdc6df078746a9117613ef4d31b
   - enabled: 1
-    path: Assets/Scenes/Gameplay.unity
+    path: Assets/Scenes/Town.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Forest.unity
+    guid: 655bc08126c19dc4187aabbbfcc2a925
+  - enabled: 1
+    path: Assets/Scenes/Town 2.unity
+    guid: cc6f46c6e2a7fee4a8649b6bafdb5f72
   m_configObjects: {}

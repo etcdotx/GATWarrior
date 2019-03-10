@@ -18,12 +18,6 @@ public class NPC : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Player>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void GiveQuest(int questID) {
         //id nya berguna untuk tau quest id yg mana yg bakal dikasih dari GameDatabase Quest
         for (int i = 0; i < QuestDataBase.collectionQuest.Count; i++) {

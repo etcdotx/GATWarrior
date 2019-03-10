@@ -22,12 +22,30 @@ public class CameraMovement : MonoBehaviour {
     {
         camTransform = transform;
         cam = Camera.main;
+        currentY = lookAt.eulerAngles.y;
+        currentX = lookAt.eulerAngles.x;
     }
 
     private void Update()
     {
         currentX += Input.GetAxis("RightJoystickHorizontal");
         currentY += Input.GetAxis("RightJoystickVertical");
+        if (currentX > 180)
+        {
+            currentX = -180;
+        }
+        if (currentX < -180)
+        {
+            currentX = 180;
+        }
+        if (currentY > 180)
+        {
+            currentY = -180;
+        }
+        if (currentY < -180)
+        {
+            currentY = 180;
+        }
     }
 
     // Update is called once per frame

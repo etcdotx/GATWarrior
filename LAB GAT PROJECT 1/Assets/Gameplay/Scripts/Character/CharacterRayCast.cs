@@ -22,13 +22,14 @@ public class CharacterRayCast : MonoBehaviour
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         showDialog = GameObject.FindGameObjectWithTag("ShowDialog").GetComponent<ShowDialog>();
-        interactText.gameObject.SetActive(false);
-        xButton.gameObject.SetActive(false);
+
+        //**xbutton dan interact text harus di enable pas gantiscene
+        xButton = GameObject.Find("XButton");
+        interactText = GameObject.Find("InteractText").GetComponent<Text>();
     }
 
     private void FixedUpdate()
     {
-        //Debug.Log(GameStatus.isTalking + " " + GameStatus.IsPaused);
         if (GameStatus.IsPaused == false && GameStatus.isTalking == false)
         {
             Ray ray = new Ray(transform.position + raycastOffset, transform.forward + raycastOffset);
@@ -59,34 +60,26 @@ public class CharacterRayCast : MonoBehaviour
                             if (ItemDataBase.item == null)
                                 ItemDataBase.item = new List<Item>();
 
-                            Debug.Log("before pickup");
-
                             for (int i = 0; i < ItemDataBase.item.Count; i++)
                             {
                                 if (ItemDataBase.item[i].id == itemID)
                                 {
-                                    Debug.Log("sama");
                                     player.AddItem(ItemDataBase.item[i]);
                                     break;
                                 }
                             }
-                            Debug.Log(ItemDataBase.item.Count);
-
-                            Debug.Log("pickup");
                             Destroy(interactable.gameObject);
                         }
-                        Debug.Log(interactable.gameObject.name);
                     }
                 }
-                catch (UnityException ex)
+                catch
                 {
-                    Debug.Log(ex);
                     Debug.Log(hit.collider.gameObject.name + " is not interactable");
                 }
             }
             else
             {
-                HideButton();
+               HideButton();//**bikin eror kalo ganti scene, player gabisa search button dan textnya
             }
         }
 
