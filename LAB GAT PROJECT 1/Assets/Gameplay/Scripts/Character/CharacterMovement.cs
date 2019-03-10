@@ -25,39 +25,44 @@ public class CharacterMovement : MonoBehaviour
             charAnim = gameObject.GetComponent<Animator>();
         } catch
         {
+            Debug.Log("No Animator found");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        getInputAxis();
-        if (inputAxis.x >= 0.1 || inputAxis.y >= 0.1 || inputAxis.x <= -0.1 || inputAxis.y <= -0.1)
+        if (GameStatus.isTalking == false && GameStatus.IsPaused == false)
         {
-            calculateDirection();
-            rotate();
-            walk();
-
-            if (inputAxis.z == 1)
+            GetInputAxis();
+            if (inputAxis.x >= 0.1 || inputAxis.y >= 0.1 || inputAxis.x <= -0.1 || inputAxis.y <= -0.1)
             {
-                currentSpeed = defaultSpeed * runSpeedMultiplier;
+                CalculateDirection();
+                Rotate();
+                Walk();
+
+                if (inputAxis.z == 1)
+                {
+                    currentSpeed = defaultSpeed * runSpeedMultiplier;
+                }
+                else
+                {
+                    currentSpeed = defaultSpeed;
+                }
+                inputAxis = Vector3.zero;
             }
             else
             {
-                currentSpeed = defaultSpeed;
+                try
+                {
+                    charAnim.SetBool("isWalk", false);
+                }
+                catch { }
             }
-            inputAxis = Vector3.zero;
-        }
-        else
-        {
-            try
-            {
-                charAnim.SetBool("isWalk", false);
-            } catch { }
-        }
+       }
     }
 
-    void getInputAxis()
+    void GetInputAxis()
     {
         inputAxis.x = Input.GetAxis("LeftJoystickHorizontal");
         inputAxis.y = Input.GetAxis("LeftJoystickVertical");
@@ -75,25 +80,22 @@ public class CharacterMovement : MonoBehaviour
 
     
 
-    void calculateDirection()
+    void CalculateDirection()
     {
         angle = Mathf.Atan2(inputAxis.x, inputAxis.y);
-        
         angle = Mathf.Rad2Deg * angle;
         
     }
 
-    void rotate()
+    void Rotate()
     {
         targetRotation = Quaternion.Euler(0, angle+ mainCamera.transform.eulerAngles.y, 0);
         //Debug.Log(MainCamera.transform.eulerAngles.y);
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
 
-    void walk()
+    void Walk()
     {
-        Debug.Log(transform.forward * Input.GetAxis("LeftJoystickVertical"));
-        Debug.Log(mainCamera.transform.right * Input.GetAxis("LeftJoystickHorizontal"));
 
         if (Input.GetAxis("LeftJoystickVertical") > 0)
         {

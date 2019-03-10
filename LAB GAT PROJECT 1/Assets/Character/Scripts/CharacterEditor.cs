@@ -54,12 +54,12 @@ public class CharacterEditor : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        applyChange(ApperanceDetail.Gender_Type, 0);
+        ApplyChange(ApperanceDetail.Gender_Type, 0);
     }
 
     #region ButtonMethod
 
-    public void plusGender()
+    public void PlusGender()
     {
         if (genderIndex < genderType.Length - 1)
         {
@@ -69,10 +69,10 @@ public class CharacterEditor : MonoBehaviour
         {
             genderIndex = 0;
         }
-        applyChange(ApperanceDetail.Gender_Type, genderIndex);
+        ApplyChange(ApperanceDetail.Gender_Type, genderIndex);
     }
 
-    public void minGender()
+    public void MinGender()
     {
         if (genderIndex > 0)
         {
@@ -82,10 +82,10 @@ public class CharacterEditor : MonoBehaviour
         {
             genderIndex = genderType.Length - 1;
         }
-        applyChange(ApperanceDetail.Gender_Type, genderIndex);
+        ApplyChange(ApperanceDetail.Gender_Type, genderIndex);
     }
 
-    public void plusSkin()
+    public void PlusSkin()
     {
         if (skinColorIndex < skinColor.Length - 1)
         {
@@ -95,10 +95,10 @@ public class CharacterEditor : MonoBehaviour
         {
             skinColorIndex = 0;
         }
-        applyChange(ApperanceDetail.Skin_Color, skinColorIndex);
+        ApplyChange(ApperanceDetail.Skin_Color, skinColorIndex);
     }
 
-    public void minSkin()
+    public void MinSkin()
     {
         if (skinColorIndex > 0)
         {
@@ -108,10 +108,10 @@ public class CharacterEditor : MonoBehaviour
         {
             skinColorIndex = skinColor.Length - 1;
         }
-        applyChange(ApperanceDetail.Skin_Color, skinColorIndex);
+        ApplyChange(ApperanceDetail.Skin_Color, skinColorIndex);
     }
 
-    public void plusHair()
+    public void PlusHair()
     {
         if (genderIndex == 0)
         {
@@ -135,10 +135,10 @@ public class CharacterEditor : MonoBehaviour
                 hairIndex = 0;
             }
         }
-        applyChange(ApperanceDetail.Hair_Type, hairIndex);
+        ApplyChange(ApperanceDetail.Hair_Type, hairIndex);
     }
 
-    public void minHair()
+    public void MinHair()
     {
         if (genderIndex == 0)
         {
@@ -162,10 +162,10 @@ public class CharacterEditor : MonoBehaviour
                 hairIndex = femaleHairType.Length - 1;
             }
         }
-        applyChange(ApperanceDetail.Hair_Type, hairIndex);
+        ApplyChange(ApperanceDetail.Hair_Type, hairIndex);
     }
 
-    public void plusHairColor()
+    public void PlusHairColor()
     {
         if (hairColorIndex < hairColor.Length - 1)
         {
@@ -175,10 +175,10 @@ public class CharacterEditor : MonoBehaviour
         {
             hairColorIndex = 0;
         }
-        applyChange(ApperanceDetail.Hair_Color, hairColorIndex);
+        ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
     }
 
-    public void minHairColor()
+    public void MinHairColor()
     {
         if (hairColorIndex > 0)
         {
@@ -189,10 +189,10 @@ public class CharacterEditor : MonoBehaviour
             hairColorIndex = hairColor.Length - 1;
         }
 
-        applyChange(ApperanceDetail.Hair_Color, hairColorIndex);
+        ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
     }
 
-    public void plusEye()
+    public void PlusEye()
     {
         if (eyeIndex < eyeType.Length - 1)
         {
@@ -202,10 +202,10 @@ public class CharacterEditor : MonoBehaviour
         {
             eyeIndex = 0;
         }
-        applyChange(ApperanceDetail.Eye_Type, eyeIndex);
+        ApplyChange(ApperanceDetail.Eye_Type, eyeIndex);
     }
 
-    public void minEye()
+    public void MinEye()
     {
         if (eyeIndex > 0)
         {
@@ -215,12 +215,12 @@ public class CharacterEditor : MonoBehaviour
         {
             eyeIndex = eyeType.Length - 1;
         }
-        applyChange(ApperanceDetail.Eye_Type, eyeIndex);
+        ApplyChange(ApperanceDetail.Eye_Type, eyeIndex);
     }
 
     #endregion
 
-    void applyChange(ApperanceDetail detail, int id)
+    void ApplyChange(ApperanceDetail detail, int id)
     {
         //Debug.Log(hairColor[hairColorIndex].r +" "+ hairColor[hairColorIndex].g + " " + hairColor[hairColorIndex].b + " " + hairColor[hairColorIndex].a);
 
@@ -234,9 +234,9 @@ public class CharacterEditor : MonoBehaviour
 
                 genderText.text = genderName[id];
 
-                applyChange(ApperanceDetail.Skin_Color, skinColorIndex);
-                applyChange(ApperanceDetail.Hair_Type, 0);
-                applyChange(ApperanceDetail.Hair_Color, hairColorIndex);
+                ApplyChange(ApperanceDetail.Skin_Color, skinColorIndex);
+                ApplyChange(ApperanceDetail.Hair_Type, 0);
+                ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
 
                 player.characterAppearance[0] = genderIndex;
                 break;
@@ -265,7 +265,7 @@ public class CharacterEditor : MonoBehaviour
                 }
 
                 activeHair.transform.SetParent(activeGender.transform.Find(hairParent));
-                applyChange(ApperanceDetail.Hair_Color, hairColorIndex);
+                ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
                 player.characterAppearance[2] = hairIndex;
                 break;
 
@@ -284,9 +284,9 @@ public class CharacterEditor : MonoBehaviour
         }
     }
 
-    public void confirmCharacterCreation()
+    public void ConfirmCharacterCreation()
     {
-        player.savePlayer();
+        player.SavePlayer();
         SceneManager.LoadScene(sceneName);
     }
 }

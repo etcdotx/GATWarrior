@@ -5,11 +5,17 @@ using UnityEngine;
 public class StartGame : MonoBehaviour {
 
     public Player player;
-    public int spawnPosition;
+    public GameObject character;
+    public Vector3 characterScale;
 	// Use this for initialization
 	void Awake ()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
-        player.loadPlayer(spawnPosition);
+        GameStatus.isTalking = false;
+        GameStatus.ResumeGame();
+        try
+        {
+            player = GameObject.Find("Player").GetComponent<Player>();
+            player.LoadPlayer();
+        } catch { }
     }
 }

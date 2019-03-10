@@ -12,7 +12,7 @@ public class SelectSaveToLoad : MonoBehaviour
         mms = GameObject.Find("MainMenuScript").GetComponent<MainMenuScript>();
     }
 
-    public void loadGame() {
-        mms.saveSlot(x);
+    public void LoadGame() {
+        mms.SaveSlot(x);
     }
 }

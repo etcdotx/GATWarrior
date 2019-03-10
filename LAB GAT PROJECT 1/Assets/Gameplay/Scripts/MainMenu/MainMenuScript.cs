@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public class MainMenuScript : MonoBehaviour {
 
     public InputSetup inputSetup;
@@ -30,9 +29,9 @@ public class MainMenuScript : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        resetMenu();
+        ResetMenu();
         menuNumber = 0;
-        loadMenu();
+        LoadMenu();
         ss = GameObject.Find("SaveSlot").GetComponent<SaveSlot>();
         canNav = true;
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
@@ -45,20 +44,20 @@ public class MainMenuScript : MonoBehaviour {
             if (menuNumber > 0)
             {
                 menuNumber--;
-                loadMenu();
+                LoadMenu();
             }            
         }
 
         if (Input.GetKeyDown(inputSetup.select))
         {
-            doSelect(menuNumber, navigatorNum);
+            DoSelect(menuNumber, navigatorNum);
         }
 
         if (menuNumber == 1)
         {
             if (Input.GetKeyDown(inputSetup.deleteSave))
             {
-                deleteSlot(navigatorNum);
+                SeleteSlot(navigatorNum);
             }
         }
 
@@ -66,55 +65,52 @@ public class MainMenuScript : MonoBehaviour {
         {
             if (Input.GetAxis("LeftJoystickVertical") != 0 || Input.GetAxis("D-Pad Up") != 0 || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
             {
-                doNavigate();
+                DoNavigate();
             }
         }
     }
 
-    void doSelect(int menuNum, int navNum) {
+    void DoSelect(int menuNum, int navNum) {
         if (menuNum == 0)
         {
             if (Input.GetKeyDown(inputSetup.select) && navigatorNum == 0)
             {
                 menuNumber = 1;
-                loadMenu();
+                LoadMenu();
             }
         }
         if (menuNum == 1)
         {
-            saveSlot(navNum);
+            SaveSlot(navNum);
         }
     }
-
-    #region navigate
-    void doNavigate() {
+    
+    void DoNavigate() {
         if (Input.GetAxis("LeftJoystickVertical") == -1 || Input.GetAxis("D-Pad Down") == 1 || Input.GetKeyDown(KeyCode.DownArrow))
         {
             if (menuNumber == 0)
             {
-                startNavMenu(menu0Nav, true);
+                StartNavMenu(menu0Nav, true);
             }
             if (menuNumber == 1)
             {
-                startNavMenu(menu1Nav, true);
+                StartNavMenu(menu1Nav, true);
             }
         }
         if (Input.GetAxis("LeftJoystickVertical") == 1 || Input.GetAxis("D-Pad Up") == 1 || Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (menuNumber == 0)
             {
-                startNavMenu(menu0Nav, false);
+                StartNavMenu(menu0Nav, false);
             }
             if (menuNumber == 1)
             {
-                startNavMenu(menu1Nav, false);
+                StartNavMenu(menu1Nav, false);
             }
         }
     }
 
-    #endregion
-
-    void startNavMenu(GameObject[] Menu, bool isDown) {
+    void StartNavMenu(GameObject[] Menu, bool isDown) {
         if (isDown == true)
         {
             if (navigatorNum == Menu.Length - 1)
@@ -125,7 +121,7 @@ public class MainMenuScript : MonoBehaviour {
             {
                 navigatorNum++;
             }
-            StartCoroutine(navMenuDelay(Menu));
+            StartCoroutine(NavMenuDelay(Menu));
         }
         if (isDown == false)
         {
@@ -137,19 +133,19 @@ public class MainMenuScript : MonoBehaviour {
             {
                 navigatorNum--;
             }
-            StartCoroutine(navMenuDelay(Menu));
+            StartCoroutine(NavMenuDelay(Menu));
         }
     }
 
-    private IEnumerator navMenuDelay(GameObject[] Menu)
+    private IEnumerator NavMenuDelay(GameObject[] Menu)
     {
         canNav = false;
-        applyNav(Menu);
+        ApplyNav(Menu);
         yield return new WaitForSeconds(navigatorDelay);
         canNav = true;
     }
 
-    void applyNav(GameObject[] Menu)
+    void ApplyNav(GameObject[] Menu)
     {
         for (int i = 0; i < Menu.Length; i++)
         {
@@ -158,7 +154,7 @@ public class MainMenuScript : MonoBehaviour {
         Menu[navigatorNum].SetActive(true);
     }
 
-    void resetMenu() {
+    void ResetMenu() {
         menu0.SetActive(false);
         menu1.SetActive(false);
         for (int i = 0; i < menu0Nav.Length; i++)
@@ -172,32 +168,31 @@ public class MainMenuScript : MonoBehaviour {
         }
     }
 
-    void loadMenu()
+    void LoadMenu()
     {
-        resetMenu();
+        ResetMenu();
 
         if (menuNumber == 0)
         {
             menu0.SetActive(true);
             navigatorNum = 0;
-            applyNav(menu0Nav);
+            ApplyNav(menu0Nav);
         }
 
         if (menuNumber == 1)
         {
             menu1.SetActive(true);
             navigatorNum = 0;
-            applyNav(menu1Nav);
+            ApplyNav(menu1Nav);
         }
     }
 
-    public void openStartGame() {
+    public void OpenStartGame() {
         menuNumber = 1;
-        loadMenu();
+        LoadMenu();
     }
-
-    #region SAVESLOT
-    public void saveSlot(int x)
+    
+    public void SaveSlot(int x)
     {
         ss.saveSlot = x;
         if (ss.saveSlotExist[x] == true)
@@ -209,15 +204,12 @@ public class MainMenuScript : MonoBehaviour {
             SceneManager.LoadScene(sceneNameMenu1[1]);
         }
     }
-    #endregion
-
-    #region DELETESLOT
-    public void deleteSlot(int x)
+    
+    public void SeleteSlot(int x)
     {
-        SaveSystem.deletePlayer(x.ToString());
+        SaveSystem.DeletePlayer(x.ToString());
         saveSlotText[x].text = "Empty Game";
         ss.saveSlotExist[x] = false;
         Debug.Log("Delete successful");
     }
-    #endregion
 }

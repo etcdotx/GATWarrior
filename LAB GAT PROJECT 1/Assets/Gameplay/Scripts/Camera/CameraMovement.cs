@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
-
     private Camera cam;
     public Transform lookAt;
     public Transform camTransform;
@@ -33,6 +32,14 @@ public class CameraMovement : MonoBehaviour {
 
     // Update is called once per frame
     void LateUpdate ()
+    {
+        if (GameStatus.isTalking == false)
+        {
+            FollowCharacter();
+        }
+    }
+
+    void FollowCharacter()
     {
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);

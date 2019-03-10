@@ -375,7 +375,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 54608865}
-        m_MethodName: loadGame
+        m_MethodName: LoadGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1217,6 +1217,8 @@ MonoBehaviour:
   select: 0
   back: 0
   deleteSave: 0
+  interact: 0
+  continueTalk: 0
 --- !u!1 &936537219
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,7 +1380,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1012996917}
-        m_MethodName: loadGame
+        m_MethodName: LoadGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1571,6 +1573,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   gdb: {fileID: 0}
+  sg: {fileID: 0}
   ss: {fileID: 0}
 --- !u!1 &1312585077
 GameObject:
@@ -1880,8 +1883,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1539130814}
-        m_MethodName: loadGame
+      - m_Target: {fileID: 54608865}
+        m_MethodName: LoadGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem {
     //public static string saveFileName;
-    public static void savePlayer(Player player, string saveSlotNumber) {
+    public static void SavePlayer(Player player, string saveSlotNumber) {
         try
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -19,8 +19,8 @@ public static class SaveSystem {
             Debug.Log("Save Failed");
         }
     }
-
-    public static PlayerData loadPlayer(string saveSlotNumber)
+    
+    public static PlayerData LoadPlayer(string saveSlotNumber)
     {
         string path = Application.persistentDataPath + "/player"+ saveSlotNumber + ".savegame";
         Debug.Log(path);
@@ -40,7 +40,7 @@ public static class SaveSystem {
         }
     }
 
-    public static void deletePlayer(string saveSlotNumber)
+    public static void DeletePlayer(string saveSlotNumber)
     {
         string path = Application.persistentDataPath + "/player" + saveSlotNumber + ".savegame";
         Debug.Log(path);
