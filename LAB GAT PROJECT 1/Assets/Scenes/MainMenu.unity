@@ -288,7 +288,7 @@ MonoBehaviour:
   - {fileID: 1988563395}
   - {fileID: 1312585079}
   sceneNameMenu1:
-  - Town
+  - Rumah
   - CharacterEditor
   navigatorNum: 0
   navigatorDelay: 0.2
@@ -2467,6 +2467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c24d3330f7f8e61478e12ab2a8736edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSetup: {fileID: 0}
   cm: {fileID: 0}
   characterAppearance: 00000000000000000000000000000000
   character: {fileID: 0}
@@ -2477,6 +2478,7 @@ MonoBehaviour:
   sg: {fileID: 0}
   ss: {fileID: 0}
   finishedCollectionQuestID: 
+  inventory: {fileID: 0}
   inventoryIndicator:
   - {fileID: 813172168}
   - {fileID: 74062114}
@@ -2498,11 +2500,12 @@ MonoBehaviour:
   - {fileID: 861097579}
   - {fileID: 249704321}
   - {fileID: 1162909427}
-  inventory: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  inventoryItemID: 
   needToBeLoad:
   - {fileID: 852485341}
   - {fileID: 1925348213}
   - {fileID: 1393265553}
+  cantOpenInventory: 0
 --- !u!1001 &807902174
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3675,8 +3678,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32cabb58d3d9304bbd3e16331192e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   dialog: []
+  questID: 0
   dialNum: 0
+  isQuestDialog: 0
   conversation: {fileID: 1393265554}
   inputSetup: {fileID: 0}
 --- !u!1001 &1162909426
@@ -4234,7 +4240,7 @@ GameObject:
   - component: {fileID: 1490236680}
   m_Layer: 5
   m_Name: Inventory
-  m_TagString: Untagged
+  m_TagString: Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4639,6 +4645,7 @@ MonoBehaviour:
   deleteSave: 0
   interact: 0
   continueTalk: 0
+  openInventory: 0
 --- !u!1001 &1892690208
 PrefabInstance:
   m_ObjectHideFlags: 0

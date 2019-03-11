@@ -47,28 +47,12 @@ public class CharacterRayCast : MonoBehaviour
                         ShowButton();
                         if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking == true)
                         {
-                            GameStatus.isTalking = true;
-                            HideButton();
-                            mainCamera.transform.position = interactable.interactView.transform.position;
-                            mainCamera.transform.rotation = interactable.interactView.transform.rotation;
-                            Debug.Log(hit.collider.gameObject.name + " is interactable");
-                            showDialog.startDialog(interactable.dialog);
+                            TalkToObject(interactable);
+                            Debug.Log(hit.collider.gameObject.name + " is talking");
                         }
                         if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable == true)
                         {
-                            int itemID = interactable.gameObject.GetComponent<Interactable>().itemID;
-                            if (ItemDataBase.item == null)
-                                ItemDataBase.item = new List<Item>();
-
-                            for (int i = 0; i < ItemDataBase.item.Count; i++)
-                            {
-                                if (ItemDataBase.item[i].id == itemID)
-                                {
-                                    player.AddItem(ItemDataBase.item[i]);
-                                    break;
-                                }
-                            }
-                            Destroy(interactable.gameObject);
+                            CollectObject(interactable);
                         }
                     }
                 }
@@ -83,6 +67,45 @@ public class CharacterRayCast : MonoBehaviour
             }
         }
 
+    }
+
+    void TalkToObject(Interactable interactable)
+    {
+        bool isHavingQuest = false;
+        GameStatus.isTalking = true;
+        mainCamera.transform.position = interactable.interactView.transform.position;
+        mainCamera.transform.rotation = interactable.interactView.transform.rotation;
+        HideButton();
+        try
+        {
+            NPC interactedNPC = interactable.gameObject.GetComponent<NPC>();
+            isHavingQuest = interactedNPC.isHavingQuest;
+            if (isHavingQuest == true)
+            {
+                showDialog.StartQuestDialog(interactedNPC.questDialogActive, interactedNPC.questIDActive);
+            }
+        }
+        catch { }
+        if (isHavingQuest == false)
+        {
+            showDialog.StartDialog(interactable.dialog);
+        }
+    }
+
+    void CollectObject(Interactable interactable) {
+        int itemID = interactable.gameObject.GetComponent<Interactable>().itemID;
+        if (ItemDataBase.item == null)
+            ItemDataBase.item = new List<Item>();
+
+        for (int i = 0; i < ItemDataBase.item.Count; i++)
+        {
+            if (ItemDataBase.item[i].id == itemID)
+            {
+                player.AddItem(ItemDataBase.item[i]);
+                break;
+            }
+        }
+        Destroy(interactable.gameObject);
     }
 
     void ShowButton()

@@ -10,5 +10,5 @@ public class Interactable : MonoBehaviour
     public string interactText;
     public bool isTalking;
     public GameObject interactView;
-    public string[] dialog;
+    public List<string> dialog;
 }

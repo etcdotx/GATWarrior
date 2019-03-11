@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
+    public InputSetup inputSetup;
     public CameraMovement cm;
     public int[] characterAppearance; //Gender,Skincolor,hair,haircolor
     public GameObject character;
@@ -16,16 +17,51 @@ public class Player : MonoBehaviour {
     public List<CollectionQuest> collectionQuest = new List<CollectionQuest>();
     public List<int> finishedCollectionQuestID = new List<int>();
 
+    public GameObject inventory;
     public Image[] inventoryIndicator;
-    public int[] inventory;
+    public int[] inventoryItemID;
     public List<Item> item = new List<Item>();
 
     public GameObject[] needToBeLoad;
+    public bool cantOpenInventory;
+
     // Use this for initialization
-    void Start () {
+    void Start() {
+        inventory = GameObject.FindGameObjectWithTag("Inventory");
+        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gdb = GameObject.FindGameObjectWithTag("GDB").GetComponent<GameDataBase>();
         ss = GameObject.Find("SaveSlot").GetComponent<SaveSlot>();
+        cantOpenInventory = true;
+        inventory.SetActive(false);
         RefreshItem();
+    }
+
+    private void Update()
+    {
+        try {
+            for (int i = 0; i < collectionQuest.Count; i++)
+            {
+                Debug.Log(collectionQuest[i].title);
+            }
+        } catch { }
+        CharacterInput();
+    }
+
+    public void CharacterInput()
+    {
+        if (GameStatus.isTalking == false && cantOpenInventory==false)
+        {
+            if (Input.GetKeyDown(inputSetup.openInventory))
+            {
+                if (inventory.activeSelf == false)
+                {
+                    inventory.SetActive(true);
+                }
+                else {
+                    inventory.SetActive(false);
+                }
+            }
+        }
     }
 
     public void SavePlayer()
@@ -33,9 +69,11 @@ public class Player : MonoBehaviour {
         SaveSystem.SavePlayer(this, ss.saveSlot.ToString());
     }
 
-    public void LoadPlayer()
+    public void LoadPlayer(string spawnLocationName)
     {
         //start new game/scene
+        GameObject spawnLocation = GameObject.Find("SpawnLocation");
+        cantOpenInventory = false;
         for (int i = 0; i < needToBeLoad.Length; i++)
         {
             needToBeLoad[i].SetActive(true);
@@ -52,7 +90,6 @@ public class Player : MonoBehaviour {
 
         try
         {
-            GameObject spawnLocation = GameObject.Find("SpawnLocation");
             body[0] = GameObject.Instantiate(gdb.genderType[characterAppearance[0]], spawnLocation.transform.position, spawnLocation.transform.rotation, null);
             body[0].GetComponent<Renderer>().material.color = gdb.skinColor[characterAppearance[1]];
             if (characterAppearance[0] == 0)
@@ -79,7 +116,7 @@ public class Player : MonoBehaviour {
                 character.transform.localScale = sg.characterScale;
             }
             catch { }
-        } while (cm == null);        
+        } while (cm == null);
     }
 
     public void AddQuest(CollectionQuest newQuest)
@@ -105,11 +142,11 @@ public class Player : MonoBehaviour {
         if (itemExist == false)
         {
             item.Add(newItem);
-            for (int i = 0; i < inventory.Length; i++)
+            for (int i = 0; i < inventoryItemID.Length; i++)
             {
-                if (inventory[i] == 0)
+                if (inventoryItemID[i] == 0)
                 {
-                    inventory[i] = newItem.id;
+                    inventoryItemID[i] = newItem.id;
                     RefreshItem();
                     break;
                 }

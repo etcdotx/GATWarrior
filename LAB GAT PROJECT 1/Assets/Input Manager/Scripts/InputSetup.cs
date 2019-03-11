@@ -9,6 +9,7 @@ public class InputSetup : MonoBehaviour
     public KeyCode deleteSave;
     public KeyCode interact;
     public KeyCode continueTalk;
+    public KeyCode openInventory;
     // Start is called before the first frame update
 
     void Start()
@@ -19,5 +20,6 @@ public class InputSetup : MonoBehaviour
 
         interact = KeyCode.Joystick1Button1;
         continueTalk = KeyCode.Joystick1Button1;
+        openInventory = KeyCode.Joystick1Button7;
     }
 }

@@ -10,6 +10,7 @@ TagManager:
   - NPC
   - Conversation
   - ShowDialog
+  - Inventory
   layers:
   - Default
   - TransparentFX

@@ -2991,7 +2991,7 @@ MonoBehaviour:
   genderParent: CharacterLocation
   hairParent: Head
   eyeParent: 
-  sceneName: Gameplay
+  sceneName: Rumah
 --- !u!1 &2146464908
 GameObject:
   m_ObjectHideFlags: 0
