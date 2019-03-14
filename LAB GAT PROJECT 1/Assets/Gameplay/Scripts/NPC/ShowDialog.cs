@@ -5,52 +5,71 @@ using UnityEngine.UI;
 
 public class ShowDialog : MonoBehaviour
 {
+    [Header("Script List")]
     public Player player;
-    public List<string> dialog = new List<string>();
+
+    [Header("Value")]
+    public bool isQuestDialog;
     public int questID;
     public int dialNum;
-    public bool isQuestDialog;
-    public Text conversation;
-    public InputSetup inputSetup;
+    public List<string> dialog = new List<string>();
+    public Text conversationText;
+
+    public GameObject conversationButton;
+    public Text interactText;
 
     public void Start()
     {
-        conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Text>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
+        conversationText = GameObject.FindGameObjectWithTag("Conversation").transform.Find("ConversationText").GetComponent<Text>();
         player = GameObject.Find("Player").GetComponent<Player>();
+
+        conversationButton = GameObject.FindGameObjectWithTag("Interactable").transform.Find("ConversationButton").gameObject;
+        interactText = GameObject.FindGameObjectWithTag("Interactable").transform.Find("InteractText").GetComponent<Text>();
     }
 
     public void Update()
     {
-        if (GameStatus.isTalking == true)
+        if (GameStatus.isTalking == true && InputHolder.isInputHolded == false)
         {
-            if (Input.GetKeyDown(inputSetup.deleteSave))
+            if (dialNum == dialog.Count - 1)
+            {
+                interactText.text = "End";
+            }
+            else
+            {
+                interactText.text = "Continue";
+            }
+            if (Input.GetKeyDown(KeyCode.Joystick1Button1))
             {
                 NextDialogue();
             }
-        }
-        else
-        {
-            conversation.gameObject.SetActive(false);
         }
     }
 
     public void StartDialog(List<string> dial)
     {
-        GetDialog(dial);
         dialNum = 0;
-        conversation.gameObject.SetActive(true);
-        conversation.text = dialog[dialNum];
+        InputHolder.isInputHolded = true;
+        GetDialog(dial);
+        ShowUI();
     }
 
     public void StartQuestDialog(List<string> dial, int questID)
     {
+        dialNum = 0;
+        InputHolder.isInputHolded = true;
         GetDialog(dial);
+        ShowUI();
         isQuestDialog = true;
         this.questID = questID;
-        dialNum = 0;
-        conversation.gameObject.SetActive(true);
-        conversation.text = dialog[dialNum];
+    }
+
+    void ShowUI()
+    {
+        conversationText.gameObject.SetActive(true);
+        conversationText.text = dialog[dialNum];
+        conversationButton.SetActive(true);
+        interactText.gameObject.SetActive(true);
     }
 
     private void GetDialog(List<string> dial)
@@ -65,18 +84,29 @@ public class ShowDialog : MonoBehaviour
     public void NextDialogue() {
         if (dialNum == dialog.Count - 1)
         {
-            conversation.gameObject.SetActive(false);
-            if (isQuestDialog == true)
-            {
-                AddQuest();
-            }
-            GameStatus.isTalking = false;
+            EndDialog();
         }
         else
         {
             dialNum++;
-            conversation.text = dialog[dialNum];
+            conversationText.text = dialog[dialNum];
         }
+    }
+
+    public void EndDialog()
+    {
+        conversationButton.SetActive(false);
+        interactText.gameObject.SetActive(false);
+        conversationText.gameObject.SetActive(false);
+        if (isQuestDialog == true)
+        {
+            AddQuest();
+        }
+        isQuestDialog = false;
+        questID = 0;
+        dialog.Clear();
+        InputHolder.isInputHolded = true;
+        GameStatus.isTalking = false;
     }
 
     public void AddQuest()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
-    private Camera cam;
+
     public Transform lookAt;
     public Transform camTransform;
 
@@ -21,9 +21,10 @@ public class CameraMovement : MonoBehaviour {
     private void Start()
     {
         camTransform = transform;
-        cam = Camera.main;
         currentY = lookAt.eulerAngles.y;
         currentX = lookAt.eulerAngles.x;
+        currentX = 0;
+        currentY = 0;
     }
 
     private void Update()
@@ -38,13 +39,13 @@ public class CameraMovement : MonoBehaviour {
         {
             currentX = 180;
         }
-        if (currentY > 180)
+        if (currentY > 90)
         {
-            currentY = -180;
+            currentY = 90;
         }
-        if (currentY < -180)
+        if (currentY < -90)
         {
-            currentY = 180;
+            currentY = -90;
         }
     }
 

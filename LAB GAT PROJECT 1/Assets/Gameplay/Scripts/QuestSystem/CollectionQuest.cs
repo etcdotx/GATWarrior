@@ -26,26 +26,28 @@ public class CollectionQuest
         this.verb = verb;
         this.description = description;
         this.isOptional = isOptional;
-        CheckAmount();
+        CheckProgress();
     }
 
     public string GetGameObjectName() {
         return itemToCollect.name;
     }
 
-    public void CheckAmount()
+    public void CheckProgress()
     {
-        if (curAmount == colAmount)
+        if (curAmount >= colAmount)
         {
             isComplete = true;
+            Debug.Log(title + " quest is complete");
         }
-        else {
+        else
+        {
             isComplete = false;
         }
     }
 
-    void checkProgress()
+    public override string ToString()
     {
-
+        return curAmount + "/" + colAmount + " " + itemToCollect.name + " " +verb + "ed.";
     }
 }

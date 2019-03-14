@@ -208,7 +208,7 @@ InputManager:
     gravity: 0
     dead: 0
     sensitivity: 1
-    snap: 0
+    snap: 1
     invert: 0
     type: 2
     axis: 6
@@ -224,7 +224,7 @@ InputManager:
     gravity: 0
     dead: 0
     sensitivity: 1
-    snap: 0
+    snap: 1
     invert: 1
     type: 2
     axis: 6
@@ -247,6 +247,22 @@ InputManager:
     joyNum: 1
   - serializedVersion: 3
     m_Name: D-Pad Left
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0
+    sensitivity: 1
+    snap: 1
+    invert: 1
+    type: 2
+    axis: 5
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: DO NOT EDIT BELOW THIS
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 

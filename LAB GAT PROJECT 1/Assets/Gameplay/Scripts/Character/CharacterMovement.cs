@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public InputSetup inputSetup;
+    public Rigidbody charRig;
+
     public GameObject mainCamera;
 
     public float defaultSpeed;
     public float runSpeedMultiplier;
     public float currentSpeed;
     public float rotateSpeed;
+    public float jumpForce;
 
     public Vector3 inputAxis;
     public Quaternion targetRotation;
@@ -19,7 +23,9 @@ public class CharacterMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        charRig = gameObject.GetComponent<Rigidbody>();
         try
         {
             charAnim = gameObject.GetComponent<Animator>();
@@ -32,7 +38,7 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameStatus.isTalking == false && GameStatus.IsPaused == false)
+        if (GameStatus.isTalking == false && GameStatus.IsPaused == false && InputHolder.isInputHolded == false)
         {
             GetInputAxis();
             if (inputAxis.x >= 0.1 || inputAxis.y >= 0.1 || inputAxis.x <= -0.1 || inputAxis.y <= -0.1)
@@ -59,7 +65,12 @@ public class CharacterMovement : MonoBehaviour
                 }
                 catch { }
             }
-       }
+
+            if (Input.GetKeyDown(inputSetup.jump))
+            {
+                charRig.velocity += new Vector3(0, jumpForce, 0);
+            }
+        }
     }
 
     void GetInputAxis()
@@ -76,9 +87,7 @@ public class CharacterMovement : MonoBehaviour
         {
             inputAxis.z = 0f;
         }
-    }
-
-    
+    }    
 
     void CalculateDirection()
     {

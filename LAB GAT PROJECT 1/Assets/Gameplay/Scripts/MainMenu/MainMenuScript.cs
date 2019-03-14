@@ -24,7 +24,6 @@ public class MainMenuScript : MonoBehaviour {
 
     [Header("Navigator")]
     public int navigatorNum;
-    public float navigatorDelay;
     public bool canNav;
 
     // Use this for initialization
@@ -121,7 +120,7 @@ public class MainMenuScript : MonoBehaviour {
             {
                 navigatorNum++;
             }
-            StartCoroutine(NavMenuDelay(Menu));
+            StartCoroutine(InputHold(Menu));
         }
         if (isDown == false)
         {
@@ -133,15 +132,15 @@ public class MainMenuScript : MonoBehaviour {
             {
                 navigatorNum--;
             }
-            StartCoroutine(NavMenuDelay(Menu));
+            StartCoroutine(InputHold(Menu));
         }
     }
 
-    private IEnumerator NavMenuDelay(GameObject[] Menu)
+    private IEnumerator InputHold(GameObject[] Menu)
     {
         canNav = false;
         ApplyNav(Menu);
-        yield return new WaitForSeconds(navigatorDelay);
+        yield return new WaitForSeconds(0.2f);
         canNav = true;
     }
 

@@ -11,6 +11,9 @@ TagManager:
   - Conversation
   - ShowDialog
   - Inventory
+  - Interactable
+  - Quest
+  - MenuManager
   layers:
   - Default
   - TransparentFX

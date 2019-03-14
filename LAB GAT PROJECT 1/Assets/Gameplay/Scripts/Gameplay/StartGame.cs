@@ -13,11 +13,12 @@ public class StartGame : MonoBehaviour
     public static string curScene;
     public static string newScene;
 
+    [Header("Scene Name")]
     public string Rumah;
     public string HutanAman;
     public string Kota;
     public string Hutan1_1;
-    public string Hutan1_2;
+    public static string Hutan1_2;
     public string Hutan1_3;
     public string Hutan1_4;
 
@@ -45,7 +46,14 @@ public class StartGame : MonoBehaviour
         newScene = SceneManager.GetActiveScene().name;
         if (curScene == Rumah)
         {
-            if (newScene == HutanAman || newScene == Rumah)
+            if (newScene == Rumah)
+            {
+                selectSpawnLocationName = HutanAman + "-" + Rumah;
+                curScene = newScene;
+                Debug.Log(selectSpawnLocationName);
+                return;
+            }
+            if (newScene == HutanAman)
             {
                 selectSpawnLocationName = Rumah + "-" + HutanAman;
                 curScene = newScene;
@@ -59,14 +67,14 @@ public class StartGame : MonoBehaviour
             {
                 selectSpawnLocationName = HutanAman + "-" + Rumah;
                 curScene = newScene;
-                //Debug.Log("oke2");
+                Debug.Log(selectSpawnLocationName);
                 return;
             }
             if (newScene == Kota)
             {
                 selectSpawnLocationName = HutanAman + "-" + Kota;
                 curScene = newScene;
-               // Debug.Log("oke3");
+                Debug.Log(selectSpawnLocationName);
                 return;
             }
         }
@@ -76,7 +84,7 @@ public class StartGame : MonoBehaviour
             {
                 selectSpawnLocationName = Kota + "-" + HutanAman;
                 curScene = newScene;
-                // Debug.Log("oke4");
+                Debug.Log(selectSpawnLocationName);
                 return;
             }
         }

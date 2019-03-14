@@ -9,60 +9,75 @@ public class NPC : MonoBehaviour
 
     public bool isHavingQuest;
 
-    public List<int> questID = new List<int>();
     public int questIDActive;
 
-    public List<questDialog> questDialogList = new List<questDialog>();
+    public List<CollectionQuest> collectionQuestList = new List<CollectionQuest>();
+    public List<QuestDialog> questDialogList = new List<QuestDialog>();
     public List<string> questDialogActive = new List<string>();
-
-    public class questDialog {
-        public string dialog;
-        public int questID;
-
-        public questDialog(int questID, string dialog)
-        {
-            this.dialog = dialog;
-            this.questID = questID;
-        }
-    }
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
-        for (int i = 0; i < QuestDataBase.collectionQuest.Count; i++)
+        GetQuestList();
+        GetQuestDialog();
+        if (questDialogList.Count != 0)
         {
-            if (QuestDataBase.collectionQuest[i].sourceID == this.sourceID)
-            {
-                questID.Add(QuestDataBase.collectionQuest[i].id);
-            }
             isHavingQuest = true;
         }
-        AddQuestDialog();
-        GetQuestDialog();
-    }
-
-    public void GiveQuest(int questID) {
-        //id nya berguna untuk tau quest id yg mana yg bakal dikasih dari GameDatabase Quest
-        for (int i = 0; i < QuestDataBase.collectionQuest.Count; i++) {
-            if (QuestDataBase.collectionQuest[i].id == questID)
-            {
-                player.AddQuest(QuestDataBase.collectionQuest[i]);
-                break;
-            }               
+        else
+        {
+            isHavingQuest = false;
         }
     }
 
-    public void AddQuestDialog()
+    public void RefreshQuest()
     {
-        questDialog qd1 = new questDialog(1, "Can i ask u something");
-        questDialogList.Add(qd1);
-        questDialog qd2 = new questDialog(1, "Can u help me to collect some ingredients?");
-        questDialogList.Add(qd2);
+        for (int i = 0; i < collectionQuestList.Count; i++)
+        {
+            if (collectionQuestList[i].id == questIDActive)
+            {
+                if (collectionQuestList[i].chainQuestID != 0)
+                {
+                    questIDActive = collectionQuestList[i].chainQuestID;
+                    RefreshQuestDialog();
+                    isHavingQuest = true;
+                    break;
+                }
+            }
+            else
+            {
+                isHavingQuest = false;
+            }
+        }
+    }
+
+    public void GetQuestList()
+    {
+        for (int i = 0; i < QuestDataBase.collectionQuest.Count; i++)
+        {
+            if (QuestDataBase.collectionQuest[i].sourceID == sourceID)
+            {
+                collectionQuestList.Add(QuestDataBase.collectionQuest[i]);
+            }
+        }
     }
 
     public void GetQuestDialog()
     {
+        for (int i = 0; i < QuestDataBase.questDialog.Count; i++)
+        {
+            if (QuestDataBase.questDialog[i].sourceID == sourceID)
+            {
+                questDialogList.Add(QuestDataBase.questDialog[i]);
+            }
+        }
+        RefreshQuestDialog();
+    }
+
+    public void RefreshQuestDialog()
+    {
+        questDialogActive.Clear();
         for (int i = 0; i < questDialogList.Count; i++)
         {
             if (questDialogList[i].questID == questIDActive)
