@@ -2937,7 +2937,10 @@ MonoBehaviour:
   questListPrefab: {fileID: 8196887257004107974, guid: 67cd0da480ae4564da5b8dd9c53b7d92,
     type: 3}
   questListIndex: 0
+  playerChainQuest: 
   finishedCollectionQuestID: 
+  DEVELOPERMODE: 1
+  charPrefab: {fileID: 100008, guid: ff8b62b2e6da2f74bb943ca9d5d1bfff, type: 3}
 --- !u!1 &788693330
 GameObject:
   m_ObjectHideFlags: 0
@@ -4422,7 +4425,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  inputHold: 0
   isQuestDialog: 0
+  isQuestCompleteDialog: 0
   questID: 0
   dialNum: 0
   dialog: []

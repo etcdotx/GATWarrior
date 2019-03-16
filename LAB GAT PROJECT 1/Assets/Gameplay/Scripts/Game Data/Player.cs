@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
 
     [Header("Inventory")]
     public GameObject inventoryView;
-    public Image[] inventoryIndicator;
+    public GameObject[] inventoryIndicator;
     public int[] inventoryItemID;
     public List<Item> item = new List<Item>();
 
@@ -38,17 +38,34 @@ public class Player : MonoBehaviour {
     public List<CollectionQuest> collectionQuestUnusable = new List<CollectionQuest>();
     public List<int> finishedCollectionQuestID = new List<int>();
 
+    [Header("FOR DEVELOPMENT")]
+    public bool DEVELOPERMODE;
+    public GameObject charPrefab;
+    bool dontloadCharacter;
     // Use this for initialization
     void Start()
     {
+
         //Get Script
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gdb = GameObject.FindGameObjectWithTag("GDB").GetComponent<GameDataBase>();
         ss = GameObject.Find("SaveSlot").GetComponent<SaveSlot>();
         menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
 
+        //DEVELOPERMODE
+        if (DEVELOPERMODE == true)
+        {
+            dontloadCharacter = true;
+            ss.saveSlot = 0;
+        }
+
         //Get Gameobject or others
         inventoryView = GameObject.FindGameObjectWithTag("Inventory").transform.Find("InventoryView").gameObject;
+        int h = inventoryView.transform.Find("InventoryViewPort").childCount;
+        for (int i = 0; i < h; i++)
+        {
+            inventoryIndicator[i] = inventoryView.transform.Find("InventoryViewPort").transform.GetChild(i).gameObject;
+        }
         questView = GameObject.FindGameObjectWithTag("Quest").transform.Find("QuestView").gameObject;
         questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
         questListIndex = -1;
@@ -58,7 +75,8 @@ public class Player : MonoBehaviour {
         inventoryView.SetActive(false);
         questView.SetActive(false);
         cantOpenMenu = true;
-        RefreshItem(); 
+        RefreshItem();
+
     }
 
     private void Update()
@@ -77,10 +95,12 @@ public class Player : MonoBehaviour {
                     inventoryView.SetActive(true);
                     questView.SetActive(true);
                     menuManager.ResetMenu();
+                    GameStatus.PauseGame();
                 }
                 else {
                     inventoryView.SetActive(false);
                     questView.SetActive(false);
+                    GameStatus.ResumeGame();
                 }
             }
         }
@@ -97,6 +117,7 @@ public class Player : MonoBehaviour {
         GameObject spawnLocation = GameObject.Find(spawnLocationName);
         cantOpenMenu = false;
 
+        Debug.Log(ss.saveSlot.ToString());
         PlayerData data = SaveSystem.LoadPlayer(ss.saveSlot.ToString());
 
         //Collect Appearance Data
@@ -106,24 +127,31 @@ public class Player : MonoBehaviour {
             characterAppearance[i] = data.characterAppearance[i];
         }
 
-        //Apply Appearance
-        try
+        if (dontloadCharacter == false)
         {
-            body[0] = GameObject.Instantiate(gdb.genderType[characterAppearance[0]], spawnLocation.transform.position, spawnLocation.transform.rotation, null);
-            body[0].GetComponent<Renderer>().material.color = gdb.skinColor[characterAppearance[1]];
-            if (characterAppearance[0] == 0)
+            //Apply Appearance
+            try
             {
-                body[1] = GameObject.Instantiate(gdb.maleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
+                body[0] = GameObject.Instantiate(gdb.genderType[characterAppearance[0]], spawnLocation.transform.position, spawnLocation.transform.rotation, null);
+                body[0].GetComponent<Renderer>().material.color = gdb.skinColor[characterAppearance[1]];
+                if (characterAppearance[0] == 0)
+                {
+                    body[1] = GameObject.Instantiate(gdb.maleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
+                }
+                else
+                {
+                    body[1] = GameObject.Instantiate(gdb.femaleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
+                }
+                body[1].GetComponent<Renderer>().material.color = gdb.hairColor[characterAppearance[3]];
             }
-            else
+            catch
             {
-                body[1] = GameObject.Instantiate(gdb.femaleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
             }
-            body[1].GetComponent<Renderer>().material.color = gdb.hairColor[characterAppearance[3]];
         }
-        catch {
+        else {
+            Instantiate(charPrefab, spawnLocation.transform.position, spawnLocation.transform.rotation, null);
         }
-        
+
         do {
             try
             {
@@ -265,21 +293,33 @@ public class Player : MonoBehaviour {
 
     public void RefreshItem()
     {
+        Debug.Log(item.Count);
         for (int i = 0; i < inventoryIndicator.Length; i++)
         {
-            //semua inventory dibuat menjadi tidak aktif (yang terlihat hanya slotnya)
-            inventoryIndicator[i].transform.GetChild(0).gameObject.SetActive(false);
-            try
+            if (inventoryIndicator[i].GetComponent<InventoryItem>().itemID == 0)
             {
-                if (item[i].quantity != 0)
+                try
                 {
-                    inventoryIndicator[i].sprite = item[i].itemImage;
-                    inventoryIndicator[i].transform.GetChild(0).GetComponent<Text>().text = item[i].quantity.ToString();
-                    inventoryIndicator[i].transform.GetChild(0).gameObject.SetActive(true);
+                    for (int j = 0; j < item.Count; j++)
+                    {
+                        if (item[j].isOnInventory == false)
+                        {
+                            Debug.Log(item[j].name + " " + item[j].isOnInventory);
+                            Debug.Log("masuk");
+                            inventoryIndicator[i].GetComponent<InventoryItem>().itemID = item[j].id;
+                            item[j].isOnInventory = true;
+                            Debug.Log(item[j].name + " " + item[j].isOnInventory);
+                            break;
+                        }
+                    }
                 }
-            } catch {
-                //Debug.Log("There is no item in " + i + " inventory slot.");
+                catch
+                {
+                    //Debug.Log("There is no item in " + i + " inventory slot.");
+                }
             }
+           
+            inventoryIndicator[i].GetComponent<InventoryItem>().RefreshItem();
         }
         menuManager.RefreshQuest();
     }

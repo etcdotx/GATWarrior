@@ -16,6 +16,7 @@ public class MenuManager : MonoBehaviour
     [Header("Menu Pointer")]
     public int menuNumber;//0 inventory, 1 quest    
     public Color32 normalColor;
+    public Color32 markColor;
     public Color32 selectedColor;
     public GameObject[] menuPointer;
 
@@ -38,6 +39,9 @@ public class MenuManager : MonoBehaviour
     public GameObject inventoryViewPort;
     public GameObject[,] inventoryPos; //5 column
 
+    public InventoryItem invenSwap1;
+    public InventoryItem invenSwap2;
+    public bool isSwapping;
 
     public void Start()
     {
@@ -84,6 +88,10 @@ public class MenuManager : MonoBehaviour
             if (inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1)
             {
                 StartCoroutine(InputHold());
+            }
+            if (menuNumber == 0) //quest
+            {
+                InventorySwapping();
             }
         }
     }
@@ -137,7 +145,7 @@ public class MenuManager : MonoBehaviour
         {
             InventorySelection();
         }
-        else if (menuNumber == 1)
+        else if (menuNumber == 1) //inven
         {
             QuestSelection();
         }
@@ -193,6 +201,31 @@ public class MenuManager : MonoBehaviour
         MarkInventory();
     }
 
+    void InventorySwapping() {
+        Debug.Log("in");
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) && isSwapping==false)
+        {
+            invenSwap1 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>();
+            invenSwap1.gameObject.GetComponent<Image>().color = selectedColor;
+            invenSwap1.isSelected = true;
+            isSwapping = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Joystick1Button0) && isSwapping == true)
+        {
+            invenSwap2 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>();
+            int id1 = invenSwap1.itemID;
+            int id2 = invenSwap2.itemID;
+            invenSwap1.itemID = id2;
+            invenSwap2.itemID = id1;
+            invenSwap1.RefreshItem();
+            invenSwap2.RefreshItem();
+            invenSwap1.isSelected = false;
+            invenSwap1.gameObject.GetComponent<Image>().color = normalColor;
+            isSwapping = true;
+            isSwapping = false;
+        }
+    }
+
     public void MarkInventory()
     {
         try
@@ -201,10 +234,16 @@ public class MenuManager : MonoBehaviour
             {
                 for (int j = 0; j < inventoryColumn; j++)
                 {
-                    inventoryPos[i, j].GetComponent<Image>().color = normalColor;
+                    if (inventoryPos[i, j].GetComponent<InventoryItem>().isSelected == false)
+                    {
+                        inventoryPos[i, j].GetComponent<Image>().color = normalColor;
+                    }
                 }
             }
-            inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<Image>().color = selectedColor;
+            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>().isSelected == false)
+            {
+                inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<Image>().color = markColor;
+            }
         }
         catch { }
     }
@@ -262,8 +301,7 @@ public class MenuManager : MonoBehaviour
             {
                 player.questContent.transform.GetChild(i).GetComponent<Image>().color = normalColor;
             }
-            player.questContent.transform.GetChild(questIndex).GetComponent<Image>().color = selectedColor;
-            
+            player.questContent.transform.GetChild(questIndex).GetComponent<Image>().color = selectedColor;            
         }
         catch
         {

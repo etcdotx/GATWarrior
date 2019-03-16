@@ -67,9 +67,9 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                     }
                 }
             }
-            catch(UnityException ex)
+            catch
             {
-                Debug.Log(ex);
+                //Debug.Log(ex);
                 //Debug.Log(hit.collider.gameObject.name + " is not interactable");
             }
         }

@@ -18,12 +18,12 @@ public static class GameStatus
     public static void PauseGame()
     {
         isPaused = true;
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
 
     public static void ResumeGame()
     {
         isPaused = false;
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
     }
 }

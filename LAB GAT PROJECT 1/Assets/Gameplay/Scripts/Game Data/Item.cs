@@ -11,6 +11,7 @@ public class Item
     public string name;
     public string description;
     public bool isUsable;
+    public bool isOnInventory;
 
     public Item(int id, string imagePath, string name, string description, bool isUsable)
     {
@@ -20,5 +21,6 @@ public class Item
         this.name = name;
         this.description = description;
         this.isUsable = isUsable;
+        isOnInventory = false;
     }
 }

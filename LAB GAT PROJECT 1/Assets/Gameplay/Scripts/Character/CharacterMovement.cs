@@ -38,7 +38,7 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameStatus.isTalking == false && GameStatus.IsPaused == false && InputHolder.isInputHolded == false)
+        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false)
         {
             GetInputAxis();
             if (inputAxis.x >= 0.1 || inputAxis.y >= 0.1 || inputAxis.x <= -0.1 || inputAxis.y <= -0.1)
@@ -65,10 +65,12 @@ public class CharacterMovement : MonoBehaviour
                 }
                 catch { }
             }
-
-            if (Input.GetKeyDown(inputSetup.jump))
+            if (GameStatus.IsPaused == false)
             {
-                charRig.velocity += new Vector3(0, jumpForce, 0);
+                if (Input.GetKeyDown(inputSetup.jump))
+                {
+                    charRig.velocity += new Vector3(0, jumpForce, 0);
+                }
             }
         }
     }
