@@ -259,7 +259,7 @@ public class Player : MonoBehaviour {
         {
             //jika quest yang sudah selesai, tidak ada di dalam koleksi quest yang sudah selesai, masukkan quest tersebut
             collectionQuestComplete.Add(cq);
-            //Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
+            Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
         }
     }
 

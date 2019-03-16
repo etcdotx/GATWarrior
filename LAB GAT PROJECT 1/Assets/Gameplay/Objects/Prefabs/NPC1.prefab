@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8704636637256514577}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.433, y: 1.89, z: -5.637}
   m_LocalScale: {x: 0.33473, y: 0.58145946, z: 0.33473}
   m_Children: []
@@ -129,7 +129,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   sourceID: 1
-  isHavingQuest: 0
-  questID: 
+  canGiveQuest: 0
+  isHavingACompleteQuest: 0
+  isHaveTheQuestChainQuest: 0
+  questIDOnProgress: 0
   questIDActive: 1
   questDialogActive: []
+  questCompleteDialogActive: []

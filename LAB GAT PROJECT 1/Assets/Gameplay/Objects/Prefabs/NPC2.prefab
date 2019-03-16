@@ -129,8 +129,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   sourceID: 2
-  isHavingQuest: 0
+  canGiveQuest: 0
+  isHavingACompleteQuest: 0
+  isHaveTheQuestChainQuest: 0
   questIDOnProgress: 0
-  questIDActive: 1
+  questIDActive: 2
   questDialogActive: []
   questCompleteDialogActive: []

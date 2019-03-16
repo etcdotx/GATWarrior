@@ -67,9 +67,10 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                     }
                 }
             }
-            catch
+            catch(UnityException ex)
             {
-                Debug.Log(hit.collider.gameObject.name + " is not interactable");
+                Debug.Log(ex);
+                //Debug.Log(hit.collider.gameObject.name + " is not interactable");
             }
         }
         else
@@ -82,8 +83,7 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
     {
         bool isGivingAQuest = false;
         bool isCompletingAQuest = false;
-        bool isTheQuestExist = false;
-        bool isTheQuestProgressing = false;
+        bool isHavingTheChainQuest = false;
         GameStatus.isTalking = true;
         mainCamera.transform.position = interactable.interactView.transform.position;
         mainCamera.transform.rotation = interactable.interactView.transform.rotation;
@@ -100,30 +100,45 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                 //jika quest npc yang aktif ada di list questchain player
                 if (player.playerChainQuest[i] == interactedNPC.questIDActive)
                 {
-                    isTheQuestExist = true;
+                    //bisa memberi quest
+                    interactedNPC.canGiveQuest = true;
                     break;
                 }
             }
+
+            for (int i = 0; i < interactedNPC.questIDGiven.Count; i++)
+            {
+                if (interactedNPC.questIDGiven[i] == interactedNPC.questIDActive)
+                {
+                    //tidak memberi quest
+                    interactedNPC.canGiveQuest = false;
+                    break;
+                }
+            }
+
             for (int i = 0; i < player.playerChainQuest.Count; i++)
             {
                 //jika quest yang sedang berjalan diplayer ada di npc tersebut
-                if (player.playerChainQuest[i] == interactedNPC.questIDOnProgress)
+                if (player.playerChainQuest[i] == interactedNPC.questIDActive)
                 {
-                    isTheQuestProgressing = true;
+                    isHavingTheChainQuest = true;
                     break;
                 }
             }
 
             Debug.Log(interactedNPC.canGiveQuest);
             Debug.Log(interactedNPC.isHavingACompleteQuest);
-            Debug.Log(isTheQuestProgressing);
+            Debug.Log(isHavingTheChainQuest);
             //jika memiliki misi dan bisa memberikan misi
-            if (interactedNPC.canGiveQuest==true && isTheQuestExist==true)
+            if (interactedNPC.canGiveQuest==true)
             {
                 isGivingAQuest = true;
+                //dibuat false dulu, nanti di cek lagi
+                interactedNPC.isHavingACompleteQuest = false;
                 //memunculkan dialog quest untuk tersebut
                 showDialog.StartQuestDialog(interactedNPC.questDialogActive, interactedNPC.questIDActive);
                 //membuat npc tidak bisa memberi quest
+                interactedNPC.questIDGiven.Add(interactedNPC.questIDActive);
 
                 for (int i = 0; i < QuestDataBase.collectionQuest.Count; i++)
                 {
@@ -134,13 +149,11 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                 }
 
                 interactedNPC.canGiveQuest = false;
-                //mereset data npc untuk quest selanjutnya dan quest yang akan selesai
-                interactedNPC.NextQuestValidation();
                 interactedNPC.CheckQuestProgress();
                 Debug.Log(interactedNPC.isHavingACompleteQuest);
                 Debug.Log("quest dialog");
             }
-            else if (interactedNPC.canGiveQuest==false && interactedNPC.isHavingACompleteQuest==true && isTheQuestProgressing==true)
+            else if (interactedNPC.canGiveQuest==false && interactedNPC.isHavingACompleteQuest==true && isHavingTheChainQuest == true)
             {
                 isCompletingAQuest = true;
                 //membuat npc tidak memiliki quest yang sudah selesai, karena baru saja menyelesaikan quest
@@ -152,8 +165,9 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                 }
                 //memunculkan dialog tentang menyelesaikan quest
                 Debug.Log("Complete quest dialog");
-                showDialog.StartQuestCompleteDialog(interactedNPC.questCompleteDialogActive, interactedNPC.questIDOnProgress);
-                Debug.Log("Complete quest dialog");
+                showDialog.StartQuestCompleteDialog(interactedNPC.questCompleteDialogActive, interactedNPC.questIDActive);
+                //mereset data npc untuk quest selanjutnya
+                interactedNPC.NextQuestValidation();
             }
         }
         catch(UnityException ex) {

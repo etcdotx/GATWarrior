@@ -5,14 +5,17 @@ using UnityEngine;
 public class NPC : MonoBehaviour
 {
     public Player player;
+
+    [Header("Set source number")]
     public int sourceID;
     
     public bool canGiveQuest;
     public bool isHavingACompleteQuest;
     public bool isHaveTheQuestChainQuest;
 
-    public int questIDOnProgress;
+    [Header("Set first active quest id")]
     public int questIDActive;
+    public List<int> questIDGiven = new List<int>();
 
     public List<CollectionQuest> collectionQuestList = new List<CollectionQuest>();
     public List<QuestDialog> questDialogList = new List<QuestDialog>();
@@ -29,6 +32,7 @@ public class NPC : MonoBehaviour
         GetQuestDialog();
         GetQuestCompleteDialog();
         RefreshQuestDialog();
+        RefreshQuestCompleteDialog();
 
         if (questDialogList.Count != 0)
         {
@@ -43,6 +47,44 @@ public class NPC : MonoBehaviour
     }
 
 
+    public void CheckQuestProgress()
+    {
+        bool isTheChainIDExist = false;
+        for (int i = 0; i < player.collectionQuestComplete.Count; i++)
+        {
+            //jika collection quest yang sudah selesai = quest yang aktif
+            if (player.collectionQuestComplete[i].id == questIDActive)
+            {
+                //jika quest yang sedang dijalankan sudah selesai, maka dia memiliki quest yang sudah selesai
+                isHavingACompleteQuest = true;
+
+                //memasukkan chain quest list yang akan dikerjakan player nantinya
+                try
+                {
+                    Debug.Log("ok");
+                    for (int z = 0; z < player.playerChainQuest.Count; z++)
+                    {
+                        if (player.playerChainQuest[z] == player.collectionQuestComplete[i].chainQuestID)
+                        {
+                            Debug.Log("2");
+                            isTheChainIDExist = true;
+                            break;
+                        }
+                    }
+                    if (isTheChainIDExist == false)
+                    {
+                        player.playerChainQuest.Add(player.collectionQuestComplete[i].chainQuestID);
+                    }
+                }
+                catch { }
+                player.collectionQuestUnusable.Add(player.collectionQuestComplete[i]);
+                player.collectionQuestComplete.Remove(player.collectionQuestComplete[i]);
+
+                break;
+            }
+        }
+    }
+
     public void NextQuestValidation()
     {
         for (int i = 0; i < collectionQuestList.Count; i++)
@@ -50,9 +92,6 @@ public class NPC : MonoBehaviour
             //jika quest yang dimiliki npc sesuai dengan quest id yang sedang active
             if (collectionQuestList[i].id == questIDActive)
             {
-                //quest id yang sedang aktif menjadi quest yang sedang dijalankan
-                questIDOnProgress = collectionQuestList[i].id;
-
                 if (collectionQuestList[i].chainQuestID != 0)
                 {
                     //mengecek jika quest yang sedang aktif memiliki chainquest di npc ini
@@ -75,14 +114,20 @@ public class NPC : MonoBehaviour
                     if (isHaveTheQuestChainQuest == false)
                     {
                         //maka quest id active dimasukkan kedalam quest selanjutnya
-                        questIDActive = collectionQuestList[i + 1].id;
-
+                        //namun jika dia tidak punya quest lagi, dia membuat chainnya menjadi 0
+                        try
+                        {
+                            questIDActive = collectionQuestList[i + 1].id;
+                        } catch
+                        {
+                            questIDActive = 0;
+                        }
                         //tidak bisa memberi quest, karena baru saja memberi quest
                         canGiveQuest = false;
                     }
-                    //mereset string dialog quest yang nantinya akan diberikan sesuai dengan id yg aktif
+                    //mereset string dialog quest baru
                     RefreshQuestDialog();
-                    //mereset string dialog untuk quest yang nantinya akan selesai
+                    //mereset string dialog complete untuk quest baru
                     RefreshQuestCompleteDialog();
                     break;
                 }
@@ -90,51 +135,13 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void CheckQuestProgress()
-    {
-        bool isTheChainIDExist=false;
-        for (int i = 0; i < player.collectionQuestComplete.Count; i++)
-        {
-            if (player.collectionQuestComplete[i].id == questIDOnProgress)
-            {
-                if (player.collectionQuestComplete[i].isComplete == true)
-                {
-                    //jika quest yang sedang dijalankan sudah selesai, maka dia memiliki quest yang sudah selesai
-                    isHavingACompleteQuest = true;
-                    //memasukkan chain quest list yang akan dikerjakan player nantinya
-                    try
-                    {
-                        Debug.Log("ok");
-                        for (int z = 0; z < player.playerChainQuest.Count; z++)
-                        {
-                            if (player.playerChainQuest[z] == player.collectionQuestComplete[i].chainQuestID)
-                            {
-                                Debug.Log("2");
-                                isTheChainIDExist = true;
-                                break;
-                            }
-                        }
-                        if (isTheChainIDExist == false)
-                        {
-                            player.playerChainQuest.Add(player.collectionQuestComplete[i].chainQuestID);
-                        }
-                    }
-                    catch { }
-                    player.collectionQuestUnusable.Add(player.collectionQuestComplete[i]);
-                    player.collectionQuestComplete.Remove(player.collectionQuestComplete[i]);
-                   
-                    break;
-                }
-            }
-        }
-    }
 
     public void RefreshQuestCompleteDialog()
     {
         questCompleteDialogActive.Clear();
         for (int i = 0; i < questCompleteDialogList.Count; i++)
         {
-            if (questCompleteDialogList[i].questID == questIDOnProgress)
+            if (questCompleteDialogList[i].questID == questIDActive)
             {
                 questCompleteDialogActive.Add(questCompleteDialogList[i].dialog);
             }
@@ -153,7 +160,6 @@ public class NPC : MonoBehaviour
             }
         }
     }
-
 
     #region AMBIL DATA DARI DATABASE
     public void GetQuestList()

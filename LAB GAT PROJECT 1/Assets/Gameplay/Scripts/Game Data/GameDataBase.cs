@@ -63,7 +63,7 @@ public class GameDataBase: MonoBehaviour {
 
     void addQuestSource2()
     {
-        CollectionQuest quest2 = new CollectionQuest(1, 2, 3, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Mystery cube fom the town.", false);
+        CollectionQuest quest2 = new CollectionQuest(2, 2, 3, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Mystery cube fom the town.", false);
         QuestDataBase.collectionQuest.Add(quest2);
     }
     #endregion
@@ -118,10 +118,10 @@ public class GameDataBase: MonoBehaviour {
 
     void addDialogSource2()
     {
-        QuestDialog qd2_1 = new QuestDialog(1, 2, "Can i ask u again");
+        QuestDialog qd2_1 = new QuestDialog(2, 2, "Can i ask u again");
         QuestDataBase.questDialog.Add(qd2_1);
 
-        QuestDialog qd2_2 = new QuestDialog(1, 2, "Can u help me to gather some ingredients?");
+        QuestDialog qd2_2 = new QuestDialog(2, 2, "Can u help me to gather some ingredients?");
         QuestDataBase.questDialog.Add(qd2_2);
 
     }
@@ -141,10 +141,12 @@ public class GameDataBase: MonoBehaviour {
     {
         QuestDialog qcd1_1 = new QuestDialog(1, 1, "Thanks!");
         QuestDataBase.questCompleteDialog.Add(qcd1_1);
+        QuestDialog qcd3_1 = new QuestDialog(1, 3, "Thanks a lot!");
+        QuestDataBase.questCompleteDialog.Add(qcd3_1);
     }
     void addDialogCompleteSource2()
     {
-        QuestDialog qcd2_1 = new QuestDialog(1, 2, "Thanks to you!");
+        QuestDialog qcd2_1 = new QuestDialog(2, 2, "Thanks to you!");
         QuestDataBase.questCompleteDialog.Add(qcd2_1);
     }
     #endregion
