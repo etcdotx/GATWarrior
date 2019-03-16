@@ -9,7 +9,9 @@ public class ShowDialog : MonoBehaviour
     public Player player;
 
     [Header("Value")]
+    public bool inputHold;
     public bool isQuestDialog;
+    public bool isQuestCompleteDialog;
     public int questID;
     public int dialNum;
     public List<string> dialog = new List<string>();
@@ -29,7 +31,7 @@ public class ShowDialog : MonoBehaviour
 
     public void Update()
     {
-        if (GameStatus.isTalking == true && InputHolder.isInputHolded == false)
+        if (GameStatus.isTalking == true && inputHold == false)
         {
             if (dialNum == dialog.Count - 1)
             {
@@ -42,6 +44,7 @@ public class ShowDialog : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Joystick1Button1))
             {
                 NextDialogue();
+                StartCoroutine(InputHold());
             }
         }
     }
@@ -49,19 +52,33 @@ public class ShowDialog : MonoBehaviour
     public void StartDialog(List<string> dial)
     {
         dialNum = 0;
-        InputHolder.isInputHolded = true;
+        StartCoroutine(InputHold());
         GetDialog(dial);
         ShowUI();
     }
 
     public void StartQuestDialog(List<string> dial, int questID)
     {
+        //memulai dialog untuk quest
         dialNum = 0;
-        InputHolder.isInputHolded = true;
+        StartCoroutine(InputHold());
+        //memasukkan dialog yang dikirim kedalam list dialog
+        GetDialog(dial);
+        //menunjukkan ui dialog
+        ShowUI();
+        //menunjukkan bahwa dialog ini adalah dialog quest
+        isQuestDialog = true;
+        //data quest id dari dialog ini
+        this.questID = questID;
+    }
+
+    public void StartQuestCompleteDialog(List<string> dial, int questID)
+    {
+        dialNum = 0;
+        StartCoroutine(InputHold());
         GetDialog(dial);
         ShowUI();
-        isQuestDialog = true;
-        this.questID = questID;
+        isQuestCompleteDialog = true;
     }
 
     void ShowUI()
@@ -72,6 +89,7 @@ public class ShowDialog : MonoBehaviour
         interactText.gameObject.SetActive(true);
     }
 
+    //memasukkan dialog yang dikirim kedalam list dialog
     private void GetDialog(List<string> dial)
     {
         dialog.Clear();
@@ -98,11 +116,22 @@ public class ShowDialog : MonoBehaviour
         conversationButton.SetActive(false);
         interactText.gameObject.SetActive(false);
         conversationText.gameObject.SetActive(false);
+
+        //jika ini adalah dialog untuk quest, maka quest tersebut dimasukkan ke player
         if (isQuestDialog == true)
         {
-            AddQuest();
+            //AddQuest();
         }
+
+        //jika ini adalah percakapan untuk memberitahu bahwa quest ini selesai
+        if (isQuestCompleteDialog == true)
+        {
+            // Debug.Log("Quest complete!");
+        }
+
+        //mereset class ini
         isQuestDialog = false;
+        isQuestCompleteDialog = false;
         questID = 0;
         dialog.Clear();
         InputHolder.isInputHolded = true;
@@ -115,9 +144,16 @@ public class ShowDialog : MonoBehaviour
         {
             if (QuestDataBase.collectionQuest[i].id == this.questID)
             {
+                //jika quest id tersebut sesuai dengan yang didatabase, maka player memasukkan quest tersebut
                 player.AddQuest(QuestDataBase.collectionQuest[i]);
-                Debug.Log(QuestDataBase.collectionQuest[i]);
             }
         }
+    }
+
+    IEnumerator InputHold()
+    {
+        inputHold = true;
+        yield return new WaitForSeconds(0.15f);
+        inputHold = false;
     }
 }
