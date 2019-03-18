@@ -14,6 +14,11 @@ TagManager:
   - Interactable
   - Quest
   - MenuManager
+  - SaveSlot
+  - PlayerStatus
+  - ItemBox
+  - ItemBoxScript
+  - ItemBoxUI
   layers:
   - Default
   - TransparentFX

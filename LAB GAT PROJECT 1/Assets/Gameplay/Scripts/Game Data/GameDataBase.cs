@@ -11,7 +11,7 @@ public class GameDataBase: MonoBehaviour {
     public GameObject[] femaleHairType;
     public Color32[] hairColor;
 
-    public void Start()
+    public void Awake()
     {
         AddItem();
         AddCollectionQuest();

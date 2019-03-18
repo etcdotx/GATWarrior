@@ -11,12 +11,20 @@ public class Player : MonoBehaviour {
     public SaveSlot ss;
     public InputSetup inputSetup;
     public CameraMovement cm;
+    public ItemBox itemBox;
 
     [Header("Player Data")]
     public bool cantOpenMenu;
     public int[] characterAppearance; //Gender,Skincolor,hair,haircolor
     public GameObject character;
     public GameObject[] body;// 0 Gender, 1 Hair
+
+    [Header("Player Status")]
+    public string playerName;
+    public float maxHealth;
+    public float curHealth;
+    public Image maxHealthImg;
+    public Image curHealthImg;
 
     [Header("Menu Manager")]
     public MenuManager menuManager;
@@ -43,21 +51,26 @@ public class Player : MonoBehaviour {
     public GameObject charPrefab;
     bool dontloadCharacter;
     // Use this for initialization
-    void Start()
+
+    private void Awake()
     {
-
-        //Get Script
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        gdb = GameObject.FindGameObjectWithTag("GDB").GetComponent<GameDataBase>();
-        ss = GameObject.Find("SaveSlot").GetComponent<SaveSlot>();
-        menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
-
+        ss = GameObject.FindGameObjectWithTag("SaveSlot").GetComponent<SaveSlot>();
         //DEVELOPERMODE
         if (DEVELOPERMODE == true)
         {
             dontloadCharacter = true;
             ss.saveSlot = 0;
         }
+    }
+
+    void Start()
+    {
+        //Get Script
+        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
+        gdb = GameObject.FindGameObjectWithTag("GDB").GetComponent<GameDataBase>();
+        ss = GameObject.FindGameObjectWithTag("SaveSlot").GetComponent<SaveSlot>();
+        menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
+        itemBox = GameObject.FindGameObjectWithTag("ItemBoxScript").GetComponent<ItemBox>();
 
         //Get Gameobject or others
         inventoryView = GameObject.FindGameObjectWithTag("Inventory").transform.Find("InventoryView").gameObject;
@@ -75,13 +88,22 @@ public class Player : MonoBehaviour {
         inventoryView.SetActive(false);
         questView.SetActive(false);
         cantOpenMenu = true;
+        if (DEVELOPERMODE == true)
+        {
+            cantOpenMenu = false;
+        }
         RefreshItem();
 
+        //player status
+        maxHealth = 100;
+        curHealth = 100;
     }
 
     private void Update()
     {
         CharacterInput();
+        //debug
+        curHealthImg.fillAmount = curHealth / maxHealth;
     }
 
     public void CharacterInput()
@@ -90,16 +112,20 @@ public class Player : MonoBehaviour {
         {
             if (Input.GetKeyDown(inputSetup.openInventory))
             {
-                if (inventoryView.activeSelf == false)
+                if (inventoryView.activeSelf == false && questView.activeSelf==false)
                 {
                     inventoryView.SetActive(true);
                     questView.SetActive(true);
+                    menuManager.isOpen=true;
                     menuManager.ResetMenu();
                     GameStatus.PauseGame();
                 }
-                else {
+                //gabisa pake else, soalnya kalo buka item box, inventoryview.activeselfnya nyala
+                else if(inventoryView.activeSelf == true && questView.activeSelf == true)
+                {
                     inventoryView.SetActive(false);
                     questView.SetActive(false);
+                    menuManager.isOpen = false;
                     GameStatus.ResumeGame();
                 }
             }
@@ -117,7 +143,7 @@ public class Player : MonoBehaviour {
         GameObject spawnLocation = GameObject.Find(spawnLocationName);
         cantOpenMenu = false;
 
-        Debug.Log(ss.saveSlot.ToString());
+        //Debug.Log(ss.saveSlot.ToString());
         PlayerData data = SaveSystem.LoadPlayer(ss.saveSlot.ToString());
 
         //Collect Appearance Data
@@ -293,7 +319,6 @@ public class Player : MonoBehaviour {
 
     public void RefreshItem()
     {
-        Debug.Log(item.Count);
         for (int i = 0; i < inventoryIndicator.Length; i++)
         {
             if (inventoryIndicator[i].GetComponent<InventoryItem>().itemID == 0)
@@ -319,7 +344,7 @@ public class Player : MonoBehaviour {
                 }
             }
            
-            inventoryIndicator[i].GetComponent<InventoryItem>().RefreshItem();
+            inventoryIndicator[i].GetComponent<InventoryItem>().RefreshInventory();
         }
         menuManager.RefreshQuest();
     }

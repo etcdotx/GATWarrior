@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CharacterRayCastAndInteraction : MonoBehaviour
 {
     public Player player;
+    public MenuManager menuManager;
     public GameObject mainCamera;
     public GameObject interactButton;
     public Text interactText;
@@ -15,10 +16,13 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
 
     public InputSetup inputSetup;
     public ShowDialog showDialog;
+    public ItemBox itemBox;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
+        itemBox = GameObject.FindGameObjectWithTag("ItemBoxScript").GetComponent<ItemBox>();
+        menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         showDialog = GameObject.FindGameObjectWithTag("ShowDialog").GetComponent<ShowDialog>();
@@ -64,6 +68,17 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                     {
                         //mengambil item tersebut
                         CollectObject(interactable);
+                    }
+                    if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "ItemBox" && itemBox.isItemBoxOpened==false)
+                    {
+                        player.inventoryView.SetActive(true);
+                        itemBox.itemBoxView.SetActive(true);
+                        itemBox.isItemBoxOpened = true;
+                        menuManager.StartCoroutine("ButtonInputHold");
+                        menuManager.isOpen = true;
+                        menuManager.ResetMenu();
+                        GameStatus.PauseGame();
+                        HideButton();
                     }
                 }
             }

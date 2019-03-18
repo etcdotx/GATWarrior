@@ -146,7 +146,6 @@ public class NPC : MonoBehaviour
                 questCompleteDialogActive.Add(questCompleteDialogList[i].dialog);
             }
         }
-        Debug.Log("In");
     }
 
     public void RefreshQuestDialog()
