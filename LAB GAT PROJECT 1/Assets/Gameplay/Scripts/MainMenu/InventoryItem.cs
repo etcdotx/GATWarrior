@@ -11,14 +11,9 @@ public class InventoryItem : MonoBehaviour
     public Player player;
     public ItemBox itemBox;
 
-    private void Start()
-    {
-        player = GameObject.Find("Player").GetComponent<Player>();
-        itemBox = GameObject.FindGameObjectWithTag("ItemBoxScript").GetComponent<ItemBox>();
-    }
-
     public void RefreshInventory()
     {
+        player = GameObject.Find("Player").GetComponent<Player>();
         for (int i = 0; i < player.item.Count; i++)
         {
             if (player.item[i].id == itemID)
@@ -39,6 +34,7 @@ public class InventoryItem : MonoBehaviour
 
     public void RefreshItemBox()
     {
+        itemBox = GameObject.FindGameObjectWithTag("ItemBoxScript").GetComponent<ItemBox>();
         for (int i = 0; i < itemBox.item.Count; i++)
         {
             if (itemBox.item[i].id == itemID)
