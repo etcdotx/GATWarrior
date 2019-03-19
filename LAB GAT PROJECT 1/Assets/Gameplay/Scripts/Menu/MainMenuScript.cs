@@ -16,7 +16,7 @@ public class MainMenuScript : MonoBehaviour {
     public GameObject[] menu1Nav;
 
     [Header("Save System")]
-    public SaveSlot ss;
+    public GameDataBase gameDataBase;
     public Text[] saveSlotText;
 
     [Header("Scene Name")]
@@ -31,7 +31,7 @@ public class MainMenuScript : MonoBehaviour {
         ResetMenu();
         menuNumber = 0;
         LoadMenu();
-        ss = GameObject.Find("SaveSlot").GetComponent<SaveSlot>();
+        gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
         canNav = true;
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
     }
@@ -193,8 +193,8 @@ public class MainMenuScript : MonoBehaviour {
     
     public void SaveSlot(int x)
     {
-        ss.saveSlot = x;
-        if (ss.saveSlotExist[x] == true)
+        gameDataBase.saveSlot = x;
+        if (gameDataBase.saveSlotExist[x] == true)
         {
             SceneManager.LoadScene(sceneNameMenu1[0]);
         }
@@ -208,7 +208,7 @@ public class MainMenuScript : MonoBehaviour {
     {
         SaveSystem.DeletePlayer(x.ToString());
         saveSlotText[x].text = "Empty Game";
-        ss.saveSlotExist[x] = false;
+        gameDataBase.saveSlotExist[x] = false;
         Debug.Log("Delete successful");
     }
 }

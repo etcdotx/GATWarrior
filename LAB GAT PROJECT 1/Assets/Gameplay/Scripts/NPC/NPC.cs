@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    public Player player;
+    public PlayerData playerData;
 
     [Header("Set source number")]
-    public int sourceID;
-    
+    public int sourceID;    
     public bool canGiveQuest;
     public bool isHavingACompleteQuest;
     public bool isHaveTheQuestChainQuest;
@@ -27,7 +26,7 @@ public class NPC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         GetQuestList();
         GetQuestDialog();
         GetQuestCompleteDialog();
@@ -50,10 +49,10 @@ public class NPC : MonoBehaviour
     public void CheckQuestProgress()
     {
         bool isTheChainIDExist = false;
-        for (int i = 0; i < player.collectionQuestComplete.Count; i++)
+        for (int i = 0; i < playerData.collectionQuestComplete.Count; i++)
         {
             //jika collection quest yang sudah selesai = quest yang aktif
-            if (player.collectionQuestComplete[i].id == questIDActive)
+            if (playerData.collectionQuestComplete[i].id == questIDActive)
             {
                 //jika quest yang sedang dijalankan sudah selesai, maka dia memiliki quest yang sudah selesai
                 isHavingACompleteQuest = true;
@@ -62,9 +61,9 @@ public class NPC : MonoBehaviour
                 try
                 {
                     Debug.Log("ok");
-                    for (int z = 0; z < player.playerChainQuest.Count; z++)
+                    for (int z = 0; z < playerData.playerChainQuest.Count; z++)
                     {
-                        if (player.playerChainQuest[z] == player.collectionQuestComplete[i].chainQuestID)
+                        if (playerData.playerChainQuest[z] == playerData.collectionQuestComplete[i].chainQuestID)
                         {
                             Debug.Log("2");
                             isTheChainIDExist = true;
@@ -73,12 +72,12 @@ public class NPC : MonoBehaviour
                     }
                     if (isTheChainIDExist == false)
                     {
-                        player.playerChainQuest.Add(player.collectionQuestComplete[i].chainQuestID);
+                        playerData.playerChainQuest.Add(playerData.collectionQuestComplete[i].chainQuestID);
                     }
                 }
                 catch { }
-                player.collectionQuestUnusable.Add(player.collectionQuestComplete[i]);
-                player.collectionQuestComplete.Remove(player.collectionQuestComplete[i]);
+                playerData.collectionQuestUnusable.Add(playerData.collectionQuestComplete[i]);
+                playerData.collectionQuestComplete.Remove(playerData.collectionQuestComplete[i]);
 
                 break;
             }
@@ -134,7 +133,6 @@ public class NPC : MonoBehaviour
             }
         }
     }
-
 
     public void RefreshQuestCompleteDialog()
     {
@@ -194,5 +192,4 @@ public class NPC : MonoBehaviour
         }
     }
     #endregion
-
 }

@@ -46,16 +46,7 @@ public class CharacterMovement : MonoBehaviour
                 CalculateDirection();
                 Rotate();
                 Walk();
-
-                if (inputAxis.z == 1)
-                {
-                    currentSpeed = defaultSpeed * runSpeedMultiplier;
-                }
-                else
-                {
-                    currentSpeed = defaultSpeed;
-                }
-                inputAxis = Vector3.zero;
+                ManageSpeed();
             }
             else
             {
@@ -67,10 +58,7 @@ public class CharacterMovement : MonoBehaviour
             }
             if (GameStatus.IsPaused == false)
             {
-                if (Input.GetKeyDown(inputSetup.jump))
-                {
-                    charRig.velocity += new Vector3(0, jumpForce, 0);
-                }
+                Jump();
             }
         }
     }
@@ -101,8 +89,18 @@ public class CharacterMovement : MonoBehaviour
     void Rotate()
     {
         targetRotation = Quaternion.Euler(0, angle+ mainCamera.transform.eulerAngles.y, 0);
-        //Debug.Log(MainCamera.transform.eulerAngles.y);
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotateSpeed * Time.deltaTime);
+    }
+
+    void ManageSpeed() {
+        if (inputAxis.z == 1)
+        {
+            currentSpeed = defaultSpeed * runSpeedMultiplier;
+        }
+        else
+        {
+            currentSpeed = defaultSpeed;
+        }
     }
 
     void Walk()
@@ -112,45 +110,41 @@ public class CharacterMovement : MonoBehaviour
         {
             if (Input.GetAxis("LeftJoystickHorizontal") > 0)
             {
-                Vector3 movedirection = transform.forward * Input.GetAxis("LeftJoystickVertical") + transform.forward * Input.GetAxis("LeftJoystickHorizontal");
-                transform.localPosition = transform.localPosition + movedirection * Time.deltaTime * currentSpeed;
-                try
-                {
-                    charAnim.SetBool("isWalk", true);
-                }
-                catch { }
+                ApplyMovement(1, 1);
             }
-            else {
-                Vector3 movedirection = transform.forward * Input.GetAxis("LeftJoystickVertical") -transform.forward * Input.GetAxis("LeftJoystickHorizontal");
-                transform.localPosition = transform.localPosition + movedirection * Time.deltaTime * currentSpeed;
-                try
-                {
-                    charAnim.SetBool("isWalk", true);
-                }
-                catch { }
+            else
+            {
+                ApplyMovement(1, -1);
             }
         }
         else
         {
             if (Input.GetAxis("LeftJoystickHorizontal") > 0)
             {
-                Vector3 movedirection = -transform.forward * Input.GetAxis("LeftJoystickVertical") + transform.forward * Input.GetAxis("LeftJoystickHorizontal");
-                transform.localPosition = transform.localPosition + movedirection * Time.deltaTime * currentSpeed;
-                try
-                {
-                    charAnim.SetBool("isWalk", true);
-                }
-                catch { }
+                ApplyMovement(-1, 1);
             }
-            else {
-                Vector3 movedirection = -transform.forward * Input.GetAxis("LeftJoystickVertical") - transform.forward * Input.GetAxis("LeftJoystickHorizontal");
-                transform.localPosition = transform.localPosition + movedirection * Time.deltaTime * currentSpeed;
-                try
-                {
-                    charAnim.SetBool("isWalk", true);
-                }
-                catch { }
+            else
+            {
+                ApplyMovement(-1, -1);
             }
+        }
+    }
+
+    void ApplyMovement(int a, int b) {
+        Vector3 movedirection = a * transform.forward * Input.GetAxis("LeftJoystickVertical") + b * transform.forward * Input.GetAxis("LeftJoystickHorizontal");
+        transform.localPosition = transform.localPosition + movedirection * Time.deltaTime * currentSpeed;
+        try
+        {
+            charAnim.SetBool("isWalk", true);
+        }
+        catch { }
+    }
+
+    void Jump()
+    {
+        if (Input.GetKeyDown(inputSetup.jump))
+        {
+            charRig.velocity += new Vector3(0, jumpForce, 0);
         }
     }
 }

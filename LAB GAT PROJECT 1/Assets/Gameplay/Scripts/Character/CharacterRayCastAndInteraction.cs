@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterRayCastAndInteraction : MonoBehaviour
 {
-    public Player player;
+    public PlayerData playerData;
     public MenuManager menuManager;
     public GameObject mainCamera;
     public GameObject interactButton;
@@ -16,19 +16,19 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
 
     public InputSetup inputSetup;
     public ShowDialog showDialog;
-    public ItemBox itemBox;
+    public InventoryBox inventoryBox;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
-        itemBox = GameObject.FindGameObjectWithTag("ItemBoxScript").GetComponent<ItemBox>();
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
         menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         showDialog = GameObject.FindGameObjectWithTag("ShowDialog").GetComponent<ShowDialog>();
 
-        interactButton = GameObject.FindGameObjectWithTag("Interactable").transform.Find("InteractButton").gameObject;
-        interactText = GameObject.FindGameObjectWithTag("Interactable").transform.Find("InteractText").GetComponent<Text>();
+        interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
+        interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
         HideButton();
     }
 
@@ -44,8 +44,8 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
     void RayCasting()
     {
         Ray ray = new Ray(transform.position + raycastOffset, transform.forward + raycastOffset);
-        RaycastHit hit;
         Debug.DrawLine(transform.position + raycastOffset, transform.position + raycastOffset + transform.forward * maxRayDistance, Color.red);
+        RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, maxRayDistance))
         {
@@ -69,11 +69,11 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                         //mengambil item tersebut
                         CollectObject(interactable);
                     }
-                    if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "ItemBox" && itemBox.isItemBoxOpened==false)
+                    if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened==false)
                     {
-                        player.inventoryView.SetActive(true);
-                        itemBox.itemBoxView.SetActive(true);
-                        itemBox.isItemBoxOpened = true;
+                        playerData.inventoryView.SetActive(true);
+                        inventoryBox.inventoryBoxView.SetActive(true);
+                        inventoryBox.isItemBoxOpened = true;
                         menuManager.StartCoroutine("ButtonInputHold");
                         menuManager.isOpen = true;
                         menuManager.ResetMenu();
@@ -110,10 +110,10 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
             //mengecek apakah quest yang sedang dijalankan sudah selesai apa belum
             interactedNPC.CheckQuestProgress();
 
-            for (int i = 0; i < player.playerChainQuest.Count; i++)
+            for (int i = 0; i < playerData.playerChainQuest.Count; i++)
             {
                 //jika quest npc yang aktif ada di list questchain player
-                if (player.playerChainQuest[i] == interactedNPC.questIDActive)
+                if (playerData.playerChainQuest[i] == interactedNPC.questIDActive)
                 {
                     //bisa memberi quest
                     interactedNPC.canGiveQuest = true;
@@ -131,10 +131,10 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < player.playerChainQuest.Count; i++)
+            for (int i = 0; i < playerData.playerChainQuest.Count; i++)
             {
                 //jika quest yang sedang berjalan diplayer ada di npc tersebut
-                if (player.playerChainQuest[i] == interactedNPC.questIDActive)
+                if (playerData.playerChainQuest[i] == interactedNPC.questIDActive)
                 {
                     isHavingTheChainQuest = true;
                     break;
@@ -159,7 +159,7 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
                 {
                     if (QuestDataBase.collectionQuest[i].id == interactedNPC.questIDActive)
                     {
-                        player.AddQuest(QuestDataBase.collectionQuest[i]);
+                        playerData.AddQuest(QuestDataBase.collectionQuest[i]);
                     }
                 }
 
@@ -208,7 +208,7 @@ public class CharacterRayCastAndInteraction : MonoBehaviour
             //maka item tersebut dimasukkan kedalam koleksi item player
             if (ItemDataBase.item[i].id == itemID)
             {
-                player.AddItem(ItemDataBase.item[i]);
+                playerData.AddItem(ItemDataBase.item[i]);
                 break;
             }
         }

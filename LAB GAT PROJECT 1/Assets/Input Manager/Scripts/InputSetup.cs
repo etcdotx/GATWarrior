@@ -25,6 +25,5 @@ public class InputSetup : MonoBehaviour
         openInventory = KeyCode.Joystick1Button7;
         jump = KeyCode.Joystick1Button0;
         putInventory = KeyCode.Joystick1Button2;
-
     }
 }

@@ -6,10 +6,11 @@ using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
-    public ItemBox itemBox;
-    public Player player;
+    public InventoryBox inventoryBox;
+    public PlayerData playerData;
     public InputSetup inputSetup;
     public bool isOpen;
+    public bool cantOpenMenu;
 
     [Header("Input Settings")]
     public Vector3 inputAxis;
@@ -27,6 +28,7 @@ public class MenuManager : MonoBehaviour
     [Header("Quest Menu Settings")]
     public int questIndex;
     public int questMaxIndex;
+    public GameObject questView;
     public GameObject questContent;
     public Scrollbar questViewScrollbar;
 
@@ -43,8 +45,8 @@ public class MenuManager : MonoBehaviour
     public GameObject inventoryView;
     public GameObject inventoryViewPort;
     public GameObject[,] inventoryPos; //5 column
-    public InventoryItem invenSwap1;
-    public InventoryItem invenSwap2;
+    public InventoryIndicator invenSwap1;
+    public InventoryIndicator invenSwap2;
     public bool isSwapping;
     public Item temporaryItem;
     public GameObject slider;
@@ -53,13 +55,23 @@ public class MenuManager : MonoBehaviour
 
     public void Start()
     {
+        cantOpenMenu = true;
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        itemBox = GameObject.FindGameObjectWithTag("ItemBoxScript").GetComponent<ItemBox>();
-        player = GameObject.Find("Player").GetComponent<Player>();
+        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         pointerInputHold = false;
         buttonInputHold = false;
 
+        if (playerData.DEVELOPERMODE == true)
+        {
+            cantOpenMenu = false;
+        }
+
         //quest
+        questView = GameObject.FindGameObjectWithTag("QuestUI").transform.Find("QuestView").gameObject;
+        questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
+        questViewScrollbar = questView.transform.Find("QuestViewScrollbar").GetComponent<Scrollbar>();
+
         questIndex = 0;
         questMaxIndex = questContent.transform.childCount - 1;
 
@@ -70,7 +82,7 @@ public class MenuManager : MonoBehaviour
         ResetPointer();
 
         //inventory
-        inventoryView = GameObject.FindGameObjectWithTag("Inventory").transform.Find("InventoryView").gameObject;
+        inventoryView = GameObject.FindGameObjectWithTag("InventoryUI").transform.Find("InventoryView").gameObject;
         inventoryViewPort = inventoryView.transform.Find("InventoryViewPort").gameObject;
         slider = inventoryView.transform.Find("Slider").gameObject;
         slider.SetActive(false);
@@ -95,6 +107,30 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
+        //press start
+        if (GameStatus.isTalking == false && cantOpenMenu == false)
+        {
+            if (Input.GetKeyDown(inputSetup.openInventory))
+            {
+                if (inventoryView.activeSelf == false && questView.activeSelf == false)
+                {
+                    inventoryView.SetActive(true);
+                    questView.SetActive(true);
+                    isOpen = true;
+                    ResetMenu();
+                    GameStatus.PauseGame();
+                }
+                //gabisa pake else, soalnya kalo buka item box, inventoryview.activeselfnya nyala
+                else if (inventoryView.activeSelf == true && questView.activeSelf == true)
+                {
+                    inventoryView.SetActive(false);
+                    questView.SetActive(false);
+                    isOpen = false;
+                    GameStatus.ResumeGame();
+                }
+            }
+        }
+
         if (GameStatus.IsPaused == true && isOpen == true)
         {
             GetScrollInput();
@@ -106,6 +142,7 @@ public class MenuManager : MonoBehaviour
                     StartCoroutine(PointerInputHold());
                     ApplyInput();
                 }
+                //set quantity ke item box
                 else if (( inputAxis.x == 1 || inputAxis.x == -1) && isSettingQuantity == true)
                 {
                     StartCoroutine(PointerInputHold());
@@ -123,7 +160,7 @@ public class MenuManager : MonoBehaviour
             }
             if (buttonInputHold == false)
             {
-                if (itemBox.isItemBoxOpened == false)
+                if (inventoryBox.isItemBoxOpened == false)
                 {
                     if (menuNumber == 0) //inventory
                     {
@@ -146,11 +183,11 @@ public class MenuManager : MonoBehaviour
 
                     if (Input.GetKeyDown(inputSetup.back))
                     {
-                        if (itemBox.isItemBoxOpened == true)
+                        if (inventoryBox.isItemBoxOpened == true)
                         {
                             inventoryView.SetActive(false);
-                            itemBox.itemBoxView.SetActive(false);
-                            itemBox.isItemBoxOpened = false;
+                            inventoryBox.inventoryBoxView.SetActive(false);
+                            inventoryBox.isItemBoxOpened = false;
                             isOpen = false;
                             ResetMenu();
                             GameStatus.ResumeGame();
@@ -177,7 +214,7 @@ public class MenuManager : MonoBehaviour
         }
         if (Input.GetKeyDown(inputSetup.select) && isSettingQuantity == true)
         {
-            itemBox.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
+            inventoryBox.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
             slider.SetActive(false);
             isSettingQuantity = false;
         }
@@ -185,14 +222,14 @@ public class MenuManager : MonoBehaviour
 
     void SetQuantity()
     {
-        for (int i = 0; i < player.item.Count; i++)
+        for (int i = 0; i < playerData.item.Count; i++)
         {
-            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>().itemID == player.item[i].id)
+            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().itemID == playerData.item[i].id)
             {
-                temporaryItem = player.item[i]; //jenis item
+                temporaryItem = playerData.item[i]; //jenis item
                 slider.SetActive(true);
                 inventoryQuantitySlider.minValue = 1;
-                inventoryQuantitySlider.maxValue = player.item[i].quantity;
+                inventoryQuantitySlider.maxValue = playerData.item[i].quantity;
                 inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
                 break;
             }
@@ -201,7 +238,7 @@ public class MenuManager : MonoBehaviour
 
     void SelectMenu()
     {
-        if (itemBox.isItemBoxOpened == false)
+        if (inventoryBox.isItemBoxOpened == false)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
@@ -243,7 +280,7 @@ public class MenuManager : MonoBehaviour
 
     public void ResetPointer()
     {
-        if (itemBox.isItemBoxOpened == false)
+        if (inventoryBox.isItemBoxOpened == false)
         {
             for (int i = 0; i < menuPointer.Length; i++)
             {
@@ -277,7 +314,7 @@ public class MenuManager : MonoBehaviour
 
     void ApplyInput()
     {
-        if (itemBox.isItemBoxOpened == false)
+        if (inventoryBox.isItemBoxOpened == false)
         {
             if (menuNumber == 0) //inven
             {
@@ -297,7 +334,7 @@ public class MenuManager : MonoBehaviour
             else if (menuNumber == 1) //itembox
             {
                 //itembox selection
-                itemBox.ItemBoxSelection();
+                inventoryBox.InventoryBoxSelection();
             }
         }
     }
@@ -356,7 +393,7 @@ public class MenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button0) && isSwapping == false)
         {
-            invenSwap1 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>();
+            invenSwap1 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
             invenSwap1.gameObject.GetComponent<Image>().color = selectedColor;
             invenSwap1.isSelected = true;
             isSwapping = true;
@@ -364,12 +401,12 @@ public class MenuManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Joystick1Button0) && isSwapping == true)
         {
-            invenSwap2 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>();
+            invenSwap2 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
             int id1 = invenSwap1.itemID;
             int id2 = invenSwap2.itemID;
             invenSwap1.itemID = id2;
             invenSwap2.itemID = id1;
-            player.RefreshItem();
+            playerData.RefreshItem();
             invenSwap1.isSelected = false;
             invenSwap1.gameObject.GetComponent<Image>().color = normalColor;
             isSwapping = true;
@@ -386,13 +423,13 @@ public class MenuManager : MonoBehaviour
             {
                 for (int j = 0; j < inventoryColumn; j++)
                 {
-                    if (inventoryPos[i, j].GetComponent<InventoryItem>().isSelected == false)
+                    if (inventoryPos[i, j].GetComponent<InventoryIndicator>().isSelected == false)
                     {
                         inventoryPos[i, j].GetComponent<Image>().color = normalColor;
                     }
                 }
             }
-            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryItem>().isSelected == false)
+            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().isSelected == false)
             {
                 inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<Image>().color = markColor;
             }
@@ -451,9 +488,9 @@ public class MenuManager : MonoBehaviour
         {
             for (int i = 0; i <= questMaxIndex; i++)
             {
-                player.questContent.transform.GetChild(i).GetComponent<Image>().color = normalColor;
+                playerData.questContent.transform.GetChild(i).GetComponent<Image>().color = normalColor;
             }
-            player.questContent.transform.GetChild(questIndex).GetComponent<Image>().color = selectedColor;
+            playerData.questContent.transform.GetChild(questIndex).GetComponent<Image>().color = selectedColor;
         }
         catch
         {
@@ -464,11 +501,11 @@ public class MenuManager : MonoBehaviour
     {
         try
         {
-            for (int i = 0; i < player.collectionQuest.Count; i++)
+            for (int i = 0; i < playerData.collectionQuest.Count; i++)
             {
-                if (player.collectionQuest[i].id == player.questContent.transform.GetChild(questIndex).GetComponent<QuestListUI>().questID)
+                if (playerData.collectionQuest[i].id == playerData.questContent.transform.GetChild(questIndex).GetComponent<QuestListUI>().questID)
                 {
-                    CollectionQuest newCol = player.collectionQuest[i];
+                    CollectionQuest newCol = playerData.collectionQuest[i];
                     questDescription.text = newCol.ToString(); //newCol.description + newCol.ToString();
                     break;
                 }

@@ -4,21 +4,24 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - GDB
   - PlayerHead
   - InputSetup
   - NPC
-  - Conversation
   - ShowDialog
-  - Inventory
-  - Interactable
-  - Quest
   - MenuManager
-  - SaveSlot
-  - PlayerStatus
   - ItemBox
   - ItemBoxScript
   - ItemBoxUI
+  - PlayerData
+  - PlayerStatusUI
+  - InteractableUI
+  - ConversationUI
+  - QuestUI
+  - InventoryUI
+  - InventoryBoxUI
+  - InventoryBox
+  - GameObject_InventoryBox
+  - GameDataBase
   layers:
   - Default
   - TransparentFX

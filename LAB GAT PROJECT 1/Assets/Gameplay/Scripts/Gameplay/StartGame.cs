@@ -5,9 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
-
-    public Player player;
+    public PlayerData playerData;
+    public MenuManager menuManager;
     public GameObject character;
+    public GameDataBase gameDataBase;
     public string selectSpawnLocationName;
     public Vector3 characterScale;
     public static string curScene;
@@ -22,27 +23,30 @@ public class StartGame : MonoBehaviour
     public string Hutan1_3;
     public string Hutan1_4;
 
-    // Use this for initialization
-    void Awake()
-    {
-        if (curScene == null)
-        {
-            curScene = Rumah;
-        }
-        
-    }
-
     private void Start()
     {
         CheckScene();
         GameStatus.isTalking = false;
         GameStatus.ResumeGame();
-        player = GameObject.Find("Player").GetComponent<Player>();
-        player.LoadPlayer(selectSpawnLocationName);
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
+        gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
+        menuManager.cantOpenMenu = false;
+        //DEVELOPERMODE
+        if (playerData.DEVELOPERMODE == true)
+        {
+            gameDataBase.saveSlot = 0;
+        }
+        playerData.LoadPlayer(selectSpawnLocationName);
     }
 
     void CheckScene()
     {
+        if (curScene == null)
+        {
+            curScene = Rumah;
+        }
+
         newScene = SceneManager.GetActiveScene().name;
         if (curScene == Rumah)
         {

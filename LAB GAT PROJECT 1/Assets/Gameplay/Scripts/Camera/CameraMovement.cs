@@ -32,8 +32,7 @@ public class CameraMovement : MonoBehaviour {
         {
             currentY = -79.9f;
         }
-        currentX += Input.GetAxis("RightJoystickHorizontal");
-       
+        currentX += Input.GetAxis("RightJoystickHorizontal");       
     }
 
     // Update is called once per frame
@@ -41,11 +40,11 @@ public class CameraMovement : MonoBehaviour {
     {
         if (GameStatus.isTalking == false)
         {
-            FollowCharacter();
+            ApplyMovement();
         }
     }
 
-    void FollowCharacter()
+    void ApplyMovement()
     {
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);

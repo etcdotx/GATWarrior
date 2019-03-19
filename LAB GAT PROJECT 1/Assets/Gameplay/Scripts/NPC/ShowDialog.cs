@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ShowDialog : MonoBehaviour
 {
     [Header("Script List")]
-    public Player player;
+    public PlayerData playerData;
 
     [Header("Value")]
     public bool inputHold;
@@ -22,11 +22,11 @@ public class ShowDialog : MonoBehaviour
 
     public void Start()
     {
-        conversationText = GameObject.FindGameObjectWithTag("Conversation").transform.Find("ConversationText").GetComponent<Text>();
-        player = GameObject.Find("Player").GetComponent<Player>();
+        conversationText = GameObject.FindGameObjectWithTag("ConversationUI").transform.Find("ConversationText").GetComponent<Text>();
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
 
-        conversationButton = GameObject.FindGameObjectWithTag("Interactable").transform.Find("ConversationButton").gameObject;
-        interactText = GameObject.FindGameObjectWithTag("Interactable").transform.Find("InteractText").GetComponent<Text>();
+        conversationButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("ConversationButton").gameObject;
+        interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
     }
 
     public void Update()
@@ -145,7 +145,7 @@ public class ShowDialog : MonoBehaviour
             if (QuestDataBase.collectionQuest[i].id == this.questID)
             {
                 //jika quest id tersebut sesuai dengan yang didatabase, maka player memasukkan quest tersebut
-                player.AddQuest(QuestDataBase.collectionQuest[i]);
+                playerData.AddQuest(QuestDataBase.collectionQuest[i]);
             }
         }
     }
