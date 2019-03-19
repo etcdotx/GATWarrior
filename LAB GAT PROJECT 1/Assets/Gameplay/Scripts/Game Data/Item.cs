@@ -20,7 +20,7 @@ public class Item
         quantity = 1;
         this.id = id;
         this.imagePath = imagePath;
-        itemImage = Resources.Load<Sprite>(imagePath);
+        itemImage = Resources.Load<Sprite>(this.imagePath);
         this.name = name;
         this.description = description;
         this.isUsable = isUsable;

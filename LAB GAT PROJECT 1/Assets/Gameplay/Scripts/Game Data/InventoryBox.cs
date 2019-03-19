@@ -164,9 +164,9 @@ public class InventoryBox : MonoBehaviour
 
         if (isItemExist == false)
         {
-            Item a = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable);
-            a.quantity = quantity;
-            item.Add(a);
+            Item newItemInBox = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable);
+            newItemInBox.quantity = quantity;
+            item.Add(newItemInBox);
             newItem.quantity -= quantity;
             Debug.Log(item[0].quantity);
             Debug.Log(newItem.quantity);
@@ -187,11 +187,9 @@ public class InventoryBox : MonoBehaviour
                     {
                         if (item[j].isOnItemBox == false)
                         {
-                            Debug.Log(item[j].name + " " + item[j].isOnItemBox);
                             Debug.Log("masuk");
                             inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().itemID = item[j].id;
                             item[j].isOnItemBox = true;
-                            Debug.Log(item[j].name + " " + item[j].isOnItemBox);
                             break;
                         }
                     }

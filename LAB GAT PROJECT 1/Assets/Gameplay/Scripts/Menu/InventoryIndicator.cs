@@ -24,11 +24,16 @@ public class InventoryIndicator : MonoBehaviour
         {
             for (int i = 0; i < playerData.item.Count; i++)
             {
+                Debug.Log(playerData.item.Count);
+                Debug.Log(playerData.item[i].name + " " + playerData.item[i].quantity);
                 if (playerData.item[i].id == itemID)
                 {
+                    Debug.Log(playerData.item[i].id + " = " + itemID);
                     if (playerData.item[i].quantity == 0)
                     {
+                        Debug.Log("ok");
                         playerData.item.RemoveAt(i);
+                        Debug.Log(playerData.item.Count);
                         MakeEmpty();
                         break;
                     }
@@ -38,6 +43,7 @@ public class InventoryIndicator : MonoBehaviour
                     break;
                 }
             }
+            Debug.Log(playerData.item.Count);
         }
     }
 
@@ -52,11 +58,13 @@ public class InventoryIndicator : MonoBehaviour
         {
             for (int i = 0; i < inventoryBox.item.Count; i++)
             {
+                Debug.Log(inventoryBox.item[i].name + " " + inventoryBox.item[i].quantity);
                 if (inventoryBox.item[i].id == itemID)
                 {
                     if (inventoryBox.item[i].quantity == 0)
                     {
                         inventoryBox.item.RemoveAt(i);
+                        Debug.Log(inventoryBox.item.Count);
                         MakeEmpty();
                         break;
                     }

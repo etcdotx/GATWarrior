@@ -12,6 +12,7 @@ public class CollectionQuest
     public GameObject itemToCollect;
     public string title;
     public string verb;
+    public string resourcePath;
     public string description;
     public bool isComplete;
     public bool isOptional;
@@ -21,7 +22,8 @@ public class CollectionQuest
         this.id = id;
         this.chainQuestID = chainQuestID;
         this.colAmount = colAmount;
-        itemToCollect = Resources.Load(resourcePath) as GameObject;
+        this.resourcePath = resourcePath;
+        itemToCollect = Resources.Load(this.resourcePath) as GameObject;
         this.title = title;
         this.verb = verb;
         this.description = description;

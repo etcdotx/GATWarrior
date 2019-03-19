@@ -49,23 +49,23 @@ public class PlayerData : MonoBehaviour {
     public GameObject charPrefab;
     bool dontloadCharacter;
 
-    void Start()
+    private void Awake()
     {
         //Get Script
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
         menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
-
         //DEVELOPERMODE
         if (DEVELOPERMODE == true)
         {
             dontloadCharacter = true;
             gameDataBase.saveSlot = 0;
         }
+    }
 
-        Debug.Log(gameDataBase.saveSlot.ToString());
-
+    void Start()
+    {
         //Get Gameobject or others
         inventoryView = GameObject.FindGameObjectWithTag("InventoryUI").transform.Find("InventoryView").gameObject;
         int h = inventoryView.transform.Find("InventoryViewPort").childCount;
@@ -92,6 +92,9 @@ public class PlayerData : MonoBehaviour {
     {
         //debug
         curHealthImg.fillAmount = curHealth / maxHealth;
+        //Debug.Log(collectionQuest.Count);
+        //Debug.Log(collectionQuestComplete.Count);
+        //Debug.Log(collectionQuestUnusable.Count);
     }
 
     public void SavePlayer()
@@ -106,6 +109,7 @@ public class PlayerData : MonoBehaviour {
 
         try
         {
+            Debug.Log(gameDataBase);
             PlayerSaveData data = SaveSystem.LoadPlayer(gameDataBase.saveSlot.ToString());
             characterAppearance = new int[data.characterAppearance.Length];
             for (int i = 0; i < characterAppearance.Length; i++)
@@ -163,17 +167,18 @@ public class PlayerData : MonoBehaviour {
         } while (cm == null);
     }
 
-    public void AddQuest(CollectionQuest newQuest)
+    public void AddQuest(CollectionQuest cq)
     {
         //memasukkan quest baru kedalam ke quest yang dimiliki player
+        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, cq.resourcePath, cq.title, cq.verb, cq.description, cq.isOptional);
         collectionQuest.Add(newQuest);
         //memasukkan quest list kedalam ui
-        AddQuestToList(newQuest);
+        AddNewQuestToList();
         //mengecek status quest baru
         CheckNewQuestProgress(newQuest);
     }
 
-    public void AddQuestToList(CollectionQuest newQuest)
+    public void AddNewQuestToList()
     {
         Instantiate(questListPrefab, questContent.transform);
         questListIndex++;
@@ -212,7 +217,6 @@ public class PlayerData : MonoBehaviour {
                 //jika item tersebut sudah ada, kuantiti ditambah
                 item[i].quantity++;
                 itemExist = true;
-                Debug.Log(newItem.name + " added");
                 //cek item tersebut ke quest yang exist
                 CheckNewItem(item[i]);
                 //item tersebut di refresh kedalam inventory
@@ -224,21 +228,23 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             //item baru ditambah kedalam list player
-            item.Add(newItem);
+            item.Add(new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable));
             for (int i = 0; i < inventoryItemID.Length; i++)
             {
                 if (inventoryItemID[i] == 0)
                 {
                     //item id dimasukkan kedalam array yang masih 0 idnya
                     inventoryItemID[i] = newItem.id;
+                    Debug.Log("ok1");
                     break;
                 }
             }
-            Debug.Log("New " + newItem.name + " added");
             //cek item tersebut ke quest yang exist
             CheckNewItem(newItem);
+            Debug.Log("ok2");
             //item tersebut di refresh kedalam inventory
             RefreshItem();
+            Debug.Log("ok3");
         }
     }
 
@@ -263,13 +269,14 @@ public class PlayerData : MonoBehaviour {
         }
     }
 
-    public void AddCollectionQuestComplete(CollectionQuest cq)
+    public void AddCollectionQuestComplete(CollectionQuest cqc)
     {
+        collectionQuest.Remove(cqc);
         bool colQuestExist = false;
         for (int k = 0; k < collectionQuestComplete.Count; k++)
         {
             //jika quest yang sudah selesai, sudah ada di dalam koleksi quest yang sudah selesai, tidak dimasukkan
-            if (cq.id == collectionQuestComplete[k].id)
+            if (cqc.id == collectionQuestComplete[k].id)
             {
                 colQuestExist = true;
                 //Debug.Log("Collection Quest Complete Exist");
@@ -278,7 +285,8 @@ public class PlayerData : MonoBehaviour {
         if (colQuestExist == false)
         {
             //jika quest yang sudah selesai, tidak ada di dalam koleksi quest yang sudah selesai, masukkan quest tersebut
-            collectionQuestComplete.Add(cq);
+            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
+            collectionQuestComplete.Add(newQuestCom);
             Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
         }
     }
@@ -295,11 +303,8 @@ public class PlayerData : MonoBehaviour {
                     {
                         if (item[j].isOnInventory == false)
                         {
-                            Debug.Log(item[j].name + " " + item[j].isOnInventory);
-                            Debug.Log("masuk");
                             inventoryIndicator[i].GetComponent<InventoryIndicator>().itemID = item[j].id;
                             item[j].isOnInventory = true;
-                            Debug.Log(item[j].name + " " + item[j].isOnInventory);
                             break;
                         }
                     }
@@ -309,7 +314,6 @@ public class PlayerData : MonoBehaviour {
                     //Debug.Log("There is no item in " + i + " inventory slot.");
                 }
             }
-           
             inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
         }
         menuManager.RefreshQuest();
