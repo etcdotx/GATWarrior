@@ -6,7 +6,7 @@ public class CollectionQuest
 {
     public int sourceID;
     public int id;
-    public int chainQuestID;
+    public List<int> chainQuestID = new List<int>();
     public int colAmount;
     public int curAmount;
     public GameObject itemToCollect;
@@ -17,10 +17,9 @@ public class CollectionQuest
     public bool isComplete;
     public bool isOptional;
 
-    public CollectionQuest(int sourceID, int id, int chainQuestID,int colAmount, string resourcePath, string title, string verb, string description, bool isOptional){
+    public CollectionQuest(int sourceID, int id, int colAmount, string resourcePath, string title, string verb, string description, bool isOptional){
         this.sourceID = sourceID;
         this.id = id;
-        this.chainQuestID = chainQuestID;
         this.colAmount = colAmount;
         this.resourcePath = resourcePath;
         itemToCollect = Resources.Load(this.resourcePath) as GameObject;

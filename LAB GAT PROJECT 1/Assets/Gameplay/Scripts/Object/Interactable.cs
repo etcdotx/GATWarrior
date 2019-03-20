@@ -9,6 +9,5 @@ public class Interactable : MonoBehaviour
     public int itemID;
     public string interactText;
     public bool isTalking;
-    public GameObject interactView;
     public List<string> dialog;
 }

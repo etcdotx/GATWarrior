@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class InventoryBox : MonoBehaviour
 {
     public PlayerData playerData;
-    public MenuManager menuManager;
+
+    public Inventory inventory;
+    public GameMenuManager gameMenuManager;
 
     [Header("UI Settings")]
     public GameObject inventoryBoxUI;
@@ -15,7 +17,6 @@ public class InventoryBox : MonoBehaviour
     public GameObject inventoryBoxContent;
     public Scrollbar inventoryBoxScrollbar;
 
-    public List<Item> item = new List<Item>();
     public GameObject[] inventoryBoxIndicator;
     public GameObject[,] inventoryBoxPos;
     public int inventoryBoxColumn;
@@ -28,7 +29,9 @@ public class InventoryBox : MonoBehaviour
     public void Start()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
+        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
+        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
+
         inventoryBoxUI = GameObject.FindGameObjectWithTag("InventoryBoxUI");
         inventoryBoxView = inventoryBoxUI.transform.Find("InventoryBoxView").gameObject;
         inventoryBoxViewPort = inventoryBoxView.transform.Find("InventoryBoxViewPort").gameObject;
@@ -58,7 +61,7 @@ public class InventoryBox : MonoBehaviour
 
     public void InventoryBoxSelection()
     {
-        if (menuManager.inputAxis.y == -1) // kebawah
+        if (gameMenuManager.inputAxis.y == -1) // kebawah
         {
             if (inventoryBoxRowIndex < inventoryBoxRow - 1)
             {
@@ -69,7 +72,7 @@ public class InventoryBox : MonoBehaviour
                 inventoryBoxRowIndex = 0;
             }
         }
-        else if (menuManager.inputAxis.y == 1) // keatas
+        else if (gameMenuManager.inputAxis.y == 1) // keatas
         {
             if (inventoryBoxRowIndex > 0)
             {
@@ -81,7 +84,7 @@ public class InventoryBox : MonoBehaviour
             }
         }
 
-        if (menuManager.inputAxis.x == -1) // kekiri
+        if (gameMenuManager.inputAxis.x == -1) // kekiri
         {
             if (inventoryBoxColumnIndex > 0)
             {
@@ -92,7 +95,7 @@ public class InventoryBox : MonoBehaviour
                 inventoryBoxColumnIndex = inventoryBoxColumn - 1;
             }
         }
-        else if (menuManager.inputAxis.x == 1) //kekanan
+        else if (gameMenuManager.inputAxis.x == 1) //kekanan
         {
             if (inventoryBoxColumnIndex < inventoryBoxColumn - 1)
             {
@@ -105,7 +108,6 @@ public class InventoryBox : MonoBehaviour
         }
         MarkItemBox();
         ScrollItemBox();
-        RefreshItem();
     }
 
     void MarkItemBox()
@@ -116,13 +118,13 @@ public class InventoryBox : MonoBehaviour
             {
                 if (inventoryBoxPos[i, j].GetComponent<InventoryIndicator>().isSelected == false)
                 {
-                    inventoryBoxPos[i, j].GetComponent<Image>().color = menuManager.normalColor;
+                    inventoryBoxPos[i, j].GetComponent<Image>().color = gameMenuManager.normalColor;
                 }
             }
         }
         if (inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().isSelected == false)
         {
-            inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<Image>().color = menuManager.markColor;
+            inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<Image>().color = gameMenuManager.markColor;
         }
     }
 
@@ -147,15 +149,15 @@ public class InventoryBox : MonoBehaviour
     {
         bool isItemExist = false;
         //check if item exist or not
-        for (int i = 0; i < item.Count; i++)
+        for (int i = 0; i < playerData.inventoryBoxItem.Count; i++)
         {
-            if (item[i].id == newItem.id)
+            if (playerData.inventoryBoxItem[i].id == newItem.id)
             {
                 isItemExist = true;
                 //quantity item ditambah quantity baru
-                item[i].quantity += quantity;
+                playerData.inventoryBoxItem[i].quantity += quantity;
                 newItem.quantity -= quantity;
-                Debug.Log(item[i].quantity);
+                Debug.Log(playerData.inventoryBoxItem[i].quantity);
                 Debug.Log(newItem.quantity);
                 Debug.Log("exist");
                 break;
@@ -166,16 +168,14 @@ public class InventoryBox : MonoBehaviour
         {
             Item newItemInBox = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable);
             newItemInBox.quantity = quantity;
-            item.Add(newItemInBox);
+            playerData.inventoryBoxItem.Add(newItemInBox);
             newItem.quantity -= quantity;
-            Debug.Log(item[0].quantity);
-            Debug.Log(newItem.quantity);
         }
-        playerData.RefreshItem();
-        RefreshItem();
+        inventory.RefreshInventory();
+        RefreshInventoryBox();
     }
 
-    public void RefreshItem()
+    public void RefreshInventoryBox()
     {
         for (int i = 0; i < inventoryBoxIndicator.Length; i++)
         {
@@ -183,13 +183,12 @@ public class InventoryBox : MonoBehaviour
             {
                 try
                 {
-                    for (int j = 0; j < item.Count; j++)
+                    for (int j = 0; j < playerData.inventoryBoxItem.Count; j++)
                     {
-                        if (item[j].isOnItemBox == false)
+                        if (playerData.inventoryBoxItem[j].isOnItemBox == false)
                         {
-                            Debug.Log("masuk");
-                            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().itemID = item[j].id;
-                            item[j].isOnItemBox = true;
+                            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().itemID = playerData.inventoryBoxItem[j].id;
+                            playerData.inventoryBoxItem[j].isOnItemBox = true;
                             break;
                         }
                     }

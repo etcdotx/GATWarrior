@@ -8,7 +8,6 @@ TagManager:
   - InputSetup
   - NPC
   - ShowDialog
-  - MenuManager
   - ItemBox
   - ItemBoxScript
   - ItemBoxUI
@@ -22,6 +21,9 @@ TagManager:
   - InventoryBox
   - GameObject_InventoryBox
   - GameDataBase
+  - Inventory
+  - GameMenuManager
+  - Quest
   layers:
   - Default
   - TransparentFX

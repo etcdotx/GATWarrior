@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class StartGame : MonoBehaviour
 {
     public PlayerData playerData;
-    public MenuManager menuManager;
+    public GameMenuManager gameMenuManager;
     public GameObject character;
     public GameDataBase gameDataBase;
     public string selectSpawnLocationName;
@@ -29,9 +29,9 @@ public class StartGame : MonoBehaviour
         GameStatus.isTalking = false;
         GameStatus.ResumeGame();
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>();
+        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
-        menuManager.cantOpenMenu = false;
+        gameMenuManager.cantOpenMenu = false;
         //DEVELOPERMODE
         if (playerData.DEVELOPERMODE == true)
         {
