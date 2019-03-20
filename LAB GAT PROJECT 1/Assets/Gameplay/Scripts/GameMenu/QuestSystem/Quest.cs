@@ -9,6 +9,10 @@ public class Quest : MonoBehaviour
     public PlayerData playerData;
     public GameMenuManager gameMenuManager;
 
+    [Header("QuestDataBase")]
+    public List<CollectionQuest> collectionQuestActive = new List<CollectionQuest>();
+    public GameObject[] npcAvailable;
+
     [Header("Quest Menu Settings")]
     public int questIndex;
     public int questMaxIndex;
@@ -20,11 +24,14 @@ public class Quest : MonoBehaviour
     public GameObject questDetail;
     public TextMeshProUGUI questDescription;
     public TextMeshProUGUI questObjective;
+
     // Start is called before the first frame update
     void Start()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
+
+        collectionQuestActive.Add(QuestDataBase.collectionQuest[0]);
 
         questView = GameObject.FindGameObjectWithTag("QuestUI").transform.Find("QuestView").gameObject;
         questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
@@ -37,9 +44,26 @@ public class Quest : MonoBehaviour
         questObjective = questDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         questDescription.text = "";
         questObjective.text = "";
+
+        ActivateQuest();
     }
 
-
+    public void ActivateQuest()
+    {
+        npcAvailable = GameObject.FindGameObjectsWithTag("NPC");
+        for (int i = 0; i < collectionQuestActive.Count; i++)
+        {
+            for (int j = 0; j < npcAvailable.Length; j++)
+            {
+                if (collectionQuestActive[i].sourceID == npcAvailable[j].GetComponent<NPC>().sourceID)
+                {
+                    npcAvailable[j].GetComponent<NPC>().activeCollectionQuest.Add(collectionQuestActive[i]);
+                }
+                npcAvailable[j].GetComponent<NPC>().GetQuestDialog();
+                npcAvailable[j].GetComponent<NPC>().GetQuestCompleteDialog();
+            }
+        }
+    }
 
     public void QuestSelection()
     {
@@ -125,4 +149,5 @@ public class Quest : MonoBehaviour
         {
         }
     }
+
 }

@@ -17,9 +17,6 @@ public class GameDataBase: MonoBehaviour {
     public GameObject[] femaleHairType;
     public Color32[] hairColor;
 
-    [Header("QUEST")]
-    public List<int> questActive = new List<int>();
-
     public void Awake()
     {
         CheckSaveSlot();
@@ -27,14 +24,6 @@ public class GameDataBase: MonoBehaviour {
         AddCollectionQuest();
         QuestDialog();
         QuestCompleteDialog();        
-    }
-
-    void addQuestActive(List<int> chainQuestID)
-    {
-        for (int i = 0; i < chainQuestID.Count; i++)
-        {
-            questActive.Add(chainQuestID[i]);
-        }
     }
 
     void CheckSaveSlot() {
@@ -76,7 +65,6 @@ public class GameDataBase: MonoBehaviour {
         CollectionQuest quest1 = new CollectionQuest(1, 1, 5, "GameObject/Quest/Cube", "Collect 5 Cube", "Collect", "Collect 5 cube in town", false);
         quest1.chainQuestID.Add(2);
         quest1.chainQuestID.Add(3);
-
         QuestDataBase.collectionQuest.Add(quest1);
 
         CollectionQuest quest3 = new CollectionQuest(1, 4, 7, "GameObject/Quest/Cube", "Collect 7 Cube", "Collect", "Collect 7 cube in town", false);
@@ -84,29 +72,12 @@ public class GameDataBase: MonoBehaviour {
 
         CollectionQuest quest4 = new CollectionQuest(1, 5, 8, "GameObject/Quest/Cube", "Gather 8 Cube", "Gather", "Gather mystery cube around the town.", false);
         QuestDataBase.collectionQuest.Add(quest4);
-
-        CollectionQuest quest5 = new CollectionQuest(1, 5, 5, "GameObject/Quest/Cube", "Collect 5 Cube", "Collect", "Collect 5 cube in town", false);
-        QuestDataBase.collectionQuest.Add(quest5);
-
-        CollectionQuest quest6 = new CollectionQuest(1, 6, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Gather 6 cube in town", false);
-        QuestDataBase.collectionQuest.Add(quest6);
-
-        CollectionQuest quest7 = new CollectionQuest(1, 7,7, "GameObject/Quest/Cube", "Collect 7 Cube", "Collect", "Collect 7 cube in town", false);
-        QuestDataBase.collectionQuest.Add(quest7);
-
-        CollectionQuest quest8 = new CollectionQuest(1, 8, 8, "GameObject/Quest/Cube", "Gather 8 Cube", "Gather", "Gather 8 cube in town", false);
-        QuestDataBase.collectionQuest.Add(quest8);
-
-        CollectionQuest quest9 = new CollectionQuest(1, 9, 7, "GameObject/Quest/Cube", "Collect 7 Cube", "Collect", "Collect 7 cube in town", false);
-        QuestDataBase.collectionQuest.Add(quest9);
-
-        CollectionQuest quest10 = new CollectionQuest(1, 10, 8, "GameObject/Quest/Cube", "Gather 8 Cube", "Gather", "Gather 8 cube in town", false);
-        QuestDataBase.collectionQuest.Add(quest10);
     }
 
     void addQuestSource2()
     {
         CollectionQuest quest2 = new CollectionQuest(2, 2, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Mystery cube fom the town.", false);
+        quest2.chainQuestID.Add(4);
         QuestDataBase.collectionQuest.Add(quest2);
     }
     #endregion
@@ -139,24 +110,6 @@ public class GameDataBase: MonoBehaviour {
 
         QuestDialog qd4_2 = new QuestDialog(1, 4, "Can u help me to gather some ingredients?");
         QuestDataBase.questDialog.Add(qd4_2);
-
-        QuestDialog qd5 = new QuestDialog(1, 5, "Can u help me to gather some ingredients?");
-        QuestDataBase.questDialog.Add(qd5);
-
-        QuestDialog qd6 = new QuestDialog(1, 6, "Can u help me to gather some ingredients?");
-        QuestDataBase.questDialog.Add(qd6);
-
-        QuestDialog qd7 = new QuestDialog(1, 7, "Can u help me to gather some ingredients?");
-        QuestDataBase.questDialog.Add(qd7);
-
-        QuestDialog qd8 = new QuestDialog(1, 8, "Can u help me to gather some ingredients?");
-        QuestDataBase.questDialog.Add(qd8);
-
-        QuestDialog qd9 = new QuestDialog(1, 9, "Can u help me to gather some ingredients?");
-        QuestDataBase.questDialog.Add(qd9);
-
-        QuestDialog qd10 = new QuestDialog(1, 10, "Can u help me to gather some ingredients?");
-        QuestDataBase.questDialog.Add(qd10);
     }
 
     void addDialogSource2()
@@ -186,6 +139,10 @@ public class GameDataBase: MonoBehaviour {
         QuestDataBase.questCompleteDialog.Add(qcd1_1);
         QuestDialog qcd3_1 = new QuestDialog(1, 3, "Thanks a lot!");
         QuestDataBase.questCompleteDialog.Add(qcd3_1);
+        QuestDialog qcd4_1 = new QuestDialog(1, 3, "Wow!");
+        QuestDataBase.questCompleteDialog.Add(qcd4_1);
+        QuestDialog qcd4_2 = new QuestDialog(1, 3, "Thanks again!");
+        QuestDataBase.questCompleteDialog.Add(qcd4_2);
     }
     void addDialogCompleteSource2()
     {

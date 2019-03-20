@@ -7,14 +7,12 @@ TagManager:
   - PlayerHead
   - InputSetup
   - NPC
-  - ShowDialog
   - ItemBox
   - ItemBoxScript
   - ItemBoxUI
   - PlayerData
   - PlayerStatusUI
   - InteractableUI
-  - ConversationUI
   - QuestUI
   - InventoryUI
   - InventoryBoxUI
@@ -24,6 +22,8 @@ TagManager:
   - Inventory
   - GameMenuManager
   - Quest
+  - DialogueUI
+  - Dialogue
   layers:
   - Default
   - TransparentFX

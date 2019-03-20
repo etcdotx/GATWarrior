@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class CharacterRayCast : MonoBehaviour
 {
     public PlayerData playerData;
+    public Talk talk;
+    public Collect collect;
     public GameMenuManager gameMenuManager;
     public GameObject interactButton;
     public Text interactText;
@@ -14,7 +16,7 @@ public class CharacterRayCast : MonoBehaviour
     public Vector3 raycastOffset;
 
     public InputSetup inputSetup;
-    public ShowDialog showDialog;
+    public Dialogue dialogue;
     public InventoryBox inventoryBox;
     public Inventory inventory;
 
@@ -22,11 +24,13 @@ public class CharacterRayCast : MonoBehaviour
     void Start()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        talk = gameObject.GetComponent<Talk>();
+        collect = gameObject.GetComponent<Collect>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        showDialog = GameObject.FindGameObjectWithTag("ShowDialog").GetComponent<ShowDialog>();
+        dialogue = GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Dialogue>();
 
         interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
         interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
@@ -62,14 +66,15 @@ public class CharacterRayCast : MonoBehaviour
                     //jika object tersebut bisa berbicara
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking == true)
                     {
-                        TalkToObject(interactable);
+                        talk.TalkToObject(interactable);
                     }
                     //jika object tersebut bisa dimasukkan kedalam koleksi
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable == true)
                     {
                         //mengambil item tersebut
-                        CollectObject(interactable);
+                        collect.CollectObject(interactable);
                     }
+                    //jika object tersebut adalah inventorybox
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened==false)
                     {
                         inventory.inventoryView.SetActive(true);
@@ -84,40 +89,12 @@ public class CharacterRayCast : MonoBehaviour
                 }
             }
             catch
-            {
-                //Debug.Log(ex);
-                //Debug.Log(hit.collider.gameObject.name + " is not interactable");
-            }
+            { }
         }
         else
         {
             HideButton();
         }
-    }
-
-    void TalkToObject(Interactable interactable)
-    {
-       
-    }
-
-
-    void CollectObject(Interactable interactable)
-    {
-        //mengecek id dari item tersebut
-        int itemID = interactable.gameObject.GetComponent<Interactable>().itemID;
-
-        for (int i = 0; i < ItemDataBase.item.Count; i++)
-        {
-            //jika item yang ada didatabase sesuai dengan item yang diinteract
-            //maka item tersebut dimasukkan kedalam koleksi item player
-            if (ItemDataBase.item[i].id == itemID)
-            {
-                playerData.AddItem(ItemDataBase.item[i]);
-                break;
-            }
-        }
-        //gameobject item yang ada di hierarchy dihancurkan
-        Destroy(interactable.gameObject);
     }
 
     public void ShowButton()

@@ -74,7 +74,7 @@ public class GameMenuManager : MonoBehaviour
 
         if (GameStatus.IsPaused == true && isOpen == true)
         {
-            GetScrollInput();
+            GetInputAxis();
             SelectMenu();
             if (pointerInputHold == false)
             {
@@ -142,7 +142,7 @@ public class GameMenuManager : MonoBehaviour
         }
     }
 
-    void GetScrollInput()
+    void GetInputAxis()
     {
         inputAxis.y = Input.GetAxisRaw("D-Pad Up");
         inputAxis.x = Input.GetAxisRaw("D-Pad Right");

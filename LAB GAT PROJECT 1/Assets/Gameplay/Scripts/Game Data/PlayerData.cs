@@ -36,7 +36,6 @@ public class PlayerData : MonoBehaviour {
     [Header("Quest")]
     public GameObject questListPrefab;
     public int questListIndex;
-    public List<int> playerChainQuest = new List<int>();
     public List<CollectionQuest> collectionQuest = new List<CollectionQuest>();
     public List<CollectionQuest> collectionQuestComplete = new List<CollectionQuest>();
     public List<CollectionQuest> collectionQuestUnusable = new List<CollectionQuest>();
@@ -67,7 +66,6 @@ public class PlayerData : MonoBehaviour {
     void Start()
     {
         questListIndex = -1;
-        playerChainQuest.Add(1);
 
         //Set Default
         inventory.inventoryView.SetActive(false);
@@ -161,7 +159,8 @@ public class PlayerData : MonoBehaviour {
     {
         //memasukkan quest baru kedalam ke quest yang dimiliki player
         Debug.Log("in");
-        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, cq.resourcePath, cq.title, cq.verb, cq.description, cq.isOptional);
+        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.colAmount, cq.resourcePath, cq.title, cq.verb, cq.description, cq.isOptional);
+        newQuest.chainQuestID = cq.chainQuestID;
         collectionQuest.Add(newQuest);
         //memasukkan quest list kedalam ui
         Debug.Log("in");
@@ -285,7 +284,8 @@ public class PlayerData : MonoBehaviour {
         if (colQuestExist == false)
         {
             //jika quest yang sudah selesai, tidak ada di dalam koleksi quest yang sudah selesai, masukkan quest tersebut
-            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
+            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
+            newQuestCom.chainQuestID = cqc.chainQuestID;
             collectionQuestComplete.Add(newQuestCom);
             Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
         }
