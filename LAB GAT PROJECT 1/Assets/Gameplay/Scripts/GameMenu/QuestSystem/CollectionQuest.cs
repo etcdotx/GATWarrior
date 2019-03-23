@@ -17,9 +17,10 @@ public class CollectionQuest
     public bool isComplete;
     public bool isOptional;
 
-    public CollectionQuest(int sourceID, int id, int colAmount, string resourcePath, string title, string verb, string description, bool isOptional){
+    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, string resourcePath, string title, string verb, string description, bool isOptional){
         this.sourceID = sourceID;
         this.id = id;
+        this.chainQuestID = chainQuestID;
         this.colAmount = colAmount;
         this.resourcePath = resourcePath;
         itemToCollect = Resources.Load(this.resourcePath) as GameObject;
@@ -44,6 +45,23 @@ public class CollectionQuest
         else
         {
             isComplete = false;
+        }
+    }
+
+    public void QuestComplete() {
+        try
+        {
+
+            for (int i = 0; i < chainQuestID.Count; i++)
+                for (int j = 0; j < QuestDataBase.collectionQuest.Count; j++)
+                    if (chainQuestID[i] == QuestDataBase.collectionQuest[j].id)
+                    {
+                        GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>().collectionQuestActive.Add(QuestDataBase.collectionQuest[j]);
+                        break;
+                    }
+        }
+        catch {
+            Debug.Log("This quest doesnt have chain quest");
         }
     }
 

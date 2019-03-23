@@ -109,12 +109,8 @@ MonoBehaviour:
   isCollectable: 0
   itemID: 0
   interactText: Ask
+  readAble: []
   isTalking: 1
-  interactView: {fileID: 0}
-  dialog:
-  - Hi my name is fun
-  - I live near your house
-  - Bye
 --- !u!114 &8704636637256514571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,12 +123,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af1eb0a9766e0248b717cc859ff8fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  playerData: {fileID: 0}
   sourceID: 1
-  canGiveQuest: 0
-  isHavingACompleteQuest: 0
-  isHaveTheQuestChainQuest: 0
-  questIDOnProgress: 0
-  questIDActive: 1
-  questDialogActive: []
-  questCompleteDialogActive: []
+  optionDialog: Can i help you?
+  npcDialog:
+  - Hey
+  - I never see you around here
+  - Are you new here?
+  - Welcome, then!

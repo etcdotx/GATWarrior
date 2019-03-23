@@ -24,6 +24,7 @@ TagManager:
   - Quest
   - DialogueUI
   - Dialogue
+  - DialogueOption
   layers:
   - Default
   - TransparentFX

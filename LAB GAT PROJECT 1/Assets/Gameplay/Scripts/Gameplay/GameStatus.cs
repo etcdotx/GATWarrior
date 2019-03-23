@@ -6,12 +6,21 @@ public static class GameStatus
 {
     public static bool isTalking;
     private static bool isPaused;
+    private static bool canMove;
 
     public static bool IsPaused
     {
         get
         {
             return isPaused;
+        }
+    }
+
+    public static bool CanMove
+    {
+        get
+        {
+            return canMove;
         }
     }
 
@@ -26,4 +35,15 @@ public static class GameStatus
         isPaused = false;
         //Time.timeScale = 1;
     }
+
+    public static void PauseMove()
+    {
+        canMove = false;
+    }
+
+    public static void ResumeMove()
+    {
+        canMove = true;
+    }
+
 }

@@ -21,24 +21,28 @@ public class CameraMovement : MonoBehaviour {
 
     private void Update()
     {
-        if (currentY <= 80 || currentY >= -80) {
-            currentY += Input.GetAxis("RightJoystickVertical");
-        }
-        if (currentY >= 80)
+        if (GameStatus.isTalking == false && GameStatus.CanMove == true)
         {
-            currentY = 79.9f;
+            if (currentY <= 80 || currentY >= -80)
+            {
+                currentY += Input.GetAxis("RightJoystickVertical");
+            }
+            if (currentY >= 80)
+            {
+                currentY = 79.9f;
+            }
+            if (currentY <= -80)
+            {
+                currentY = -79.9f;
+            }
+            currentX += Input.GetAxis("RightJoystickHorizontal");
         }
-        if (currentY <= -80)
-        {
-            currentY = -79.9f;
-        }
-        currentX += Input.GetAxis("RightJoystickHorizontal");       
     }
 
     // Update is called once per frame
     void LateUpdate ()
     {
-        if (GameStatus.isTalking == false)
+        if (GameStatus.isTalking == false && GameStatus.CanMove == true)
         {
             ApplyMovement();
         }

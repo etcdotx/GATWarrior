@@ -134,7 +134,9 @@ public class GameMenuManager : MonoBehaviour
                             inventoryBox.isItemBoxOpened = false;
                             isOpen = false;
                             ResetMenu();
+                            InputHolder.isInputHolded = true;
                             GameStatus.ResumeGame();
+                            GameStatus.ResumeMove();
                         }
                     }
                 }

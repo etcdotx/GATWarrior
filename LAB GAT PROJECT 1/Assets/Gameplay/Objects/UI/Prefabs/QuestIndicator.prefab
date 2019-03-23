@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9266838}
   - component: {fileID: 5698633894575263658}
   m_Layer: 0
-  m_Name: QuestList
+  m_Name: QuestIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

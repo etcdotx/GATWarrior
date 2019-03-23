@@ -23,6 +23,7 @@ public class CharacterMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        GameStatus.ResumeMove();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         charRig = gameObject.GetComponent<Rigidbody>();
@@ -38,7 +39,7 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false)
+        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false && GameStatus.CanMove == true)
         {
             GetInputAxis();
             if (inputAxis.x >= 0.1 || inputAxis.y >= 0.1 || inputAxis.x <= -0.1 || inputAxis.y <= -0.1)

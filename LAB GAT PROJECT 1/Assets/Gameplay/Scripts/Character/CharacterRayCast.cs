@@ -66,6 +66,7 @@ public class CharacterRayCast : MonoBehaviour
                     //jika object tersebut bisa berbicara
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking == true)
                     {
+                        GameStatus.isTalking = true;
                         talk.TalkToObject(interactable);
                     }
                     //jika object tersebut bisa dimasukkan kedalam koleksi
@@ -84,6 +85,7 @@ public class CharacterRayCast : MonoBehaviour
                         gameMenuManager.isOpen = true;
                         gameMenuManager.ResetMenu();
                         GameStatus.PauseGame();
+                        GameStatus.PauseMove();
                         HideButton();
                     }
                 }

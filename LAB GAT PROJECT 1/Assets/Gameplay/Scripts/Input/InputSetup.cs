@@ -16,8 +16,8 @@ public class InputSetup : MonoBehaviour
 
     void Start()
     {
-        select = KeyCode.Joystick1Button0;
-        back = KeyCode.Joystick1Button1;
+        select = KeyCode.Joystick1Button1;
+        back = KeyCode.Joystick1Button0;
         deleteSave = KeyCode.Joystick1Button2;
 
         interact = KeyCode.Joystick1Button1;

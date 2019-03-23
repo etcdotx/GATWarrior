@@ -24,16 +24,15 @@ public class Talk : MonoBehaviour
             int totalDialogueOption = thisNPC.activeCollectionQuest.Count;
             if (totalDialogueOption != 0)
             {
-                dialogue.showDialogueOption(thisNPC.activeCollectionQuest);
+                dialogue.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);
+            }
+            else
+            {
+                dialogue.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);          
             }
         }
         catch {
 
         }
-    }
-
-    void DoSingleDialoge()
-    {
-
     }
 }

@@ -7,12 +7,17 @@ public class NPC : MonoBehaviour
     public PlayerData playerData;
 
     [Header("Set source number")]
-    public int sourceID;    
+    public int sourceID;
+    public int activeCollectionQuestTotal;
+    public int questDialogListTotal;
+    public int questCompleteDialogListTotal;
 
-    [Header("Set first active quest id")]
+    [Header("content")]
     public List<CollectionQuest> activeCollectionQuest = new List<CollectionQuest>();
     public List<QuestDialog> questDialogList = new List<QuestDialog>();
     public List<QuestDialog> questCompleteDialogList = new List<QuestDialog>();
+    public string optionDialog;
+    public List<string> npcDialog = new List<string>();
 
     // Start is called before the first frame update
     void Start()
@@ -22,16 +27,19 @@ public class NPC : MonoBehaviour
 
     public void GetQuestDialog()
     {
+        //Debug.Log(QuestDataBase.questDialog.Count);
         for (int i = 0; i < activeCollectionQuest.Count; i++)
         {
             for (int j = 0; j < QuestDataBase.questDialog.Count; j++)
             {
-                if (activeCollectionQuest[i].sourceID == QuestDataBase.questDialog[j].sourceID)
+                if (activeCollectionQuest[i].id == QuestDataBase.questDialog[j].questID)
                 {
                     questDialogList.Add(QuestDataBase.questDialog[j]);
+                    //Debug.Log(activeCollectionQuest[i].id + "="+QuestDataBase.questDialog[j].questID + "-> "+QuestDataBase.questDialog[j].dialog);
                 }
             }
         }
+        questDialogListTotal = questDialogList.Count;
     }
 
     public void GetQuestCompleteDialog()
@@ -40,11 +48,12 @@ public class NPC : MonoBehaviour
         {
             for (int j = 0; j < QuestDataBase.questCompleteDialog.Count; j++)
             {
-                if (activeCollectionQuest[i].sourceID == QuestDataBase.questCompleteDialog[j].sourceID)
+                if (activeCollectionQuest[i].id == QuestDataBase.questCompleteDialog[j].questID)
                 {
                     questCompleteDialogList.Add(QuestDataBase.questCompleteDialog[j]);
                 }
             }
         }
+        questCompleteDialogListTotal = questCompleteDialogList.Count;
     }
 }

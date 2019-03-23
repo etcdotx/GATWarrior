@@ -62,22 +62,21 @@ public class GameDataBase: MonoBehaviour {
 
     public void addQuestSource1()
     {
-        CollectionQuest quest1 = new CollectionQuest(1, 1, 5, "GameObject/Quest/Cube", "Collect 5 Cube", "Collect", "Collect 5 cube in town", false);
-        quest1.chainQuestID.Add(2);
-        quest1.chainQuestID.Add(3);
+        List<int> quest1ChainQuestID = new List<int>() { 2, 3};
+        CollectionQuest quest1 = new CollectionQuest(1, 1, quest1ChainQuestID, 5, "GameObject/Quest/Cube", "Collect 5 Cube", "Collect", "Collect 5 cube in town", false);
         QuestDataBase.collectionQuest.Add(quest1);
-
-        CollectionQuest quest3 = new CollectionQuest(1, 4, 7, "GameObject/Quest/Cube", "Collect 7 Cube", "Collect", "Collect 7 cube in town", false);
+        Debug.Log(quest1.chainQuestID[0] + " " + quest1.chainQuestID[1]);
+        CollectionQuest quest3 = new CollectionQuest(1, 3, null, 7, "GameObject/Quest/Cube", "Collect 7 Cube", "Collect", "Collect 7 cube in town", false);
         QuestDataBase.collectionQuest.Add(quest3);
 
-        CollectionQuest quest4 = new CollectionQuest(1, 5, 8, "GameObject/Quest/Cube", "Gather 8 Cube", "Gather", "Gather mystery cube around the town.", false);
+        CollectionQuest quest4 = new CollectionQuest(1, 4, null, 8, "GameObject/Quest/Cube", "Gather 8 Cube", "Gather", "Gather mystery cube around the town.", false);
         QuestDataBase.collectionQuest.Add(quest4);
     }
 
     void addQuestSource2()
     {
-        CollectionQuest quest2 = new CollectionQuest(2, 2, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Mystery cube fom the town.", false);
-        quest2.chainQuestID.Add(4);
+        List<int> quest2ChainQuestID = new List<int>() { 4 };
+        CollectionQuest quest2 = new CollectionQuest(2, 2, quest2ChainQuestID, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Mystery cube fom the town.", false);
         QuestDataBase.collectionQuest.Add(quest2);
     }
     #endregion
@@ -139,9 +138,9 @@ public class GameDataBase: MonoBehaviour {
         QuestDataBase.questCompleteDialog.Add(qcd1_1);
         QuestDialog qcd3_1 = new QuestDialog(1, 3, "Thanks a lot!");
         QuestDataBase.questCompleteDialog.Add(qcd3_1);
-        QuestDialog qcd4_1 = new QuestDialog(1, 3, "Wow!");
+        QuestDialog qcd4_1 = new QuestDialog(1, 4, "Wow!");
         QuestDataBase.questCompleteDialog.Add(qcd4_1);
-        QuestDialog qcd4_2 = new QuestDialog(1, 3, "Thanks again!");
+        QuestDialog qcd4_2 = new QuestDialog(1, 4, "Thanks again!");
         QuestDataBase.questCompleteDialog.Add(qcd4_2);
     }
     void addDialogCompleteSource2()

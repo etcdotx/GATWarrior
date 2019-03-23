@@ -38,7 +38,6 @@ public class PlayerData : MonoBehaviour {
     public int questListIndex;
     public List<CollectionQuest> collectionQuest = new List<CollectionQuest>();
     public List<CollectionQuest> collectionQuestComplete = new List<CollectionQuest>();
-    public List<CollectionQuest> collectionQuestUnusable = new List<CollectionQuest>();
     public List<int> finishedCollectionQuestID = new List<int>();
 
     [Header("FOR DEVELOPMENT")]
@@ -80,9 +79,8 @@ public class PlayerData : MonoBehaviour {
     private void Update()
     {
         curHealthImg.fillAmount = curHealth / maxHealth;
-        //Debug.Log(collectionQuest.Count);
-        //Debug.Log(collectionQuestComplete.Count);
-        //Debug.Log(collectionQuestUnusable.Count);
+        //Debug.Log("Cq " + collectionQuest.Count);
+        //Debug.Log("cqc " + collectionQuestComplete.Count);
     }
 
     public void SavePlayer()
@@ -158,28 +156,39 @@ public class PlayerData : MonoBehaviour {
     public void AddQuest(CollectionQuest cq)
     {
         //memasukkan quest baru kedalam ke quest yang dimiliki player
-        Debug.Log("in");
-        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.colAmount, cq.resourcePath, cq.title, cq.verb, cq.description, cq.isOptional);
+        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, cq.resourcePath, cq.title, cq.verb, cq.description, cq.isOptional);
         newQuest.chainQuestID = cq.chainQuestID;
         collectionQuest.Add(newQuest);
         //memasukkan quest list kedalam ui
-        Debug.Log("in");
         AddNewQuestToList(newQuest);
         //mengecek status quest baru
-        Debug.Log("in");
         CheckNewQuestProgress(newQuest);
-        Debug.Log("in");
     }
 
     public void AddNewQuestToList(CollectionQuest cq)
     {
         Instantiate(questListPrefab, quest.questContent.transform);
         int a = quest.questContent.transform.childCount - 1; //last quest (new addded)
-        quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = collectionQuest[a].title;
-        quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = collectionQuest[a].id;
-        Debug.Log(quest.questMaxIndex);
+        Debug.Log(a);
+        Debug.Log(quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text);
+        Debug.Log(cq.title);
+        quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
+        quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
         quest.questMaxIndex++;
-        Debug.Log(quest.questMaxIndex);
+    }
+
+    public void RemoveQuestList(CollectionQuest cq)
+    {
+        for (int i = 0; i < quest.questContent.transform.childCount; i++)
+        {
+            if (quest.questContent.transform.GetChild(i).GetComponent<QuestIndicator>().questID == cq.id)
+            {
+                Destroy(quest.questContent.transform.GetChild(i).gameObject);
+                quest.questMaxIndex--;
+                quest.RefreshQuest();
+                break;
+            }
+        }
     }
 
     public void CheckNewQuestProgress(CollectionQuest newQuest)
@@ -202,11 +211,6 @@ public class PlayerData : MonoBehaviour {
             }
         }
         newQuest.CheckProgress();
-        //jika item dari quest tersebut sudah memenuhi target maka quest tersebut dimasukkan kedalam quest complete coll
-        if (newQuest.isComplete == true)
-        {
-            AddCollectionQuestComplete(newQuest);
-        }
     }
 
     public void AddItem(Item item)
@@ -258,18 +262,13 @@ public class PlayerData : MonoBehaviour {
                 collectionQuest[i].curAmount += addedItem.quantity;
                 //jika item tersebut sudah memenuhi kriteria, maka quest tersebut complete
                 collectionQuest[i].CheckProgress();
-
-                if (collectionQuest[i].isComplete == true)
-                {
-                    //jika quest sudah selesai, masukkin ke quest id
-                    AddCollectionQuestComplete(collectionQuest[i]);
-                }
             }
         }
     }
 
     public void AddCollectionQuestComplete(CollectionQuest cqc)
     {
+        RemoveQuestList(cqc);
         collectionQuest.Remove(cqc);
         bool colQuestExist = false;
         for (int k = 0; k < collectionQuestComplete.Count; k++)
@@ -284,7 +283,7 @@ public class PlayerData : MonoBehaviour {
         if (colQuestExist == false)
         {
             //jika quest yang sudah selesai, tidak ada di dalam koleksi quest yang sudah selesai, masukkan quest tersebut
-            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
+            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
             newQuestCom.chainQuestID = cqc.chainQuestID;
             collectionQuestComplete.Add(newQuestCom);
             Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);

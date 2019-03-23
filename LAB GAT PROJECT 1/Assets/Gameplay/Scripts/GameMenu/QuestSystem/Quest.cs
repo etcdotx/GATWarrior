@@ -51,17 +51,29 @@ public class Quest : MonoBehaviour
     public void ActivateQuest()
     {
         npcAvailable = GameObject.FindGameObjectsWithTag("NPC");
-        for (int i = 0; i < collectionQuestActive.Count; i++)
+        for (int i = 0; i < npcAvailable.Length; i++)
         {
-            for (int j = 0; j < npcAvailable.Length; j++)
+            npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Clear();
+            for (int j = 0; j < collectionQuestActive.Count; j++)
             {
-                if (collectionQuestActive[i].sourceID == npcAvailable[j].GetComponent<NPC>().sourceID)
+                if (collectionQuestActive[j].sourceID == npcAvailable[i].GetComponent<NPC>().sourceID)
                 {
-                    npcAvailable[j].GetComponent<NPC>().activeCollectionQuest.Add(collectionQuestActive[i]);
+                    CollectionQuest cq = new CollectionQuest(collectionQuestActive[j].sourceID, 
+                        collectionQuestActive[j].id, collectionQuestActive[j].chainQuestID, collectionQuestActive[j].colAmount, 
+                        collectionQuestActive[j].resourcePath, collectionQuestActive[j].title, 
+                        collectionQuestActive[j].verb, collectionQuestActive[j].description, collectionQuestActive[j].isOptional);
+                    npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Add(cq);
                 }
-                npcAvailable[j].GetComponent<NPC>().GetQuestDialog();
-                npcAvailable[j].GetComponent<NPC>().GetQuestCompleteDialog();
             }
+        }
+        for (int i = 0; i < npcAvailable.Length; i++)
+        {
+            npcAvailable[i].GetComponent<NPC>().questDialogList.Clear();
+            npcAvailable[i].GetComponent<NPC>().questCompleteDialogList.Clear();
+            npcAvailable[i].GetComponent<NPC>().GetQuestCompleteDialog();
+            npcAvailable[i].GetComponent<NPC>().GetQuestDialog();
+            npcAvailable[i].GetComponent<NPC>().GetQuestCompleteDialog();
+            npcAvailable[i].GetComponent<NPC>().activeCollectionQuestTotal = npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Count;
         }
     }
 
@@ -129,24 +141,16 @@ public class Quest : MonoBehaviour
 
     public void RefreshQuest()
     {
-        try
+        questDescription.text = "";
+        questObjective.text = "";
+        for (int i = 0; i < playerData.collectionQuest.Count; i++)
         {
-            for (int i = 0; i < playerData.collectionQuest.Count; i++)
+            if (playerData.collectionQuest[i].id == questContent.transform.GetChild(questIndex).GetComponent<QuestIndicator>().questID)
             {
-                if (playerData.collectionQuest[i].id == questContent.transform.GetChild(questIndex).GetComponent<QuestIndicator>().questID)
-                {
-                    questDescription.text = playerData.collectionQuest[i].description;
-                    questObjective.text = playerData.collectionQuest[i].ToString(); //newCol.description + newCol.ToString();
-                    break;
-                }
-                else
-                {
-                    questDescription.text = "";
-                }
+                questDescription.text = playerData.collectionQuest[i].description;
+                questObjective.text = playerData.collectionQuest[i].ToString(); //newCol.description + newCol.ToString();
+                break;
             }
-        }
-        catch
-        {
         }
     }
 

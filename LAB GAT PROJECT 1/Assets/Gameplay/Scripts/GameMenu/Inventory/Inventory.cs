@@ -118,7 +118,7 @@ public class Inventory : MonoBehaviour
 
     public void InventorySwapping()
     {
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0) && isSwapping == false)
+        if (Input.GetKeyDown(inputSetup.select) && isSwapping == false)
         {
             invenSwap1 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
             invenSwap1.gameObject.GetComponent<Image>().color = gameMenuManager.selectedColor;
@@ -126,7 +126,7 @@ public class Inventory : MonoBehaviour
             isSwapping = true;
             StartCoroutine(gameMenuManager.ButtonInputHold());
         }
-        else if (Input.GetKeyDown(KeyCode.Joystick1Button0) && isSwapping == true)
+        else if (Input.GetKeyDown(inputSetup.select) && isSwapping == true)
         {
             invenSwap2 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
             int id1 = invenSwap1.itemID;
