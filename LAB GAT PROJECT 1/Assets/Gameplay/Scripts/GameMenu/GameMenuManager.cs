@@ -48,112 +48,186 @@ public class GameMenuManager : MonoBehaviour
     private void Update()
     {
         //press start
+        OpenCloseMenu();
+
+        if (GameStatus.IsPaused == true && isOpen == true)
+        {
+            GetInputAxis();
+            SelectMenu();
+            PointerInput();
+            ButtonInput();
+        }
+    }
+
+    void OpenCloseMenu() {
         if (GameStatus.isTalking == false && cantOpenMenu == false)
         {
             if (Input.GetKeyDown(inputSetup.openGameMenu))
             {
                 if (inventory.inventoryView.activeSelf == false && quest.questView.activeSelf == false)
                 {
-                    inventory.inventoryView.SetActive(true);
-                    quest.questView.SetActive(true);
-                    quest.RefreshQuest();
-                    isOpen = true;
-                    ResetMenu();
-                    GameStatus.PauseGame();
+                    OpenMenu();
                 }
                 //gabisa pake else, soalnya kalo buka item box, inventoryview.activeselfnya nyala
-                else if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true)
+                else if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true && inventory.isSwapping == false)
                 {
-                    inventory.inventoryView.SetActive(false);
-                    quest.questView.SetActive(false);
-                    isOpen = false;
-                    GameStatus.ResumeGame();
+                    CloseMenu();
+                }
+            }
+            if (Input.GetKeyDown(inputSetup.back))
+            {                
+                if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true && inventory.isSwapping == false)
+                {
+                    CloseMenu();
+                }
+                else if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true && inventory.isSwapping == true)
+                {
+                    inventory.ResetInventorySwap();
                 }
             }
         }
+    }
 
-        if (GameStatus.IsPaused == true && isOpen == true)
+    void PointerInput() {
+        if (pointerInputHold == false)
         {
-            GetInputAxis();
-            SelectMenu();
-            if (pointerInputHold == false)
+            if ((inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == false && inventoryBox.isSettingQuantity == false)
             {
-                if ((inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == false)
+                StartCoroutine(PointerInputHold());
+                ApplyNavigation();
+            }
+            //set quantity ke item box (put value)
+            else if ((inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == true)
+            {
+                StartCoroutine(PointerInputHold());
+                if (inputAxis.x == 1)
                 {
-                    StartCoroutine(PointerInputHold());
-                    ApplyInput();
+                    inventory.IncreaseQuantityToPut();
                 }
-                //set quantity ke item box
-                else if (( inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == true)
+                if (inputAxis.x == -1)
                 {
-                    StartCoroutine(PointerInputHold());
-                    if (inputAxis.x == 1)
-                    {
-                        inventory.IncreaseQuantityToPut();
-                    }
-                    if (inputAxis.x == -1)
-                    {
-                        inventory.DecreaseQuantityToPut();
-                    }
+                    inventory.DecreaseQuantityToPut();
                 }
             }
-            if (buttonInputHold == false)
+            else if ((inputAxis.x == 1 || inputAxis.x == -1) && inventoryBox.isSettingQuantity == true)
             {
-                if (inventoryBox.isItemBoxOpened == false)
+                StartCoroutine(PointerInputHold());
+                if (inputAxis.x == 1)
                 {
-                    if (menuNumber == 0) //inventory
-                    {
-                        inventory.InventorySwapping();
-                    }
-                    if (menuNumber == 1)
-                    {
+                    inventoryBox.IncreaseQuantityToPut();
+                }
+                if (inputAxis.x == -1)
+                {
+                    inventoryBox.DecreaseQuantityToPut();
+                }
+            }
+        }
+    }
 
-                    }
+    void ButtonInput() {
+        if (buttonInputHold == false)
+        {
+            if (inventoryBox.isItemBoxOpened == false)
+            {
+                ButtonOnStartMenu();
+            }
+            else if(inventoryBox.isItemBoxOpened == true)
+            {
+                ButtonOnInventoryBox();
+            }
+        }
+    }
+
+    void ButtonOnStartMenu() {
+        if (menuNumber == 0) //inventory
+        {
+            inventory.InventorySwapping();
+        }
+        if (menuNumber == 1)
+        {
+
+        }
+    }
+
+    void ButtonOnInventoryBox() {
+        if (menuNumber == 0) //inventory
+        {
+            if (inventory.isSettingQuantity == false)
+            {
+                inventory.InventorySwapping();
+            }
+            inventory.PutInventory();
+        }
+        if (menuNumber == 1)//itemBox
+        {
+            if (inventoryBox.isSettingQuantity == false)
+            {
+                inventoryBox.InventoryBoxSwapping();
+            }
+            inventoryBox.PutInventory();
+        }
+
+        if (Input.GetKeyDown(inputSetup.back))
+        {
+            if (inventoryBox.isItemBoxOpened == true)
+            {
+                if (inventory.isSwapping == true)
+                {
+                    inventory.ResetInventorySwap();
+                }
+                else if (inventoryBox.isSwapping == true)
+                {
+                    inventoryBox.ResetInventoryBoxSwap();
+                }
+                else if (inventory.isSettingQuantity == true)
+                {
+                    inventory.slider.SetActive(false);
+                    inventory.isSettingQuantity = false;
+                }
+                else if (inventoryBox.isSettingQuantity == true)
+                {
+                    inventoryBox.slider.SetActive(false);
+                    inventoryBox.isSettingQuantity = false;
                 }
                 else
                 {
-                    if (menuNumber == 0) //inventory
-                    {
-                        if (inventory.isSettingQuantity == false)
-                        {
-                            inventory.InventorySwapping();
-                        }
-                        inventory.PutInventory();
-                    }
-                    if (menuNumber == 1)//itemBox
-                    {
-
-                    }
-
-                    if (Input.GetKeyDown(inputSetup.back))
-                    {
-                        if (inventoryBox.isItemBoxOpened == true)
-                        {
-                            inventory.inventoryView.SetActive(false);
-                            inventoryBox.inventoryBoxView.SetActive(false);
-                            inventoryBox.isItemBoxOpened = false;
-                            isOpen = false;
-                            ResetMenu();
-                            InputHolder.isInputHolded = true;
-                            GameStatus.ResumeGame();
-                            GameStatus.ResumeMove();
-                        }
-                    }
+                    CloseInventoryBoxMenu();
                 }
             }
         }
     }
 
-    void GetInputAxis()
-    {
-        inputAxis.y = Input.GetAxisRaw("D-Pad Up");
-        inputAxis.x = Input.GetAxisRaw("D-Pad Right");
+    void OpenMenu() {
+        inventory.inventoryView.SetActive(true);
+        quest.questView.SetActive(true);
+        quest.RefreshQuest();
+        isOpen = true;
+        ResetMenu();
+        GameStatus.PauseGame();
     }
- 
+
+    void CloseMenu() {
+        inventory.inventoryView.SetActive(false);
+        quest.questView.SetActive(false);
+        isOpen = false;
+        InputHolder.isInputHolded = true;
+        GameStatus.ResumeGame();
+    }
+
+    void CloseInventoryBoxMenu() {
+        inventory.inventoryView.SetActive(false);
+        inventoryBox.inventoryBoxView.SetActive(false);
+        inventoryBox.isItemBoxOpened = false;
+        isOpen = false;
+        ResetMenu();
+        InputHolder.isInputHolded = true;
+        GameStatus.ResumeGame();
+        GameStatus.ResumeMove();
+    }
 
     void SelectMenu()
     {
-        if (inventoryBox.isItemBoxOpened == false)
+        if (inventoryBox.isItemBoxOpened == false && inventory.isSwapping==false )
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
@@ -172,7 +246,8 @@ public class GameMenuManager : MonoBehaviour
                 ResetPointer();
             }
         }
-        else
+        else if (inventoryBox.isItemBoxOpened == true && inventory.isSwapping == false && inventoryBox.isSwapping == false &&
+            inventory.isSettingQuantity== false && inventoryBox.isSettingQuantity == false)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
@@ -193,41 +268,7 @@ public class GameMenuManager : MonoBehaviour
         }
     }
 
-    public void ResetPointer()
-    {
-        if (inventoryBox.isItemBoxOpened == false)
-        {
-            for (int i = 0; i < menuPointer.Length; i++)
-            {
-                menuPointer[i].SetActive(false);
-            }
-            menuPointer[menuNumber].SetActive(true);
-        }
-        else
-        {
-            for (int i = 0; i < itemBoxPointer.Length; i++)
-            {
-                itemBoxPointer[i].SetActive(false);
-            }
-            itemBoxPointer[menuNumber].SetActive(true);
-        }
-    }
-
-    public IEnumerator PointerInputHold()
-    {
-        pointerInputHold = true;
-        yield return new WaitForSeconds(0.15f);
-        pointerInputHold = false;
-    }
-
-    public IEnumerator ButtonInputHold()
-    {
-        buttonInputHold = true;
-        yield return new WaitForSeconds(0.15f);
-        buttonInputHold = false;
-    }
-
-    void ApplyInput()
+    void ApplyNavigation()
     {
         if (inventoryBox.isItemBoxOpened == false)
         {
@@ -254,6 +295,43 @@ public class GameMenuManager : MonoBehaviour
         }
     }
 
+    #region UTIL
+    void GetInputAxis()
+    {
+        inputAxis.y = Input.GetAxisRaw("D-Pad Up");
+        inputAxis.x = Input.GetAxisRaw("D-Pad Right");
+    }
+    public IEnumerator PointerInputHold()
+    {
+        pointerInputHold = true;
+        yield return new WaitForSeconds(0.15f);
+        pointerInputHold = false;
+    }
+    public IEnumerator ButtonInputHold()
+    {
+        buttonInputHold = true;
+        yield return new WaitForSeconds(0.15f);
+        buttonInputHold = false;
+    }
+    public void ResetPointer()
+    {
+        if (inventoryBox.isItemBoxOpened == false)
+        {
+            for (int i = 0; i < menuPointer.Length; i++)
+            {
+                menuPointer[i].SetActive(false);
+            }
+            menuPointer[menuNumber].SetActive(true);
+        }
+        else
+        {
+            for (int i = 0; i < itemBoxPointer.Length; i++)
+            {
+                itemBoxPointer[i].SetActive(false);
+            }
+            itemBoxPointer[menuNumber].SetActive(true);
+        }
+    }
     public void ResetMenu()
     {
         menuNumber = 0;
@@ -263,6 +341,7 @@ public class GameMenuManager : MonoBehaviour
         inventory.inventoryColumnIndex = 0;
         inventory.inventoryRowIndex = 0;
         inventory.MarkInventory();
+        inventoryBox.MarkInventoryBox();
 
         //reset quest pointer
         quest.questIndex = 0;
@@ -270,4 +349,6 @@ public class GameMenuManager : MonoBehaviour
         quest.MarkQuest();
         quest.RefreshQuest();
     }
+    #endregion
+
 }

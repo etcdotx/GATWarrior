@@ -10,6 +10,7 @@ public class Dialogue : MonoBehaviour
     public PlayerData playerData;
     public InputSetup inputSetup;
     public Quest quest;
+    public Inventory inventory;
 
     [Header("Util")]
     public NPC target;
@@ -43,6 +44,7 @@ public class Dialogue : MonoBehaviour
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
+        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         quest = GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>();
 
         dialogueUI = GameObject.FindGameObjectWithTag("DialogueUI");
@@ -106,6 +108,33 @@ public class Dialogue : MonoBehaviour
         }
     }
 
+
+    public void StartNewDialogue(NPC target, List<CollectionQuest> cqList, List<string> npcDialog, string optionDialog, bool haveDialogOption)
+    {
+        this.target = target;
+        this.haveDialogOption = haveDialogOption;
+        ShowUI(haveDialogOption);
+        StartCoroutine(InputHold());
+        //add normal dialogue
+        for (int i = 0; i < npcDialog.Count; i++)
+        {
+            string a = npcDialog[i];
+            interactDialogList.Add(a);
+        }
+        if (haveDialogOption == true)
+        {
+            InstantiateDialogueOption(cqList);
+            interactText.text = "Choose";
+            dialogueText.text = optionDialog;
+        }
+        else
+        {
+            dialog = interactDialogList;
+            dialogueText.text = dialog[dialNum];
+        }
+        ScrollOption();
+    }
+
     void ConfirmDialogSelection()
     {
         StartCoroutine(InputHold());
@@ -151,7 +180,9 @@ public class Dialogue : MonoBehaviour
                         if (playerData.collectionQuest[j].isComplete == true)
                         {
                             Debug.Log("Quest is complete");
+                            SetQuestCompleteDialogue();
                             playerData.collectionQuest[j].QuestComplete();
+                            inventory.RefreshInventory();
                             target.activeCollectionQuest.RemoveAt(i);
                             for (int b = 0; b < quest.collectionQuestActive.Count; b++)
                                 if (quest.collectionQuestActive[b].id == playerData.collectionQuest[j].id)
@@ -161,29 +192,30 @@ public class Dialogue : MonoBehaviour
                                 }
                             playerData.AddCollectionQuestComplete(playerData.collectionQuest[j]);
                             quest.ActivateQuest();
-
-                            //nge add ke list unused
-                            CancelTalk();
                             break;
                         }
                         SetQuestDialogue();
-                        break;
+                    }
+                    else
+                    {
+                        Debug.Log("gada quest");
+                        checkExist = false;
                     }
                 }
 
                 if (checkExist == false)
                 {
-                    Debug.Log("ext");
+                    Debug.Log("ada quest");
                     playerData.AddQuest(target.activeCollectionQuest[i]);
                     SetQuestDialogue();
                 }
                 break;
-
             }
         }
     }
 
-    void SetQuestDialogue() {
+    void SetQuestDialogue()
+    {
         dialog.Clear();
         for (int i = 0; i < target.questDialogList.Count; i++)
             if (target.questDialogList[i].questID == dialogueOptionContent.transform.GetChild(dialogueOptionIndex).GetComponent<DialogueOption>().questID)
@@ -192,33 +224,20 @@ public class Dialogue : MonoBehaviour
         dialogueText.text = dialog[dialNum];
     }
 
-    public void StartNewDialogue(NPC target, List<CollectionQuest> cqList, List<string> npcDialog, string optionDialog, bool haveDialogOption)
+    void SetQuestCompleteDialogue()
     {
-        this.target = target;
-        this.haveDialogOption = haveDialogOption;
-        ShowUI(haveDialogOption);
-        StartCoroutine(InputHold());
-        //add normal dialogue
-        for (int i = 0; i < npcDialog.Count; i++)
-        {
-            string a = npcDialog[i];
-            interactDialogList.Add(a);
-        }
-        if (haveDialogOption == true)
-        {
-            InstantiateDialogueOption(cqList);
-            interactText.text = "Choose";
-            dialogueText.text = optionDialog;
-        }
-        else
-        {
-            dialog = interactDialogList;
-            dialogueText.text = dialog[dialNum];
-        }
-        ScrollOption();
+        dialog.Clear();
+        for (int i = 0; i < target.questCompleteDialogList.Count; i++)
+            if (target.questCompleteDialogList[i].questID == dialogueOptionContent.transform.GetChild(dialogueOptionIndex).GetComponent<DialogueOption>().questID)
+                dialog.Add(target.questCompleteDialogList[i].dialog);
+
+        Debug.Log(dialog.Count);
+        Debug.Log(dialog[dialNum]);
+        dialogueText.text = dialog[dialNum];
     }
 
-    void DestroyOption() {
+    void DestroyOption()
+    {
         for (int i = 0; i < dialogueOptionContent.transform.childCount; i++)
             Destroy(dialogueOptionContent.transform.GetChild(i).gameObject);
     }
@@ -235,6 +254,7 @@ public class Dialogue : MonoBehaviour
                 cqList[i].description, cqList[i].isOptional);
             colQuestList.Add(newCol);
         }
+
         //for normal dialogue
         Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform);
         dialogueOptionContent.transform.GetChild(0).GetComponent<DialogueOption>().optionText.text = "Talk";
@@ -249,9 +269,21 @@ public class Dialogue : MonoBehaviour
         }
         for (int i = nonDialogueIndex; i < dialogueOptionContent.transform.childCount; i++)
         {
-            Debug.Log(colQuestList[cqIndex].title);
             dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().optionText.text = colQuestList[cqIndex].title;
             dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questID = colQuestList[cqIndex].id;
+            dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questIndicatorNew.SetActive(true);
+            dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questIndicatorComplete.SetActive(false);
+            for (int j = 0; j < playerData.collectionQuest.Count; j++)
+                if (playerData.collectionQuest[j].id == colQuestList[cqIndex].id)
+                    if (playerData.collectionQuest[j].isComplete == true)
+                    {
+                        dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questIndicatorNew.SetActive(false);
+                        dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questIndicatorComplete.SetActive(true);
+                        break;
+                    }
+                    else
+                        break;
+
             cqIndex++;
         }
 
@@ -323,11 +355,15 @@ public class Dialogue : MonoBehaviour
     public void NextDialogue()
     {
         if (dialNum == dialog.Count - 1)
+        {
             EndDialog();
+            Debug.Log("a");
+        }
         else
         {
             dialNum++;
             dialogueText.text = dialog[dialNum];
+            Debug.Log("in");
         }
     }
     public void EndDialog()
@@ -339,8 +375,9 @@ public class Dialogue : MonoBehaviour
         interactText.gameObject.SetActive(false);
         dialogueText.gameObject.SetActive(false);
         //mereset class ini
-        InputHolder.isInputHolded = true;
         GameStatus.isTalking = false;
+        InputHolder.isInputHolded = true;
+        Debug.Log("a");
     }
     void ClearList()
     {

@@ -65,7 +65,7 @@ public class GameDataBase: MonoBehaviour {
         List<int> quest1ChainQuestID = new List<int>() { 2, 3};
         CollectionQuest quest1 = new CollectionQuest(1, 1, quest1ChainQuestID, 5, "GameObject/Quest/Cube", "Collect 5 Cube", "Collect", "Collect 5 cube in town", false);
         QuestDataBase.collectionQuest.Add(quest1);
-        Debug.Log(quest1.chainQuestID[0] + " " + quest1.chainQuestID[1]);
+
         CollectionQuest quest3 = new CollectionQuest(1, 3, null, 7, "GameObject/Quest/Cube", "Collect 7 Cube", "Collect", "Collect 7 cube in town", false);
         QuestDataBase.collectionQuest.Add(quest3);
 
@@ -156,11 +156,23 @@ public class GameDataBase: MonoBehaviour {
         if (ItemDataBase.item == null)
             ItemDataBase.item = new List<Item>();
 
-        Item Cube = new Item(1, "ItemImage/Cube", "Cube", "A cube", false);
+        Item Cube = new Item(1, "ItemImage/Cube", "Cube", "A cube", false, false);
         ItemDataBase.item.Add(Cube);
 
-        Item Sphere = new Item(2, "ItemImage/Sphere", "Sphere", "A sphere", false);
+        Item Sphere = new Item(2, "ItemImage/Sphere", "Sphere", "A sphere", false, false);
         ItemDataBase.item.Add(Sphere);
+
+        Item Hoe = new Item(3, "ItemImage/Tools/Hoe", "Hoe", "A Hoe", true, true);
+        ItemDataBase.item.Add(Hoe);
+
+        Item WaterScoop = new Item(4, "ItemImage/Tools/WaterScoop", "Water Scoop", "A water scoop", true, true);
+        ItemDataBase.item.Add(WaterScoop);
+
+        Item Potion = new Item(5, "ItemImage/Usable/Potion", "Potion", "A potion", true, false);
+        ItemDataBase.item.Add(Potion);
+
+        Item Seed = new Item(6, "ItemImage/Usable/Seed", "Seed", "A seed", true, false);
+        ItemDataBase.item.Add(Seed);
     }
     #endregion
 }

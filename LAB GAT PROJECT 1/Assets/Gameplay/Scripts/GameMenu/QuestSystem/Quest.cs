@@ -16,8 +16,11 @@ public class Quest : MonoBehaviour
     [Header("Quest Menu Settings")]
     public int questIndex;
     public int questMaxIndex;
+    //public int questCompleteIndex;
+    //public int questCompleteMaxIndex;
     public GameObject questView;
     public GameObject questContent;
+    //public GameObject questCompleteContent;
     public Scrollbar questViewScrollbar;
 
     [Header("Quest Detail")]
@@ -31,20 +34,22 @@ public class Quest : MonoBehaviour
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
 
-        collectionQuestActive.Add(QuestDataBase.collectionQuest[0]);
-
         questView = GameObject.FindGameObjectWithTag("QuestUI").transform.Find("QuestView").gameObject;
         questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
         questViewScrollbar = questView.transform.Find("QuestViewScrollbar").GetComponent<Scrollbar>();
         questDetail = questView.transform.Find("QuestDetail").gameObject;
         questIndex = 0;
+        //questCompleteMaxIndex = 0;
         questMaxIndex = questContent.transform.childCount - 1;
+        //questCompleteMaxIndex = questCompleteContent.transform.childCount - 1;
 
         questDescription = questDetail.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         questObjective = questDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         questDescription.text = "";
         questObjective.text = "";
 
+        //add first quest
+        collectionQuestActive.Add(QuestDataBase.collectionQuest[0]);
         ActivateQuest();
     }
 
@@ -72,7 +77,6 @@ public class Quest : MonoBehaviour
             npcAvailable[i].GetComponent<NPC>().questCompleteDialogList.Clear();
             npcAvailable[i].GetComponent<NPC>().GetQuestCompleteDialog();
             npcAvailable[i].GetComponent<NPC>().GetQuestDialog();
-            npcAvailable[i].GetComponent<NPC>().GetQuestCompleteDialog();
             npcAvailable[i].GetComponent<NPC>().activeCollectionQuestTotal = npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Count;
         }
     }
@@ -147,8 +151,14 @@ public class Quest : MonoBehaviour
         {
             if (playerData.collectionQuest[i].id == questContent.transform.GetChild(questIndex).GetComponent<QuestIndicator>().questID)
             {
+                if (playerData.collectionQuest[i].isComplete == true)
+                {
+                    questObjective.text = playerData.collectionQuest[i].ToString() + "\n" + "Quest Complete";
+                }
+                else
+                    questObjective.text = playerData.collectionQuest[i].ToString();
+
                 questDescription.text = playerData.collectionQuest[i].description;
-                questObjective.text = playerData.collectionQuest[i].ToString(); //newCol.description + newCol.ToString();
                 break;
             }
         }

@@ -14,8 +14,9 @@ public class Item
     public bool isUsable;
     public bool isOnInventory;
     public bool isOnItemBox;
+    public bool isASingleTool;
 
-    public Item(int id, string imagePath, string name, string description, bool isUsable)
+    public Item(int id, string imagePath, string name, string description, bool isUsable, bool isASingleTool)
     {
         quantity = 1;
         this.id = id;
@@ -24,6 +25,7 @@ public class Item
         this.name = name;
         this.description = description;
         this.isUsable = isUsable;
+        this.isASingleTool = isASingleTool;
         isOnInventory = false;
         isOnItemBox = false;
     }

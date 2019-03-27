@@ -42,7 +42,7 @@ public class CharacterMovement : MonoBehaviour
         if (GameStatus.isTalking == false && InputHolder.isInputHolded == false && GameStatus.CanMove == true)
         {
             GetInputAxis();
-            if (inputAxis.x >= 0.1 || inputAxis.y >= 0.1 || inputAxis.x <= -0.1 || inputAxis.y <= -0.1)
+            if (Mathf.Abs(inputAxis.x) > 0.15 || Mathf.Abs(inputAxis.y) > 0.15)
             {
                 CalculateDirection();
                 Rotate();

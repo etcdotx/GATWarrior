@@ -51,7 +51,6 @@ public class CollectionQuest
     public void QuestComplete() {
         try
         {
-
             for (int i = 0; i < chainQuestID.Count; i++)
                 for (int j = 0; j < QuestDataBase.collectionQuest.Count; j++)
                     if (chainQuestID[i] == QuestDataBase.collectionQuest[j].id)
@@ -59,6 +58,16 @@ public class CollectionQuest
                         GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>().collectionQuestActive.Add(QuestDataBase.collectionQuest[j]);
                         break;
                     }
+
+            PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+            for (int i = 0; i < playerData.inventoryItem.Count; i++)
+            {
+                if (playerData.inventoryItem[i].name == itemToCollect.name)
+                {
+                    playerData.inventoryItem[i].quantity -= colAmount;
+                    break;
+                }
+            }
         }
         catch {
             Debug.Log("This quest doesnt have chain quest");

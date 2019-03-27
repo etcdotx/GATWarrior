@@ -25,6 +25,9 @@ TagManager:
   - DialogueUI
   - Dialogue
   - DialogueOption
+  - Soil
+  - UsableItemUI
+  - UsableItem
   layers:
   - Default
   - TransparentFX

@@ -50,6 +50,7 @@ public class NPC : MonoBehaviour
             {
                 if (activeCollectionQuest[i].id == QuestDataBase.questCompleteDialog[j].questID)
                 {
+                    //Debug.Log(QuestDataBase.questCompleteDialog[j]);
                     questCompleteDialogList.Add(QuestDataBase.questCompleteDialog[j]);
                 }
             }

@@ -69,7 +69,6 @@ public class PlayerData : MonoBehaviour {
         //Set Default
         inventory.inventoryView.SetActive(false);
         quest.questView.SetActive(false);
-        inventory.RefreshInventory();
 
         //player status
         maxHealth = 100;
@@ -95,7 +94,6 @@ public class PlayerData : MonoBehaviour {
 
         try
         {
-            Debug.Log(gameDataBase);
             PlayerSaveData data = SaveSystem.LoadPlayer(gameDataBase.saveSlot.ToString());
             characterAppearance = new int[data.characterAppearance.Length];
             for (int i = 0; i < characterAppearance.Length; i++)
@@ -169,9 +167,6 @@ public class PlayerData : MonoBehaviour {
     {
         Instantiate(questListPrefab, quest.questContent.transform);
         int a = quest.questContent.transform.childCount - 1; //last quest (new addded)
-        Debug.Log(a);
-        Debug.Log(quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text);
-        Debug.Log(cq.title);
         quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
         quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
         quest.questMaxIndex++;
@@ -202,14 +197,14 @@ public class PlayerData : MonoBehaviour {
                 break;
             }
         }
-        for (int i = 0; i < inventoryBoxItem.Count; i++)
-        {
-            if (newQuest.itemToCollect.name == inventoryBoxItem[i].name)
-            {
-                newQuest.curAmount += inventoryBoxItem[i].quantity;
-                break;
-            }
-        }
+        //for (int i = 0; i < inventoryBoxItem.Count; i++)
+        //{
+        //    if (newQuest.itemToCollect.name == inventoryBoxItem[i].name)
+        //    {
+        //        newQuest.curAmount += inventoryBoxItem[i].quantity;
+        //        break;
+        //    }
+        //}
         newQuest.CheckProgress();
     }
 
@@ -233,7 +228,7 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             //item baru ditambah kedalam list player
-            Item newItem = new Item(item.id, item.imagePath, item.name, item.description, item.isUsable);
+            Item newItem = new Item(item.id, item.imagePath, item.name, item.description, item.isUsable, item.isASingleTool);
             inventoryItem.Add(newItem);
             //cek item tersebut ke quest yang exist
             CheckNewItem(newItem);
@@ -250,18 +245,21 @@ public class PlayerData : MonoBehaviour {
             if (collectionQuest[i].itemToCollect.name == addedItem.name)
             {
                 collectionQuest[i].curAmount = 0;
-                for (int j = 0; j < inventoryBoxItem.Count; j++)
-                {
-                    if (collectionQuest[i].id == inventoryBoxItem[j].id)
-                    {
-                        collectionQuest[i].curAmount += inventoryBoxItem[j].quantity;
-                        break;
-                    }
-                }
+                //kalo ditambah invenbox
+                //for (int j = 0; j < inventoryBoxItem.Count; j++)
+                //{
+                //    if (collectionQuest[i].id == inventoryBoxItem[j].id)
+                //    {
+                //        collectionQuest[i].curAmount += inventoryBoxItem[j].quantity;
+                //        break;
+                //    }
+                //}
+
                 //jumlah item yang baru, dimasukkan kedalam amount quest yang membutuhkan item tersebut
                 collectionQuest[i].curAmount += addedItem.quantity;
                 //jika item tersebut sudah memenuhi kriteria, maka quest tersebut complete
                 collectionQuest[i].CheckProgress();
+                Debug.Log("in");
             }
         }
     }
@@ -286,7 +284,16 @@ public class PlayerData : MonoBehaviour {
             CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
             newQuestCom.chainQuestID = cqc.chainQuestID;
             collectionQuestComplete.Add(newQuestCom);
+            //AddCompleteQuestList(newQuestCom);
             Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
         }
     }
+
+    //public void AddCompleteQuestList(CollectionQuest cq) {
+    //    Instantiate(questListPrefab, quest.questCompleteContent.transform);
+    //    int a = quest.questCompleteContent.transform.childCount - 1; //last quest (new addded)
+    //    quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
+    //    quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
+    //    quest.questCompleteMaxIndex++;
+    //}
 }

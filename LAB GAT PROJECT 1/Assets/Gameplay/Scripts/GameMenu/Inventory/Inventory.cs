@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
     public InputSetup inputSetup;
     public GameMenuManager gameMenuManager;
     public InventoryBox inventoryBox;
+    public UsableItem usableItem;
 
     [Header("Inventory Settings")]
     public int inventoryColumn;
@@ -35,6 +36,7 @@ public class Inventory : MonoBehaviour
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
+        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
 
         inventoryView = GameObject.FindGameObjectWithTag("InventoryUI").transform.Find("InventoryView").gameObject;
         inventoryViewPort = inventoryView.transform.Find("InventoryViewPort").gameObject;
@@ -64,6 +66,13 @@ public class Inventory : MonoBehaviour
                 c++;
             }
         }
+
+
+        playerData.AddItem(ItemDataBase.item[2]);
+        playerData.AddItem(ItemDataBase.item[3]);
+        playerData.AddItem(ItemDataBase.item[4]);
+        playerData.AddItem(ItemDataBase.item[5]);
+        RefreshInventory();
     }
 
     public void InventorySelection()
@@ -134,12 +143,16 @@ public class Inventory : MonoBehaviour
             invenSwap1.itemID = id2;
             invenSwap2.itemID = id1;
             RefreshInventory();
-            invenSwap1.isSelected = false;
-            invenSwap1.gameObject.GetComponent<Image>().color = gameMenuManager.normalColor;
-            isSwapping = true;
-            isSwapping = false;
-            StartCoroutine(gameMenuManager.ButtonInputHold());
+            ResetInventorySwap();
         }
+    }
+
+    public void ResetInventorySwap()
+    {
+        invenSwap1.isSelected = false;
+        invenSwap1.gameObject.GetComponent<Image>().color = gameMenuManager.normalColor;
+        isSwapping = false;
+        StartCoroutine(gameMenuManager.ButtonInputHold());
     }
 
     public void MarkInventory()
@@ -164,23 +177,50 @@ public class Inventory : MonoBehaviour
         catch { }
     }
 
+    public void PutInventory()
+    {
+        if (Input.GetKeyDown(inputSetup.putInventory) && isSettingQuantity == false && isSwapping==false)
+        {
+            inventoryQuantitySlider.value = 1;
+            SetInitialQuantityToPut();
+        }
+        if (Input.GetKeyDown(inputSetup.select) && isSettingQuantity == true)
+        {
+            inventoryBox.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
+            slider.SetActive(false);
+            isSettingQuantity = false;
+        }
+    }
+
     public void SetInitialQuantityToPut()
     {
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        bool isItemExist=true;
+        if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().itemID == 0)
         {
-            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().itemID == playerData.inventoryItem[i].id)
+            Debug.Log("no item");
+            isItemExist = false;
+        }
+        if (isItemExist == true)
+        {
+            for (int i = 0; i < playerData.inventoryItem.Count; i++)
             {
-                temporaryItem = playerData.inventoryItem[i]; //jenis item
-                slider.SetActive(true);
-                inventoryQuantitySlider.minValue = 1;
-                inventoryQuantitySlider.maxValue = playerData.inventoryItem[i].quantity;
-                inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
-                break;
+                if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().itemID == playerData.inventoryItem[i].id)
+                {
+                    temporaryItem = playerData.inventoryItem[i]; //jenis item
+                    slider.SetActive(true);
+                    inventoryQuantitySlider.minValue = 1;
+                    inventoryQuantitySlider.maxValue = playerData.inventoryItem[i].quantity;
+                    inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
+                    isItemExist = true;
+                    isSettingQuantity = true;
+                    break;
+                }
             }
         }
     }
 
-    public void IncreaseQuantityToPut() {
+    public void IncreaseQuantityToPut()
+    {
         inventoryQuantitySlider.value += 1;
         inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
     }
@@ -191,19 +231,33 @@ public class Inventory : MonoBehaviour
         inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
     }
 
-    public void PutInventory()
+    public void PlaceItem(Item newItem, int quantity)
     {
-        if (Input.GetKeyDown(inputSetup.putInventory) && isSettingQuantity == false)
+        bool isItemExist = false;
+        //check if item exist or not
+        for (int i = 0; i < playerData.inventoryItem.Count; i++)
         {
-            isSettingQuantity = true;
-            SetInitialQuantityToPut();
+            if (playerData.inventoryItem[i].id == newItem.id)
+            {
+                isItemExist = true;
+                //quantity item ditambah quantity baru
+                playerData.inventoryItem[i].quantity += quantity;
+                playerData.CheckNewItem(playerData.inventoryItem[i]);
+                newItem.quantity -= quantity;
+                break;
+            }
         }
-        if (Input.GetKeyDown(inputSetup.select) && isSettingQuantity == true)
+
+        if (isItemExist == false)
         {
-            inventoryBox.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
-            slider.SetActive(false);
-            isSettingQuantity = false;
+            Item newItemIn = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable, newItem.isASingleTool);
+            newItemIn.quantity = quantity;
+            playerData.inventoryItem.Add(newItemIn);
+            newItem.quantity -= quantity;
         }
+
+        inventoryBox.RefreshInventoryBox();
+        RefreshInventory();
     }
 
     public void RefreshInventory()
@@ -231,5 +285,6 @@ public class Inventory : MonoBehaviour
             }
             inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
         }
+        usableItem.GetUsableItem();
     }
 }

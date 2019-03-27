@@ -19,33 +19,42 @@ public class CameraMovement : MonoBehaviour {
     public float charOffsetY;
     public float charOffsetZ;
 
+    public Vector3 inputAxis;
     private void Update()
     {
-        if (GameStatus.isTalking == false && GameStatus.CanMove == true)
-        {
-            if (currentY <= 80 || currentY >= -80)
+        GetInputAxis();
+        if (Mathf.Abs(inputAxis.x) > 0.15 || Mathf.Abs(inputAxis.y) > 0.15) {
+            if (GameStatus.isTalking == false && GameStatus.CanMove == true)
             {
-                currentY += Input.GetAxis("RightJoystickVertical");
+                if (currentY <= 80 || currentY >= -80)
+                {
+                    currentY += Input.GetAxis("RightJoystickVertical");
+                }
+                if (currentY >= 80)
+                {
+                    currentY = 79.9f;
+                }
+                if (currentY <= -80)
+                {
+                    currentY = -79.9f;
+                }
+                currentX += Input.GetAxis("RightJoystickHorizontal");
             }
-            if (currentY >= 80)
-            {
-                currentY = 79.9f;
-            }
-            if (currentY <= -80)
-            {
-                currentY = -79.9f;
-            }
-            currentX += Input.GetAxis("RightJoystickHorizontal");
         }
     }
 
     // Update is called once per frame
-    void LateUpdate ()
+    void LateUpdate()
     {
         if (GameStatus.isTalking == false && GameStatus.CanMove == true)
         {
             ApplyMovement();
         }
+    }
+
+    void GetInputAxis() {
+        inputAxis.x = Input.GetAxis("RightJoystickHorizontal");
+        inputAxis.y = Input.GetAxis("RightJoystickVertical");
     }
 
     void ApplyMovement()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterRayCast : MonoBehaviour
+public class CharacterInteraction : MonoBehaviour
 {
     public PlayerData playerData;
     public Talk talk;
@@ -13,12 +13,15 @@ public class CharacterRayCast : MonoBehaviour
     public Text interactText;
 
     public float maxRayDistance;
-    public Vector3 raycastOffset;
+    public Vector3 interactRaycastOffset;
 
     public InputSetup inputSetup;
     public Dialogue dialogue;
     public InventoryBox inventoryBox;
     public Inventory inventory;
+
+    public bool PlantHideButton;
+    public bool InteractHideButton;
 
     // Start is called before the first frame update
     void Start()
@@ -34,22 +37,32 @@ public class CharacterRayCast : MonoBehaviour
 
         interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
         interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
+        PlantHideButton = true;
+        InteractHideButton = true;
         HideButton();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (GameStatus.IsPaused == false && GameStatus.isTalking == false)
+        if (GameStatus.IsPaused == false && GameStatus.isTalking == false && InputHolder.isInputHolded==false)
         {
-            RayCasting();
+            InteractionRayCasting();
         }
-
+        if (InteractHideButton == false || PlantHideButton == false)
+        {
+            ShowButton();
+        }
+        else if (InteractHideButton == true && PlantHideButton == true)
+        {
+            HideButton();
+        }
+        Debug.Log(GameStatus.isTalking);
     }
 
-    void RayCasting()
+    void InteractionRayCasting()
     {
-        Ray ray = new Ray(transform.position + raycastOffset, transform.forward + raycastOffset);
-        Debug.DrawLine(transform.position + raycastOffset, transform.position + raycastOffset + transform.forward * maxRayDistance, Color.red);
+        Ray ray = new Ray(transform.position + interactRaycastOffset, transform.forward + interactRaycastOffset);
+        Debug.DrawLine(transform.position + interactRaycastOffset, transform.position + interactRaycastOffset + transform.forward * maxRayDistance, Color.red);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, maxRayDistance))
@@ -62,7 +75,7 @@ public class CharacterRayCast : MonoBehaviour
                 {
                     //menunjukkan ui interact
                     interactText.text = interactable.interactText;
-                    ShowButton();
+                    InteractHideButton = false;
                     //jika object tersebut bisa berbicara
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking == true)
                     {
@@ -76,7 +89,7 @@ public class CharacterRayCast : MonoBehaviour
                         collect.CollectObject(interactable);
                     }
                     //jika object tersebut adalah inventorybox
-                    if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened==false)
+                    if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened == false)
                     {
                         inventory.inventoryView.SetActive(true);
                         inventoryBox.inventoryBoxView.SetActive(true);
@@ -91,11 +104,13 @@ public class CharacterRayCast : MonoBehaviour
                 }
             }
             catch
-            { }
+            {
+                InteractHideButton = true;
+            }
         }
         else
         {
-            HideButton();
+            InteractHideButton = true;
         }
     }
 

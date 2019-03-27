@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Talk : MonoBehaviour
 {
-    public CharacterRayCast characterRayCast;
+    public CharacterInteraction characterInteraction;
     public InputSetup inputSetup;
     public Dialogue dialogue;
 
     // Start is called before the first frame update
     void Start()
     {
-        characterRayCast = gameObject.GetComponent<CharacterRayCast>();
+        characterInteraction = gameObject.GetComponent<CharacterInteraction>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         dialogue = GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Dialogue>();
     }
