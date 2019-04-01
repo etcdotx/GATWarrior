@@ -28,6 +28,10 @@ TagManager:
   - Soil
   - UsableItemUI
   - UsableItem
+  - PlantTrigger
+  - Soils
+  - PlantNodes
+  - PlantDataBase
   layers:
   - Default
   - TransparentFX

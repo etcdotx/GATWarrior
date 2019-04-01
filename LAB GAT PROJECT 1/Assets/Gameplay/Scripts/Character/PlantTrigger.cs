@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class PlantTrigger : MonoBehaviour
 {
-    public CharacterInteraction characterInteraction;
+    PlayerData playerData;
+    UsableItem usableItem;
+
+    public GameObject target;
 
     private void Start()
     {
-        characterInteraction = gameObject.GetComponentInParent<CharacterInteraction>();
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
     }
 
     private void OnTriggerStay(Collider other)
@@ -18,8 +22,9 @@ public class PlantTrigger : MonoBehaviour
             if (other.isTrigger == true)
             {
                 other.GetComponentInParent<Soil>().selectedIndicator.SetActive(true);
-                characterInteraction.PlantHideButton = false;
-                characterInteraction.interactText.text = "Plant";
+                target = other.gameObject.transform.parent.gameObject;
+                playerData.stateNearSoil = true;
+                usableItem.CheckIfItemIsUsable();
             }
         }
     }
@@ -31,7 +36,9 @@ public class PlantTrigger : MonoBehaviour
             if (other.isTrigger == true)
             {
                 other.GetComponentInParent<Soil>().selectedIndicator.SetActive(false);
-                characterInteraction.PlantHideButton = true;
+                target = null;
+                playerData.stateNearSoil = false;
+                usableItem.CheckIfItemIsUsable();
             }
         }
     }

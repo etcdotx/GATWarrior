@@ -20,7 +20,7 @@ public class CharacterInteraction : MonoBehaviour
     public InventoryBox inventoryBox;
     public Inventory inventory;
 
-    public bool PlantHideButton;
+    public bool OtherHideButton;
     public bool InteractHideButton;
 
     // Start is called before the first frame update
@@ -37,7 +37,7 @@ public class CharacterInteraction : MonoBehaviour
 
         interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
         interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
-        PlantHideButton = true;
+        OtherHideButton = true;
         InteractHideButton = true;
         HideButton();
     }
@@ -48,15 +48,14 @@ public class CharacterInteraction : MonoBehaviour
         {
             InteractionRayCasting();
         }
-        if (InteractHideButton == false || PlantHideButton == false)
+        if (InteractHideButton == false || OtherHideButton == false)
         {
             ShowButton();
         }
-        else if (InteractHideButton == true && PlantHideButton == true)
+        else if (InteractHideButton == true && OtherHideButton == true)
         {
             HideButton();
         }
-        Debug.Log(GameStatus.isTalking);
     }
 
     void InteractionRayCasting()

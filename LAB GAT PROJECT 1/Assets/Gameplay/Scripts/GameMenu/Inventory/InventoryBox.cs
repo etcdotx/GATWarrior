@@ -65,6 +65,7 @@ public class InventoryBox : MonoBehaviour
         inventoryBoxRowIndex = 0;
 
         int c = 0;
+        inventoryBoxIndicator = new GameObject[inventoryBoxContent.transform.childCount];
         for (int i = 0; i < inventoryBoxRow; i++)
         {
             for (int j = 0; j < inventoryBoxColumn; j++)
@@ -269,7 +270,12 @@ public class InventoryBox : MonoBehaviour
         }
         if (isItemExist == false)
         {
-            Item newItemInBox = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable, newItem.isASingleTool);
+            Item newItemInBox = new Item(newItem.id, newItem.imagePath, newItem.name,
+                newItem.description, newItem.isUsable, newItem.isASingleTool, newItem.itemType);
+            if (newItem.itemType != null)
+                if (newItem.itemType.ToLower().Equals("plant".ToLower()))
+                    newItemInBox.plantID = newItem.plantID;
+
             newItemInBox.quantity = quantity;
             playerData.inventoryBoxItem.Add(newItemInBox);
             newItem.quantity -= quantity;
@@ -315,5 +321,6 @@ public class InventoryBox : MonoBehaviour
             inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().RefreshItemBox();
         }
         usableItem.GetUsableItem();
+        usableItem.SlideItem(true);
     }
 }

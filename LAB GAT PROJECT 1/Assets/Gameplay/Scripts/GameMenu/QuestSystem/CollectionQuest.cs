@@ -37,6 +37,22 @@ public class CollectionQuest
 
     public void CheckProgress()
     {
+        bool itemExist=false;
+        PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        {
+            if (playerData.inventoryItem[i].name == itemToCollect.name)
+            {
+                curAmount = playerData.inventoryItem[i].quantity;
+                itemExist = true;
+                break;
+            }
+        }
+        if (itemExist == false)
+        {
+            curAmount = 0;
+        }
+
         if (curAmount >= colAmount)
         {
             isComplete = true;
@@ -48,7 +64,19 @@ public class CollectionQuest
         }
     }
 
-    public void QuestComplete() {
+    public void QuestComplete()
+    {
+        PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        {
+            if (playerData.inventoryItem[i].name == itemToCollect.name)
+            {
+                playerData.inventoryItem[i].quantity -= colAmount;
+                Debug.Log("innn");
+                break;
+            }
+        }
+
         try
         {
             for (int i = 0; i < chainQuestID.Count; i++)
@@ -58,16 +86,6 @@ public class CollectionQuest
                         GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>().collectionQuestActive.Add(QuestDataBase.collectionQuest[j]);
                         break;
                     }
-
-            PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-            for (int i = 0; i < playerData.inventoryItem.Count; i++)
-            {
-                if (playerData.inventoryItem[i].name == itemToCollect.name)
-                {
-                    playerData.inventoryItem[i].quantity -= colAmount;
-                    break;
-                }
-            }
         }
         catch {
             Debug.Log("This quest doesnt have chain quest");

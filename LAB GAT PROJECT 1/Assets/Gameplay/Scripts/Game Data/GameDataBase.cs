@@ -75,9 +75,22 @@ public class GameDataBase: MonoBehaviour {
 
     void addQuestSource2()
     {
-        List<int> quest2ChainQuestID = new List<int>() { 4 };
-        CollectionQuest quest2 = new CollectionQuest(2, 2, quest2ChainQuestID, 6, "GameObject/Quest/Cube", "Gather 6 Cube", "Gather", "Mystery cube fom the town.", false);
+        List<int> quest2ChainQuestID = new List<int>() { 4,5,6,7 };
+        CollectionQuest quest2 = new CollectionQuest(2, 2, quest2ChainQuestID, 6, "GameObject/Quest/Sphere", "Gather 6 Sphere", "Gather", "Mystery Sphere fom the town.", false);
         QuestDataBase.collectionQuest.Add(quest2);
+
+
+        CollectionQuest quest5 = new CollectionQuest(2, 5, null, 7, "GameObject/Quest/Sphere", "Gather 7 Sphere", "Gather", "Mystery Sphere fom the town.", false);
+        QuestDataBase.collectionQuest.Add(quest5);
+
+
+        CollectionQuest quest6 = new CollectionQuest(2, 6, null, 8, "GameObject/Quest/Sphere", "Gather 8 Sphere", "Gather", "Mystery Sphere fom the town.", false);
+        QuestDataBase.collectionQuest.Add(quest6);
+
+
+        CollectionQuest quest7 = new CollectionQuest(2, 7, null, 9, "GameObject/Quest/Sphere", "Gather 9 Sphere", "Gather", "Mystery Sphere fom the town.", false);
+        QuestDataBase.collectionQuest.Add(quest7);
+
     }
     #endregion
 
@@ -119,6 +132,17 @@ public class GameDataBase: MonoBehaviour {
         QuestDialog qd2_2 = new QuestDialog(2, 2, "Can u help me to gather some ingredients?");
         QuestDataBase.questDialog.Add(qd2_2);
 
+        QuestDialog qd5_1 = new QuestDialog(2, 5, "Can u help me to gather some ingredients?");
+        QuestDataBase.questDialog.Add(qd5_1);
+
+        QuestDialog qd6_1 = new QuestDialog(2, 6, "Boy");
+        QuestDataBase.questDialog.Add(qd6_1);
+
+        QuestDialog qd6_2 = new QuestDialog(2, 6, "What the what");
+        QuestDataBase.questDialog.Add(qd6_2);
+
+        QuestDialog qd7_1 = new QuestDialog(2, 7, "Can u help me to gather some ingredients?");
+        QuestDataBase.questDialog.Add(qd7_1);
     }
     #endregion
 
@@ -147,6 +171,12 @@ public class GameDataBase: MonoBehaviour {
     {
         QuestDialog qcd2_1 = new QuestDialog(2, 2, "Thanks to you!");
         QuestDataBase.questCompleteDialog.Add(qcd2_1);
+        QuestDialog qcd5_1 = new QuestDialog(2, 5, "Thanks to me!");
+        QuestDataBase.questCompleteDialog.Add(qcd5_1);
+        QuestDialog qcd6_1 = new QuestDialog(2, 6, "Thanks to your mom!");
+        QuestDataBase.questCompleteDialog.Add(qcd6_1);
+        QuestDialog qcd7_1 = new QuestDialog(2, 7, "Thanks!");
+        QuestDataBase.questCompleteDialog.Add(qcd7_1);
     }
     #endregion
 
@@ -156,23 +186,33 @@ public class GameDataBase: MonoBehaviour {
         if (ItemDataBase.item == null)
             ItemDataBase.item = new List<Item>();
 
-        Item Cube = new Item(1, "ItemImage/Cube", "Cube", "A cube", false, false);
+        Item Cube = new Item(1, "ItemImage/Cube", "Cube", "A cube", false, false, null);
         ItemDataBase.item.Add(Cube);
 
-        Item Sphere = new Item(2, "ItemImage/Sphere", "Sphere", "A sphere", false, false);
+        Item Sphere = new Item(2, "ItemImage/Sphere", "Sphere", "A sphere", false, false, null);
         ItemDataBase.item.Add(Sphere);
 
-        Item Hoe = new Item(3, "ItemImage/Tools/Hoe", "Hoe", "A Hoe", true, true);
+        Item Hoe = new Item(3, "ItemImage/Tools/Hoe", "Hoe", "A Hoe", true, true, "Hoe".ToLower());
         ItemDataBase.item.Add(Hoe);
 
-        Item WaterScoop = new Item(4, "ItemImage/Tools/WaterScoop", "Water Scoop", "A water scoop", true, true);
+        Item WaterScoop = new Item(4, "ItemImage/Tools/WaterScoop", "Water Scoop", "A water scoop", true, true, null);
         ItemDataBase.item.Add(WaterScoop);
 
-        Item Potion = new Item(5, "ItemImage/Usable/Potion", "Potion", "A potion", true, false);
+        Item Potion = new Item(5, "ItemImage/Usable/Potion", "Potion", "A potion", true, false, "Potion".ToLower());
+        Potion.itemType = "potion";
         ItemDataBase.item.Add(Potion);
 
-        Item Seed = new Item(6, "ItemImage/Usable/Seed", "Seed", "A seed", true, false);
+
+        AddPlantItem();
+    }
+
+    void AddPlantItem() {
+        Item Seed = new Item(6, "ItemImage/Usable/Seed", "Seed", "A seed", true, false, "Plant".ToLower());
+        Seed.plantID = 1;
         ItemDataBase.item.Add(Seed);
+
+        Item Apple = new Item(7, "ItemImage/Ingredients/Apple", "Apple", "An Apple", false, false, null);
+        ItemDataBase.item.Add(Apple);
     }
     #endregion
 }

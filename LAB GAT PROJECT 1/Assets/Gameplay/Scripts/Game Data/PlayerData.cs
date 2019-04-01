@@ -40,6 +40,10 @@ public class PlayerData : MonoBehaviour {
     public List<CollectionQuest> collectionQuestComplete = new List<CollectionQuest>();
     public List<int> finishedCollectionQuestID = new List<int>();
 
+    [Header("Player State")]
+    public bool stateNearSoil;
+    public bool stateHpNotMax;
+
     [Header("FOR DEVELOPMENT")]
     public bool DEVELOPERMODE;
     public GameObject charPrefab;
@@ -228,7 +232,12 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             //item baru ditambah kedalam list player
-            Item newItem = new Item(item.id, item.imagePath, item.name, item.description, item.isUsable, item.isASingleTool);
+            Item newItem = new Item(item.id, item.imagePath, item.name, item.description, 
+                item.isUsable, item.isASingleTool, item.itemType);
+            if (item.itemType != null)
+                if (item.itemType.ToLower().Equals("plant".ToLower()))
+                    newItem.plantID = item.plantID;
+
             inventoryItem.Add(newItem);
             //cek item tersebut ke quest yang exist
             CheckNewItem(newItem);
@@ -245,15 +254,6 @@ public class PlayerData : MonoBehaviour {
             if (collectionQuest[i].itemToCollect.name == addedItem.name)
             {
                 collectionQuest[i].curAmount = 0;
-                //kalo ditambah invenbox
-                //for (int j = 0; j < inventoryBoxItem.Count; j++)
-                //{
-                //    if (collectionQuest[i].id == inventoryBoxItem[j].id)
-                //    {
-                //        collectionQuest[i].curAmount += inventoryBoxItem[j].quantity;
-                //        break;
-                //    }
-                //}
 
                 //jumlah item yang baru, dimasukkan kedalam amount quest yang membutuhkan item tersebut
                 collectionQuest[i].curAmount += addedItem.quantity;
@@ -288,12 +288,4 @@ public class PlayerData : MonoBehaviour {
             Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
         }
     }
-
-    //public void AddCompleteQuestList(CollectionQuest cq) {
-    //    Instantiate(questListPrefab, quest.questCompleteContent.transform);
-    //    int a = quest.questCompleteContent.transform.childCount - 1; //last quest (new addded)
-    //    quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
-    //    quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
-    //    quest.questCompleteMaxIndex++;
-    //}
 }

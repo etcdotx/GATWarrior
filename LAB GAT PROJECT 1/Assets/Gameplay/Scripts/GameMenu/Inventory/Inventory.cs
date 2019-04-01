@@ -42,6 +42,7 @@ public class Inventory : MonoBehaviour
         inventoryViewPort = inventoryView.transform.Find("InventoryViewPort").gameObject;
 
         int h = inventoryViewPort.transform.childCount;
+        inventoryIndicator = new GameObject[h];
         for (int i = 0; i < h; i++)
         {
             inventoryIndicator[i] = inventoryViewPort.transform.GetChild(i).gameObject;
@@ -250,7 +251,12 @@ public class Inventory : MonoBehaviour
 
         if (isItemExist == false)
         {
-            Item newItemIn = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description, newItem.isUsable, newItem.isASingleTool);
+            Item newItemIn = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description,
+                newItem.isUsable, newItem.isASingleTool, newItem.itemType);
+            if (newItem.itemType != null)
+                if (newItem.itemType.ToLower().Equals("plant".ToLower()))
+                    newItemIn.plantID = newItem.plantID;
+
             newItemIn.quantity = quantity;
             playerData.inventoryItem.Add(newItemIn);
             newItem.quantity -= quantity;
@@ -286,5 +292,6 @@ public class Inventory : MonoBehaviour
             inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
         }
         usableItem.GetUsableItem();
+        usableItem.SlideItem(false);
     }
 }

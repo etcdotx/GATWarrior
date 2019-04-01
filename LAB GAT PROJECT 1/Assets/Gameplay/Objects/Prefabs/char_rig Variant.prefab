@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7710232090894329774}
   m_Layer: 0
   m_Name: PlantTrigger
-  m_TagString: Untagged
+  m_TagString: PlantTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888c22693a3cb554aba5989b5787c46a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterInteraction: {fileID: 0}
 --- !u!54 &6776380
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -135,7 +134,7 @@ MonoBehaviour:
   dialogue: {fileID: 0}
   inventoryBox: {fileID: 0}
   inventory: {fileID: 0}
-  PlantHideButton: 0
+  OtherHideButton: 0
   InteractHideButton: 0
 --- !u!114 &1101680378512693209
 MonoBehaviour:

@@ -275,6 +275,8 @@ public class Dialogue : MonoBehaviour
             dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questIndicatorComplete.SetActive(false);
             for (int j = 0; j < playerData.collectionQuest.Count; j++)
                 if (playerData.collectionQuest[j].id == colQuestList[cqIndex].id)
+                {
+                    playerData.collectionQuest[j].CheckProgress();
                     if (playerData.collectionQuest[j].isComplete == true)
                     {
                         dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questIndicatorNew.SetActive(false);
@@ -283,6 +285,7 @@ public class Dialogue : MonoBehaviour
                     }
                     else
                         break;
+                }
 
             cqIndex++;
         }
@@ -357,13 +360,11 @@ public class Dialogue : MonoBehaviour
         if (dialNum == dialog.Count - 1)
         {
             EndDialog();
-            Debug.Log("a");
         }
         else
         {
             dialNum++;
             dialogueText.text = dialog[dialNum];
-            Debug.Log("in");
         }
     }
     public void EndDialog()
@@ -377,7 +378,6 @@ public class Dialogue : MonoBehaviour
         //mereset class ini
         GameStatus.isTalking = false;
         InputHolder.isInputHolded = true;
-        Debug.Log("a");
     }
     void ClearList()
     {

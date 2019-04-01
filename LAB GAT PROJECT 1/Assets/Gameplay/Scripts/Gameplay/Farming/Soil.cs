@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Soil : MonoBehaviour
 {
-    public bool isGatherable;
-    public bool needWater;
-    public int plantID;
-    public int soilID;
-    public int state;
-    public int day;
-
-    public bool selected;
+    public GameObject soil;
     public GameObject selectedIndicator;
+    public GameObject plantLocation;
+    public int soilID;
 
     // Update is called once per frame
     private void Start()

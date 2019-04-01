@@ -14,7 +14,10 @@ public class UsableItemIndicator : MonoBehaviour
     public void RefreshUsableItem()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-
+        if (itemID == 0)
+        {
+            itemImage.sprite = null;
+        }
         for (int i = 0; i < playerData.inventoryItem.Count; i++)
         {
             if (playerData.inventoryItem[i].id == itemID)
