@@ -195,7 +195,7 @@ public class GameDataBase: MonoBehaviour {
         Item Hoe = new Item(3, "ItemImage/Tools/Hoe", "Hoe", "A Hoe", true, true, "Hoe".ToLower());
         ItemDataBase.item.Add(Hoe);
 
-        Item WaterScoop = new Item(4, "ItemImage/Tools/WaterScoop", "Water Scoop", "A water scoop", true, true, null);
+        Item WaterScoop = new Item(4, "ItemImage/Tools/WaterScoop", "Water Scoop", "A water scoop", true, true, "WaterScoop".ToLower());
         ItemDataBase.item.Add(WaterScoop);
 
         Item Potion = new Item(5, "ItemImage/Usable/Potion", "Potion", "A potion", true, false, "Potion".ToLower());

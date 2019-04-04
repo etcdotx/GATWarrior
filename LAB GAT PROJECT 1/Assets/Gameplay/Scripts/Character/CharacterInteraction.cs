@@ -82,13 +82,13 @@ public class CharacterInteraction : MonoBehaviour
                         talk.TalkToObject(interactable);
                     }
                     //jika object tersebut bisa dimasukkan kedalam koleksi
-                    if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable == true)
+                    else if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable == true)
                     {
                         //mengambil item tersebut
                         collect.CollectObject(interactable);
                     }
                     //jika object tersebut adalah inventorybox
-                    if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened == false)
+                    else if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened == false)
                     {
                         inventory.inventoryView.SetActive(true);
                         inventoryBox.inventoryBoxView.SetActive(true);

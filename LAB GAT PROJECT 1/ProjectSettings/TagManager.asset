@@ -32,6 +32,7 @@ TagManager:
   - Soils
   - PlantNodes
   - PlantDataBase
+  - Enemy
   layers:
   - Default
   - TransparentFX

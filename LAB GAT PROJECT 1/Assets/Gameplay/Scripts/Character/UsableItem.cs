@@ -5,6 +5,7 @@ using UnityEngine;
 public class UsableItem : MonoBehaviour
 {
     public PlayerData playerData;
+    public InputSetup inputSetup;
 
     [Header("Indicator")]
     public GameObject usableItemUI;
@@ -21,11 +22,13 @@ public class UsableItem : MonoBehaviour
     public List<int> usableItemID = new List<int>();
     public Item selectedItem;
     public bool isItemUsable;
+    public bool isSelectingItem;
 
     // Start is called before the first frame update
     void Start()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
 
         usableItemUI = GameObject.FindGameObjectWithTag("UsableItemUI");
         usableItemView = usableItemUI.transform.Find("UsableItemView").gameObject;
@@ -45,6 +48,7 @@ public class UsableItem : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Joystick1Button4))
             {
+                isSelectingItem = true;
                 if (Input.GetKeyDown(KeyCode.Joystick1Button1))
                 {
                     SlideItem(true);
@@ -54,9 +58,14 @@ public class UsableItem : MonoBehaviour
                     SlideItem(false);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Joystick1Button2) && isItemUsable == true)
+            if (Input.GetKeyUp(KeyCode.Joystick1Button4))
             {
-                Debug.Log(selectedItem.name + " is used");
+                isSelectingItem = false;
+            }
+
+            if (Input.GetKeyDown(inputSetup.useItem) && isItemUsable == true)
+            {
+                //Debug.Log(selectedItem.name + " is used");
                 selectedItem.Use();
             }
         }

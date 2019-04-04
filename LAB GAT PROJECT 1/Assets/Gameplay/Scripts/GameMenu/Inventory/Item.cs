@@ -57,6 +57,7 @@ public class Item
                             soils.plantID[i] = plantID;
                             soils.state[i] = 1;
                             soils.StartPlanting(soils.soilID[i], plantID);
+                            break;
                         }
                     }
                 }
@@ -76,11 +77,35 @@ public class Item
                         {
                             soils.canBeHooed[i] = false;
                             plantTrigger.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = soils.soilHooed;
+                            break;
                         }
                     }
-                    return;
+                }
+                //Debug.Log("hoe used");
+                return;
+            }
+            else if (itemType.ToLower().Equals("waterscoop".ToLower()))
+            {
+                if (playerData.stateNearSoil == true)
+                {
+                    PlantTrigger plantTrigger = GameObject.FindGameObjectWithTag("PlantTrigger").GetComponent<PlantTrigger>();
+                    Soils soils = GameObject.FindGameObjectWithTag("Soils").GetComponent<Soils>();
+
+                    for (int i = 0; i < soils.soilID.Length; i++)
+                    {
+                        if (plantTrigger.target.GetComponent<Soil>().soilID == soils.soilID[i])
+                        {
+                            if (soils.canBeHooed[i] == false)
+                            {
+                                soils.needWater[i] = false;
+                                plantTrigger.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = soils.soilWet;
+                                break;
+                            }
+                        }
+                    }
                 }
                 Debug.Log("hoe used");
+                return;
             }
         }
     }
@@ -100,6 +125,10 @@ public class Item
                     return true;
             }
             if (itemType.ToLower().Equals("hoe".ToLower()))
+            {
+                return true;
+            }
+            if (itemType.ToLower().Equals("waterscoop".ToLower()))
             {
                 return true;
             }

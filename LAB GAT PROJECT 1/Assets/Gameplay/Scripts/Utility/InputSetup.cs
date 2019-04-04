@@ -12,18 +12,25 @@ public class InputSetup : MonoBehaviour
     public KeyCode openGameMenu;
     public KeyCode jump;
     public KeyCode putInventory;
+    public KeyCode attack;
+    public KeyCode useItem;
     // Start is called before the first frame update
 
     void Start()
     {
-        select = KeyCode.Joystick1Button1;
         back = KeyCode.Joystick1Button0;
-        deleteSave = KeyCode.Joystick1Button2;
+        continueTalk = KeyCode.Joystick1Button0;
+        jump = KeyCode.Joystick1Button0;
 
         interact = KeyCode.Joystick1Button1;
-        continueTalk = KeyCode.Joystick1Button0;
-        openGameMenu = KeyCode.Joystick1Button7;
-        jump = KeyCode.Joystick1Button0;
+        select = KeyCode.Joystick1Button1;
+
+        deleteSave = KeyCode.Joystick1Button2;
         putInventory = KeyCode.Joystick1Button2;
+        attack = KeyCode.Joystick1Button2;
+
+        useItem = KeyCode.Joystick1Button5;
+
+        openGameMenu = KeyCode.Joystick1Button7;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public InputSetup inputSetup;
+    public CharacterAttack characterAttack;
     public Rigidbody charRig;
 
     public GameObject mainCamera;
@@ -24,12 +25,13 @@ public class CharacterMovement : MonoBehaviour
     void Start()
     {
         GameStatus.ResumeMove();
+        characterAttack = GetComponent<CharacterAttack>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         charRig = gameObject.GetComponent<Rigidbody>();
         try
         {
-            charAnim = gameObject.GetComponent<Animator>();
+            charAnim = GetComponent<Animator>();
         } catch
         {
             Debug.Log("No Animator found");
@@ -39,7 +41,8 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false && GameStatus.CanMove == true)
+        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false 
+            && GameStatus.CanMove == true && characterAttack.isAttacking == false)//
         {
             GetInputAxis();
             if (Mathf.Abs(inputAxis.x) > 0.15 || Mathf.Abs(inputAxis.y) > 0.15)

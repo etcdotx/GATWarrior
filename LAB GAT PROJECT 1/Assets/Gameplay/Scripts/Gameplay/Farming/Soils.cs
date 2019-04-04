@@ -18,6 +18,7 @@ public class Soils : MonoBehaviour
 
     public Color32 soilNormal;
     public Color32 soilHooed;
+    public Color32 soilWet;
 
     public float count;
 
@@ -90,12 +91,21 @@ public class Soils : MonoBehaviour
             {
                 if (state[i] == plantDataBase.plantMaxState[plantID[i]])
                 {
+                    if (plantNodeSoil[i].plantLocation.transform.childCount == 0)
+                    {
+                        state[i] = 0;
+                        plantID[i] = 0;
+                        canBeHooed[i] = true;
+                    }
                     Debug.Log("seed " + plantID + " cant grow more");
                     break;
                 }
                 else
                 {
-                    state[i]++;
+                    if (needWater[i] == false)
+                    {
+                        state[i]++;
+                    }
                     Debug.Log("Plant ID = " + plantID[i] + ", State = " + state[i] + ", Max State = " + plantDataBase.plantMaxState[plantID[i]]);
                     if (state[i] == 2)
                     {
@@ -103,6 +113,8 @@ public class Soils : MonoBehaviour
                         Instantiate(plantDataBase.plantState2[plantID[i]],
                              plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity,
                              plantNodeSoil[i].plantLocation.transform);
+                        needWater[i] = true;
+                        plantNodeSoil[i].soil.GetComponent<MeshRenderer>().material.color = soilNormal;
                     }
                     else if (state[i] == 3)
                     {
@@ -110,6 +122,8 @@ public class Soils : MonoBehaviour
                         Instantiate(plantDataBase.plantState3[plantID[i]],
                              plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity,
                              plantNodeSoil[i].plantLocation.transform);
+                        needWater[i] = true;
+                        plantNodeSoil[i].soil.GetComponent<MeshRenderer>().material.color = soilNormal;
                     }
                     else if(state[i] == 4)
                     {
@@ -117,6 +131,8 @@ public class Soils : MonoBehaviour
                         Instantiate(plantDataBase.plantState4[plantID[i]],
                              plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity,
                              plantNodeSoil[i].plantLocation.transform);
+                        needWater[i] = true;
+                        plantNodeSoil[i].soil.GetComponent<MeshRenderer>().material.color = soilNormal;
                     }
 
                     if (state[i] == plantDataBase.plantMaxState[plantID[i]])
