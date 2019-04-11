@@ -33,6 +33,9 @@ TagManager:
   - PlantNodes
   - PlantDataBase
   - Enemy
+  - PlayerWeapon
+  - MonsterDatabase
+  - Monster
   layers:
   - Default
   - TransparentFX

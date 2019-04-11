@@ -7,13 +7,17 @@ public class CharacterAttack : MonoBehaviour
     public InputSetup inputSetup;
     public UsableItem usableItem;
     public Animator charAnim;
-    public bool isAttacking;
     public Rigidbody rigid;
 
-    public Vector3 curPos;
-    public bool buttonInputHold;
+    [Header("Attack Status")]
+    public bool isAttacking;
+    public bool attackInputHold;
+
+    [Header("Attack (FILL)")]
     public int attackCountMax;
     public int attackCount;
+    public float[] attackAnimationTime;
+    public float[] attackAnimationSpeed;
 
     [Header("Force setiap count attack")]
     public float[] force;
@@ -36,52 +40,51 @@ public class CharacterAttack : MonoBehaviour
             {
                 AttackBehaviour(attackCount);
             }
-            if (Input.GetKeyDown(inputSetup.attack))
+            if (Input.GetKeyDown(inputSetup.attack) && attackCount<attackCountMax)
             {
-                isAttacking = true;
-                attackCount++;
-                charAnim.SetTrigger("attack");
-
-                curPos = transform.position;
-                rigid.velocity = Vector3.zero;
-
                 StopAllCoroutines();
                 StartCoroutine(Attacking());
 
                 if (attackCount == attackCountMax)
                 {
-                    StartCoroutine(ButtonInputHold());
+                    StartCoroutine(AttackInputHold());
                 }
             }
         }
     }
 
-    IEnumerator Attacking() {
-        yield return new WaitForSeconds(0.5f);
+    IEnumerator Attacking()
+    {
+        charAnim.SetBool("isAttacking",true);
+        attackCount++;
+        charAnim.SetTrigger("attack");
+        charAnim.SetInteger("attackCount",attackCount);
+        isAttacking = true;
+        yield return new WaitForSeconds((attackAnimationTime[attackCount] / attackAnimationSpeed[attackCount])-0.3f);
         isAttacking = false;
-        Debug.Log("finish");
-        attackCount = 0;
+        StartCoroutine(StopAttack());
     }
 
-    void AttackBehaviour(int attackCount) {
-        if(attackCount == 1 || attackCount == 2 || attackCount == 3)
+    IEnumerator StopAttack() {
+        yield return new WaitForSeconds(0.3f);
+        attackCount = 0;
+        isAttacking = false;
+    }
+
+    void AttackBehaviour(int attackCount)
+    {
+        if (attackCount == 1 || attackCount == 2 || attackCount == 3)
         {
-            if (Vector3.Distance(curPos, transform.position) < 1)
-            {
-                rigid.AddForce(transform.forward* force[attackCount], ForceMode.Acceleration);
-            }
-            else {
-                rigid.velocity = Vector3.zero;
-            }
+            transform.position += transform.forward * force[attackCount] * Time.deltaTime;
         }
     }
 
-    public IEnumerator ButtonInputHold()
+    public IEnumerator AttackInputHold()
     {
-        buttonInputHold = true;
-        yield return new WaitForSeconds(0.15f);
+        attackInputHold = true;
         attackCount = 0;
-        buttonInputHold = false;
+        yield return new WaitForSeconds(0.3f);
+        attackInputHold = false;
     }
 
 }

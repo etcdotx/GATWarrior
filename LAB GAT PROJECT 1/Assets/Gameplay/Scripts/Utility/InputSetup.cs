@@ -14,6 +14,7 @@ public class InputSetup : MonoBehaviour
     public KeyCode putInventory;
     public KeyCode attack;
     public KeyCode useItem;
+    public KeyCode lockEnemy;
     // Start is called before the first frame update
 
     void Start()
@@ -32,5 +33,7 @@ public class InputSetup : MonoBehaviour
         useItem = KeyCode.Joystick1Button5;
 
         openGameMenu = KeyCode.Joystick1Button7;
+
+        lockEnemy = KeyCode.Joystick1Button9;
     }
 }

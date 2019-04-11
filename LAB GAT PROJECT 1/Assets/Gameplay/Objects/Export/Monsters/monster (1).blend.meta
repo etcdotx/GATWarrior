@@ -1,33 +1,29 @@
 fileFormatVersion: 2
-guid: 10a439476af75534ea5bfa1f6af33878
+guid: 8f90283dbb0f87544868021b6c5db93b
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: Armature
     100002: Bone
-    100004: Bone.001
-    100006: Bone.001_end
+    100004: Bone_001
+    100006: Bone_001_end
     100008: Bone_end
-    100010: Camera
-    100012: Icosphere
-    100014: Lamp
-    100016: //RootNode
+    100010: Icosphere
+    100012: //RootNode
     400000: Armature
     400002: Bone
-    400004: Bone.001
-    400006: Bone.001_end
+    400004: Bone_001
+    400006: Bone_001_end
     400008: Bone_end
-    400010: Camera
-    400012: Icosphere
-    400014: Lamp
-    400016: //RootNode
-    2000000: Camera
-    2100000: No Name
+    400010: Icosphere
+    400012: //RootNode
+    2100000: Material
     4300000: Icosphere
-    7400000: Armature|chomp
-    7400002: Armature|dead
+    7400000: Default Take
+    7400002: Armature_Armature_chomp_Armature_chomp
+    7400004: Armature_Armature_dead_Armature_dead
+    7400006: attacked
     9500000: //RootNode
-    10800000: Lamp
     13700000: Icosphere
   externalObjects: {}
   materials:
@@ -56,69 +52,13 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Armature|chomp
-      takeName: Armature|chomp
-      firstFrame: 0
-      lastFrame: 8
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|dead
-      takeName: Armature|dead
-      firstFrame: 0
-      lastFrame: 17
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
@@ -137,7 +77,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
