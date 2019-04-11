@@ -444,10 +444,10 @@ MonoBehaviour:
   characterAttack: {fileID: 0}
   charRig: {fileID: 0}
   mainCamera: {fileID: 0}
-  defaultSpeed: 1
+  defaultSpeed: 0.5
   runSpeedMultiplier: 2
   currentSpeed: 0
-  rotateSpeed: 10
+  rotateSpeed: 13
   jumpForce: 5
   inputAxis: {x: 0, y: 0, z: 0}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
@@ -522,53 +522,12 @@ MonoBehaviour:
   inputSetup: {fileID: 0}
   usableItem: {fileID: 0}
   charAnim: {fileID: 0}
-  ac: {fileID: 0}
   rigid: {fileID: 0}
-  playerWeaponCol: {fileID: 0}
+  weaponStatus: {fileID: 0}
   isAttacking: 0
   attackInputHold: 0
   attackCountMax: 3
   attackCount: 0
-  attackAnimationTime:
-  - 0
-  - 1.292
-  - 1.625
-  - 2.042
-  attackAnimationSpeed:
-  - 0
-  - 2
-  - 2
-  - 2
-  maxAttackFrame:
-  - 0
-  - 31
-  - 39
-  - 49
-  colEnableFrame:
-  - 0
-  - 12
-  - 20
-  - 21
-  colDisableFrame:
-  - 0
-  - 16
-  - 34
-  - 24
-  colEnableTime:
-  - 0
-  - 0
-  - 0
-  - 0
-  colDisableTime:
-  - 0
-  - 0
-  - 0
-  - 0
-  force:
-  - 0
-  - 0.2
-  - 0
-  - 0.2
 --- !u!136 &523417977
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -797,7 +756,7 @@ Transform:
   - {fileID: 5598119718597822036}
   m_Father: {fileID: 5598119718597822028}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 2.6905706, y: 0.00000839349, z: 0.00000023401414}
+  m_LocalEulerAnglesHint: {x: -18.470287, y: -12.698565, z: 9.376031}
 --- !u!1 &5598119718598056572
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,7 +982,7 @@ PrefabInstance:
     - target: {fileID: 3889517844886216301, guid: b200a9fdae80a254c8e28fd1eb9bfc71,
         type: 3}
       propertyPath: m_Name
-      value: Weapon1
+      value: Hitbox
       objectReference: {fileID: 0}
     - target: {fileID: 6588967244701761818, guid: b200a9fdae80a254c8e28fd1eb9bfc71,
         type: 3}

@@ -8,6 +8,7 @@ public class CharacterAttack : MonoBehaviour
     public UsableItem usableItem;
     public Animator charAnim;
     public Rigidbody rigid;
+    public WeaponStatus weaponStatus;
 
     [Header("Attack Status")]
     public bool isAttacking;
@@ -16,11 +17,6 @@ public class CharacterAttack : MonoBehaviour
     [Header("Attack (FILL)")]
     public int attackCountMax;
     public int attackCount;
-    public float[] attackAnimationTime;
-    public float[] attackAnimationSpeed;
-
-    [Header("Force setiap count attack")]
-    public float[] force;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +25,8 @@ public class CharacterAttack : MonoBehaviour
         usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
         charAnim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
+        weaponStatus = GameObject.FindGameObjectWithTag("PlayerWeapon").GetComponent<WeaponStatus>();
+
     }
 
     // Update is called once per frame
@@ -36,53 +34,43 @@ public class CharacterAttack : MonoBehaviour
     {
         if (usableItem.isSelectingItem == false)
         {
-            if (isAttacking == true)
-            {
-                AttackBehaviour(attackCount);
-            }
             if (Input.GetKeyDown(inputSetup.attack) && attackCount<attackCountMax)
             {
                 StopAllCoroutines();
-                StartCoroutine(Attacking());
+                Attacking();
 
                 if (attackCount == attackCountMax)
                 {
                     StartCoroutine(AttackInputHold());
                 }
             }
+            if (isAttacking == true)
+            {
+                weaponStatus.AttackBehaviour();
+            }
         }
     }
 
-    IEnumerator Attacking()
+    void Attacking()
     {
         charAnim.SetBool("isAttacking",true);
-        attackCount++;
         charAnim.SetTrigger("attack");
-        charAnim.SetInteger("attackCount",attackCount);
         isAttacking = true;
-        yield return new WaitForSeconds((attackAnimationTime[attackCount] / attackAnimationSpeed[attackCount])-0.3f);
-        isAttacking = false;
         StartCoroutine(StopAttack());
     }
 
-    IEnumerator StopAttack() {
+    IEnumerator StopAttack()
+    {
         yield return new WaitForSeconds(0.3f);
         attackCount = 0;
         isAttacking = false;
-    }
-
-    void AttackBehaviour(int attackCount)
-    {
-        if (attackCount == 1 || attackCount == 2 || attackCount == 3)
-        {
-            transform.position += transform.forward * force[attackCount] * Time.deltaTime;
-        }
+        charAnim.SetBool("isAttacking", false);
     }
 
     public IEnumerator AttackInputHold()
     {
+        charAnim.SetBool("isAttacking", false);
         attackInputHold = true;
-        attackCount = 0;
         yield return new WaitForSeconds(0.3f);
         attackInputHold = false;
     }

@@ -8,9 +8,13 @@ public class WeaponStatus : MonoBehaviour
     public CharacterAttack characterAttack;
     public BoxCollider boxCol;
     public int[] attackDamage;
+    public int attackCount; //darianimasi
 
     public GameObject hitIndicatorPrefab;
     public GameObject hitIndicatorLocation;
+
+    [Header("Force setiap count attack")]
+    public float[] force;
 
     // Start is called before the first frame update
     void Start()
@@ -23,16 +27,30 @@ public class WeaponStatus : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         if (other.gameObject.CompareTag("Monster"))
         {
-            Debug.Log("in");
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
-            monsterStatus.ReceiveDamageInfo(characterAttack.attackCount, attackDamage[characterAttack.attackCount], this);
+            monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
         }
     }
 
     public void HitSuccessful() {
         Instantiate(hitIndicatorPrefab, hitIndicatorLocation.transform.position, Quaternion.identity, null);
+    }
+
+
+    public void AttackBehaviour()
+    {
+        Collider[] cols = Physics.OverlapBox(boxCol.bounds.center, boxCol.bounds.extents, boxCol.transform.rotation, LayerMask.GetMask("Enemy"));
+
+        foreach (Collider c in cols) {
+            MonsterStatus monsterStatus = c.gameObject.GetComponent<MonsterStatus>();
+            monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
+        }
+
+        if (attackCount == 1 || attackCount == 2 || attackCount == 3)
+        {
+            player.transform.position += player.transform.forward * force[attackCount] * Time.deltaTime;
+        }
     }
 }

@@ -43,15 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb017cb4825fdc4cb1a4942503306e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  playerData: {fileID: 0}
+  gameMenuManager: {fileID: 0}
   character: {fileID: 0}
-  spawnLocation: []
-  selectSpawnLocation: {fileID: 0}
-  characterScale: {x: 0.20722, y: 0.20722, z: 0.20722}
+  gameDataBase: {fileID: 0}
+  selectSpawnLocationName: 
+  characterScale: {x: 0.03963616, y: 0.03963616, z: 0.03963616}
   Rumah: Rumah
   HutanAman: HutanAman
   Kota: Kota
   Hutan1_1: Hutan1_1
-  Hutan1_2: Hutan1_2
   Hutan1_3: Hutan1_3
   Hutan1_4: Hutan1_4
