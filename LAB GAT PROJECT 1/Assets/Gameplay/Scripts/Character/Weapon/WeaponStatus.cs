@@ -5,9 +5,10 @@ using UnityEngine;
 public class WeaponStatus : MonoBehaviour
 {
     public GameObject player;
+    public WeaponDetail weaponDetail;
     public CharacterAttack characterAttack;
     public BoxCollider boxCol;
-    public int[] attackDamage;
+    public float[] attackDamage;
     public int attackCount; //darianimasi
 
     public GameObject hitIndicatorPrefab;
@@ -21,8 +22,25 @@ public class WeaponStatus : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         characterAttack = player.GetComponent<CharacterAttack>();
+
         boxCol = GetComponent<BoxCollider>();
-        boxCol.enabled = false;
+
+        RefreshWeapon();
+    }
+
+    void RefreshWeapon()
+    {
+        weaponDetail = transform.GetChild(1).GetComponent<WeaponDetail>();
+        attackDamage = new float[weaponDetail.damage.Length];
+        attackDamage = weaponDetail.damage;
+    }
+
+    private void Update()
+    {
+        if (characterAttack.isAttacking == true)
+        {
+            AttackBehaviour();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,6 +49,7 @@ public class WeaponStatus : MonoBehaviour
         {
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
             monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
+            Debug.Log("in cold");
         }
     }
 
@@ -38,15 +57,20 @@ public class WeaponStatus : MonoBehaviour
         Instantiate(hitIndicatorPrefab, hitIndicatorLocation.transform.position, Quaternion.identity, null);
     }
 
-
     public void AttackBehaviour()
     {
-        Collider[] cols = Physics.OverlapBox(boxCol.bounds.center, boxCol.bounds.extents, boxCol.transform.rotation, LayerMask.GetMask("Enemy"));
+        //if (boxCol.enabled == true)
+        //{
+        //    Collider[] cols = Physics.OverlapBox(boxCol.bounds.center, boxCol.bounds.extents, boxCol.transform.rotation, LayerMask.GetMask("Monster"));
 
-        foreach (Collider c in cols) {
-            MonsterStatus monsterStatus = c.gameObject.GetComponent<MonsterStatus>();
-            monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
-        }
+        //    foreach (Collider c in cols)
+        //    {
+        //        boxCol.enabled = false;
+        //        MonsterStatus monsterStatus = c.gameObject.GetComponent<MonsterStatus>();
+        //        monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
+        //        Debug.Log("in cols");
+        //    }
+        //}
 
         if (attackCount == 1 || attackCount == 2 || attackCount == 3)
         {

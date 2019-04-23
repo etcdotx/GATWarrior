@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 09f48e490f739044ab712603403e8e35
+guid: d90bb0f95ce1c4447b781039b86142ed
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -35,9 +35,10 @@ ModelImporter:
     100058: leg.L
     100060: leg.R
     100062: neck
-    100064: shoulder.L
-    100066: shoulder.R
-    100068: weapon
+    100064: panci_shield
+    100066: shoulder.L
+    100068: shoulder.R
+    100070: spatula
     400000: arm.L
     400002: arm.R
     400004: Armature
@@ -70,13 +71,14 @@ ModelImporter:
     400058: leg.L
     400060: leg.R
     400062: neck
-    400064: shoulder.L
-    400066: shoulder.R
-    400068: weapon
+    400064: panci_shield
+    400066: shoulder.L
+    400068: shoulder.R
+    400070: spatula
     2000000: Camera
-    2100000: base
-    2100002: t-shirt
-    2100004: boots
+    2100000: t-shirt
+    2100002: boots
+    2100004: base
     2100006: pants
     2100008: face
     2100010: pouch
@@ -84,23 +86,32 @@ ModelImporter:
     2100014: band
     2100016: light
     2100018: hair
-    4300000: weapon
-    4300002: char
+    2100020: pans.003
+    2100022: metal.001
+    2100024: leather
+    2100026: pans
+    2300000: panci_shield
+    2300002: spatula
+    3300000: panci_shield
+    3300002: spatula
+    4300000: char
+    4300002: spatula
+    4300004: panci_shield
     7400000: Armature|Armature|Armature|Armature|Armature|attack_1|Armature|attack_1|
     7400002: Armature|Armature|Armature|Armature|Armature|attack_2|Armature|attack_2|
     7400004: Armature|Armature|Armature|Armature|Armature|attack_3|Armature|attack_3|
-    7400006: Armature|Armature|Armature|Armature|Armature|clap|Armature|clap|Arma.000
-    7400008: Armature|Armature|Armature|Armature|Armature|clap|Armature|clap|Armature
-    7400010: Armature|Armature|Armature|Armature|Armature|idle_1|Armature|idle_1|Arma
-    7400012: Armature|Armature|Armature|Armature|Armature|idle_2|Armature|idle_2|Arma
-    7400014: Armature|Armature|Armature|Armature|Armature|kick|Armature|kick|Armature
-    7400016: Armature|Armature|Armature|Armature|Armature|thinking|Armature|thinking|
-    7400018: Armature|Armature|Armature|Armature|Armature|walk|Armature|walk|Armature
-    7400020: Armature|attacked
+    7400006: Armature|Armature|Armature|Armature|Armature|clap|Armature|clap|Armature
+    7400008: Armature|Armature|Armature|Armature|Armature|idle_1|Armature|idle_1|Arma
+    7400010: Armature|Armature|Armature|Armature|Armature|idle_2|Armature|idle_2|Arma
+    7400012: Armature|Armature|Armature|Armature|Armature|kick|Armature|kick|Armature
+    7400014: Armature|Armature|Armature|Armature|Armature|thinking|Armature|thinking|
+    7400016: Armature|Armature|Armature|Armature|Armature|walk|Armature|walk|Armature
+    7400018: Armature|attacked
+    7400020: Armature|idle_atk_mode
+    7400022: Armature|shield
     9500000: //RootNode
     10800000: Lamp
     13700000: char
-    13700002: weapon
   externalObjects: {}
   materials:
     importMaterials: 1

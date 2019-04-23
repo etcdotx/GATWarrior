@@ -12,8 +12,12 @@ public class MonsterStatus : MonoBehaviour
     public MonsterMovement monsterMovement;
     public MonsterAttack monsterAttack;
     public CharacterAttack characterAttack;
+    public Interactable interactable;
     public Collider col;
     public NavMeshAgent agent;
+
+    [Header("Condition")]
+    public bool isAttacking=false;
 
     [Header("Setup")]
     public int enemyID;
@@ -32,6 +36,12 @@ public class MonsterStatus : MonoBehaviour
     [Header("GetMonsterScript")]
     private SphereMonsterStatus sms;
 
+    [Header("Drop rate")]
+    public int[] itemID;
+    public int[] itemDropPercentage;
+    public int[] dropTime;
+    public int[] itemDropped;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +54,8 @@ public class MonsterStatus : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
+        interactable = GetComponent<Interactable>();
+
 
         if (enemyID == 1) {
             sms = GetComponent<SphereMonsterStatus>();
@@ -58,9 +70,13 @@ public class MonsterStatus : MonoBehaviour
             isDamaged = false;
             playerAttack.Clear();
         }
+        if (isAttacking == false && monsterAttack.isAttacking==false && monsterMovement.playerOnSight == true)
+        {
+            StartCoroutine(Attacking());
+        }
     }
 
-    public void ReceiveDamageInfo(int attackNum, int damage, WeaponStatus weapon) { 
+    public void ReceiveDamageInfo(int attackNum, float damage, WeaponStatus weapon) { 
         for (int i = 0; i < playerAttack.Count; i++)
         {
             if (playerAttack[i] == attackNum)
@@ -88,6 +104,16 @@ public class MonsterStatus : MonoBehaviour
         }
     }
 
+    IEnumerator Attacking()
+    {
+        int ran = Random.Range(6, 8);
+        yield return new WaitForSeconds(ran);
+        isAttacking = true;
+        monsterAttack.isAttacking = true;
+        isAttacking = false;
+        StopAllCoroutines();
+    }
+
     IEnumerator Dying()
     {
         monsterMovement.StopAllCoroutines();
@@ -95,11 +121,13 @@ public class MonsterStatus : MonoBehaviour
         agent.enabled = true;
         agent.isStopped = true;
         monsterMovement.wanderingType = false;
-        col.enabled = false;
+        col.isTrigger = true;
         animator.SetBool("isAttacked", false);
         animator.SetBool("isDead", true);
         yield return new WaitForSeconds(dieTime);
         rigid.velocity = new Vector3(0, 0, 0);
+        col.isTrigger = false;
+        interactable.isInteractable = true;
         StartCoroutine(DestroyThis());
     }
 

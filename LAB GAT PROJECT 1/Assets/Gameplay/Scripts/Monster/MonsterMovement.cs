@@ -76,28 +76,32 @@ public class MonsterMovement : MonoBehaviour
     {
         if (agent.enabled==true)
         {
-            if (wanderingType == true) {
-                if ((playerOnSight == true && awareType == true) || (playerOnSight == true && inCombat == true))
+            if (monsterStatus.isAttacking == false)
+            {
+                if (wanderingType == true)
                 {
-                    LookAtPlayer();
-                    if (distance > positionGap)
+                    if (playerOnSight == true && (awareType == true || inCombat == true))
                     {
-                        agent.ResetPath();
-                        transform.position += transform.forward * moveSpeed * Time.deltaTime;
+                        LookAtPlayer();
+                        if (distance > positionGap)
+                        {
+                            agent.ResetPath();
+                            transform.position += transform.forward * moveSpeed * Time.deltaTime;
+                        }
+                        else
+                        {
+                            Wandering();
+                        }
                     }
                     else
                     {
                         Wandering();
                     }
-                }
-                else
-                {
-                    Wandering();
-                }
 
-                if (distance >= breakGap)
-                {
-                    StopCombat();
+                    if (distance >= breakGap)
+                    {
+                        StopCombat();
+                    }
                 }
             }
         }
@@ -111,7 +115,9 @@ public class MonsterMovement : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(target), Time.time * rotateSpeed);
     }
 
-    void Wandering() {
+    void Wandering()
+    {
+        isInterrupted = false;
         wanderTime += Time.deltaTime;
 
         if (wanderTime >= wanderTimer)

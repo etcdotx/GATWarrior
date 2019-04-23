@@ -15,6 +15,7 @@ public class InputSetup : MonoBehaviour
     public KeyCode attack;
     public KeyCode useItem;
     public KeyCode lockEnemy;
+    public KeyCode shielding;
     // Start is called before the first frame update
 
     void Start()

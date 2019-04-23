@@ -68,6 +68,7 @@ public class CharacterInteraction : MonoBehaviour
         {
             try
             {
+                Debug.Log(hit.collider.gameObject);
                 Interactable interactable = hit.collider.gameObject.GetComponent<Interactable>();
                 //mengecek apakah object tersebut interactable
                 if (interactable.isInteractable == true)
@@ -104,6 +105,7 @@ public class CharacterInteraction : MonoBehaviour
             }
             catch
             {
+                Debug.Log(hit.collider.gameObject + "not interactable");
                 InteractHideButton = true;
             }
         }

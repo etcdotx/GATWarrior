@@ -7,8 +7,21 @@ public class MonsterAttack : MonoBehaviour
 {
     public MonsterStatus monsterStatus;
     public MonsterMovement monsterMovement;
-    public Rigidbody rigid;
+    public NavMeshAgent agent;
 
-    public bool attacking;
+    public int maxAttackNum = 1;
+    public float damage;
+    public bool isAttacking = false;
     public int attackNum;
+
+    public Rigidbody rigid;
+    public float speed;
+    public float flyForce;
+
+    private void Start()
+    {
+        monsterStatus = GetComponent<MonsterStatus>();
+        monsterMovement = GetComponent<MonsterMovement>();
+        agent = GetComponent<NavMeshAgent>();
+    }
 }

@@ -8,9 +8,10 @@ public class CharacterAttack : MonoBehaviour
     public UsableItem usableItem;
     public Animator charAnim;
     public Rigidbody rigid;
-    public WeaponStatus weaponStatus;
 
     [Header("Attack Status")]
+    public bool combatMode;
+    public bool isShielding;
     public bool isAttacking;
     public bool attackInputHold;
 
@@ -25,35 +26,49 @@ public class CharacterAttack : MonoBehaviour
         usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
         charAnim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
-        weaponStatus = GameObject.FindGameObjectWithTag("PlayerWeapon").GetComponent<WeaponStatus>();
 
+        combatMode = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (usableItem.isSelectingItem == false)
+        if (combatMode == true)
         {
-            if (Input.GetKeyDown(inputSetup.attack) && attackCount<attackCountMax)
+            if (usableItem.isSelectingItem == false)
             {
-                StopAllCoroutines();
-                Attacking();
-
-                if (attackCount == attackCountMax)
+                Shielding();
+                if (Input.GetKeyDown(inputSetup.attack) && attackCount < attackCountMax)
                 {
-                    StartCoroutine(AttackInputHold());
+                    StopAllCoroutines();
+                    Attacking();
+
+                    if (attackCount == attackCountMax)
+                    {
+                        StartCoroutine(AttackInputHold());
+                    }
+                }
+                if (Input.GetKeyDown(inputSetup.useItem)) {
+                    combatMode = false;
+                    charAnim.SetBool("combatMode", false);
+                    charAnim.SetBool("shielding", false);
                 }
             }
-            if (isAttacking == true)
+        }
+        else {
+            if (usableItem.isSelectingItem == false)
             {
-                weaponStatus.AttackBehaviour();
+                if (Input.GetKeyDown(inputSetup.attack))
+                {
+                    combatMode = true;
+                    charAnim.SetBool("combatMode", true);
+                }
             }
         }
     }
 
     void Attacking()
     {
-        charAnim.SetBool("isAttacking",true);
         charAnim.SetTrigger("attack");
         isAttacking = true;
         StartCoroutine(StopAttack());
@@ -64,7 +79,6 @@ public class CharacterAttack : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         attackCount = 0;
         isAttacking = false;
-        charAnim.SetBool("isAttacking", false);
     }
 
     public IEnumerator AttackInputHold()
@@ -75,4 +89,16 @@ public class CharacterAttack : MonoBehaviour
         attackInputHold = false;
     }
 
+    void Shielding() {
+        if (Input.GetAxisRaw("LT Button") == 1)
+        {
+            charAnim.SetBool("shielding", true);
+            isShielding = true;
+        }
+        else
+        {
+            charAnim.SetBool("shielding", false);
+            isShielding = false;
+        }
+    }
 }

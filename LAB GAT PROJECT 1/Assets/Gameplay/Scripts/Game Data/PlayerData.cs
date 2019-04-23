@@ -41,16 +41,17 @@ public class PlayerData : MonoBehaviour {
     public List<int> finishedCollectionQuestID = new List<int>();
 
     [Header("Player State")]
+    public GameObject charPrefab;
     public bool stateNearSoil;
     public bool stateHpNotMax;
 
     [Header("FOR DEVELOPMENT")]
     public bool DEVELOPERMODE;
-    public GameObject charPrefab;
-    bool dontloadCharacter;
+    public bool dontloadCharacter;
 
     private void Awake()
     {
+
         //Get Script
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
@@ -58,10 +59,10 @@ public class PlayerData : MonoBehaviour {
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         quest = GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
+
         //DEVELOPERMODE
         if (DEVELOPERMODE == true)
         {
-            dontloadCharacter = true;
             gameDataBase.saveSlot = 0;
         }
     }
@@ -130,10 +131,12 @@ public class PlayerData : MonoBehaviour {
             }
             catch
             {
+                Debug.Log("error");
             }
         }
         else {
-            Instantiate(charPrefab, spawnLocation.transform.position, spawnLocation.transform.rotation, null);
+            //Instantiate(charPrefab, spawnLocation.transform.position, spawnLocation.transform.rotation, null);
+            Debug.Log("in");
         }
 
         do {

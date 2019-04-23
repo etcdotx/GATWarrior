@@ -14,7 +14,8 @@ public class Collect : MonoBehaviour
     public void CollectObject(Interactable interactable)
     {
         //mengecek id dari item tersebut
-        int itemID = interactable.gameObject.GetComponent<Interactable>().itemID;
+        int itemID = interactable.itemID[0];
+        interactable.itemID.RemoveAt(0);
 
         for (int i = 0; i < ItemDataBase.item.Count; i++)
         {
@@ -27,6 +28,7 @@ public class Collect : MonoBehaviour
             }
         }
         //gameobject item yang ada di hierarchy dihancurkan
-        Destroy(interactable.gameObject);
+        if(interactable.itemID.Count==0)
+            Destroy(interactable.gameObject);
     }
 }

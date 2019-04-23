@@ -58,6 +58,97 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterMovement: {fileID: 0}
+--- !u!1 &2425557457989046255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5409156077941584358}
+  - component: {fileID: 3163112755883119406}
+  - component: {fileID: 2616202494464233056}
+  - component: {fileID: 3600941507897563851}
+  m_Layer: 9
+  m_Name: Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5409156077941584358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2425557457989046255}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.461}
+  m_LocalScale: {x: 0.682142, y: 0.6640232, z: 0.34199}
+  m_Children: []
+  m_Father: {fileID: 6450951504228440527}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &3163112755883119406
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2425557457989046255}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2616202494464233056
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2425557457989046255}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!65 &3600941507897563851
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2425557457989046255}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6450951504228440526
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,6 +166,8 @@ GameObject:
   - component: {fileID: 6450951504228440566}
   - component: {fileID: 6450951504228440561}
   - component: {fileID: 4443112982501845190}
+  - component: {fileID: 22151508}
+  - component: {fileID: 5588696619467864214}
   m_Layer: 9
   m_Name: Sphere Monster
   m_TagString: Monster
@@ -96,6 +189,7 @@ Transform:
   - {fileID: 8032087400349515455}
   - {fileID: 8032087400349515443}
   - {fileID: 677872597616367158}
+  - {fileID: 5409156077941584358}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -239,8 +333,10 @@ MonoBehaviour:
   monsterMovement: {fileID: 0}
   monsterAttack: {fileID: 0}
   characterAttack: {fileID: 0}
+  interactable: {fileID: 0}
   col: {fileID: 0}
   agent: {fileID: 0}
+  isAttacking: 0
   enemyID: 1
   maxHp: 50
   dieTime: 1
@@ -249,6 +345,10 @@ MonoBehaviour:
   isDamaged: 0
   force: 100
   flyForce: 100
+  itemID: 
+  itemDropPercentage: 
+  dropTime: 
+  itemDropped: 
 --- !u!114 &4443112982501845190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,9 +363,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterStatus: {fileID: 0}
   monsterMovement: {fileID: 0}
-  rigid: {fileID: 0}
-  attacking: 0
+  agent: {fileID: 0}
+  maxAttackNum: 1
+  damage: 0
+  isAttacking: 0
   attackNum: 0
+  rigid: {fileID: 0}
+  speed: 0
+  flyForce: 0
+--- !u!114 &22151508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6450951504228440526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302b004344283ae41b0a7df32f19ec65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterStatus: {fileID: 0}
+  monsterMovement: {fileID: 0}
+  monsterAttack: {fileID: 0}
+  agent: {fileID: 0}
+  maxAttackNum: 1
+  damage: 10
+  attackNum: 0
+  rigid: {fileID: 0}
+  speed: 100
+  flyForce: 100
+  hitBox: {fileID: 3600941507897563851}
+--- !u!114 &5588696619467864214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6450951504228440526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dcfae4793d766746a98efb08d11e593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInteractable: 0
+  isCollectable: 1
+  itemID: 0100000002000000
+  interactText: Skin
+  readAble: []
+  isTalking: 0
 --- !u!1 &8032087400349868691
 GameObject:
   m_ObjectHideFlags: 0

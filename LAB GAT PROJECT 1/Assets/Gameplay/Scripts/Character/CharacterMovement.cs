@@ -73,13 +73,16 @@ public class CharacterMovement : MonoBehaviour
         inputAxis.y = Input.GetAxis("LeftJoystickVertical");
 
         //run
-        if (Input.GetAxis("RT Button")==1 || Input.GetKey(KeyCode.LeftShift))
+        if (characterAttack.isShielding == false)
         {
-            inputAxis.z = 1f;
-        }
-        else
-        {
-            inputAxis.z = 0f;
+            if (Input.GetAxisRaw("RT Button") == 1)
+            {
+                inputAxis.z = 1f;
+            }
+            else
+            {
+                inputAxis.z = 0f;
+            }
         }
     }    
 
