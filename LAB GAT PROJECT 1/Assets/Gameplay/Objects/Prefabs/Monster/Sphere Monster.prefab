@@ -314,7 +314,7 @@ MonoBehaviour:
   canBeInterrupted: 1
   canBeFall: 1
   wanderingType: 1
-  awareType: 1
+  awareType: 0
 --- !u!114 &6450951504228440561
 MonoBehaviour:
   m_ObjectHideFlags: 0

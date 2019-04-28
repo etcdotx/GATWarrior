@@ -23,6 +23,7 @@ public class PlayerData : MonoBehaviour {
     public string playerName;
     public float maxHealth;
     public float curHealth;
+    public GameObject healthIndicator;
     public Image maxHealthImg;
     public Image curHealthImg;
 
@@ -75,16 +76,20 @@ public class PlayerData : MonoBehaviour {
         inventory.inventoryView.SetActive(false);
         quest.questView.SetActive(false);
 
-        //player status
-        maxHealth = 100;
-        curHealth = 100;
+        //characterstats
+        curHealth = maxHealth;
+        RefreshHp();
     }
 
     private void Update()
     {
-        curHealthImg.fillAmount = curHealth / maxHealth;
+        //curHealthImg.fillAmount = curHealth / maxHealth;
         //Debug.Log("Cq " + collectionQuest.Count);
         //Debug.Log("cqc " + collectionQuestComplete.Count);
+    }
+
+    public void RefreshHp() {
+        curHealthImg.fillAmount = curHealth / maxHealth;
     }
 
     public void SavePlayer()
@@ -148,7 +153,7 @@ public class PlayerData : MonoBehaviour {
                 startGame = GameObject.Find("StartGame").GetComponent<StartGame>();
 
                 //Modify
-                cm.lookAt = character.transform;
+                cm.player = character;
                 character.GetComponent<Rigidbody>().isKinematic = false;
                 character.transform.localScale = startGame.characterScale;
             }

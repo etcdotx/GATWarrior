@@ -6,6 +6,8 @@ public class UsableItem : MonoBehaviour
 {
     public PlayerData playerData;
     public InputSetup inputSetup;
+    public GameObject player;
+    public CharacterCombat characterCombat;
 
     [Header("Indicator")]
     public GameObject usableItemUI;
@@ -29,6 +31,8 @@ public class UsableItem : MonoBehaviour
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        characterCombat = player.GetComponent<CharacterCombat>();
 
         usableItemUI = GameObject.FindGameObjectWithTag("UsableItemUI");
         usableItemView = usableItemUI.transform.Find("UsableItemView").gameObject;
@@ -63,9 +67,9 @@ public class UsableItem : MonoBehaviour
                 isSelectingItem = false;
             }
 
-            if (Input.GetKeyDown(inputSetup.useItem) && isItemUsable == true)
+            if (Input.GetKeyDown(inputSetup.useItem) && isItemUsable == true && characterCombat.combatMode==false && isSelectingItem==false)
             {
-                //Debug.Log(selectedItem.name + " is used");
+                Debug.Log(selectedItem.name + " is used");
                 selectedItem.Use();
             }
         }

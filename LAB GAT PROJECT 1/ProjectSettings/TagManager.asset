@@ -36,6 +36,7 @@ TagManager:
   - PlayerWeapon
   - MonsterDatabase
   - Monster
+  - ShopUI
   layers:
   - Default
   - TransparentFX

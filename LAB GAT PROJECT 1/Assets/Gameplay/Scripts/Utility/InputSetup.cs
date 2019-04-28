@@ -29,9 +29,11 @@ public class InputSetup : MonoBehaviour
 
         deleteSave = KeyCode.Joystick1Button2;
         putInventory = KeyCode.Joystick1Button2;
-        attack = KeyCode.Joystick1Button2;
+        useItem = KeyCode.Joystick1Button2;
 
-        useItem = KeyCode.Joystick1Button5;
+        attack = KeyCode.Joystick1Button3;
+
+        shielding = KeyCode.Joystick1Button5;
 
         openGameMenu = KeyCode.Joystick1Button7;
 

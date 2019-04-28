@@ -6,7 +6,7 @@ public class WeaponStatus : MonoBehaviour
 {
     public GameObject player;
     public WeaponDetail weaponDetail;
-    public CharacterAttack characterAttack;
+    public CharacterCombat characterCombat;
     public BoxCollider boxCol;
     public float[] attackDamage;
     public int attackCount; //darianimasi
@@ -21,7 +21,7 @@ public class WeaponStatus : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        characterAttack = player.GetComponent<CharacterAttack>();
+        characterCombat = player.GetComponent<CharacterCombat>();
 
         boxCol = GetComponent<BoxCollider>();
 
@@ -37,7 +37,7 @@ public class WeaponStatus : MonoBehaviour
 
     private void Update()
     {
-        if (characterAttack.isAttacking == true)
+        if (characterCombat.isAttacking == true)
         {
             AttackBehaviour();
         }

@@ -28,6 +28,7 @@ public class SphereMonsterAttack : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         rigid = GetComponent<Rigidbody>();
+        hitBox.enabled = false;
     }
 
     private void Update()
@@ -53,6 +54,7 @@ public class SphereMonsterAttack : MonoBehaviour
         hitBox.enabled = true;
         agent.isStopped = true;
         agent.enabled = false;
+        monsterMovement.StopAllCoroutines();
         Attack(num);
         yield return new WaitForSeconds(1f);
         agent.enabled = true;

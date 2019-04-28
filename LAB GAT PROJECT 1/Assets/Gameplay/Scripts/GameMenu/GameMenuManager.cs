@@ -10,6 +10,7 @@ public class GameMenuManager : MonoBehaviour
     public InventoryBox inventoryBox;
     public PlayerData playerData;
     public InputSetup inputSetup;
+
     public bool isOpen;
     public bool cantOpenMenu;
 
@@ -198,6 +199,7 @@ public class GameMenuManager : MonoBehaviour
     }
 
     void OpenMenu() {
+        playerData.healthIndicator.SetActive(false);
         inventory.inventoryView.SetActive(true);
         quest.questView.SetActive(true);
         quest.RefreshQuest();
@@ -206,7 +208,9 @@ public class GameMenuManager : MonoBehaviour
         GameStatus.PauseGame();
     }
 
-    void CloseMenu() {
+    void CloseMenu()
+    {
+        playerData.healthIndicator.SetActive(true);
         inventory.inventoryView.SetActive(false);
         quest.questView.SetActive(false);
         isOpen = false;
@@ -214,7 +218,21 @@ public class GameMenuManager : MonoBehaviour
         GameStatus.ResumeGame();
     }
 
-    void CloseInventoryBoxMenu() {
+    public void OpenInventoryBoxMenu() {
+        playerData.healthIndicator.SetActive(false);
+        inventory.inventoryView.SetActive(true);
+        inventoryBox.inventoryBoxView.SetActive(true);
+        inventoryBox.isItemBoxOpened = true;
+        StartCoroutine("ButtonInputHold");
+        isOpen = true;
+        ResetMenu();
+        GameStatus.PauseGame();
+        GameStatus.PauseMove();
+    }
+
+    void CloseInventoryBoxMenu()
+    {
+        playerData.healthIndicator.SetActive(true);
         inventory.inventoryView.SetActive(false);
         inventoryBox.inventoryBoxView.SetActive(false);
         inventoryBox.isItemBoxOpened = false;

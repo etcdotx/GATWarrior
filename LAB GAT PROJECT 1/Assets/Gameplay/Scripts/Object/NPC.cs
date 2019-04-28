@@ -6,6 +6,8 @@ public class NPC : MonoBehaviour
 {
     public PlayerData playerData;
 
+    public bool isAShop;
+
     [Header("Set source number")]
     public int sourceID;
     public int activeCollectionQuestTotal;

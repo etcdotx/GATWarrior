@@ -39,7 +39,8 @@ public class Item
             PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
             if (itemType.ToLower().Equals("potion".ToLower()))
             {
-                playerData.curHealth += 100;
+                playerData.curHealth += 20;
+                playerData.RefreshHp();
                 Debug.Log("cur health : "+playerData.curHealth);
                 return;
             }

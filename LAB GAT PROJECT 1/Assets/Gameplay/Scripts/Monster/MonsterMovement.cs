@@ -74,37 +74,40 @@ public class MonsterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (agent.enabled==true)
+        if (monsterStatus.hp > 0)
         {
-            if (monsterStatus.isAttacking == false)
+            if (agent.enabled == true)
             {
-                if (wanderingType == true)
+                if (monsterStatus.isAttacking == false)
                 {
-                    if (playerOnSight == true && (awareType == true || inCombat == true))
+                    if (wanderingType == true)
                     {
-                        LookAtPlayer();
-                        if (distance > positionGap)
+                        if (playerOnSight == true && (awareType == true || inCombat == true))
                         {
-                            agent.ResetPath();
-                            transform.position += transform.forward * moveSpeed * Time.deltaTime;
+                            LookAtPlayer();
+                            if (distance > positionGap)
+                            {
+                                agent.ResetPath();
+                                transform.position += transform.forward * moveSpeed * Time.deltaTime;
+                            }
+                            else
+                            {
+                                Wandering();
+                            }
                         }
                         else
                         {
                             Wandering();
                         }
-                    }
-                    else
-                    {
-                        Wandering();
-                    }
 
-                    if (distance >= breakGap)
-                    {
-                        StopCombat();
+                        if (distance >= breakGap)
+                        {
+                            StopCombat();
+                        }
                     }
                 }
             }
-        }
+        } 
     }
 
     void LookAtPlayer() {
@@ -158,19 +161,24 @@ public class MonsterMovement : MonoBehaviour
 
     public IEnumerator Interrupted()
     {
-        playerOnSight = true;
-        isInterrupted = true;
-        agent.isStopped = true;
-        anim.SetBool("isAttacked", true);
-        yield return new WaitForSeconds(interruptedRecoveryTime);
-        isInterrupted = false;
-        agent.isStopped = false;
-        agent.ResetPath();
-        anim.SetBool("isAttacked", false);
+        if (agent.enabled == true)
+        {
+            inCombat = true;
+            playerOnSight = true;
+            isInterrupted = true;
+            agent.isStopped = true;
+            anim.SetBool("isAttacked", true);
+            yield return new WaitForSeconds(interruptedRecoveryTime);
+            isInterrupted = false;
+            agent.isStopped = false;
+            agent.ResetPath();
+            anim.SetBool("isAttacked", false);
+        }     
     }
 
     public IEnumerator Falling()
     {
+        inCombat = true;
         playerOnSight = true;
         agent.isStopped = true;
         agent.enabled = false;

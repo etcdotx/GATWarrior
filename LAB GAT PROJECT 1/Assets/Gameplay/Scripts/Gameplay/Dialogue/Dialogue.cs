@@ -115,6 +115,7 @@ public class Dialogue : MonoBehaviour
         this.haveDialogOption = haveDialogOption;
         ShowUI(haveDialogOption);
         StartCoroutine(InputHold());
+
         //add normal dialogue
         for (int i = 0; i < npcDialog.Count; i++)
         {
@@ -155,7 +156,7 @@ public class Dialogue : MonoBehaviour
 
     void SelectDialogue()
     {
-        if (dialogueOptionIndex == 0)
+        if (dialogueOptionIndex <= nonDialogueIndex-1)
         {
             isAQuestDialog = false;
         }
@@ -257,9 +258,19 @@ public class Dialogue : MonoBehaviour
 
         //for normal dialogue
         Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform);
-        dialogueOptionContent.transform.GetChild(0).GetComponent<DialogueOption>().optionText.text = "Talk";
+        dialogueOptionContent.transform.GetChild(nonDialogueIndex).GetComponent<DialogueOption>().optionText.text = "Talk";
         index++;
         nonDialogueIndex++;
+        //for shop
+
+        if (target.isAShop == true)
+        {
+            Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform);
+            dialogueOptionContent.transform.GetChild(nonDialogueIndex).GetComponent<DialogueOption>().optionText.text = "Buy";
+            index++;
+            nonDialogueIndex++;
+            Debug.Log("in");
+        }
 
         //for questdialogue
         for (int i = 0; i < colQuestList.Count; i++)
@@ -267,6 +278,7 @@ public class Dialogue : MonoBehaviour
             Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform);
             index++;
         }
+
         for (int i = nonDialogueIndex; i < dialogueOptionContent.transform.childCount; i++)
         {
             dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().optionText.text = colQuestList[cqIndex].title;

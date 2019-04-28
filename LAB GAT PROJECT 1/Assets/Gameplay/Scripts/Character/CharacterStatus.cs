@@ -1,19 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterStatus : MonoBehaviour
 {
+    public PlayerData playerData;
+    public CharacterMovement characterMovement;
+
+    [Header("Player Status")]
+    public string playerName;
+
     public Animator anim;
-    public float maxHealth;
-    public float health;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        characterMovement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
-        maxHealth = 100;
-        health = maxHealth;
     }
 
     // Update is called once per frame
@@ -22,8 +27,11 @@ public class CharacterStatus : MonoBehaviour
         
     }
 
-    public void Damaged(float dmg) {
-        health -= dmg;
+    public void Damaged(float dmg)
+    {
         anim.SetTrigger("attacked");
+        characterMovement.currentSpeed = 0;
+        playerData.curHealth -= dmg;
+        playerData.RefreshHp();
     }
 }

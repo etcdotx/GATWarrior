@@ -22,6 +22,9 @@ public class Talk : MonoBehaviour
         {
             NPC thisNPC = interactable.gameObject.GetComponent<NPC>();
             int totalDialogueOption = thisNPC.activeCollectionQuest.Count;
+            if (thisNPC.isAShop == true)
+                totalDialogueOption += 1;
+
             if (totalDialogueOption != 0)
             {
                 dialogue.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);

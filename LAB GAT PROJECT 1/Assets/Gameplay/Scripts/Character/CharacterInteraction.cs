@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class CharacterInteraction : MonoBehaviour
 {
     public PlayerData playerData;
+    public Animator animator;
+
     public Talk talk;
     public Collect collect;
     public GameMenuManager gameMenuManager;
@@ -27,6 +29,7 @@ public class CharacterInteraction : MonoBehaviour
     void Start()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        animator = GetComponent<Animator>();
         talk = gameObject.GetComponent<Talk>();
         collect = gameObject.GetComponent<Collect>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
@@ -68,7 +71,7 @@ public class CharacterInteraction : MonoBehaviour
         {
             try
             {
-                Debug.Log(hit.collider.gameObject);
+                //Debug.Log(hit.collider.gameObject);
                 Interactable interactable = hit.collider.gameObject.GetComponent<Interactable>();
                 //mengecek apakah object tersebut interactable
                 if (interactable.isInteractable == true)
@@ -80,6 +83,7 @@ public class CharacterInteraction : MonoBehaviour
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking == true)
                     {
                         GameStatus.isTalking = true;
+                        animator.SetBool("isWalk", false);
                         talk.TalkToObject(interactable);
                     }
                     //jika object tersebut bisa dimasukkan kedalam koleksi
@@ -91,21 +95,15 @@ public class CharacterInteraction : MonoBehaviour
                     //jika object tersebut adalah inventorybox
                     else if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" && inventoryBox.isItemBoxOpened == false)
                     {
-                        inventory.inventoryView.SetActive(true);
-                        inventoryBox.inventoryBoxView.SetActive(true);
-                        inventoryBox.isItemBoxOpened = true;
-                        gameMenuManager.StartCoroutine("ButtonInputHold");
-                        gameMenuManager.isOpen = true;
-                        gameMenuManager.ResetMenu();
-                        GameStatus.PauseGame();
-                        GameStatus.PauseMove();
+                        animator.SetBool("isWalk", false);
+                        gameMenuManager.OpenInventoryBoxMenu();
                         HideButton();
                     }
                 }
             }
             catch
             {
-                Debug.Log(hit.collider.gameObject + "not interactable");
+                //Debug.Log(hit.collider.gameObject + "not interactable");
                 InteractHideButton = true;
             }
         }

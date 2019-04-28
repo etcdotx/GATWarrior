@@ -5,30 +5,51 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public InputSetup inputSetup;
-    public CharacterAttack characterAttack;
+    public CharacterCombat characterCombat;
     public Rigidbody charRig;
 
     public GameObject mainCamera;
+    public CameraMovement cameraMovement;
 
-    public float defaultSpeed;
-    public float runSpeedMultiplier;
-    public float currentSpeed;
     public float rotateSpeed;
-    public float jumpForce;
+    public float lockRotationSpeed;
+    public bool lockWalk;
+
+    [Header("Rolling")]
+    public float rollForce;
+    public bool isRolling;
 
     public Vector3 inputAxis;
     public Quaternion targetRotation;
     public float angle;
     public Animator charAnim;
+    
+    [Header("Movement Speed")]
+    public float maxDefaultSpeed;
+    public float maxRunSpeed;
+    public float currentSpeed;
+    public float accelerateRatePerSec;
+    public float defaultTimeZeroToMax=1f;
+    public float runTimeZeroToMax = 2.5f;
+
+    [Header("Movement Logic")]
+    public float curAng;
+    public Vector2 curVecMovement;
+    public Vector2 overVecMovement;
 
     // Use this for initialization
     void Start()
     {
         GameStatus.ResumeMove();
-        characterAttack = GetComponent<CharacterAttack>();
+        characterCombat = GetComponent<CharacterCombat>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
+        isRolling = false;
+
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        cameraMovement = mainCamera.GetComponent<CameraMovement>();
+
         charRig = gameObject.GetComponent<Rigidbody>();
+
         try
         {
             charAnim = GetComponent<Animator>();
@@ -38,31 +59,48 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+    public float test;
     // Update is called once per frame
     void Update()
     {
-        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false 
-            && GameStatus.CanMove == true && characterAttack.isAttacking == false)//
+        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false
+            && GameStatus.CanMove == true && characterCombat.isAttacking == false && isRolling==false)//
         {
             GetInputAxis();
+            if (characterCombat.isShielding == true && cameraMovement.isLocking == true && cameraMovement.monsterTarget!=null)
+            {
+                Vector3 lookTarget = cameraMovement.monsterTarget.transform.position;
+                lookTarget.y = transform.position.y;
+                transform.LookAt(lookTarget);
+            }
             if (Mathf.Abs(inputAxis.x) > 0.15 || Mathf.Abs(inputAxis.y) > 0.15)
             {
-                CalculateDirection();
-                Rotate();
-                Walk();
                 ManageSpeed();
+                if (characterCombat.isShielding == true && cameraMovement.isLocking == true)
+                {
+                    lockWalk = true;
+                }
+                else
+                {
+                    lockWalk = false;
+                    CheckMoveToRotation();
+                    CalculateDirection();
+                    Rotate();
+                }
+                Walk();
             }
             else
             {
                 try
                 {
                     charAnim.SetBool("isWalk", false);
+                    currentSpeed = 0;
                 }
                 catch { }
             }
             if (GameStatus.IsPaused == false)
             {
-                Jump();
+                Roll();
             }
         }
     }
@@ -73,7 +111,7 @@ public class CharacterMovement : MonoBehaviour
         inputAxis.y = Input.GetAxis("LeftJoystickVertical");
 
         //run
-        if (characterAttack.isShielding == false)
+        if (characterCombat.isShielding == false)
         {
             if (Input.GetAxisRaw("RT Button") == 1)
             {
@@ -84,29 +122,52 @@ public class CharacterMovement : MonoBehaviour
                 inputAxis.z = 0f;
             }
         }
-    }    
+    }
+
+    void CheckMoveToRotation() {
+        float angle1 = Mathf.Atan2(overVecMovement.x, overVecMovement.y);
+        float angle2 = Mathf.Atan2(curVecMovement.x, curVecMovement.y);
+
+        overVecMovement = new Vector2(Mathf.Abs(inputAxis.x), Mathf.Abs(inputAxis.y));
+        angle1 = Mathf.Rad2Deg * angle1;
+
+        float curRotation = Mathf.Abs(angle1 - curAng);
+        if (curRotation > 20)
+        {
+            currentSpeed = 0;
+        }
+
+        curVecMovement = new Vector2(Mathf.Abs(inputAxis.x), Mathf.Abs(inputAxis.y));
+        angle2 = Mathf.Rad2Deg * angle2;
+        curAng = angle2;
+    }
 
     void CalculateDirection()
     {
         angle = Mathf.Atan2(inputAxis.x, inputAxis.y);
         angle = Mathf.Rad2Deg * angle;
-        
     }
 
     void Rotate()
     {
-        targetRotation = Quaternion.Euler(0, angle+ mainCamera.transform.eulerAngles.y, 0);
+        targetRotation = Quaternion.Euler(0, angle + mainCamera.transform.eulerAngles.y, 0);
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
 
     void ManageSpeed() {
         if (inputAxis.z == 1)
         {
-            currentSpeed = defaultSpeed * runSpeedMultiplier;
+            accelerateRatePerSec = maxRunSpeed / runTimeZeroToMax;
+            currentSpeed += accelerateRatePerSec * Time.deltaTime;
+            currentSpeed = Mathf.Min(currentSpeed, maxRunSpeed);
+            //currentSpeed = maxRunSpeed;
         }
         else
         {
-            currentSpeed = defaultSpeed;
+            accelerateRatePerSec = maxDefaultSpeed / defaultTimeZeroToMax;
+            currentSpeed += accelerateRatePerSec * Time.deltaTime;
+            currentSpeed = Mathf.Min(currentSpeed, maxDefaultSpeed);
+            //currentSpeed = maxDefaultSpeed;
         }
     }
 
@@ -137,8 +198,28 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    void ApplyMovement(int a, int b) {
-        Vector3 movedirection = a * transform.forward * Input.GetAxis("LeftJoystickVertical") + b * transform.forward * Input.GetAxis("LeftJoystickHorizontal");
+    void ApplyMovement(int a, int b)
+    {
+        Vector3 movedirection = new Vector3(0,0,0);
+        if (lockWalk == false)
+        {
+            movedirection = a * transform.forward * Input.GetAxis("LeftJoystickVertical") + b * transform.forward * Input.GetAxis("LeftJoystickHorizontal");
+        }
+        else {
+            if (a > 0)
+            {
+                if (b > 0)
+                    movedirection = a * transform.forward * Input.GetAxis("LeftJoystickVertical") + b * transform.right * Input.GetAxis("LeftJoystickHorizontal");
+                else
+                    movedirection = a * transform.forward * Input.GetAxis("LeftJoystickVertical") + -b * transform.right * Input.GetAxis("LeftJoystickHorizontal");
+            }
+            else {
+                if (b > 0)
+                    movedirection = -a * transform.forward * Input.GetAxis("LeftJoystickVertical") + b * transform.right * Input.GetAxis("LeftJoystickHorizontal");
+                else
+                    movedirection = -a * transform.forward * Input.GetAxis("LeftJoystickVertical") + -b * transform.right * Input.GetAxis("LeftJoystickHorizontal");
+            }
+        }
         transform.localPosition = transform.localPosition + movedirection * Time.deltaTime * currentSpeed;
         try
         {
@@ -147,11 +228,13 @@ public class CharacterMovement : MonoBehaviour
         catch { }
     }
 
-    void Jump()
+    void Roll()
     {
         if (Input.GetKeyDown(inputSetup.jump))
         {
-            charRig.velocity += new Vector3(0, jumpForce, 0);
+            charAnim.SetTrigger("roll");
+            charRig.AddForce(transform.forward * rollForce, ForceMode.Impulse);
+            //charRig.velocity += transform.forward * rollForce;
         }
     }
 }

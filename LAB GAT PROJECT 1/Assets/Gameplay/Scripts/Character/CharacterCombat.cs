@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterAttack : MonoBehaviour
+public class CharacterCombat : MonoBehaviour
 {
+    public CharacterMovement characterMovement;
     public InputSetup inputSetup;
     public UsableItem usableItem;
     public Animator charAnim;
@@ -19,13 +20,21 @@ public class CharacterAttack : MonoBehaviour
     public int attackCountMax;
     public int attackCount;
 
+    [Header("Equipment")]
+    public GameObject shield;
+    public GameObject weapon;
+
     // Start is called before the first frame update
     void Start()
     {
+        characterMovement = GetComponent<CharacterMovement>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
         charAnim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
+
+        shield.SetActive(false);
+        weapon.SetActive(false);
 
         combatMode = false;
     }
@@ -33,12 +42,12 @@ public class CharacterAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (combatMode == true)
+        if (combatMode == true && characterMovement.isRolling == false)
         {
             if (usableItem.isSelectingItem == false)
             {
                 Shielding();
-                if (Input.GetKeyDown(inputSetup.attack) && attackCount < attackCountMax)
+                if (Input.GetKeyDown(inputSetup.attack) && attackCount < attackCountMax && attackInputHold==false)
                 {
                     StopAllCoroutines();
                     Attacking();
@@ -47,11 +56,12 @@ public class CharacterAttack : MonoBehaviour
                     {
                         StartCoroutine(AttackInputHold());
                     }
+                    else {
+                        StartCoroutine(StopAttack());
+                    }
                 }
                 if (Input.GetKeyDown(inputSetup.useItem)) {
-                    combatMode = false;
-                    charAnim.SetBool("combatMode", false);
-                    charAnim.SetBool("shielding", false);
+                    SheatheWeapon();
                 }
             }
         }
@@ -60,18 +70,33 @@ public class CharacterAttack : MonoBehaviour
             {
                 if (Input.GetKeyDown(inputSetup.attack))
                 {
-                    combatMode = true;
-                    charAnim.SetBool("combatMode", true);
+                    DrawWeapon();
                 }
             }
         }
+    }
+
+    void DrawWeapon() {
+
+        shield.SetActive(true);
+        weapon.SetActive(true);
+        combatMode = true;
+        charAnim.SetBool("combatMode", true);
+    }
+
+    void SheatheWeapon() {
+        combatMode = false;
+        charAnim.SetBool("combatMode", false);
+        charAnim.SetBool("shielding", false);
+        shield.SetActive(false);
+        weapon.SetActive(false);
     }
 
     void Attacking()
     {
         charAnim.SetTrigger("attack");
         isAttacking = true;
-        StartCoroutine(StopAttack());
+        attackCount++;
     }
 
     IEnumerator StopAttack()
@@ -85,12 +110,15 @@ public class CharacterAttack : MonoBehaviour
     {
         charAnim.SetBool("isAttacking", false);
         attackInputHold = true;
-        yield return new WaitForSeconds(0.3f);
+        isAttacking = true;
+        yield return new WaitForSeconds(1);
         attackInputHold = false;
+        isAttacking = false;
+        attackCount = 0;
     }
 
     void Shielding() {
-        if (Input.GetAxisRaw("LT Button") == 1)
+        if (Input.GetKey(inputSetup.shielding))
         {
             charAnim.SetBool("shielding", true);
             isShielding = true;
