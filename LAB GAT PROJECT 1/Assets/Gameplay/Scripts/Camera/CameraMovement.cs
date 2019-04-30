@@ -38,13 +38,13 @@ public class CameraMovement : MonoBehaviour {
     public GameObject[] nearestMonster;
 
     public Vector3 resetVector;
-    public bool resetting;
     public float test;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        resetting = false;
+        resetCurrent = true;
+        ApplyMovement();
     }
 
     private void Update()
@@ -114,7 +114,12 @@ public class CameraMovement : MonoBehaviour {
         //normal
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-        transform.position = player.transform.position + new Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ) + rotation * dir;
+
+        Vector3 targetPos = player.transform.position + new Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ) + rotation * dir;
+        //Vector3 desiredPos = Vector3.Lerp(transform.position, targetPos, test);
+        //transform.position = desiredPos;
+
+        transform.position = targetPos;
         transform.LookAt(player.transform.position + new Vector3(charOffsetX, charOffsetY, charOffsetZ));
     }
 

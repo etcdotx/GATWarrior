@@ -14,9 +14,6 @@ public class CharacterMovement : MonoBehaviour
     public float rotateSpeed;
     public float lockRotationSpeed;
     public bool lockWalk;
-
-    [Header("Rolling")]
-    public float rollForce;
     public bool isRolling;
 
     public Vector3 inputAxis;
@@ -32,10 +29,15 @@ public class CharacterMovement : MonoBehaviour
     public float defaultTimeZeroToMax=1f;
     public float runTimeZeroToMax = 2.5f;
 
+    [Header("Rolling")]
+    public float rollForce;
+
     [Header("Movement Logic")]
     public float curAng;
     public Vector2 curVecMovement;
     public Vector2 overVecMovement;
+
+    public float test;
 
     // Use this for initialization
     void Start()
@@ -58,8 +60,6 @@ public class CharacterMovement : MonoBehaviour
             Debug.Log("No Animator found");
         }
     }
-
-    public float test;
     // Update is called once per frame
     void Update()
     {
@@ -102,6 +102,11 @@ public class CharacterMovement : MonoBehaviour
             {
                 Roll();
             }
+        }
+
+        if (isRolling == true)
+        {
+            Rolling();
         }
     }
 
@@ -233,8 +238,10 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(inputSetup.jump))
         {
             charAnim.SetTrigger("roll");
-            charRig.AddForce(transform.forward * rollForce, ForceMode.Impulse);
-            //charRig.velocity += transform.forward * rollForce;
         }
+    }
+
+    void Rolling() {
+        transform.position += transform.forward * rollForce * Time.deltaTime;
     }
 }

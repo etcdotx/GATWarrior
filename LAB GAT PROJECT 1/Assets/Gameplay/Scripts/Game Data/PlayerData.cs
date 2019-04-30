@@ -19,6 +19,9 @@ public class PlayerData : MonoBehaviour {
     public GameObject character;
     public GameObject[] body;// 0 Gender, 1 Hair
 
+    [Header("Player Wealth")]
+    public int money;
+
     [Header("Player Status")]
     public string playerName;
     public float maxHealth;
