@@ -1,0 +1,83 @@
+fileFormatVersion: 2
+guid: 8ec3471aa3293dc42af81fbbadafa21a
+ScriptedImporter:
+  fileIDToRecycleName:
+    2100000: Cliff Sharp
+    2800000: Cliff Sharp - baseColor
+    2800002: Cliff Sharp - normal
+    2800004: Cliff Sharp - metallic
+    2800006: Cliff Sharp - height
+    11400000: sbsar
+    11400002: graph0
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 232528478, guid: 43a8bbf65be290d44ba52b94476242b9, type: 3}
+  version: 17
+  mGraphInstanceData:
+  - graphLabel: Cliff Sharp
+    prototypeName: Cliff Sharp
+    graphDescIndex: 0
+    generateAllOutputs: 0
+    generateMipMaps: 1
+    preset: " <sbspreset pkgurl=\"pkg://CliffSharp\" label=\"\" >\n  <presetinput
+      identifier=\"$outputsize\" uid=\"2377806427\" type=\"8\" value=\"11,11\" />\n
+      \ <presetinput identifier=\"$randomseed\" uid=\"3670565897\" type=\"4\" value=\"5734\"
+      />\n  <presetinput identifier=\"Nb_X\" uid=\"4275073845\" type=\"4\" value=\"6\"
+      />\n </sbspreset>\n"
+    shaderName: Standard
+    outputNames: baseColor,normal,metallic,height
+    texturePackingList:
+    - outputName: baseColor
+      alphaSource: baseColor
+    - outputName: normal
+      alphaSource: normal
+    - outputName: roughness
+      alphaSource: roughness
+    - outputName: metallic
+      alphaSource: smoothness
+    - outputName: height
+      alphaSource: height
+    textureParameters:
+    - textureName: Cliff Sharp - roughness
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Cliff Sharp - baseColor
+      wrapMode: 0
+      filterMode: 1
+      aniso: 3
+    - textureName: Cliff Sharp - normal
+      wrapMode: 0
+      filterMode: 1
+      aniso: 4
+    - textureName: Cliff Sharp - metallic
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Cliff Sharp - height
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    colorSpaceList:
+    - outputName: baseColor
+      bLinear: 0
+    - outputName: normal
+      bLinear: 1
+    - outputName: roughness
+      bLinear: 1
+    - outputName: metallic
+      bLinear: 1
+    - outputName: height
+      bLinear: 1
+    inputTextureMap: []
+    targetSettingList:
+    - label: 
+      bLockRatio: 1
+      textureWidth: 2048
+      textureHeight: 2048
+      textureFormat: 2
+      bGenerateOnLoad: 1
+    material: {fileID: 2100000, guid: 8ec3471aa3293dc42af81fbbadafa21a, type: 3}
+    generatedTextures: []

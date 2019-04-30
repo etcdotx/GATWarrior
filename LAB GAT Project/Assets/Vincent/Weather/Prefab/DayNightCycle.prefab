@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3232713917882589660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3232713917882589666}
+  - component: {fileID: 3232713917882589661}
+  m_Layer: 0
+  m_Name: DayNightCycle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3232713917882589666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3232713917882589660}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 267.3509, y: -41.755016, z: 27.288773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3232713917882589661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3232713917882589660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9777e5ff5cd7f644b9f1a948194d1581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hour: 0
+  _minute: 0
+  _speed: 12.5
+  _Sun: {fileID: 0}
+  _Moon: {fileID: 0}
+  _Pstars: {fileID: 0}
+  _Pcloud: {fileID: 0}
+  _DayNightSkyColor:
+    serializedVersion: 2
+    key0: {r: 0.038477294, g: 0.013082955, b: 0.3962264, a: 1}
+    key1: {r: 1, g: 0.9563377, b: 0.9103774, a: 1}
+    key2: {r: 0.09411765, g: 0.3764706, b: 0.44313726, a: 0}
+    key3: {r: 0.2991723, g: 0.66823965, b: 0.7830189, a: 0}
+    key4: {r: 0.9716981, g: 0.9328624, b: 0.8204432, a: 0}
+    key5: {r: 1, g: 1, b: 1, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 27756
+    ctime3: 33924
+    ctime4: 39899
+    ctime5: 65535
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 6
+    m_NumAlphaKeys: 2
+  _DayNightHorizonColor:
+    serializedVersion: 2
+    key0: {r: 0.05067365, g: 0.009033469, b: 0.2735849, a: 1}
+    key1: {r: 0.9988362, g: 1, b: 0.504717, a: 1}
+    key2: {r: 0.75956744, g: 0.9528302, b: 0.9369085, a: 0}
+    key3: {r: 0.9811321, g: 0.60269696, b: 0.24528302, a: 0}
+    key4: {r: 1, g: 1, b: 1, a: 0}
+    key5: {r: 1, g: 1, b: 1, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 23708
+    ctime3: 42791
+    ctime4: 65535
+    ctime5: 65535
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 4
+    m_NumAlphaKeys: 2
+  _FogColor:
+    serializedVersion: 2
+    key0: {r: 0.028835872, g: 0.45440325, b: 0.6792453, a: 1}
+    key1: {r: 0.92848146, g: 0.9528302, b: 0.5348434, a: 1}
+    key2: {r: 1, g: 0.9498744, b: 0.7311321, a: 0}
+    key3: {r: 1, g: 0.6635466, b: 0.2028302, a: 0}
+    key4: {r: 0, g: 0.18867935, b: 0.2830189, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 32960
+    ctime3: 46067
+    ctime4: 52428
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
