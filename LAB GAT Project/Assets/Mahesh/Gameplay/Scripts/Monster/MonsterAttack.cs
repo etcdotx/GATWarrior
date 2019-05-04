@@ -16,7 +16,6 @@ public class MonsterAttack : MonoBehaviour
 
     public Rigidbody rigid;
     public float speed;
-    public float flyForce;
 
     private void Start()
     {

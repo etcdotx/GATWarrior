@@ -143,7 +143,7 @@ public class MonsterStatus : MonoBehaviour
             monsterMovement.StartCoroutine(monsterMovement.Falling());
             Vector3 playerForce = new Vector3(0, flyForce, 0) + player.transform.forward*force;
             rigid.AddForce(playerForce, ForceMode.Acceleration);
-            Debug.Log("in");
+            //Debug.Log("in");
             return true;
         }
         return false;

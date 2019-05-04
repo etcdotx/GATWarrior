@@ -65,7 +65,7 @@ public class Quest : MonoBehaviour
                 {
                     CollectionQuest cq = new CollectionQuest(collectionQuestActive[j].sourceID, 
                         collectionQuestActive[j].id, collectionQuestActive[j].chainQuestID, collectionQuestActive[j].colAmount, 
-                        collectionQuestActive[j].resourcePath, collectionQuestActive[j].title, 
+                        collectionQuestActive[j].itemToCollect, collectionQuestActive[j].title, 
                         collectionQuestActive[j].verb, collectionQuestActive[j].description, collectionQuestActive[j].isOptional);
                     npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Add(cq);
                 }

@@ -259,6 +259,7 @@ public class Inventory : MonoBehaviour
 
             newItemIn.quantity = quantity;
             playerData.inventoryItem.Add(newItemIn);
+            playerData.CheckNewItem(playerData.inventoryItem[playerData.inventoryItem.Count-1]);
             newItem.quantity -= quantity;
         }
 

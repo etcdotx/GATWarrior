@@ -49,7 +49,7 @@ public class WeaponStatus : MonoBehaviour
         {
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
             monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
-            Debug.Log("in cold");
+            //Debug.Log("in cold");
         }
     }
 

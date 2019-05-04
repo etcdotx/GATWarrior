@@ -3,7 +3,37 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlantNodes
+  - NPC
+  - Soil
+  - Monster
+  - GameObject_InventoryBox
+  - InteractableUI
+  - Dialogue
+  - UsableItem
+  - InputSetup
+  - GameMenuManager
+  - PlayerStatusUI
+  - QuestUI
+  - InventoryUI
+  - UsableItemUI
+  - PlayerData
+  - DialogueUI
+  - MonsterDatabase
+  - GameDataBase
+  - PlantDataBase
+  - InventoryBoxUI
+  - ShopUI
+  - Soils
+  - Quest
+  - InventoryBox
+  - Inventory
+  - DialogueOption
+  - PlayerWeapon
+  - PlantTrigger
+  - PlayerHead
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -13,8 +43,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Player
+  - Shield
   - 
   - 
   - 

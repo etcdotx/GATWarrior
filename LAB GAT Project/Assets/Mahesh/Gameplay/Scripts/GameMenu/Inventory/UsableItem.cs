@@ -134,7 +134,7 @@ public class UsableItem : MonoBehaviour
     {
         usableItemList.Clear();
         usableItemID.Clear();
-        Debug.Log(playerData.inventoryItem.Count);
+        //Debug.Log(playerData.inventoryItem.Count);
         for (int i = 0; i < playerData.inventoryItem.Count; i++)
         {
             bool exist = false;

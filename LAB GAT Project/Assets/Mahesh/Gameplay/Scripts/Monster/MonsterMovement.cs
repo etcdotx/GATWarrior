@@ -102,7 +102,7 @@ public class MonsterMovement : MonoBehaviour
 
                         if (distance >= breakGap)
                         {
-                            StopCombat();
+                            //StopCombat();
                         }
                     }
                 }
@@ -193,5 +193,17 @@ public class MonsterMovement : MonoBehaviour
         agent.isStopped = false;
         agent.ResetPath();
         rigid.velocity = new Vector3(0, 0, 0);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //if (collision.collider.CompareTag("Ground"))
+            //Debug.Log(transform.name + " grounded");
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        //if (collision.collider.CompareTag("Ground"))
+            //Debug.Log(transform.name + " is not grounded");
     }
 }

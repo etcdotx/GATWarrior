@@ -48,7 +48,7 @@ MonoBehaviour:
   character: {fileID: 0}
   gameDataBase: {fileID: 0}
   selectSpawnLocationName: 
-  characterScale: {x: 0.002, y: 0.002, z: 0.002}
+  characterScale: {x: 0.01029141, y: 0.01029141, z: 0.01029141}
   Rumah: Rumah
   HutanAman: HutanAman
   Kota: Kota

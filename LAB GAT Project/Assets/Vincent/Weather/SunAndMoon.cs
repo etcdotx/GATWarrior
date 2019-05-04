@@ -87,8 +87,8 @@ public class SunAndMoon : MonoBehaviour {
         RenderSettings.skybox.SetColor("_GroundColor", _DayNightSkyColor.Evaluate(t_dot));
         RenderSettings.fogColor = _FogColor.Evaluate(t_dot);
 
-        Debug.Log("Hour :" + _hour);
-        Debug.Log("Minute :" + _minute);
+        //Debug.Log("Hour :" + _hour);
+        //Debug.Log("Minute :" + _minute);
     }
 
 }

@@ -107,12 +107,12 @@ public class PlayerData : MonoBehaviour {
 
         try
         {
-            PlayerSaveData data = SaveSystem.LoadPlayer(gameDataBase.saveSlot.ToString());
-            characterAppearance = new int[data.characterAppearance.Length];
-            for (int i = 0; i < characterAppearance.Length; i++)
-            {
-                characterAppearance[i] = data.characterAppearance[i];
-            }
+            //PlayerSaveData data = SaveSystem.LoadPlayer(gameDataBase.saveSlot.ToString());
+            //characterAppearance = new int[data.characterAppearance.Length];
+            //for (int i = 0; i < characterAppearance.Length; i++)
+            //{
+            //    characterAppearance[i] = data.characterAppearance[i];
+            //}
         } catch(UnityException ex)
         {
             Debug.Log(ex);
@@ -169,7 +169,7 @@ public class PlayerData : MonoBehaviour {
     public void AddQuest(CollectionQuest cq)
     {
         //memasukkan quest baru kedalam ke quest yang dimiliki player
-        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, cq.resourcePath, cq.title, cq.verb, cq.description, cq.isOptional);
+        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, cq.itemToCollect, cq.title, cq.verb, cq.description, cq.isOptional);
         newQuest.chainQuestID = cq.chainQuestID;
         collectionQuest.Add(newQuest);
         //memasukkan quest list kedalam ui
@@ -254,7 +254,7 @@ public class PlayerData : MonoBehaviour {
             CheckNewItem(newItem);
         }
         //item tersebut di refresh kedalam inventory
-        Debug.Log(item.name + " , total = " + inventoryItem.Count);
+        //Debug.Log(item.name + " , total = " + inventoryItem.Count);
         inventory.RefreshInventory();
     }
 
@@ -293,7 +293,7 @@ public class PlayerData : MonoBehaviour {
         if (colQuestExist == false)
         {
             //jika quest yang sudah selesai, tidak ada di dalam koleksi quest yang sudah selesai, masukkan quest tersebut
-            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.resourcePath, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
+            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.itemToCollect, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
             newQuestCom.chainQuestID = cqc.chainQuestID;
             collectionQuestComplete.Add(newQuestCom);
             //AddCompleteQuestList(newQuestCom);

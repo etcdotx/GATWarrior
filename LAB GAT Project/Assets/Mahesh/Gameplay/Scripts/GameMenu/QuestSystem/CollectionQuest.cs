@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectionQuest
+[CreateAssetMenu(fileName = "New Collection Quest", menuName = "Collection Quest")]
+public class CollectionQuest : ScriptableObject
 {
     public int sourceID;
     public int id;
@@ -17,18 +18,18 @@ public class CollectionQuest
     public bool isComplete;
     public bool isOptional;
 
-    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, string resourcePath, string title, string verb, string description, bool isOptional){
+    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, GameObject itemToCollect, string title, string verb, string description, bool isOptional)
+    {
         this.sourceID = sourceID;
         this.id = id;
         this.chainQuestID = chainQuestID;
         this.colAmount = colAmount;
-        this.resourcePath = resourcePath;
-        itemToCollect = Resources.Load(this.resourcePath) as GameObject;
+        this.itemToCollect = itemToCollect;
         this.title = title;
         this.verb = verb;
         this.description = description;
         this.isOptional = isOptional;
-        CheckProgress();
+        //CheckProgress();
     }
 
     public string GetGameObjectName() {

@@ -70,17 +70,21 @@ public class SphereMonsterAttack : MonoBehaviour
         bool blocked = false;
         if (hitBox.enabled == true)
         {
+            Debug.Log("attack!");
+
             Collider[] col = Physics.OverlapBox(hitBox.bounds.center, hitBox.bounds.extents, hitBox.transform.rotation, LayerMask.GetMask("Shield"));
 
             foreach (Collider c in col)
             {
+                Debug.Log(c.transform.name);
                 hitBox.enabled = false;
-                CharacterStatus characterStatus = c.transform.parent.parent.parent.parent.parent.parent.parent.GetComponent<CharacterStatus>();
-                //Debug.Log("blocked ! hp = " + characterStatus.health);
+                blocked = true;
+                Debug.Log("blocked");
             }
 
             if (blocked == false)
             {
+                Debug.Log("attack not blocked");
                 Collider[] cols = Physics.OverlapBox(hitBox.bounds.center, hitBox.bounds.extents, hitBox.transform.rotation, LayerMask.GetMask("Player"));
 
                 foreach (Collider c in cols)
@@ -89,6 +93,7 @@ public class SphereMonsterAttack : MonoBehaviour
                     CharacterStatus characterStatus = c.GetComponent<CharacterStatus>();
                     characterStatus.Damaged(damage);
                     //Debug.Log("damaged ! hp = " + characterStatus.health);
+                    Debug.Log("Damaged");
                 }
             }
         }

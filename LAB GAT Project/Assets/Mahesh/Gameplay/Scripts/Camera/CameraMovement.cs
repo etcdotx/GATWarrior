@@ -40,6 +40,15 @@ public class CameraMovement : MonoBehaviour {
     public Vector3 resetVector;
     public float test;
 
+    [Header("Camera Collision")]
+    public float minDistance;
+    public float maxDistance;
+    public float smooth;
+
+    public float maxRayDistance;
+    public Vector3 dollyDirAdjusted;
+    public float colDis;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -104,22 +113,24 @@ public class CameraMovement : MonoBehaviour {
             resetCurrent = false;
         }
 
+        maxRayDistance = Vector3.Distance(transform.position, player.transform.position);
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+        Debug.DrawLine(transform.position, transform.forward, Color.green);
 
-        //Vector3 direction = player.transform.position - transform.position;
-        //Vector3 direction = transform.position;
-        //Quaternion toRotation = Quaternion.FromToRotation(transform.forward, player.transform.position + new Vector3(charOffsetX, charOffsetY, charOffsetZ));
-        //Quaternion toRotation = Quaternion.FromToRotation(transform.forward, new Vector3(direction.x,direction.y,0) + new Vector3(charOffsetX, charOffsetY, charOffsetZ));
-        //transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, test * Time.time);
+        if (Physics.Raycast(ray, out hit, maxRayDistance))
+        {
+            Debug.Log("hit = "+ hit.collider.name);
+            //colDis = Mathf.Clamp(hit.distance, minDistance, maxDistance);
+            //transform.position = Vector3.Lerp(transform.position, player.transform.position * colDis, Time.deltaTime * smooth);
+        }
+        //else {
+            Vector3 dir = new Vector3(0, 0, -distance);
+            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
 
-        //normal
-        Vector3 dir = new Vector3(0, 0, -distance);
-        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-
-        Vector3 targetPos = player.transform.position + new Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ) + rotation * dir;
-        //Vector3 desiredPos = Vector3.Lerp(transform.position, targetPos, test);
-        //transform.position = desiredPos;
-
-        transform.position = targetPos;
+            Vector3 targetPos = player.transform.position + new Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ) + rotation * dir;
+            transform.position = targetPos;
+        //}
         transform.LookAt(player.transform.position + new Vector3(charOffsetX, charOffsetY, charOffsetZ));
     }
 

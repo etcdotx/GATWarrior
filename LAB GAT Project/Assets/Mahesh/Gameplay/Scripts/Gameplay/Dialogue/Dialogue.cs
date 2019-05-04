@@ -206,7 +206,6 @@ public class Dialogue : MonoBehaviour
 
                 if (checkExist == false)
                 {
-                    Debug.Log("ada quest");
                     playerData.AddQuest(target.activeCollectionQuest[i]);
                     SetQuestDialogue();
                 }
@@ -251,7 +250,7 @@ public class Dialogue : MonoBehaviour
         for (int i = 0; i < cqList.Count; i++)
         {
             CollectionQuest newCol = new CollectionQuest(cqList[i].sourceID, cqList[i].id, cqList[i].chainQuestID,
-                cqList[i].colAmount, cqList[i].resourcePath, cqList[i].title, cqList[i].verb,
+                cqList[i].colAmount, cqList[i].itemToCollect, cqList[i].title, cqList[i].verb,
                 cqList[i].description, cqList[i].isOptional);
             colQuestList.Add(newCol);
         }

@@ -632,7 +632,7 @@ Transform:
   - {fileID: 686105056956959907}
   m_Father: {fileID: 686105056956959911}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -77.17507, y: 103.0373, z: 98.39997}
+  m_LocalEulerAnglesHint: {x: -77.17507, y: 103.03728, z: 98.39995}
 --- !u!1 &686105056956862695
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,7 +923,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1322353692941747100}
   - component: {fileID: 4144787669809389496}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -976,7 +976,7 @@ GameObject:
   - component: {fileID: 5598119718598056556}
   - component: {fileID: 2193518142998861162}
   - component: {fileID: 840948945}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Character (Player)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -992,7 +992,7 @@ Transform:
   m_GameObject: {fileID: 5598119718598056550}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
+  m_LocalScale: {x: 0.010291405, y: 0.0102914, z: 0.010291405}
   m_Children:
   - {fileID: 686105056956959909}
   - {fileID: 686105056956959915}
@@ -1075,13 +1075,13 @@ MonoBehaviour:
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   angle: 0
   charAnim: {fileID: 0}
-  maxDefaultSpeed: 0.5
-  maxRunSpeed: 1.5
+  maxDefaultSpeed: 2
+  maxRunSpeed: 6
   currentSpeed: 0
   accelerateRatePerSec: 0
   defaultTimeZeroToMax: 0.5
   runTimeZeroToMax: 2.5
-  rollForce: 4
+  rollForce: 20
   curAng: 0
   curVecMovement: {x: 0, y: 0}
   overVecMovement: {x: 0, y: 0}
@@ -1257,11 +1257,6 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 841097568371463309, guid: b200a9fdae80a254c8e28fd1eb9bfc71,
-        type: 3}
-      propertyPath: hitIndicatorLocation
-      value: 
-      objectReference: {fileID: 5211180759134349795}
     - target: {fileID: 6143371995323029520, guid: b200a9fdae80a254c8e28fd1eb9bfc71,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1322,12 +1317,6 @@ PrefabInstance:
 --- !u!1 &5669483243506725416 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5492831034545890676, guid: b200a9fdae80a254c8e28fd1eb9bfc71,
-    type: 3}
-  m_PrefabInstance: {fileID: 185905707418523484}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5211180759134349795 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5387902795681349311, guid: b200a9fdae80a254c8e28fd1eb9bfc71,
     type: 3}
   m_PrefabInstance: {fileID: 185905707418523484}
   m_PrefabAsset: {fileID: 0}
