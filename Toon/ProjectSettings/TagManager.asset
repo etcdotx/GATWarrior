@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Soil
+  - Monster
+  - NPC
+  - PlayerHead
+  - InteractableUI
+  - Dialogue
+  - Soils
+  - UsableItem
+  - Quest
+  - InputSetup
+  - InventoryBox
+  - GameMenuManager
+  - PlayerStatusUI
+  - QuestUI
+  - InventoryUI
+  - UsableItemUI
+  - PlayerData
+  - DialogueUI
+  - MonsterDatabase
+  - GameDataBase
+  - PlantDataBase
+  - Inventory
+  - InventoryBoxUI
+  - ShopUI
+  - PlayerWeapon
+  - PlantTrigger
+  - GameObject_InventoryBox
+  - DialogueOption
+  - ConversationUI
+  - ShowDialog
+  - MenuManager
+  - PlantNodes
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - PostProcessing
+  - Player
+  - Monster
+  - Shield
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

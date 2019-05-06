@@ -1,0 +1,175 @@
+fileFormatVersion: 2
+guid: c9d3bd041c9871f42947df10bdc4dad0
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Base
+    100002: Cerobong
+    100004: Door
+    100006: Hiasan
+    100008: //RootNode
+    100010: Plane
+    100012: Roof
+    100014: Top_Window
+    100016: Window
+    100018: Window_001
+    100020: Window_002
+    100022: Window_003
+    100024: Window_Roof
+    100026: Window_Roof_001
+    100028: Wood
+    400000: Base
+    400002: Cerobong
+    400004: Door
+    400006: Hiasan
+    400008: //RootNode
+    400010: Plane
+    400012: Roof
+    400014: Top_Window
+    400016: Window
+    400018: Window_001
+    400020: Window_002
+    400022: Window_003
+    400024: Window_Roof
+    400026: Window_Roof_001
+    400028: Wood
+    2100000: Material_007
+    2100002: Material_004__Window1
+    2100004: Material_005__Window_Roof_001
+    2100006: Roof__Roof
+    2100008: Material_001__Cerobong
+    2100010: Material_003__Window_Roof
+    2100012: Material_002__Door1
+    2100014: Material__Woods
+    2100016: Material_006__hiasan
+    2100018: Base__Base
+    2300000: Base
+    2300002: Cerobong
+    2300004: Door
+    2300006: Hiasan
+    2300008: Plane
+    2300010: Roof
+    2300012: Top_Window
+    2300014: Window
+    2300016: Window_001
+    2300018: Window_002
+    2300020: Window_003
+    2300022: Window_Roof
+    2300024: Window_Roof_001
+    2300026: Wood
+    3300000: Base
+    3300002: Cerobong
+    3300004: Door
+    3300006: Hiasan
+    3300008: Plane
+    3300010: Roof
+    3300012: Top_Window
+    3300014: Window
+    3300016: Window_001
+    3300018: Window_002
+    3300020: Window_003
+    3300022: Window_Roof
+    3300024: Window_Roof_001
+    3300026: Wood
+    4300000: Plane
+    4300002: Window_003
+    4300004: Window_Roof_001
+    4300006: Window_002
+    4300008: Window_001
+    4300010: Roof
+    4300012: Cerobong
+    4300014: Window_Roof
+    4300016: Window
+    4300018: Top_Window
+    4300020: Door
+    4300022: Wood
+    4300024: Hiasan
+    4300026: Base
+    7400000: Default Take
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

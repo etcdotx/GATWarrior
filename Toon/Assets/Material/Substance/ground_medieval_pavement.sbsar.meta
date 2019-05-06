@@ -1,0 +1,130 @@
+fileFormatVersion: 2
+guid: 970d2be4099c09f43a6e6a18eedc1012
+ScriptedImporter:
+  internalIDToNameTable:
+  - first:
+      21: 2100000
+    second: Medieval Pavement
+  - first:
+      28: 2800000
+    second: Medieval Pavement - baseColor
+  - first:
+      28: 2800002
+    second: Medieval Pavement - normal
+  - first:
+      28: 2800004
+    second: Medieval Pavement - metallic
+  - first:
+      28: 2800006
+    second: Medieval Pavement - ambientOcclusion
+  - first:
+      28: 2800008
+    second: Medieval Pavement - height
+  - first:
+      114: 11400000
+    second: sbsar
+  - first:
+      114: 11400002
+    second: graph0
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 232528478, guid: 43a8bbf65be290d44ba52b94476242b9, type: 3}
+  version: 17
+  mGraphInstanceData:
+  - graphLabel: Medieval Pavement
+    prototypeName: Medieval Pavement
+    graphDescIndex: 0
+    generateAllOutputs: 0
+    generateMipMaps: 1
+    preset: " <sbspreset pkgurl=\"pkg://ground_medieval_pavement\" label=\"\" >\n
+      </sbspreset>\n"
+    shaderName: Standard
+    outputNames: baseColor,normal,metallic,ambientOcclusion,height
+    texturePackingList:
+    - outputName: diffuse
+      alphaSource: diffuse
+    - outputName: baseColor
+      alphaSource: baseColor
+    - outputName: normal
+      alphaSource: normal
+    - outputName: specular
+      alphaSource: specular
+    - outputName: glossiness
+      alphaSource: glossiness
+    - outputName: roughness
+      alphaSource: roughness
+    - outputName: metallic
+      alphaSource: smoothness
+    - outputName: ambientOcclusion
+      alphaSource: ambientOcclusion
+    - outputName: height
+      alphaSource: height
+    textureParameters:
+    - textureName: Medieval Pavement - glossiness
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - diffuse
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - baseColor
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - normal
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - specular
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - roughness
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - metallic
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - ambientOcclusion
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Medieval Pavement - height
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    colorSpaceList:
+    - outputName: diffuse
+      bLinear: 0
+    - outputName: baseColor
+      bLinear: 0
+    - outputName: normal
+      bLinear: 1
+    - outputName: specular
+      bLinear: 0
+    - outputName: glossiness
+      bLinear: 1
+    - outputName: roughness
+      bLinear: 1
+    - outputName: metallic
+      bLinear: 1
+    - outputName: ambientOcclusion
+      bLinear: 1
+    - outputName: height
+      bLinear: 1
+    inputTextureMap: []
+    targetSettingList:
+    - label: 
+      bLockRatio: 1
+      textureWidth: 256
+      textureHeight: 256
+      textureFormat: 0
+      bGenerateOnLoad: 1
+    material: {fileID: 2100000, guid: 970d2be4099c09f43a6e6a18eedc1012, type: 3}
+    generatedTextures: []
