@@ -120,7 +120,7 @@ public class CameraMovement : MonoBehaviour {
 
         if (Physics.Raycast(ray, out hit, maxRayDistance))
         {
-            Debug.Log("hit = "+ hit.collider.name);
+            //Debug.Log("hit = "+ hit.collider.name);
             //colDis = Mathf.Clamp(hit.distance, minDistance, maxDistance);
             //transform.position = Vector3.Lerp(transform.position, player.transform.position * colDis, Time.deltaTime * smooth);
         }

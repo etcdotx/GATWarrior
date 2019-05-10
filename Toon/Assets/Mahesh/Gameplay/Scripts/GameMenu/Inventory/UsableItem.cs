@@ -124,7 +124,9 @@ public class UsableItem : MonoBehaviour
             CheckIfItemIsUsable();
         } catch { }
     }
-
+    
+    //function ini dipanggil saat nge slide item dan ada trigger
+    //misalnya saat memegang plant dekat dengan soil
     public void CheckIfItemIsUsable()
     {
         isItemUsable = selectedItem.IsItemUsable();

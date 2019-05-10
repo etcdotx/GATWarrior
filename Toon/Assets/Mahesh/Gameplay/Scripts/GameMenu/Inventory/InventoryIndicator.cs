@@ -8,8 +8,26 @@ public class InventoryIndicator : MonoBehaviour
     public PlayerData playerData;
 
     public int itemID;
-    public bool isSelected;
     public Image itemImage;
+
+    public bool isSelected;
+    public bool marked;
+    public GameObject markIndicator;
+    public GameObject selectIndicator;
+
+    private void Start()
+    {
+        selectIndicator.SetActive(false);
+        markIndicator.SetActive(false);
+    }
+
+    private void Update()
+    {
+        //if (isSelected)
+        //    selectIndicator.SetActive(true);
+        //if(marked)
+        //    markIndicator.SetActive(true);
+    }
 
     public void RefreshInventory()
     {

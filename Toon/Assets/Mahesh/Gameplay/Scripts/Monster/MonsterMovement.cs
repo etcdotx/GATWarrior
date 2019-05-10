@@ -161,19 +161,16 @@ public class MonsterMovement : MonoBehaviour
 
     public IEnumerator Interrupted()
     {
-        if (agent.enabled == true)
-        {
-            inCombat = true;
-            playerOnSight = true;
-            isInterrupted = true;
-            agent.isStopped = true;
-            anim.SetBool("isAttacked", true);
-            yield return new WaitForSeconds(interruptedRecoveryTime);
-            isInterrupted = false;
-            agent.isStopped = false;
-            agent.ResetPath();
-            anim.SetBool("isAttacked", false);
-        }     
+        inCombat = true;
+        playerOnSight = true;
+        isInterrupted = true;
+        agent.isStopped = true;
+        anim.SetBool("isAttacked", true);
+        yield return new WaitForSeconds(interruptedRecoveryTime);
+        isInterrupted = false;
+        agent.isStopped = false;
+        agent.ResetPath();
+        anim.SetBool("isAttacked", false);
     }
 
     public IEnumerator Falling()
@@ -181,7 +178,7 @@ public class MonsterMovement : MonoBehaviour
         inCombat = true;
         playerOnSight = true;
         agent.isStopped = true;
-        agent.enabled = false;
+        //agent.enabled = false;
         anim.SetBool("isAttacked", true);
         isFalling = true;
         rigid.constraints = RigidbodyConstraints.None;
@@ -189,21 +186,9 @@ public class MonsterMovement : MonoBehaviour
         rigid.constraints = RigidbodyConstraints.FreezeRotation;
         isFalling = false;
         anim.SetBool("isAttacked", false);
-        agent.enabled = true;
+        //agent.enabled = true;
         agent.isStopped = false;
         agent.ResetPath();
         rigid.velocity = new Vector3(0, 0, 0);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        //if (collision.collider.CompareTag("Ground"))
-            //Debug.Log(transform.name + " grounded");
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //if (collision.collider.CompareTag("Ground"))
-            //Debug.Log(transform.name + " is not grounded");
     }
 }

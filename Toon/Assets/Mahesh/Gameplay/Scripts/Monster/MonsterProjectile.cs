@@ -28,7 +28,10 @@ public class MonsterProjectile : MonoBehaviour
             CharacterStatus cs = other.transform.GetComponent<CharacterStatus>();
             cs.Damaged(damage);
             Destroy(gameObject);
-            Debug.Log("in");
+            Debug.Log("Projectile hit player");
+        } else if (other.CompareTag("Shield")){
+            Destroy(gameObject);
+            Debug.Log("Projectile blocked");
         }
     }
 }

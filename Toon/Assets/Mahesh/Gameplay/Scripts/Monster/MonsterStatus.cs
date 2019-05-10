@@ -122,7 +122,7 @@ public class MonsterStatus : MonoBehaviour
         gameObject.tag = "Untagged";
         monsterMovement.StopAllCoroutines();
         monsterAttack.StopAllCoroutines();
-        agent.enabled = true;
+        //agent.enabled = true;
         agent.isStopped = true;
         monsterMovement.wanderingType = false;
         //col.isTrigger = true;
@@ -139,11 +139,11 @@ public class MonsterStatus : MonoBehaviour
     public bool CheckForce(int attackNum) {
         if (attackNum == 3)
         {
-            monsterMovement.StopAllCoroutines();
-            monsterMovement.StartCoroutine(monsterMovement.Falling());
+            //monsterMovement.StopAllCoroutines();
+            //monsterMovement.StartCoroutine(monsterMovement.Falling());
             Vector3 playerForce = new Vector3(0, flyForce, 0) + player.transform.forward*force;
             rigid.AddForce(playerForce, ForceMode.Acceleration);
-            //Debug.Log("in");
+            Debug.Log("hard hit");
             return true;
         }
         return false;

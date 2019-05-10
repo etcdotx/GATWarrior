@@ -49,11 +49,11 @@ public class SphereMonsterRangedAttack : MonoBehaviour
     public IEnumerator Attacking(int num)
     {
         agent.isStopped = true;
-        agent.enabled = false;
+        //agent.enabled = false;
         monsterMovement.StopAllCoroutines();
         Attack(num);
         yield return new WaitForSeconds(1f);
-        agent.enabled = true;
+        //agent.enabled = true;
         agent.isStopped = false;
         agent.ResetPath();
         rigid.velocity = new Vector3(0, 0, 0);

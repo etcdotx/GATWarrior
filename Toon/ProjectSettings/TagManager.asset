@@ -36,6 +36,9 @@ TagManager:
   - ShowDialog
   - MenuManager
   - PlantNodes
+  - Ground
+  - Shield
+  - Shop
   layers:
   - Default
   - TransparentFX

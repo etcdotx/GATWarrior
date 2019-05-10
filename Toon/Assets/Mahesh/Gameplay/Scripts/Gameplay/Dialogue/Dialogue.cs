@@ -9,6 +9,7 @@ public class Dialogue : MonoBehaviour
     [Header("Script List")]
     public PlayerData playerData;
     public InputSetup inputSetup;
+    public Shop shop;
     public Quest quest;
     public Inventory inventory;
 
@@ -46,6 +47,7 @@ public class Dialogue : MonoBehaviour
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         quest = GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>();
+        shop = GameObject.FindGameObjectWithTag("Shop").GetComponent<Shop>();
 
         dialogueUI = GameObject.FindGameObjectWithTag("DialogueUI");
         dialogueOptionView = dialogueUI.transform.Find("DialogueOptionView").gameObject;
@@ -143,15 +145,27 @@ public class Dialogue : MonoBehaviour
         if (isAQuestDialog == true)
         {
             CheckQuest();
+            dialogueOptionView.SetActive(false);
+            haveDialogOption = false;
         }
         else
         {
-            dialog = interactDialogList;
-            dialogueText.text = dialog[dialNum];
+            if (target.isAShop)
+            {
+                if (dialogueOptionIndex == 0)
+                {
+                    dialog = interactDialogList;
+                    dialogueText.text = dialog[dialNum];
+                    dialogueOptionView.SetActive(false);
+                    haveDialogOption = false;
+                }
+                else
+                {
+                    CancelTalk();
+                    shop.OpenShop();
+                }
+            }
         }
-
-        dialogueOptionView.SetActive(false);
-        haveDialogOption = false;
     }
 
     void SelectDialogue()

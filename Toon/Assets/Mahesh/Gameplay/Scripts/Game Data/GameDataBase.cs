@@ -19,6 +19,9 @@ public class GameDataBase: MonoBehaviour {
 
     [Header("Test")]
     public CollectionQuest[] colQuestList;
+    public Item[] itemList;
+    public Item[] usableItem;
+    public Item[] plantItem;
 
     public void Awake()
     {
@@ -164,32 +167,18 @@ public class GameDataBase: MonoBehaviour {
         if (ItemDataBase.item == null)
             ItemDataBase.item = new List<Item>();
 
-        Item Cube = new Item(1, "ItemImage/Cube", "Cube", "A cube", false, false, null);
-        ItemDataBase.item.Add(Cube);
-
-        Item Sphere = new Item(2, "ItemImage/Sphere", "Sphere", "A sphere", false, false, null);
-        ItemDataBase.item.Add(Sphere);
-
-        Item Hoe = new Item(3, "ItemImage/Tools/Hoe", "Hoe", "A Hoe", true, true, "Hoe".ToLower());
-        ItemDataBase.item.Add(Hoe);
-
-        Item WaterScoop = new Item(4, "ItemImage/Tools/WaterScoop", "Water Scoop", "A water scoop", true, true, "WaterScoop".ToLower());
-        ItemDataBase.item.Add(WaterScoop);
-
-        Item Potion = new Item(5, "ItemImage/Usable/Potion", "Potion", "A potion", true, false, "Potion".ToLower());
-        Potion.itemType = "potion";
-        ItemDataBase.item.Add(Potion);
-
-        AddPlantItem();
-    }
-
-    void AddPlantItem() {
-        Item Seed = new Item(6, "ItemImage/Usable/Seed", "Seed", "A seed", true, false, "Plant".ToLower());
-        Seed.plantID = 1;
-        ItemDataBase.item.Add(Seed);
-
-        Item Apple = new Item(7, "ItemImage/Ingredients/Apple", "Apple", "An Apple", false, false, null);
-        ItemDataBase.item.Add(Apple);
+        for (int i = 0; i < itemList.Length; i++)
+        {
+            ItemDataBase.item.Add(itemList[i]);
+        }
+        for (int i = 0; i < usableItem.Length; i++)
+        {
+            ItemDataBase.item.Add(usableItem[i]);
+        }
+        for (int i = 0; i < plantItem.Length; i++)
+        {
+            ItemDataBase.item.Add(plantItem[i]);
+        }
     }
     #endregion
 }

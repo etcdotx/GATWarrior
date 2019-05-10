@@ -144,7 +144,7 @@ public class PlayerData : MonoBehaviour {
         }
         else {
             //Instantiate(charPrefab, spawnLocation.transform.position, spawnLocation.transform.rotation, null);
-            Debug.Log("in");
+            Debug.Log("Start without instantiate");
         }
 
         do {
@@ -243,8 +243,8 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             //item baru ditambah kedalam list player
-            Item newItem = new Item(item.id, item.imagePath, item.name, item.description, 
-                item.isUsable, item.isASingleTool, item.itemType);
+            Item newItem = new Item(item.id, item.itemImage, item.itemName, item.description, 
+                item.isUsable, item.isConsumable, item.isASingleTool, item.itemType);
             if (item.itemType != null)
                 if (item.itemType.ToLower().Equals("plant".ToLower()))
                     newItem.plantID = item.plantID;
@@ -263,7 +263,7 @@ public class PlayerData : MonoBehaviour {
     {
         for (int i = 0; i < collectionQuest.Count; i++)
         {
-            if (collectionQuest[i].itemToCollect.name == addedItem.name)
+            if (collectionQuest[i].itemToCollect.name == addedItem.itemName)
             {
                 collectionQuest[i].curAmount = 0;
 

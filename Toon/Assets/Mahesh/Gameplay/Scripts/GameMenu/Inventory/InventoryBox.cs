@@ -270,8 +270,8 @@ public class InventoryBox : MonoBehaviour
         }
         if (isItemExist == false)
         {
-            Item newItemInBox = new Item(newItem.id, newItem.imagePath, newItem.name,
-                newItem.description, newItem.isUsable, newItem.isASingleTool, newItem.itemType);
+            Item newItemInBox = new Item(newItem.id, newItem.itemImage, newItem.itemName,
+                newItem.description, newItem.isUsable, newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
             if (newItem.itemType != null)
                 if (newItem.itemType.ToLower().Equals("plant".ToLower()))
                     newItemInBox.plantID = newItem.plantID;

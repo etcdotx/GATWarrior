@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &699462945119239936
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699462945119239943}
+  - component: {fileID: 699462945119239942}
+  m_Layer: 0
+  m_Name: Soils
+  m_TagString: Soils
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &699462945119239943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699462945119239936}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 699462945476035111}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &699462945119239942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699462945119239936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023ab88fb392bb340a66eecd6be4d70e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plantDataBase: {fileID: 0}
+  plantNodes: {fileID: 0}
+  plantNode: []
+  plantNodeSoil: []
+  plantID: 
+  soilID: 
+  state: 
+  day: 
+  needWater: 
+  gatherable: 
+  canBeHooed: 
+  soilNormal:
+    serializedVersion: 2
+    rgba: 5920374
+  soilHooed:
+    serializedVersion: 2
+    rgba: 7630492
+  soilWet:
+    serializedVersion: 2
+    rgba: 10261358
+  count: 0
+--- !u!1 &699462945476035104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699462945476035111}
+  - component: {fileID: 699462945476035110}
+  m_Layer: 0
+  m_Name: PlantDataBase
+  m_TagString: PlantDataBase
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &699462945476035111
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699462945476035104}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 699462945119239943}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &699462945476035110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699462945476035104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e7b7ff784f11d499355dbb5579efef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plantState1:
+  - {fileID: 0}
+  - {fileID: 6605333396142728640, guid: a2ee2d0edfcff0b41a27934e62178de8, type: 3}
+  plantState2:
+  - {fileID: 0}
+  - {fileID: 9040704359313568331, guid: 77f482240a839e74cb9b116da425ec61, type: 3}
+  plantState3:
+  - {fileID: 0}
+  - {fileID: 8465612174605470249, guid: 7729770e31893d240bdd257efff1025b, type: 3}
+  plantState4:
+  - {fileID: 0}
+  - {fileID: 2867918698610226795, guid: ddf6838037afb6d468534023c2aa325a, type: 3}
+  plantState5:
+  - {fileID: 0}
+  - {fileID: 0}
+  plantMaxState: 0000000004000000

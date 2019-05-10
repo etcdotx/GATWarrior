@@ -17,11 +17,11 @@ namespace GrassBending {
         public static void AddBender(IGrassBend bender) {
             if (!m_benders.Add(bender)) return;
 
-            Debug.Log("x");
+            //Debug.Log("x");
             var t_sortedBender = m_benders.OrderBy(b => b.m_priority).ToList();
             m_benders.Clear();  
             m_benders.UnionWith(t_sortedBender);
-            Debug.Log(m_benders.Add(bender));
+            //Debug.Log(m_benders.Add(bender));
         }
 
         public static void RemoveBender(IGrassBend bender) => m_benders.Remove(bender);

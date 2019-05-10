@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5499832610801760753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5499832610801760752}
+  - component: {fileID: 5499832610801760759}
+  m_Layer: 0
+  m_Name: GameDataBase
+  m_TagString: GameDataBase
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5499832610801760752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5499832610801760753}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.6472168, y: 1.8479614, z: 6.052081}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5499832610801760759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5499832610801760753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce49f0010bca44b45b0f18e2de35ab09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mms: {fileID: 0}
+  saveSlot: 0
+  saveSlotExist: 010000
+  genderType:
+  - {fileID: 1025940100011468, guid: 7008da15d319181429dad0099f7fa8cf, type: 3}
+  - {fileID: 1016041416422864, guid: e781ed9fdf776f343a2b7862f3f9767e, type: 3}
+  skinColor:
+  - serializedVersion: 2
+    rgba: 16744192
+  - serializedVersion: 2
+    rgba: 12517120
+  - serializedVersion: 2
+    rgba: 5961471
+  - serializedVersion: 2
+    rgba: 16777215
+  - serializedVersion: 2
+    rgba: 0
+  - serializedVersion: 2
+    rgba: 6254079
+  maleHairType:
+  - {fileID: 1520985881955706, guid: 4e617b629b70fbd49aedd73f4ff353d7, type: 3}
+  - {fileID: 1959848540274536, guid: 41ec68f708d50144da00c14c85ee3e11, type: 3}
+  femaleHairType:
+  - {fileID: 1040662509914598, guid: 6719959eea1925443ad9cd1de34c8938, type: 3}
+  - {fileID: 1576377626584240, guid: 7ab0d5057687a6f4881c2a593d4935a7, type: 3}
+  hairColor:
+  - serializedVersion: 2
+    rgba: 16753926
+  - serializedVersion: 2
+    rgba: 2634495
+  - serializedVersion: 2
+    rgba: 45055
+  - serializedVersion: 2
+    rgba: 11075334
+  - serializedVersion: 2
+    rgba: 16777215
+  - serializedVersion: 2
+    rgba: 0
+  - serializedVersion: 2
+    rgba: 14616300
+  colQuestList:
+  - {fileID: 11400000, guid: 15c2d8974613c6d46b702efb8ea7e4bc, type: 2}
+  - {fileID: 11400000, guid: 0a86952b5c375944c832717a0da99aac, type: 2}
+  - {fileID: 11400000, guid: 151ad1379bfbdaf4d8c6c74fc8d89aac, type: 2}
+  itemList:
+  - {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
+  - {fileID: 11400000, guid: 335ca529d5ec8284f9ae0f17520c6f00, type: 2}
+  - {fileID: 11400000, guid: f1dd20cedd3215d4990f98137f2f8a25, type: 2}
+  - {fileID: 11400000, guid: 7cde836477f30fc40b88dc667c21f37b, type: 2}
+  - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}
+  - {fileID: 11400000, guid: 554c187a152e170498e49db16bf06b28, type: 2}
+  - {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
+  usableItem: []
+  plantItem: []

@@ -8,6 +8,7 @@ public class GameMenuManager : MonoBehaviour
     public Inventory inventory;
     public Quest quest;
     public InventoryBox inventoryBox;
+    public Shop shop;
     public PlayerData playerData;
     public InputSetup inputSetup;
 
@@ -26,6 +27,7 @@ public class GameMenuManager : MonoBehaviour
     public Color32 selectedColor;
     public GameObject[] menuPointer;
     public GameObject[] itemBoxPointer;
+    public GameObject[] shopPointer;
 
     public void Start()
     {
@@ -34,6 +36,7 @@ public class GameMenuManager : MonoBehaviour
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         quest = GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
+        shop = GameObject.FindGameObjectWithTag("Shop").GetComponent<Shop>();
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         pointerInputHold = false;
         buttonInputHold = false;
@@ -49,9 +52,10 @@ public class GameMenuManager : MonoBehaviour
     private void Update()
     {
         //press start
-        OpenCloseMenu();
+        if(!shop.inShop)
+            OpenCloseMenu();
 
-        if (GameStatus.IsPaused == true && isOpen == true)
+        if ((GameStatus.IsPaused && isOpen) || shop.inShop)
         {
             GetInputAxis();
             SelectMenu();
@@ -61,7 +65,7 @@ public class GameMenuManager : MonoBehaviour
     }
 
     void OpenCloseMenu() {
-        if (GameStatus.isTalking == false && cantOpenMenu == false)
+        if (!GameStatus.isTalking && !cantOpenMenu)
         {
             if (Input.GetKeyDown(inputSetup.openGameMenu))
             {
@@ -92,7 +96,8 @@ public class GameMenuManager : MonoBehaviour
     void PointerInput() {
         if (pointerInputHold == false)
         {
-            if ((inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == false && inventoryBox.isSettingQuantity == false)
+            if ((inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1) 
+                && !inventory.isSettingQuantity && !inventoryBox.isSettingQuantity)
             {
                 StartCoroutine(PointerInputHold());
                 ApplyNavigation();
@@ -101,25 +106,19 @@ public class GameMenuManager : MonoBehaviour
             else if ((inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == true)
             {
                 StartCoroutine(PointerInputHold());
-                if (inputAxis.x == 1)
+                if (inventory.isSettingQuantity)
                 {
-                    inventory.IncreaseQuantityToPut();
+                    if (inputAxis.x == 1)
+                        inventory.IncreaseQuantityToPut();
+                    if (inputAxis.x == -1)
+                        inventory.DecreaseQuantityToPut();
                 }
-                if (inputAxis.x == -1)
+                else if (inventoryBox.isSettingQuantity)
                 {
-                    inventory.DecreaseQuantityToPut();
-                }
-            }
-            else if ((inputAxis.x == 1 || inputAxis.x == -1) && inventoryBox.isSettingQuantity == true)
-            {
-                StartCoroutine(PointerInputHold());
-                if (inputAxis.x == 1)
-                {
-                    inventoryBox.IncreaseQuantityToPut();
-                }
-                if (inputAxis.x == -1)
-                {
-                    inventoryBox.DecreaseQuantityToPut();
+                    if (inputAxis.x == 1)
+                        inventoryBox.IncreaseQuantityToPut();
+                    if (inputAxis.x == -1)
+                        inventoryBox.DecreaseQuantityToPut();
                 }
             }
         }
@@ -245,70 +244,79 @@ public class GameMenuManager : MonoBehaviour
 
     void SelectMenu()
     {
-        if (inventoryBox.isItemBoxOpened == false && inventory.isSwapping==false )
+        if (shop.inShop)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
-                if (menuNumber < menuPointer.Length - 1)
-                {
+                if (menuNumber < shopPointer.Length - 1)
                     menuNumber++;
-                }
-                ResetPointer();
+                ResetPointer(shopPointer);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
-                {
                     menuNumber--;
-                }
-                ResetPointer();
+                ResetPointer(shopPointer);
             }
         }
-        else if (inventoryBox.isItemBoxOpened == true && inventory.isSwapping == false && inventoryBox.isSwapping == false &&
-            inventory.isSettingQuantity== false && inventoryBox.isSettingQuantity == false)
-        {
-            if (Input.GetKeyDown(KeyCode.Joystick1Button5))
+        else {
+            if (inventoryBox.isItemBoxOpened == false && inventory.isSwapping == false)
             {
-                if (menuNumber < itemBoxPointer.Length - 1)
+                if (Input.GetKeyDown(KeyCode.Joystick1Button5))
                 {
-                    menuNumber++;
+                    if (menuNumber < menuPointer.Length - 1)
+                        menuNumber++;
+                    ResetPointer(menuPointer);
                 }
-                ResetPointer();
+                if (Input.GetKeyDown(KeyCode.Joystick1Button4))
+                {
+                    if (menuNumber > 0)
+                        menuNumber--;
+                    ResetPointer(menuPointer);
+                }
             }
-            if (Input.GetKeyDown(KeyCode.Joystick1Button4))
+            else if (inventoryBox.isItemBoxOpened && !inventory.isSwapping && !inventoryBox.isSwapping &&
+                !inventory.isSettingQuantity && !inventoryBox.isSettingQuantity)
             {
-                if (menuNumber > 0)
+                if (Input.GetKeyDown(KeyCode.Joystick1Button5))
                 {
-                    menuNumber--;
+                    if (menuNumber < itemBoxPointer.Length - 1)
+                        menuNumber++;
+                    ResetPointer(itemBoxPointer);
                 }
-                ResetPointer();
+                if (Input.GetKeyDown(KeyCode.Joystick1Button4))
+                {
+                    if (menuNumber > 0)
+                        menuNumber--;
+                    ResetPointer(itemBoxPointer);
+                }
             }
         }
     }
 
     void ApplyNavigation()
     {
-        if (inventoryBox.isItemBoxOpened == false)
+        if (shop.inShop)
         {
             if (menuNumber == 0) //inven
-            {
                 inventory.InventorySelection();
-            }
-            else if (menuNumber == 1) //quest
-            {
-                quest.QuestSelection();
-            }
-        }
-        else
-        {
-            if (menuNumber == 0) //inven
-            {
-                inventory.InventorySelection();
-            }
             else if (menuNumber == 1) //itembox
+                shop.ShopSelection();
+        }
+        else {
+            if (!inventoryBox.isItemBoxOpened)
             {
-                //itembox selection
-                inventoryBox.InventoryBoxSelection();
+                if (menuNumber == 0) //inven
+                    inventory.InventorySelection();
+                else if (menuNumber == 1) //quest
+                    quest.QuestSelection();
+            }
+            else if (inventoryBox.isItemBoxOpened)
+            {
+                if (menuNumber == 0) //inven
+                    inventory.InventorySelection();
+                else if (menuNumber == 1) //itembox
+                    inventoryBox.InventoryBoxSelection();
             }
         }
     }
@@ -331,29 +339,21 @@ public class GameMenuManager : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
         buttonInputHold = false;
     }
-    public void ResetPointer()
+
+    public void ResetPointer(GameObject[] pointer)
     {
-        if (inventoryBox.isItemBoxOpened == false)
+        for (int i = 0; i < pointer.Length; i++)
         {
-            for (int i = 0; i < menuPointer.Length; i++)
-            {
-                menuPointer[i].SetActive(false);
-            }
-            menuPointer[menuNumber].SetActive(true);
+            pointer[i].SetActive(false);
         }
-        else
-        {
-            for (int i = 0; i < itemBoxPointer.Length; i++)
-            {
-                itemBoxPointer[i].SetActive(false);
-            }
-            itemBoxPointer[menuNumber].SetActive(true);
-        }
+        pointer[menuNumber].SetActive(true);
     }
     public void ResetMenu()
     {
         menuNumber = 0;
-        ResetPointer();
+        ResetPointer(menuPointer);
+        ResetPointer(shopPointer);
+        ResetPointer(itemBoxPointer);
 
         //reset inventory pointer
         inventory.inventoryColumnIndex = 0;

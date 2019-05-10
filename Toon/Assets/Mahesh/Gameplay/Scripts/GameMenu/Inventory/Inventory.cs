@@ -131,8 +131,8 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(inputSetup.select) && isSwapping == false)
         {
             invenSwap1 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
-            invenSwap1.gameObject.GetComponent<Image>().color = gameMenuManager.selectedColor;
-            invenSwap1.isSelected = true;
+            //invenSwap1.GetComponent<Image>().color = gameMenuManager.selectedColor;
+            invenSwap1.selectIndicator.SetActive(true);
             isSwapping = true;
             StartCoroutine(gameMenuManager.ButtonInputHold());
         }
@@ -150,32 +150,24 @@ public class Inventory : MonoBehaviour
 
     public void ResetInventorySwap()
     {
-        invenSwap1.isSelected = false;
-        invenSwap1.gameObject.GetComponent<Image>().color = gameMenuManager.normalColor;
+        invenSwap1.selectIndicator.SetActive(false);
+        invenSwap2.selectIndicator.SetActive(false);
         isSwapping = false;
         StartCoroutine(gameMenuManager.ButtonInputHold());
+        MarkInventory();
     }
 
     public void MarkInventory()
     {
-        try
+        for (int i = 0; i < inventoryRow; i++)
         {
-            for (int i = 0; i < inventoryRow; i++)
+            for (int j = 0; j < inventoryColumn; j++)
             {
-                for (int j = 0; j < inventoryColumn; j++)
-                {
-                    if (inventoryPos[i, j].GetComponent<InventoryIndicator>().isSelected == false)
-                    {
-                        inventoryPos[i, j].GetComponent<Image>().color = gameMenuManager.normalColor;
-                    }
-                }
-            }
-            if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().isSelected == false)
-            {
-                inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<Image>().color = gameMenuManager.markColor;
+                inventoryPos[i, j].GetComponent<InventoryIndicator>().markIndicator.SetActive(false);
             }
         }
-        catch { }
+
+        inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().markIndicator.SetActive(true);
     }
 
     public void PutInventory()
@@ -251,8 +243,8 @@ public class Inventory : MonoBehaviour
 
         if (isItemExist == false)
         {
-            Item newItemIn = new Item(newItem.id, newItem.imagePath, newItem.name, newItem.description,
-                newItem.isUsable, newItem.isASingleTool, newItem.itemType);
+            Item newItemIn = new Item(newItem.id, newItem.itemImage, newItem.itemName, newItem.description,
+                newItem.isUsable, newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
             if (newItem.itemType != null)
                 if (newItem.itemType.ToLower().Equals("plant".ToLower()))
                     newItemIn.plantID = newItem.plantID;
