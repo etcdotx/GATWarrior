@@ -16,9 +16,6 @@ public class MonsterStatus : MonoBehaviour
     public Collider col;
     public NavMeshAgent agent;
 
-    [Header("Condition")]
-    public bool isAttacking=false;
-
     [Header("Setup")]
     public int enemyID;
     public float maxHp;
@@ -70,7 +67,8 @@ public class MonsterStatus : MonoBehaviour
             isDamaged = false;
             playerAttack.Clear();
         }
-        if (isAttacking == false && monsterAttack.isAttacking==false && monsterMovement.playerOnSight == true && (monsterMovement.awareType == true || monsterMovement.inCombat == true))
+        if (!monsterAttack.isAttacking && monsterMovement.playerOnSight
+            && (monsterMovement.awareType || monsterMovement.inCombat))
         {
             StartCoroutine(Attacking());
         }
@@ -109,11 +107,10 @@ public class MonsterStatus : MonoBehaviour
 
     IEnumerator Attacking()
     {
-        int ran = Random.Range(6, 8);
-        yield return new WaitForSeconds(ran);
-        isAttacking = true;
+        int wait = Random.Range(6, 8);
+        yield return new WaitForSeconds(wait);
+        Debug.Log("attack!");
         monsterAttack.isAttacking = true;
-        isAttacking = false;
         StopAllCoroutines();
     }
 
@@ -122,16 +119,12 @@ public class MonsterStatus : MonoBehaviour
         gameObject.tag = "Untagged";
         monsterMovement.StopAllCoroutines();
         monsterAttack.StopAllCoroutines();
-        //agent.enabled = true;
         agent.isStopped = true;
         monsterMovement.wanderingType = false;
-        //col.isTrigger = true;
         animator.SetBool("isAttacked", false);
         animator.SetBool("isDead", true);
         yield return new WaitForSeconds(dieTime);
-        rigid.velocity = new Vector3(0, 0, 0);
         rigid.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
-        //col.isTrigger = false;
         interactable.isInteractable = true;
         StartCoroutine(DestroyThis());
     }
@@ -139,11 +132,9 @@ public class MonsterStatus : MonoBehaviour
     public bool CheckForce(int attackNum) {
         if (attackNum == 3)
         {
-            //monsterMovement.StopAllCoroutines();
-            //monsterMovement.StartCoroutine(monsterMovement.Falling());
-            Vector3 playerForce = new Vector3(0, flyForce, 0) + player.transform.forward*force;
-            rigid.AddForce(playerForce, ForceMode.Acceleration);
-            Debug.Log("hard hit");
+            transform.LookAt(player.transform);
+            monsterMovement.StopAllCoroutines();
+            monsterMovement.StartCoroutine(monsterMovement.Falling());
             return true;
         }
         return false;

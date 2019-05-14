@@ -18,6 +18,7 @@ public class Dialogue : MonoBehaviour
     public List<string> dialog = new List<string>();
     public List<CollectionQuest> colQuestList = new List<CollectionQuest>();
     public List<string> interactDialogList = new List<string>();
+    public bool isTalking;
     public bool inputHold;
     public bool haveDialogOption;
     public bool isAQuestDialog;
@@ -37,7 +38,7 @@ public class Dialogue : MonoBehaviour
 
     [Header("Input")]
     public Vector3 inputAxis;
-    public int nonDialogueIndex;
+    public int nonQuestIndex;
     public int dialogueOptionIndex;
     public int dialogueOptionMaxIndex;
 
@@ -60,15 +61,16 @@ public class Dialogue : MonoBehaviour
 
         dialogueOptionView.SetActive(false);
         dialogueText.gameObject.SetActive(false);
+        isTalking = false;
         haveDialogOption = false;
         isAQuestDialog = false;
-        nonDialogueIndex = 0;
+        nonQuestIndex = 0;
     }
 
     public void Update()
     {
         GetInputAxis();
-        if (GameStatus.isTalking == true && inputHold == false)
+        if (inputHold == false && isTalking)
         {
             if (haveDialogOption == true)
             {
@@ -105,7 +107,7 @@ public class Dialogue : MonoBehaviour
             StartCoroutine(InputHold());
             if (dialNum == dialog.Count - 1)
                 interactText.text = "End";
-            else
+            else if(dialNum<dialog.Count-1)
                 interactText.text = "Continue";
         }
     }
@@ -165,12 +167,18 @@ public class Dialogue : MonoBehaviour
                     shop.OpenShop();
                 }
             }
+            else {
+                dialog = interactDialogList;
+                dialogueText.text = dialog[dialNum];
+                dialogueOptionView.SetActive(false);
+                haveDialogOption = false;
+            }
         }
     }
 
     void SelectDialogue()
     {
-        if (dialogueOptionIndex <= nonDialogueIndex-1)
+        if (dialogueOptionIndex <= nonQuestIndex-1)
         {
             isAQuestDialog = false;
         }
@@ -271,17 +279,17 @@ public class Dialogue : MonoBehaviour
 
         //for normal dialogue
         Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform);
-        dialogueOptionContent.transform.GetChild(nonDialogueIndex).GetComponent<DialogueOption>().optionText.text = "Talk";
+        dialogueOptionContent.transform.GetChild(nonQuestIndex).GetComponent<DialogueOption>().optionText.text = "Talk";
         index++;
-        nonDialogueIndex++;
+        nonQuestIndex++;
         //for shop
 
         if (target.isAShop == true)
         {
             Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform);
-            dialogueOptionContent.transform.GetChild(nonDialogueIndex).GetComponent<DialogueOption>().optionText.text = "Buy";
+            dialogueOptionContent.transform.GetChild(nonQuestIndex).GetComponent<DialogueOption>().optionText.text = "Buy";
             index++;
-            nonDialogueIndex++;
+            nonQuestIndex++;
             Debug.Log("in");
         }
 
@@ -292,7 +300,7 @@ public class Dialogue : MonoBehaviour
             index++;
         }
 
-        for (int i = nonDialogueIndex; i < dialogueOptionContent.transform.childCount; i++)
+        for (int i = nonQuestIndex; i < dialogueOptionContent.transform.childCount; i++)
         {
             dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().optionText.text = colQuestList[cqIndex].title;
             dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().questID = colQuestList[cqIndex].id;
@@ -394,21 +402,24 @@ public class Dialogue : MonoBehaviour
     }
     public void EndDialog()
     {
-        //quest.ActivateQuest();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        CharacterMovement cm = player.GetComponent<CharacterMovement>();
+        cm.canMove = true;
+        isTalking = false;
+
         DestroyOption();
         ClearList();
         dialogueButton.SetActive(false);
         interactText.gameObject.SetActive(false);
         dialogueText.gameObject.SetActive(false);
         //mereset class ini
-        GameStatus.isTalking = false;
         InputHolder.isInputHolded = true;
     }
     void ClearList()
     {
         isAQuestDialog = false;
         dialNum = 0;
-        nonDialogueIndex = 0;
+        nonQuestIndex = 0;
         dialogueOptionIndex = 0;
         dialogueOptionMaxIndex = 0;
         dialog.Clear();

@@ -9,18 +9,26 @@ public class MonsterAttack : MonoBehaviour
     public MonsterMovement monsterMovement;
     public NavMeshAgent agent;
 
-    public int maxAttackNum = 1;
+    public int maxAttackNum;
+    public int attackNum;
     public float damage;
     public bool isAttacking = false;
-    public int attackNum;
 
     public Rigidbody rigid;
     public float speed;
+
+    public List<int> attackSuccess = new List<int>();
 
     private void Start()
     {
         monsterStatus = GetComponent<MonsterStatus>();
         monsterMovement = GetComponent<MonsterMovement>();
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    public void Update()
+    {
+        if (attackSuccess.Count != 0 && attackNum==0)
+            attackSuccess.Clear();
     }
 }

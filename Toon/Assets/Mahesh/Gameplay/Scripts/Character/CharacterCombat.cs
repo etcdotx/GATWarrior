@@ -42,7 +42,7 @@ public class CharacterCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (combatMode == true && characterMovement.isRolling == false)
+        if (combatMode && characterMovement.canMove)
         {
             if (usableItem.isSelectingItem == false)
             {

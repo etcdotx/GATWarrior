@@ -7,6 +7,7 @@ public class CharacterInteraction : MonoBehaviour
 {
     public PlayerData playerData;
     public Animator animator;
+    public CharacterMovement cm;
 
     public Talk talk;
     public Collect collect;
@@ -29,6 +30,7 @@ public class CharacterInteraction : MonoBehaviour
     void Start()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        cm = GetComponent<CharacterMovement>();
         animator = GetComponent<Animator>();
         talk = gameObject.GetComponent<Talk>();
         collect = gameObject.GetComponent<Collect>();
@@ -47,7 +49,7 @@ public class CharacterInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (GameStatus.IsPaused == false && GameStatus.isTalking == false && InputHolder.isInputHolded==false)
+        if (GameStatus.IsPaused == false && dialogue.isTalking == false && InputHolder.isInputHolded==false)
         {
             InteractionRayCasting();
         }
@@ -82,9 +84,10 @@ public class CharacterInteraction : MonoBehaviour
                     //jika object tersebut bisa berbicara
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking == true)
                     {
-                        GameStatus.isTalking = true;
+                        cm.canMove = false;
                         animator.SetBool("isWalk", false);
                         talk.TalkToObject(interactable);
+                        Debug.Log("ngobrol");
                     }
                     //jika object tersebut bisa dimasukkan kedalam koleksi
                     else if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable == true)

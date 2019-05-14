@@ -14,9 +14,6 @@ public class WeaponStatus : MonoBehaviour
     public GameObject hitIndicatorPrefab;
     public GameObject hitIndicatorLocation;
 
-    [Header("Force setiap count attack")]
-    public float[] force;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -35,46 +32,17 @@ public class WeaponStatus : MonoBehaviour
         attackDamage = weaponDetail.damage;
     }
 
-    private void Update()
-    {
-        if (characterCombat.isAttacking == true)
-        {
-            AttackBehaviour();
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Monster"))
         {
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
             monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
-            //Debug.Log("in cold");
+            Debug.Log(other.name + " damaged");
         }
     }
 
     public void HitSuccessful() {
         Instantiate(hitIndicatorPrefab, hitIndicatorLocation.transform.position, Quaternion.identity, null);
-    }
-
-    public void AttackBehaviour()
-    {
-        //if (boxCol.enabled == true)
-        //{
-        //    Collider[] cols = Physics.OverlapBox(boxCol.bounds.center, boxCol.bounds.extents, boxCol.transform.rotation, LayerMask.GetMask("Monster"));
-
-        //    foreach (Collider c in cols)
-        //    {
-        //        boxCol.enabled = false;
-        //        MonsterStatus monsterStatus = c.gameObject.GetComponent<MonsterStatus>();
-        //        monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
-        //        Debug.Log("in cols");
-        //    }
-        //}
-
-        if (attackCount == 1 || attackCount == 2 || attackCount == 3)
-        {
-            player.transform.position += player.transform.forward * force[attackCount] * Time.deltaTime;
-        }
     }
 }

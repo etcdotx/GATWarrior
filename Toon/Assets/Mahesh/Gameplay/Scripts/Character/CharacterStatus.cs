@@ -10,8 +10,10 @@ public class CharacterStatus : MonoBehaviour
 
     [Header("Player Status")]
     public string playerName;
-
     public Animator anim;
+
+    public List<MonsterAttack> monsterAttack = new List<MonsterAttack>();
+    public bool isDamaged;
 
     // Start is called before the first frame update
     void Start()
@@ -21,17 +23,16 @@ public class CharacterStatus : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Damaged(float dmg)
     {
         anim.SetTrigger("attacked");
         characterMovement.currentSpeed = 0;
         playerData.curHealth -= dmg;
         playerData.RefreshHp();
+    }
+
+    public void Blocked(float dmg)
+    {
+        anim.SetTrigger("blocking");
     }
 }

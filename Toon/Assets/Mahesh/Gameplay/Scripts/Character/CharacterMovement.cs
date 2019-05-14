@@ -14,7 +14,6 @@ public class CharacterMovement : MonoBehaviour
     public float rotateSpeed;
     public float lockRotationSpeed;
     public bool lockWalk;
-    public bool isRolling;
 
     public Vector3 inputAxis;
     public Quaternion targetRotation;
@@ -29,15 +28,13 @@ public class CharacterMovement : MonoBehaviour
     public float defaultTimeZeroToMax=1f;
     public float runTimeZeroToMax = 2.5f;
 
-    [Header("Rolling")]
-    public float rollForce;
-
     [Header("Movement Logic")]
     public float curAng;
     public Vector2 curVecMovement;
     public Vector2 overVecMovement;
 
     public float test;
+    public bool canMove;
 
     // Use this for initialization
     void Start()
@@ -45,7 +42,6 @@ public class CharacterMovement : MonoBehaviour
         GameStatus.ResumeMove();
         characterCombat = GetComponent<CharacterCombat>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        isRolling = false;
 
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         cameraMovement = mainCamera.GetComponent<CameraMovement>();
@@ -63,8 +59,7 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameStatus.isTalking == false && InputHolder.isInputHolded == false
-            && GameStatus.CanMove == true && characterCombat.isAttacking == false && isRolling==false)//
+        if (!InputHolder.isInputHolded && GameStatus.CanMove && !characterCombat.isAttacking && canMove)//
         {
             GetInputAxis();
             if (characterCombat.isShielding == true && cameraMovement.isLocking == true && cameraMovement.monsterTarget!=null)
@@ -102,11 +97,6 @@ public class CharacterMovement : MonoBehaviour
             {
                 Roll();
             }
-        }
-
-        if (isRolling == true)
-        {
-            Rolling();
         }
     }
 
@@ -241,7 +231,16 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    void Rolling() {
-        transform.position += transform.forward * rollForce * Time.deltaTime;
+    public IEnumerator BlockFail() {
+        canMove = false;
+        yield return new WaitForSeconds(1);
+        canMove = true;
+    }
+    
+    public IEnumerator BlockSuccess()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(0.3f);
+        canMove = true;
     }
 }

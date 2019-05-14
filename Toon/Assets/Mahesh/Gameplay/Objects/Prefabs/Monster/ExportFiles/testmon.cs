@@ -18,25 +18,17 @@ public class testmon : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            anim.SetTrigger("mundur");
+            anim.SetTrigger("attacked");
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            anim.SetTrigger("mental");
+            anim.SetTrigger("fall");
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            anim.SetTrigger("serang");
-            totalserang = 3;
+            anim.SetTrigger("attack");
+            //totalserang = 3;
             //totalserang = Random.Range()
-        }
-    }
-
-    void checkSerang() {
-        if (totalserang != 0)
-        {
-            anim.SetTrigger("serang");
-            totalserang--;
         }
     }
 }

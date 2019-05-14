@@ -158,7 +158,7 @@ public class PlayerData : MonoBehaviour {
                 //Modify
                 cm.player = character;
                 character.GetComponent<Rigidbody>().isKinematic = false;
-                character.transform.localScale = startGame.characterScale;
+                //character.transform.localScale = startGame.characterScale;
             }
             catch {
                 Debug.Log("There is no camera or a character or a start game script");

@@ -20,6 +20,9 @@ public class SphereMonsterRangedAttack : MonoBehaviour
 
     public GameObject sphereBall;
     public Transform spawnPos;
+
+    public bool attacking;
+
     private void Start()
     {
         monsterStatus = GetComponent<MonsterStatus>();
@@ -29,13 +32,20 @@ public class SphereMonsterRangedAttack : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         rigid = GetComponent<Rigidbody>();
+        attacking = false;
     }
 
     private void Update()
     {
         if (monsterStatus.hp > 0)
-            if (monsterAttack.isAttacking == true && monsterMovement.isInterrupted == false)
+            if (monsterAttack.isAttacking && !monsterMovement.isInterrupted 
+                && !monsterMovement.isFalling && !attacking)
                 StartCoroutine(Attacking(1));
+
+        if (monsterMovement.isInterrupted || monsterMovement.isFalling)
+        {
+            StopAllCoroutines();
+        }
     }
 
     public void Attack(int num) {
@@ -48,15 +58,13 @@ public class SphereMonsterRangedAttack : MonoBehaviour
 
     public IEnumerator Attacking(int num)
     {
+        attacking = true;
         agent.isStopped = true;
-        //agent.enabled = false;
-        monsterMovement.StopAllCoroutines();
         Attack(num);
-        yield return new WaitForSeconds(1f);
-        //agent.enabled = true;
+        yield return new WaitForSeconds(2f);
         agent.isStopped = false;
         agent.ResetPath();
         rigid.velocity = new Vector3(0, 0, 0);
-        StopAllCoroutines();
+        attacking = false;
     }
 }

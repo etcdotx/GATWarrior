@@ -5,37 +5,39 @@ using UnityEngine.AI;
 
 public class SphereMonsterAttack : MonoBehaviour
 {
+    public Animator anim;
     public MonsterStatus monsterStatus;
     public MonsterMovement monsterMovement;
     public MonsterAttack monsterAttack;
     public NavMeshAgent agent;
-
-    public int maxAttackNum = 1;
+    
+    public int bonusAttack;
     public float damage;
-    public int attackNum;
-
-    public Rigidbody rigid;
-    public float speed;
-    public float flyForce;
-
     public BoxCollider hitBox;
+
+    public bool canAttack;
     private void Start()
     {
+        anim = GetComponent<Animator>();
         monsterStatus = GetComponent<MonsterStatus>();
         monsterMovement = GetComponent<MonsterMovement>();
         monsterAttack = GetComponent<MonsterAttack>();
 
 
         agent = GetComponent<NavMeshAgent>();
-        rigid = GetComponent<Rigidbody>();
         hitBox.enabled = false;
+        canAttack = true;
     }
 
     private void Update()
     {
         if (monsterStatus.hp > 0)
-            if (monsterAttack.isAttacking == true && monsterMovement.isInterrupted == false)
-                StartCoroutine(Attacking(1));
+            if (monsterAttack.isAttacking && canAttack && !monsterMovement.isInterrupted && !monsterMovement.isFalling)
+            {
+                monsterAttack.attackNum = Random.Range(1, monsterAttack.maxAttackNum);
+                Attack(monsterAttack.attackNum);
+                canAttack = false;
+            }
 
         AttackBehaviour();
     }
@@ -43,57 +45,66 @@ public class SphereMonsterAttack : MonoBehaviour
     public void Attack(int num) {
         if (num == 1)
         {
-            monsterAttack.isAttacking = false;
-            Vector3 playerForce = new Vector3(0, flyForce, 0) + transform.forward * speed;
-            rigid.AddForce(playerForce, ForceMode.Acceleration);
+            agent.isStopped = true;
+            anim.SetTrigger("attack");
+            bonusAttack = Random.Range(0, 2);
         }
-    }
-
-    public IEnumerator Attacking(int num)
-    {
-        hitBox.enabled = true;
-        agent.isStopped = true;
-        //agent.enabled = false;
-        monsterMovement.StopAllCoroutines();
-        Attack(num);
-        yield return new WaitForSeconds(1f);
-        //agent.enabled = true;
-        agent.isStopped = false;
-        agent.ResetPath();
-        rigid.velocity = new Vector3(0, 0, 0);
-        StopAllCoroutines();
-        hitBox.enabled = false;
     }
 
     public void AttackBehaviour()
     {
-        bool blocked = false;
-        if (hitBox.enabled == true)
+        if (hitBox.enabled)
         {
-            Debug.Log("attack!");
-
+            //blocked
             Collider[] col = Physics.OverlapBox(hitBox.bounds.center, hitBox.bounds.extents, hitBox.transform.rotation, LayerMask.GetMask("Shield"));
-
             foreach (Collider c in col)
             {
-                Debug.Log(c.transform.name);
-                hitBox.enabled = false;
-                blocked = true;
-                Debug.Log(c.transform.name + " is blocking");
-            }
-
-            if (blocked == false)
-            {
-                Collider[] cols = Physics.OverlapBox(hitBox.bounds.center, hitBox.bounds.extents, hitBox.transform.rotation, LayerMask.GetMask("Player"));
-
-                foreach (Collider c in cols)
+                for (int i = 0; i < monsterAttack.attackSuccess.Count; i++)
                 {
-                    hitBox.enabled = false;
-                    CharacterStatus characterStatus = c.GetComponent<CharacterStatus>();
-                    characterStatus.Damaged(damage);
-                    Debug.Log(c.transform.name + " Damaged");
+                    if (monsterAttack.attackSuccess[i] == monsterAttack.attackNum)
+                    {
+                        return;
+                    }
                 }
+                monsterAttack.attackSuccess.Add(monsterAttack.attackNum);
+                CharacterStatus characterStatus = c.GetComponent<Shield>().characterStatus;
+                characterStatus.Blocked(damage);
             }
+
+            //damaging
+            Collider[] cols = Physics.OverlapBox(hitBox.bounds.center, hitBox.bounds.extents, hitBox.transform.rotation, LayerMask.GetMask("Player"));
+            foreach (Collider c in cols)
+            {
+                for (int i = 0; i < monsterAttack.attackSuccess.Count; i++)
+                {
+                    if (monsterAttack.attackSuccess[i] == monsterAttack.attackNum)
+                    {
+                        return;
+                    }
+                }
+                monsterAttack.attackSuccess.Add(monsterAttack.attackNum);
+                CharacterStatus characterStatus = c.GetComponent<CharacterStatus>();
+                characterStatus.Damaged(damage);
+                Debug.Log(c.transform.name + " Damaged");
+            }
+        }
+    }
+
+    void CheckAttack()
+    {
+        if (bonusAttack > 0)
+        {
+            anim.SetTrigger("attack");
+            monsterAttack.attackNum++;
+            bonusAttack--;
+        }
+        else
+        {
+            monsterAttack.attackNum = 0;
+            monsterAttack.isAttacking = false;
+            agent.isStopped = false;
+            canAttack = true;
+            agent.ResetPath();
         }
     }
 
