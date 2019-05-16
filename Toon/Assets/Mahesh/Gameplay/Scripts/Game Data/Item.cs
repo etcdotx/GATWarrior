@@ -13,6 +13,8 @@ public class Item : ScriptableObject
 
     [Header("Quantity must be 1")]
     public int quantity;
+
+    [Header("Price")]
     public int price;
 
     [Header("If usable, fill the item type")]
@@ -112,6 +114,7 @@ public class Item : ScriptableObject
         PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         if (itemName.ToLower().Equals("potion".ToLower()))
         {
+            quantity--;
             playerData.curHealth += 20;
             playerData.RefreshHp();
             Debug.Log("cur health : " + playerData.curHealth);

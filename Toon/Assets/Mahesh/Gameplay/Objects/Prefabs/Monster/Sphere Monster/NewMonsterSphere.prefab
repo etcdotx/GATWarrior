@@ -131,9 +131,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   player: {fileID: 0}
   playerOnSight: 0
-  maintainDistanceSpeed: 0
   positionGap: 4
-  distance: 0
   fieldOfViewAngle: 180
   rotateSpeed: 0.4
   wanderRadius: 2
@@ -155,7 +153,7 @@ MonoBehaviour:
   canBeInterrupted: 1
   canBeFall: 1
   wanderingType: 1
-  awareType: 1
+  awareType: 0
 --- !u!114 &8997219693739315641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,7 +176,7 @@ MonoBehaviour:
   col: {fileID: 0}
   agent: {fileID: 0}
   enemyID: 1
-  maxHp: 500
+  maxHp: 50
   dieTime: 1
   hp: 0
   playerAttack: 00000000000000000000000000000000000000000000000000000000000000000000000000000000

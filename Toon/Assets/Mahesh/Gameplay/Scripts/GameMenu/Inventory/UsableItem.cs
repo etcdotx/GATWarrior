@@ -8,6 +8,7 @@ public class UsableItem : MonoBehaviour
     public InputSetup inputSetup;
     public GameObject player;
     public CharacterCombat characterCombat;
+    public Inventory inventory;
 
     [Header("Indicator")]
     public GameObject usableItemUI;
@@ -17,14 +18,13 @@ public class UsableItem : MonoBehaviour
 
     [Header("Container")]
     public GameObject[] usableIndicator = new GameObject[3];
-    public GameObject selectedLocation;
 
     [Header("Data")]
     public List<Item> usableItemList = new List<Item>();
-    public List<int> usableItemID = new List<int>();
     public Item selectedItem;
     public bool isItemUsable;
     public bool isSelectingItem;
+    public bool isUsingItem;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +33,7 @@ public class UsableItem : MonoBehaviour
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         player = GameObject.FindGameObjectWithTag("Player");
         characterCombat = player.GetComponent<CharacterCombat>();
+        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
 
         usableItemUI = GameObject.FindGameObjectWithTag("UsableItemUI");
         usableItemView = usableItemUI.transform.Find("UsableItemView").gameObject;
@@ -44,6 +45,7 @@ public class UsableItem : MonoBehaviour
         {
             usableIndicator[i] = usableItemContent.transform.GetChild(i).gameObject;
         }
+        isUsingItem = false;
     }
 
     private void Update()
@@ -69,35 +71,46 @@ public class UsableItem : MonoBehaviour
 
             if (Input.GetKeyDown(inputSetup.useItem) && isItemUsable == true && characterCombat.combatMode==false && isSelectingItem==false)
             {
-                Debug.Log(selectedItem.name + " is used");
-                selectedItem.Use();
+                Debug.Log("useitem");
+                UseItem();
             }
         }
+    }
+
+    public void UseItem()
+    {
+        isUsingItem = true;
+        selectedItem.Use();
+        for (int i = 0; i < inventory.inventoryIndicator.Length; i++)
+        {
+            inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
+        }
+        inventory.RefreshInventory();
     }
 
     public void SlideItem(bool isRight)
     {
         for (int i = 0; i < usableIndicator.Length; i++)
         {
-            for (int j = 0; j < usableItemID.Count; j++)
+            for (int j = 0; j < usableItemList.Count; j++)
             {
-                if (usableIndicator[i].GetComponent<UsableItemIndicator>().itemID == usableItemID[j])
+                if (usableIndicator[i].GetComponent<UsableItemIndicator>().item == usableItemList[j])
                 {
                     if (isRight == true)
                     {
-                        if (j == usableItemID.Count - 1)
-                            usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = usableItemID[0];
+                        if (j == usableItemList.Count - 1)
+                            usableIndicator[i].GetComponent<UsableItemIndicator>().item = usableItemList[0];
                         else
-                            usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = usableItemID[j + 1];
+                            usableIndicator[i].GetComponent<UsableItemIndicator>().item = usableItemList[j + 1];
 
                         usableIndicator[i].GetComponent<UsableItemIndicator>().RefreshUsableItem();
                         break;
                     }
                     else {
                         if (j == 0)
-                            usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = usableItemID[usableItemID.Count - 1];
+                            usableIndicator[i].GetComponent<UsableItemIndicator>().item = usableItemList[usableItemList.Count - 1];
                         else
-                            usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = usableItemID[j - 1];
+                            usableIndicator[i].GetComponent<UsableItemIndicator>().item = usableItemList[j - 1];
 
                         usableIndicator[i].GetComponent<UsableItemIndicator>().RefreshUsableItem();
                         break;
@@ -110,22 +123,14 @@ public class UsableItem : MonoBehaviour
 
     void SelectItem()
     {
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        if (usableItemList.Count > 0)
         {
-            if (playerData.inventoryItem[i].id == usableIndicator[1].GetComponent<UsableItemIndicator>().itemID)
-            {
-                selectedItem = playerData.inventoryItem[i];
-                break;
-            }
-        }
-
-        try
-        {
+            selectedItem = usableIndicator[1].GetComponent<UsableItemIndicator>().item;
             CheckIfItemIsUsable();
-        } catch { }
+        }
     }
     
-    //function ini dipanggil saat nge slide item dan ada trigger
+    //function ini dipanggil saat nge slide item dan juga jika ada trigger
     //misalnya saat memegang plant dekat dengan soil
     public void CheckIfItemIsUsable()
     {
@@ -134,26 +139,14 @@ public class UsableItem : MonoBehaviour
 
     public void GetUsableItem()
     {
-        usableItemList.Clear();
-        usableItemID.Clear();
-        //Debug.Log(playerData.inventoryItem.Count);
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        if (!isUsingItem)
         {
-            bool exist = false;
-            if (playerData.inventoryItem[i].isUsable == true)
+            usableItemList.Clear();
+            for (int i = 0; i < playerData.inventoryItem.Count; i++)
             {
-                for (int j = 0; j < usableItemList.Count; j++)
-                {
-                    if (playerData.inventoryItem[i].id == usableItemList[j].id)
-                    {
-                        exist = true;
-                        break;
-                    }
-                }
-                if (exist == false)
+                if (playerData.inventoryItem[i].isUsable == true)
                 {
                     usableItemList.Add(playerData.inventoryItem[i]);
-                    usableItemID.Add(playerData.inventoryItem[i].id);
                 }
             }
         }
@@ -162,33 +155,34 @@ public class UsableItem : MonoBehaviour
         {
             for (int i = 0; i < usableIndicator.Length; i++)
             {
-                usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = 0;
+                usableIndicator[i].GetComponent<UsableItemIndicator>().item = null;
                 usableIndicator[i].GetComponent<UsableItemIndicator>().RefreshUsableItem();
             }
+            return;
         }
 
         if (usableItemList.Count == 1)
         {
             for (int i = 0; i < usableIndicator.Length; i++)
             {
-                usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = usableItemList[0].id;
+                usableIndicator[i].GetComponent<UsableItemIndicator>().item = usableItemList[0];
                 usableIndicator[i].GetComponent<UsableItemIndicator>().RefreshUsableItem();
             }
         }
         else if (usableItemList.Count == 2)
         {
-            usableIndicator[0].GetComponent<UsableItemIndicator>().itemID = usableItemList[0].id;
+            usableIndicator[0].GetComponent<UsableItemIndicator>().item = usableItemList[0];
             usableIndicator[0].GetComponent<UsableItemIndicator>().RefreshUsableItem();
-            usableIndicator[1].GetComponent<UsableItemIndicator>().itemID = usableItemList[1].id;
+            usableIndicator[1].GetComponent<UsableItemIndicator>().item = usableItemList[1];
             usableIndicator[1].GetComponent<UsableItemIndicator>().RefreshUsableItem();
-            usableIndicator[2].GetComponent<UsableItemIndicator>().itemID = usableItemList[0].id;
+            usableIndicator[2].GetComponent<UsableItemIndicator>().item = usableItemList[0];
             usableIndicator[2].GetComponent<UsableItemIndicator>().RefreshUsableItem();
         }
-        else
+        else if (!isUsingItem)
         {
             for (int i = 0; i < usableItemList.Count; i++)
             {
-                usableIndicator[i].GetComponent<UsableItemIndicator>().itemID = usableItemList[i].id;
+                usableIndicator[i].GetComponent<UsableItemIndicator>().item = usableItemList[i];
                 usableIndicator[i].GetComponent<UsableItemIndicator>().RefreshUsableItem();
                 if (i == usableIndicator.Length - 1)
                 {
@@ -204,6 +198,13 @@ public class UsableItem : MonoBehaviour
         else
         {
             isItemUsable = false;
+        }
+
+        if (!isUsingItem)
+        {
+            selectedItem = usableIndicator[1].GetComponent<UsableItemIndicator>().item;
+            CheckIfItemIsUsable();
+            isUsingItem = false;
         }
     }
 }

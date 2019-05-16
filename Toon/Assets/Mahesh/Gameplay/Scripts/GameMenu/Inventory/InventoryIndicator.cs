@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class InventoryIndicator : MonoBehaviour
 {
     public PlayerData playerData;
+    public UsableItem usableItem;
 
     public int itemID;
+    public Item item;
     public Image itemImage;
 
     public bool isSelected;
@@ -21,81 +23,72 @@ public class InventoryIndicator : MonoBehaviour
         markIndicator.SetActive(false);
     }
 
-    private void Update()
-    {
-        //if (isSelected)
-        //    selectIndicator.SetActive(true);
-        //if(marked)
-        //    markIndicator.SetActive(true);
-    }
-
     public void RefreshInventory()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-
-        if (itemID == 0)
+        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
+        if (item != null)
         {
-            MakeEmpty();
+            if (item.quantity == 0)
+            {
+                playerData.inventoryItem.Remove(item);
+                usableItem.isUsingItem = false;
+                Debug.Log(usableItem.isUsingItem);
+                MakeEmpty();
+            }
+            else
+            {
+                itemImage.sprite = item.itemImage;
+                transform.GetChild(0).GetComponent<Text>().text = item.quantity.ToString();
+                transform.GetChild(0).gameObject.SetActive(true);
+                if (item.isASingleTool)
+                {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
+            }
         }
         else
         {
-            for (int i = 0; i < playerData.inventoryItem.Count; i++)
-            {
-                if (playerData.inventoryItem[i].id == itemID)
-                {
-                    if (playerData.inventoryItem[i].quantity == 0)
-                    {
-                        playerData.inventoryItem.RemoveAt(i);
-                        MakeEmpty();
-                        break;
-                    }
-                    itemImage.sprite = playerData.inventoryItem[i].itemImage;
-                    transform.GetChild(0).GetComponent<Text>().text = playerData.inventoryItem[i].quantity.ToString();
-                    transform.GetChild(0).gameObject.SetActive(true);
-                    if (playerData.inventoryItem[i].isASingleTool == true)
-                    {
-                        transform.GetChild(0).gameObject.SetActive(false);
-                    }
-                    break;
-                }
-            }
+            MakeEmpty();
         }
     }
 
-    public void RefreshItemBox()
+    public void RefreshInventoryBox()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        if (itemID == 0)
+        if (item != null)
         {
-            MakeEmpty();
+            if (item.quantity == 0)
+            {
+                playerData.inventoryBoxItem.Remove(item);
+                MakeEmpty();
+            }
+            else
+            {
+                itemImage.sprite = item.itemImage;
+                transform.GetChild(0).GetComponent<Text>().text = item.quantity.ToString();
+                transform.GetChild(0).gameObject.SetActive(true);
+                if (item.isASingleTool)
+                {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
+            }
         }
         else
         {
-            for (int i = 0; i < playerData.inventoryBoxItem.Count; i++)
-            {
-                if (playerData.inventoryBoxItem[i].id == itemID)
-                {
-                    if (playerData.inventoryBoxItem[i].quantity == 0)
-                    {
-                        playerData.inventoryBoxItem.RemoveAt(i);
-                        MakeEmpty();
-                        break;
-                    }
-                    itemImage.sprite = playerData.inventoryBoxItem[i].itemImage;
-                    transform.GetChild(0).GetComponent<Text>().text = playerData.inventoryBoxItem[i].quantity.ToString();
-                    transform.GetChild(0).gameObject.SetActive(true);
-                    if (playerData.inventoryBoxItem[i].isASingleTool == true)
-                    {
-                        transform.GetChild(0).gameObject.SetActive(false);
-                    }
-                    break;
-                }
-            }
+            MakeEmpty();
         }
     }
 
     public void MakeEmpty()
     {
+        try {
+            Debug.Log(item.itemName + " removed");
+        } catch { }
+        playerData.inventoryItem.Remove(item);
+        if(item!=null && item.isUsable)
+            usableItem.usableItemList.Remove(item);
+        item = null;
         itemID = 0;
         itemImage.sprite = null;
         transform.GetChild(0).GetComponent<Text>().text = 0.ToString();

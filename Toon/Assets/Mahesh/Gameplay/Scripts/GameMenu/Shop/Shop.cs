@@ -82,19 +82,40 @@ public class Shop : MonoBehaviour
     }
 
     void MarkShopSelection() {
-        Debug.Log(shopIndicator[shopRowIndex].itemNameText.text);
+        for (int i = 0; i < shopIndicator.Count; i++)
+        {
+            shopIndicator[i].selectedIndicator.SetActive(false);
+        }
+        //Debug.Log(shopIndicator[shopRowIndex].itemNameText.text);
+        shopIndicator[shopRowIndex].selectedIndicator.SetActive(true);
+
     }
 
-    public void OpenShop() {
+    public void OpenShop()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        CharacterMovement cm = player.GetComponent<CharacterMovement>();
+        cm.canMove = false;
+
         inShop = true;
+        shopIndicator[0].selectedIndicator.SetActive(true);
         playerData.healthIndicator.SetActive(false);
         inventory.inventoryView.SetActive(true);
+        inventory.MarkInventory();
         shopView.SetActive(true);
         GameStatus.PauseGame();
     }
 
     public void CloseShop()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        CharacterMovement cm = player.GetComponent<CharacterMovement>();
+        cm.canMove = true;
+
+        for (int i = 0; i < shopIndicator.Count; i++)
+        {
+            shopIndicator[i].selectedIndicator.SetActive(false);
+        }
         GameStatus.ResumeGame();
         inShop = false;
         playerData.healthIndicator.SetActive(true);

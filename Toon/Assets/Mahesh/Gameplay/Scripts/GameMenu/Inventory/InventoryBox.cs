@@ -214,7 +214,7 @@ public class InventoryBox : MonoBehaviour
     public void SetInitialQuantityToPut()
     {
         bool isItemExist = true;
-        if (inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().itemID == 0)
+        if (inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().item == null)
         {
             Debug.Log("no item");
             isItemExist = false;
@@ -223,12 +223,13 @@ public class InventoryBox : MonoBehaviour
         {
             for (int i = 0; i < playerData.inventoryBoxItem.Count; i++)
             {
-                if (inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().itemID == playerData.inventoryBoxItem[i].id)
+                if (inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().item.id == playerData.inventoryBoxItem[i].id)
                 {
                     temporaryItem = playerData.inventoryBoxItem[i]; //jenis item
                     slider.SetActive(true);
                     inventoryBoxQuantitySlider.minValue = 1;
-                    inventoryBoxQuantitySlider.maxValue = playerData.inventoryBoxItem[i].quantity;
+                    inventoryBoxQuantitySlider.maxValue = temporaryItem.quantity;
+                    Debug.Log("max : " + temporaryItem.quantity);
                     inventoryBoxQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryBoxQuantitySlider.value.ToString();
                     isItemExist = true;
                     isSettingQuantity = true;
@@ -264,10 +265,11 @@ public class InventoryBox : MonoBehaviour
                 newItem.quantity -= quantity;
                 Debug.Log(playerData.inventoryBoxItem[i].quantity);
                 Debug.Log(newItem.quantity);
-                Debug.Log("exist");
+                Debug.Log("exist item in box");
                 break;
             }
         }
+
         if (isItemExist == false)
         {
             Item newItemInBox = new Item(newItem.id, newItem.itemImage, newItem.itemName,
@@ -279,6 +281,7 @@ public class InventoryBox : MonoBehaviour
             newItemInBox.quantity = quantity;
             playerData.inventoryBoxItem.Add(newItemInBox);
             newItem.quantity -= quantity;
+            Debug.Log("new item in box");
         }
 
         //check inventory ke quest
@@ -307,6 +310,7 @@ public class InventoryBox : MonoBehaviour
                     {
                         if (playerData.inventoryBoxItem[j].isOnItemBox == false)
                         {
+                            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().item = playerData.inventoryBoxItem[j];
                             inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().itemID = playerData.inventoryBoxItem[j].id;
                             playerData.inventoryBoxItem[j].isOnItemBox = true;
                             break;
@@ -318,9 +322,8 @@ public class InventoryBox : MonoBehaviour
                     //Debug.Log("There is no item in " + i + " inventory box.");
                 }
             }
-            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().RefreshItemBox();
+            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().RefreshInventoryBox();
         }
         usableItem.GetUsableItem();
-        usableItem.SlideItem(true);
     }
 }

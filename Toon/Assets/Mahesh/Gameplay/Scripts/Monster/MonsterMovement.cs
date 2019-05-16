@@ -28,6 +28,12 @@ public class MonsterMovement : MonoBehaviour
     public float wanderTimer;
     public float wanderTime;
 
+    [Header("Wander Holder")]
+    public bool resetHold;
+    public float wanderHoldTime;
+    public float minWanderHoldTime;
+    public float maxWanderHoldTime;
+
     [Header("Normal Wandering (FILL)")]
     public float minWanderRadius;
     public float maxWanderRadius;
@@ -67,6 +73,7 @@ public class MonsterMovement : MonoBehaviour
         //wander
         float wanderTimer = Random.Range(2, 5);
         wanderTime = wanderTimer;
+        StartCoroutine(WanderHolder());
     }
 
     // Update is called once per frame
@@ -84,16 +91,18 @@ public class MonsterMovement : MonoBehaviour
                         if (distance > positionGap)
                         {
                             agent.SetDestination(player.transform.position);
-                            Debug.Log("in");
+                            //Debug.Log(distance + " > " + positionGap);
                         }
                         else
                         {
-                            Wandering();
+                            if(wanderTime<wanderTimer)
+                                Wandering();
                         }
                     }
                     else
                     {
-                        Wandering();
+                        if (wanderTime < wanderTimer)
+                            Wandering();
                     }
                 }
                 else {
@@ -121,20 +130,36 @@ public class MonsterMovement : MonoBehaviour
 
         if (wanderTime >= wanderTimer)
         {
-            if (playerOnSight == true)
+            if (resetHold)
             {
-                //attack
-                wanderRadius = Random.Range(minAttackWanderRadius, maxAttackWanderRadius);
-                wanderTimer = Random.Range(minAttackWanderTime, maxAttackWanderTime);
+                StartCoroutine(WanderHolder());
             }
-            else {
-                wanderRadius = Random.Range(minWanderRadius, maxWanderRadius);
-                wanderTimer = Random.Range(minWanderTime, maxWanderTime);
-            }
-            Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
-            agent.SetDestination(newPos);
-            wanderTime = 0;
         }
+    }
+
+    IEnumerator WanderHolder()
+    {
+        resetHold = false;
+        agent.isStopped = true;
+        wanderHoldTime = Random.Range(minWanderHoldTime, maxWanderHoldTime);
+        yield return new WaitForSeconds(wanderHoldTime);
+        wanderTime = 0;
+        agent.isStopped = false;
+        resetHold = true;
+
+        if (playerOnSight == true)
+        {
+            wanderRadius = Random.Range(minAttackWanderRadius, maxAttackWanderRadius);
+            wanderTimer = Random.Range(minAttackWanderTime, maxAttackWanderTime);
+        }
+        else
+        {
+            wanderRadius = Random.Range(minWanderRadius, maxWanderRadius);
+            wanderTimer = Random.Range(minWanderTime, maxWanderTime);
+        }
+
+        Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
+        agent.SetDestination(newPos);
     }
 
     public void StopCombat() {

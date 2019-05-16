@@ -18,7 +18,7 @@ MonoBehaviour:
   description: A simple cube
   quantity: 1
   price: 10
-  isUsable: 1
+  isUsable: 0
   isConsumable: 0
   isASingleTool: 0
   itemType: Potion

@@ -9,4 +9,5 @@ public class ShopIndicator : MonoBehaviour
     public Image image;
     public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI priceText;
+    public GameObject selectedIndicator;
 }

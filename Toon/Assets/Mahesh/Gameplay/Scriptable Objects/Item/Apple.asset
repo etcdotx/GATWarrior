@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Apple
   m_EditorClassIdentifier: 
   id: 7
-  itemImage: {fileID: 21300000, guid: 91240f4642588474285964b80ab1b5a6, type: 3}
+  itemImage: {fileID: 21300000, guid: 2403ab77e1e79c642a3d68536a297786, type: 3}
   itemName: Apple
   description: An apple
   quantity: 1

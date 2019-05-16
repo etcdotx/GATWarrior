@@ -20,7 +20,7 @@ public class PlayerData : MonoBehaviour {
     public GameObject[] body;// 0 Gender, 1 Hair
 
     [Header("Player Wealth")]
-    public int money;
+    public int gold;
 
     [Header("Player Status")]
     public string playerName;

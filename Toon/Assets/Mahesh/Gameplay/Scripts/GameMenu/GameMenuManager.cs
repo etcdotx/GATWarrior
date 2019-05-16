@@ -94,16 +94,15 @@ public class GameMenuManager : MonoBehaviour
     }
 
     void PointerInput() {
-        if (pointerInputHold == false)
+        if (!pointerInputHold && 
+            (inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1))
         {
-            if ((inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1) 
-                && !inventory.isSettingQuantity && !inventoryBox.isSettingQuantity)
+            if (!inventory.isSettingQuantity && !inventoryBox.isSettingQuantity)
             {
                 StartCoroutine(PointerInputHold());
                 ApplyNavigation();
             }
-            //set quantity ke item box (put value)
-            else if ((inputAxis.x == 1 || inputAxis.x == -1) && inventory.isSettingQuantity == true)
+            else if (inventory.isSettingQuantity)
             {
                 StartCoroutine(PointerInputHold());
                 if (inventory.isSettingQuantity)
@@ -125,16 +124,16 @@ public class GameMenuManager : MonoBehaviour
     }
 
     void ButtonInput() {
-        if (buttonInputHold == false)
+        if (!buttonInputHold)
         {
-            if (inventoryBox.isItemBoxOpened == false)
-            {
+            if (shop.inShop)
+                ButtonOnShop();
+
+            else if (inventoryBox.isItemBoxOpened == false)
                 ButtonOnStartMenu();
-            }
-            else if(inventoryBox.isItemBoxOpened == true)
-            {
+
+            else if (inventoryBox.isItemBoxOpened == true)
                 ButtonOnInventoryBox();
-            }
         }
     }
 
@@ -143,15 +142,20 @@ public class GameMenuManager : MonoBehaviour
         {
             inventory.InventorySwapping();
         }
-        if (menuNumber == 1)
+        if (menuNumber == 1) // quest
         {
 
         }
     }
 
+    void ButtonOnShop() {
+
+    }
+
     void ButtonOnInventoryBox() {
         if (menuNumber == 0) //inventory
         {
+            Debug.Log("in0");
             if (inventory.isSettingQuantity == false)
             {
                 inventory.InventorySwapping();
@@ -160,6 +164,7 @@ public class GameMenuManager : MonoBehaviour
         }
         if (menuNumber == 1)//itemBox
         {
+            Debug.Log("in1");
             if (inventoryBox.isSettingQuantity == false)
             {
                 inventoryBox.InventoryBoxSwapping();
@@ -213,6 +218,7 @@ public class GameMenuManager : MonoBehaviour
         inventory.inventoryView.SetActive(false);
         quest.questView.SetActive(false);
         isOpen = false;
+        ResetMenu();
         InputHolder.isInputHolded = true;
         GameStatus.ResumeGame();
     }
@@ -220,7 +226,9 @@ public class GameMenuManager : MonoBehaviour
     public void OpenInventoryBoxMenu() {
         playerData.healthIndicator.SetActive(false);
         inventory.inventoryView.SetActive(true);
+        inventory.MarkInventory();
         inventoryBox.inventoryBoxView.SetActive(true);
+        inventoryBox.MarkInventoryBox();
         inventoryBox.isItemBoxOpened = true;
         StartCoroutine("ButtonInputHold");
         isOpen = true;
