@@ -39,6 +39,7 @@ TagManager:
   - Ground
   - Shield
   - Shop
+  - ShopDescription
   layers:
   - Default
   - TransparentFX

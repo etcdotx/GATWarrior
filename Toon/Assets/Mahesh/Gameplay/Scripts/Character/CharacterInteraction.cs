@@ -87,7 +87,6 @@ public class CharacterInteraction : MonoBehaviour
                         cm.canMove = false;
                         animator.SetBool("isWalk", false);
                         talk.TalkToObject(interactable);
-                        Debug.Log("ngobrol");
                     }
                     //jika object tersebut bisa dimasukkan kedalam koleksi
                     else if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable == true)

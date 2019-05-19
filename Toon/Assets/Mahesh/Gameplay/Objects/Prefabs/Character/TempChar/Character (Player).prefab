@@ -240,56 +240,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00044603273, y: 0.0141763855, z: 0.00077311136}
     m_Extent: {x: 0.013533219, y: 0.032563142, z: 0.015561957}
   m_DirtyAABB: 0
---- !u!1 &686105056956862605
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 686105056956959917}
-  - component: {fileID: 686105056949445441}
-  m_Layer: 0
-  m_Name: Char-New
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &686105056956959917
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686105056956862605}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -99.59319, y: -89.84361, z: -202.03236}
-  m_LocalScale: {x: 25.229483, y: 25.229483, z: 25.229483}
-  m_Children: []
-  m_Father: {fileID: 5598119718597822022}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &686105056949445441
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686105056956862605}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d90bb0f95ce1c4447b781039b86142ed, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &686105056956862607
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,7 +902,6 @@ Transform:
   - {fileID: 686105056956959909}
   - {fileID: 686105056956959915}
   - {fileID: 1321442009336932697}
-  - {fileID: 686105056956959917}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -201.133, z: 0}
@@ -1025,7 +974,6 @@ MonoBehaviour:
   rotateSpeed: 6
   lockRotationSpeed: 360
   lockWalk: 0
-  isRolling: 0
   inputAxis: {x: 0, y: 0, z: 0}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   angle: 0
@@ -1036,11 +984,11 @@ MonoBehaviour:
   accelerateRatePerSec: 0
   defaultTimeZeroToMax: 0.5
   runTimeZeroToMax: 2.5
-  rollForce: 20
   curAng: 0
   curVecMovement: {x: 0, y: 0}
   overVecMovement: {x: 0, y: 0}
   test: 0.125
+  canMove: 0
 --- !u!114 &5598119718598056554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1055,6 +1003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
   animator: {fileID: 0}
+  cm: {fileID: 0}
   talk: {fileID: 0}
   collect: {fileID: 0}
   gameMenuManager: {fileID: 0}

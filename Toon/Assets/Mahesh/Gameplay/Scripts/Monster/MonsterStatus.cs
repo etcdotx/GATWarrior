@@ -27,11 +27,7 @@ public class MonsterStatus : MonoBehaviour
     [Header("Damaged")]
     public List<int> playerAttack = new List<int>();
     public bool isDamaged = false;
-    public float force;
-    public float flyForce;
-
-    [Header("GetMonsterScript")]
-    private SphereMonsterStatus sms;
+    public bool isDead;
 
     [Header("Drop rate")]
     public int[] itemID;
@@ -39,10 +35,11 @@ public class MonsterStatus : MonoBehaviour
     public int[] dropTime;
     public int[] itemDropped;
 
-    // Start is called before the first frame update
-    void Start()
+    [Header("Attacking")]
+    public bool canAttack;
+
+    private void Awake()
     {
-        hp = maxHp;
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         monsterMovement = GetComponent<MonsterMovement>();
@@ -52,11 +49,13 @@ public class MonsterStatus : MonoBehaviour
         col = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
         interactable = GetComponent<Interactable>();
+    }
 
-
-        if (enemyID == 1) {
-            sms = GetComponent<SphereMonsterStatus>();
-        }
+    // Start is called before the first frame update
+    void Start()
+    {
+        hp = maxHp;
+        canAttack = true;
     }
 
     // Update is called once per frame
@@ -68,9 +67,13 @@ public class MonsterStatus : MonoBehaviour
             playerAttack.Clear();
         }
         if (!monsterAttack.isAttacking && monsterMovement.playerOnSight
-            && (monsterMovement.awareType || monsterMovement.inCombat))
+            && (monsterMovement.awareType || monsterMovement.inCombat) && canAttack)
         {
             StartCoroutine(Attacking());
+        }
+        if (isDead && !monsterMovement.isFalling)
+        {
+            StartCoroutine(Dying());
         }
     }
 
@@ -92,21 +95,21 @@ public class MonsterStatus : MonoBehaviour
 
             bool checkForce = CheckForce(attackNum);
 
-            if (monsterMovement.canBeInterrupted == true && checkForce == false)
+            if (monsterMovement.canBeInterrupted == true && checkForce == false && !monsterAttack.isAttacking)
             {
-                monsterMovement.StopCoroutine(monsterMovement.Interrupted());
-                monsterMovement.StartCoroutine(monsterMovement.Interrupted());
+                monsterMovement.Interrupted();
             }
 
             if (hp <= 0)
             {
-                StartCoroutine(Dying());
+                isDead = true;
             }
         }
     }
 
     IEnumerator Attacking()
     {
+        canAttack = false;
         int wait = Random.Range(6, 8);
         yield return new WaitForSeconds(wait);
         Debug.Log("attack!");
@@ -116,13 +119,14 @@ public class MonsterStatus : MonoBehaviour
 
     IEnumerator Dying()
     {
+        isDead = false;
         gameObject.tag = "Untagged";
         monsterMovement.StopAllCoroutines();
         monsterAttack.StopAllCoroutines();
         agent.isStopped = true;
         monsterMovement.wanderingType = false;
-        animator.SetBool("isAttacked", false);
-        animator.SetBool("isDead", true);
+        animator.SetBool("isMove", false);
+        animator.SetTrigger("isDead");
         yield return new WaitForSeconds(dieTime);
         rigid.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
         interactable.isInteractable = true;
@@ -130,12 +134,14 @@ public class MonsterStatus : MonoBehaviour
     }
 
     public bool CheckForce(int attackNum) {
-        if (attackNum == 3)
+        if (!monsterAttack.isAttacking)
         {
-            transform.LookAt(player.transform);
-            monsterMovement.StopAllCoroutines();
-            monsterMovement.StartCoroutine(monsterMovement.Falling());
-            return true;
+            if (attackNum == 3)
+            {
+                transform.LookAt(player.transform);
+                monsterMovement.Falling();
+                return true;
+            }
         }
         return false;
     }

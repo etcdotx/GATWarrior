@@ -13,6 +13,7 @@ public class WeaponStatus : MonoBehaviour
 
     public GameObject hitIndicatorPrefab;
     public GameObject hitIndicatorLocation;
+    public Vector3 hitPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +37,9 @@ public class WeaponStatus : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Monster"))
         {
+            Debug.Log(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
+            hitPosition = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
             monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
             Debug.Log(other.name + " damaged");
@@ -43,6 +47,7 @@ public class WeaponStatus : MonoBehaviour
     }
 
     public void HitSuccessful() {
-        Instantiate(hitIndicatorPrefab, hitIndicatorLocation.transform.position, Quaternion.identity, null);
+        Debug.Log(hitPosition);
+        Instantiate(hitIndicatorPrefab, hitPosition, Quaternion.identity, null);
     }
 }

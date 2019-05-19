@@ -55,7 +55,6 @@ public class PlayerData : MonoBehaviour {
 
     private void Awake()
     {
-
         //Get Script
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
@@ -82,13 +81,34 @@ public class PlayerData : MonoBehaviour {
         //characterstats
         curHealth = maxHealth;
         RefreshHp();
-    }
 
-    private void Update()
-    {
-        //curHealthImg.fillAmount = curHealth / maxHealth;
-        //Debug.Log("Cq " + collectionQuest.Count);
-        //Debug.Log("cqc " + collectionQuestComplete.Count);
+        //additem
+        AddItem(ItemDataBase.item[2]);
+        AddItem(ItemDataBase.item[3]);
+        AddItem(ItemDataBase.item[4]);
+        AddItem(ItemDataBase.item[4]);
+        AddItem(ItemDataBase.item[4]);
+        AddItem(ItemDataBase.item[4]);
+        AddItem(ItemDataBase.item[4]);
+        AddItem(ItemDataBase.item[5]);
+
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+        AddItemToBox(ItemDataBase.item[4]);
+
+        AddItemToBox(ItemDataBase.item[7]);
+        AddItemToBox(ItemDataBase.item[7]);
+        AddItemToBox(ItemDataBase.item[7]);
+        AddItemToBox(ItemDataBase.item[7]);
+        AddItemToBox(ItemDataBase.item[7]);
+        AddItemToBox(ItemDataBase.item[7]);
+        AddItemToBox(ItemDataBase.item[7]);
     }
 
     public void RefreshHp() {
@@ -243,10 +263,10 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             //item baru ditambah kedalam list player
-            Item newItem = new Item(item.id, item.itemImage, item.itemName, item.description, 
+            Item newItem = new Item(item.id, item.itemImage, item.itemName, item.description, item.price,
                 item.isUsable, item.isConsumable, item.isASingleTool, item.itemType);
             if (item.itemType != null)
-                if (item.itemType.ToLower().Equals("plant".ToLower()))
+                if (item.itemType.ToLower().Equals("seed".ToLower()))
                     newItem.plantID = item.plantID;
 
             inventoryItem.Add(newItem);
@@ -258,6 +278,36 @@ public class PlayerData : MonoBehaviour {
         inventory.RefreshInventory();
     }
 
+    public void AddItemToBox(Item item)
+    {
+        bool itemExist = false;
+
+        for (int i = 0; i < inventoryBoxItem.Count; i++)
+        {
+            if (inventoryBoxItem[i].id == item.id)
+            {
+                //jika item tersebut sudah ada, kuantiti ditambah
+                inventoryBoxItem[i].quantity++;
+                itemExist = true;
+                break;
+            }
+        }
+
+        if (itemExist == false)
+        {
+            //item baru ditambah kedalam list player
+            Item newItem = new Item(item.id, item.itemImage, item.itemName, item.description, item.price,
+                item.isUsable, item.isConsumable, item.isASingleTool, item.itemType);
+            if (item.itemType != null)
+                if (item.itemType.ToLower().Equals("seed".ToLower()))
+                    newItem.plantID = item.plantID;
+
+            inventoryBoxItem.Add(newItem);
+        }
+        //item tersebut di refresh kedalam inventory
+        //Debug.Log(item.name + " , total = " + inventoryBoxItem.Count);
+        inventoryBox.RefreshInventoryBox();
+    }
 
     public void CheckNewItem(Item addedItem)
     {

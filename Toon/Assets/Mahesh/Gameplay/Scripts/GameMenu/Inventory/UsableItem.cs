@@ -26,10 +26,9 @@ public class UsableItem : MonoBehaviour
     public bool isSelectingItem;
     public bool isUsingItem;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        //playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         player = GameObject.FindGameObjectWithTag("Player");
         characterCombat = player.GetComponent<CharacterCombat>();
@@ -45,6 +44,11 @@ public class UsableItem : MonoBehaviour
         {
             usableIndicator[i] = usableItemContent.transform.GetChild(i).gameObject;
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         isUsingItem = false;
     }
 
@@ -139,14 +143,18 @@ public class UsableItem : MonoBehaviour
 
     public void GetUsableItem()
     {
+        //is using item true kalo lagi make item, akan false kalo item yang dipake abis --> ada di inventoryindicator refreshinventory
         if (!isUsingItem)
         {
             usableItemList.Clear();
-            for (int i = 0; i < playerData.inventoryItem.Count; i++)
+            for (int i = 0; i < inventory.inventoryIndicator.Length; i++)
             {
-                if (playerData.inventoryItem[i].isUsable == true)
+                if (inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().item != null)
                 {
-                    usableItemList.Add(playerData.inventoryItem[i]);
+                    if (inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().item.isUsable == true)
+                    {
+                        usableItemList.Add(inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().item);
+                    }
                 }
             }
         }

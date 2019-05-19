@@ -18,8 +18,7 @@ public class MonsterAttack : MonoBehaviour
     public float speed;
 
     public List<int> attackSuccess = new List<int>();
-
-    private void Start()
+    private void Awake()
     {
         monsterStatus = GetComponent<MonsterStatus>();
         monsterMovement = GetComponent<MonsterMovement>();

@@ -164,7 +164,7 @@ public class Dialogue : MonoBehaviour
                 else
                 {
                     CancelTalk();
-                    shop.OpenShop();
+                    shop.OpenShop(target);
                 }
             }
             else {
@@ -290,7 +290,6 @@ public class Dialogue : MonoBehaviour
             dialogueOptionContent.transform.GetChild(nonQuestIndex).GetComponent<DialogueOption>().optionText.text = "Buy";
             index++;
             nonQuestIndex++;
-            Debug.Log("in");
         }
 
         //for questdialogue

@@ -48,8 +48,11 @@ MonoBehaviour:
   gameMenuManager: {fileID: 0}
   inventoryBox: {fileID: 0}
   inventory: {fileID: 0}
+  maxRow: 5
   shopRow: 0
   shopRowIndex: 0
+  shopList: 0
+  maxShopList: 0
   inShop: 0
   shopUI: {fileID: 0}
   shopView: {fileID: 0}
@@ -117,11 +120,15 @@ MonoBehaviour:
   inventoryIndicator: []
   invenSwap1: {fileID: 0}
   invenSwap2: {fileID: 0}
+  itemSwap1: {fileID: 0}
+  itemSwap2: {fileID: 0}
   isSwapping: 0
   temporaryItem: {fileID: 0}
   slider: {fileID: 0}
   inventoryQuantitySlider: {fileID: 0}
   isSettingQuantity: 0
+  swapIndex1: 0
+  swapIndex2: 0
 --- !u!1 &7865212618385263042
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +191,8 @@ MonoBehaviour:
   isItemBoxOpened: 0
   invenSwap1: {fileID: 0}
   invenSwap2: {fileID: 0}
+  itemSwap1: {fileID: 0}
+  itemSwap2: {fileID: 0}
   isSwapping: 0
   temporaryItem: {fileID: 0}
   isSettingQuantity: 0
@@ -266,6 +275,7 @@ MonoBehaviour:
   shopPointer:
   - {fileID: 0}
   - {fileID: 0}
+  menuState: 0
 --- !u!1 &7865212618573120343
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,14 @@ public class Shop : MonoBehaviour
     public Inventory inventory;
 
     [Header("UI Settings")]
-    public int shopRow;
+    public GridLayoutGroup gridLayoutGroup;
+    public int maxRow;
     public int shopRowIndex;
+    public int shopList;
+    public int maxShopList;
+    public int minRange;
+    public int maxRange;
+    public float padding;
     public bool inShop;
 
     public GameObject shopUI;
@@ -25,8 +31,10 @@ public class Shop : MonoBehaviour
     public List<ShopIndicator> shopIndicator = new List<ShopIndicator>();
     public List<Item> shopItem = new List<Item>();
 
-    // Start is called before the first frame update
-    void Start()
+    [Header("Shop Description")]
+    public ShopDescription shopDescription;
+
+    private void Awake()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
@@ -37,10 +45,17 @@ public class Shop : MonoBehaviour
         shopUI = GameObject.FindGameObjectWithTag("ShopUI");
         shopView = shopUI.transform.Find("ShopView").gameObject;
         shopViewPort = shopView.transform.Find("ShopViewPort").gameObject;
+        shopDescription = shopView.transform.Find("ShopDescription").GetComponent<ShopDescription>();
         shopContent = shopViewPort.transform.Find("ShopContent").gameObject;
+        gridLayoutGroup = shopContent.GetComponent<GridLayoutGroup>();
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
         shopView.SetActive(false);
-        AddShopIndicator();
+        maxRow = gridLayoutGroup.constraintCount;
+        padding = gridLayoutGroup.spacing.x;
     }
 
     // Update is called once per frame
@@ -55,27 +70,73 @@ public class Shop : MonoBehaviour
         }
     }
 
-    public void ShopSelection() {
+    public void ShopSelection()
+    {
         if (gameMenuManager.inputAxis.y == -1) // kebawah
         {
-            if (shopRowIndex < shopRow - 1)
+            if (shopRowIndex < maxRange-1)
             {
                 shopRowIndex++;
             }
             else
             {
-                shopRowIndex = 0;
+                shopRowIndex = minRange;
             }
         }
         else if (gameMenuManager.inputAxis.y == 1) // keatas
         {
-            if (shopRowIndex > 0)
+            if (shopRowIndex > minRange)
             {
                 shopRowIndex--;
             }
             else
             {
-                shopRowIndex = shopRow - 1;
+                shopRowIndex = maxRange-1;
+            }
+        }
+        if (gameMenuManager.inputAxis.x == -1) // kekiri
+        {
+            if (shopList > 0)
+            {
+                gridLayoutGroup.padding.left += (int)padding;
+                //shopContent.transform.position += new Vector3(-padding, 0, 0);
+                shopList--;
+                minRange -= maxRow;
+                maxRange = minRange+ maxRow;
+                if (maxRange > shopItem.Count)
+                    maxRange = shopItem.Count;
+                shopRowIndex = minRange;
+            }
+            else
+            {
+                gridLayoutGroup.padding.left = -(int)padding * (maxShopList-1);
+                shopList = maxShopList-1;
+                minRange = shopList * maxRow;
+                maxRange = shopItem.Count;
+                shopRowIndex = minRange;
+            }
+        }
+        else if (gameMenuManager.inputAxis.x == 1) //kekanan
+        {
+            if (shopList < maxShopList - 1)
+            {
+                gridLayoutGroup.padding.left += -(int)padding;
+                shopList++;
+                minRange += maxRow;
+                maxRange += maxRow;
+                if (maxRange > shopItem.Count)
+                    maxRange = shopItem.Count;
+                shopRowIndex = minRange;
+            }
+            else
+            {
+                gridLayoutGroup.padding.left = 0;
+                shopList = 0;
+                minRange = 0;
+                maxRange = maxRow;
+                if (maxRange > shopItem.Count)
+                    maxRange = shopItem.Count;
+                shopRowIndex = minRange;
             }
         }
         MarkShopSelection();
@@ -86,52 +147,90 @@ public class Shop : MonoBehaviour
         {
             shopIndicator[i].selectedIndicator.SetActive(false);
         }
-        //Debug.Log(shopIndicator[shopRowIndex].itemNameText.text);
         shopIndicator[shopRowIndex].selectedIndicator.SetActive(true);
+        shopContent.SetActive(false);
+        shopContent.SetActive(true);
+        shopDescription.item = shopIndicator[shopRowIndex].item;
+        shopDescription.RefreshDescription();
 
     }
 
-    public void OpenShop()
+    public void OpenShop(NPC target)
     {
+        shopIndicator.Clear();
+        shopItem.Clear();
+        for (int i = 0; i < target.shopItem.Count; i++)
+        {
+            Item temp = target.shopItem[i];
+            Item temp2 = new Item(temp.id, temp.itemImage, temp.itemName,
+                temp.description, temp.price, temp.isUsable, temp.isConsumable, temp.isASingleTool, temp.itemType);
+            if (temp.itemType != null)
+                if (temp.itemType.ToLower().Equals("seed".ToLower()))
+                    temp2.plantID = temp.plantID;
+            shopItem.Add(temp2);
+        }
+        ResetRange();        
+        AddShopIndicator();
+
+        gameMenuManager.menuState = GameMenuManager.MenuState.shopMenu;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         CharacterMovement cm = player.GetComponent<CharacterMovement>();
         cm.canMove = false;
 
         inShop = true;
-        shopIndicator[0].selectedIndicator.SetActive(true);
         playerData.healthIndicator.SetActive(false);
-        inventory.inventoryView.SetActive(true);
-        inventory.MarkInventory();
+        inventoryBox.inventoryBoxView.SetActive(true);
+        inventoryBox.MarkInventoryBox();
         shopView.SetActive(true);
         GameStatus.PauseGame();
     }
 
     public void CloseShop()
     {
+        RemoveShopIndicator();
+        gameMenuManager.menuState = GameMenuManager.MenuState.noMenu;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         CharacterMovement cm = player.GetComponent<CharacterMovement>();
         cm.canMove = true;
-
-        for (int i = 0; i < shopIndicator.Count; i++)
-        {
-            shopIndicator[i].selectedIndicator.SetActive(false);
-        }
         GameStatus.ResumeGame();
         inShop = false;
         playerData.healthIndicator.SetActive(true);
-        inventory.inventoryView.SetActive(false);
+        inventoryBox.inventoryBoxView.SetActive(false);
         shopView.SetActive(false);
     }
 
-    void AddShopIndicator() {
+    void ResetRange() {
+        maxShopList = (shopItem.Count / maxRow) + 1;
+        minRange = 0;
+        maxRange = maxRow;
+        if (maxRange > shopItem.Count)
+            maxRange = shopItem.Count;
+        shopRowIndex = 0;
+    }
+
+    void AddShopIndicator()
+    {
         for (int i = 0; i < shopItem.Count; i++)
         {
             Instantiate(shopIndicatorPrefab, shopContent.transform);
             shopIndicator.Add(shopContent.transform.GetChild(i).GetComponent<ShopIndicator>());
-            shopIndicator[i].itemNameText.text = shopItem[i].itemName;
-            shopIndicator[i].priceText.text = shopItem[i].price.ToString();
-            shopIndicator[i].image.sprite = shopItem[i].itemImage;
-            shopRow++;
+            shopIndicator[i].item = shopItem[i + (maxRow * shopList)];
+            shopIndicator[i].RefreshIndicator();
+        }
+        MarkShopSelection();
+    }
+
+    void RemoveShopIndicator()
+    {
+        shopIndicator.Clear();
+        shopItem.Clear();
+        gridLayoutGroup.padding.left = 0;
+        shopList = 0;
+        shopRowIndex = 0;
+
+        for (int i = 0; i < shopContent.transform.childCount; i++)
+        {
+            GameObject.Destroy(shopContent.transform.GetChild(i).gameObject);
         }
     }
 }

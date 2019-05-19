@@ -21,6 +21,9 @@ public class NPC : MonoBehaviour
     public string optionDialog;
     public List<string> npcDialog = new List<string>();
 
+    [Header("Shop")]
+    public List<Item> shopItem = new List<Item>();
+
     // Start is called before the first frame update
     void Start()
     {

@@ -46,8 +46,8 @@ public class SphereMonsterAttack : MonoBehaviour
         if (num == 1)
         {
             agent.isStopped = true;
-            anim.SetTrigger("attack");
             bonusAttack = Random.Range(0, 2);
+            anim.SetTrigger("attack");
         }
     }
 
@@ -90,21 +90,22 @@ public class SphereMonsterAttack : MonoBehaviour
         }
     }
 
-    void CheckAttack()
+    public void CheckAttack()
     {
-        if (bonusAttack > 0)
+        if (bonusAttack == 0)
+        {
+            monsterAttack.attackNum = 0;
+            monsterAttack.isAttacking = false;
+            monsterStatus.canAttack = true;
+            agent.isStopped = false;
+            canAttack = true;
+            agent.ResetPath();
+        }
+        else if (bonusAttack > 0)
         {
             anim.SetTrigger("attack");
             monsterAttack.attackNum++;
             bonusAttack--;
-        }
-        else
-        {
-            monsterAttack.attackNum = 0;
-            monsterAttack.isAttacking = false;
-            agent.isStopped = false;
-            canAttack = true;
-            agent.ResetPath();
         }
     }
 

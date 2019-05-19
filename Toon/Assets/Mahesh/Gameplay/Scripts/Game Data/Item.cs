@@ -30,13 +30,14 @@ public class Item : ScriptableObject
     public bool isOnInventory;
     public bool isOnItemBox;
 
-    public Item(int id, Sprite itemImage, string itemName, string description, bool isUsable, bool isConsumable, bool isASingleTool, string itemType)
+    public Item(int id, Sprite itemImage, string itemName, string description, int price, bool isUsable, bool isConsumable, bool isASingleTool, string itemType)
     {
         quantity = 1;
         this.id = id;
         this.itemImage = itemImage;
         this.itemName = itemName;
         this.description = description;
+        this.price = price;
         this.isUsable = isUsable;
         this.isConsumable = isConsumable;
         this.isASingleTool = isASingleTool;
@@ -151,18 +152,11 @@ public class Item : ScriptableObject
             {
                 return true;
             }
-            if (itemType.ToLower().Equals("seed".ToLower()))
+            if (itemName.ToLower().Equals("hoe".ToLower()) || itemType.ToLower().Equals("waterscoop".ToLower()) || 
+                itemType.ToLower().Equals("seed".ToLower()))
             {
-                if(playerData.stateNearSoil==true)
+                if (playerData.stateNearSoil == true)
                     return true;
-            }
-            if (itemType.ToLower().Equals("hoe".ToLower()))
-            {
-                return true;
-            }
-            if (itemType.ToLower().Equals("waterscoop".ToLower()))
-            {
-                return true;
             }
         }
 

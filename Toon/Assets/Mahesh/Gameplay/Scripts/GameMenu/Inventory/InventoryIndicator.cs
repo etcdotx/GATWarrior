@@ -33,7 +33,6 @@ public class InventoryIndicator : MonoBehaviour
             {
                 playerData.inventoryItem.Remove(item);
                 usableItem.isUsingItem = false;
-                Debug.Log(usableItem.isUsingItem);
                 MakeEmpty();
             }
             else
@@ -86,8 +85,6 @@ public class InventoryIndicator : MonoBehaviour
             Debug.Log(item.itemName + " removed");
         } catch { }
         playerData.inventoryItem.Remove(item);
-        if(item!=null && item.isUsable)
-            usableItem.usableItemList.Remove(item);
         item = null;
         itemID = 0;
         itemImage.sprite = null;

@@ -29,7 +29,15 @@ public class GameMenuManager : MonoBehaviour
     public GameObject[] itemBoxPointer;
     public GameObject[] shopPointer;
 
-    public void Start()
+    public enum MenuState {
+        noMenu,
+        startMenu,
+        inventoryBoxMenu,
+        shopMenu
+    }
+    public MenuState menuState;
+
+    private void Awake()
     {
         cantOpenMenu = true;
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
@@ -45,15 +53,18 @@ public class GameMenuManager : MonoBehaviour
         {
             cantOpenMenu = false;
         }
+    }
 
+    public void Start()
+    {
         ResetMenu();
+        menuState = MenuState.noMenu;
     }
 
     private void Update()
     {
         //press start
-        if(!shop.inShop)
-            OpenCloseMenu();
+        OpenCloseMenu();
 
         if ((GameStatus.IsPaused && isOpen) || shop.inShop)
         {
@@ -67,28 +78,29 @@ public class GameMenuManager : MonoBehaviour
     void OpenCloseMenu() {
         if (!GameStatus.isTalking && !cantOpenMenu)
         {
-            if (Input.GetKeyDown(inputSetup.openGameMenu))
+            if (Input.GetKeyDown(inputSetup.openGameMenu)) //tombol start
             {
-                if (inventory.inventoryView.activeSelf == false && quest.questView.activeSelf == false)
-                {
+                if (menuState == MenuState.noMenu)
                     OpenMenu();
-                }
-                //gabisa pake else, soalnya kalo buka item box, inventoryview.activeselfnya nyala
-                else if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true && inventory.isSwapping == false)
-                {
+
+                else if (menuState == MenuState.startMenu)
                     CloseMenu();
-                }
             }
-            if (Input.GetKeyDown(inputSetup.back))
-            {                
-                if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true && inventory.isSwapping == false)
-                {
+            if (Input.GetKeyDown(inputSetup.back)) //tombol back
+            {
+                if (menuState == MenuState.startMenu)
                     CloseMenu();
-                }
-                else if (inventory.inventoryView.activeSelf == true && quest.questView.activeSelf == true && inventory.isSwapping == true)
-                {
-                    inventory.ResetInventorySwap();
-                }
+
+                else if (menuState == MenuState.startMenu)
+                    if(inventory.isSwapping)
+                        inventory.ResetInventorySwap();
+                
+                else if (menuState == MenuState.inventoryBoxMenu)
+                        if(inventoryBox.isSwapping)
+                            inventoryBox.ResetInventoryBoxSwap();
+
+                else if (menuState == MenuState.shopMenu)
+                    shop.CloseShop();
             }
         }
     }
@@ -102,7 +114,7 @@ public class GameMenuManager : MonoBehaviour
                 StartCoroutine(PointerInputHold());
                 ApplyNavigation();
             }
-            else if (inventory.isSettingQuantity)
+            else
             {
                 StartCoroutine(PointerInputHold());
                 if (inventory.isSettingQuantity)
@@ -123,16 +135,42 @@ public class GameMenuManager : MonoBehaviour
         }
     }
 
+    void ApplyNavigation()
+    {
+        if (menuState == MenuState.shopMenu)
+        {
+            if (menuNumber == 0) //itembox
+                shop.ShopSelection();
+            else if (menuNumber == 1) //inven
+                inventoryBox.InventoryBoxSelection();
+        }
+        else if (menuState == MenuState.startMenu)
+        {
+            if (menuNumber == 0) //inven
+                inventory.InventorySelection();
+            else if (menuNumber == 1) //quest
+                quest.QuestSelection();
+        }
+            
+        else if (menuState == MenuState.inventoryBoxMenu)
+        {
+            if (menuNumber == 0) //inven
+                inventory.InventorySelection();
+            else if (menuNumber == 1) //itembox
+                inventoryBox.InventoryBoxSelection();
+        }
+    }
+
     void ButtonInput() {
         if (!buttonInputHold)
         {
-            if (shop.inShop)
+            if (menuState == MenuState.shopMenu)
                 ButtonOnShop();
 
-            else if (inventoryBox.isItemBoxOpened == false)
+            else if (menuState == MenuState.startMenu)
                 ButtonOnStartMenu();
 
-            else if (inventoryBox.isItemBoxOpened == true)
+            else if (menuState == MenuState.inventoryBoxMenu)
                 ButtonOnInventoryBox();
         }
     }
@@ -155,7 +193,6 @@ public class GameMenuManager : MonoBehaviour
     void ButtonOnInventoryBox() {
         if (menuNumber == 0) //inventory
         {
-            Debug.Log("in0");
             if (inventory.isSettingQuantity == false)
             {
                 inventory.InventorySwapping();
@@ -164,7 +201,6 @@ public class GameMenuManager : MonoBehaviour
         }
         if (menuNumber == 1)//itemBox
         {
-            Debug.Log("in1");
             if (inventoryBox.isSettingQuantity == false)
             {
                 inventoryBox.InventoryBoxSwapping();
@@ -202,57 +238,9 @@ public class GameMenuManager : MonoBehaviour
         }
     }
 
-    void OpenMenu() {
-        playerData.healthIndicator.SetActive(false);
-        inventory.inventoryView.SetActive(true);
-        quest.questView.SetActive(true);
-        quest.RefreshQuest();
-        isOpen = true;
-        ResetMenu();
-        GameStatus.PauseGame();
-    }
-
-    void CloseMenu()
-    {
-        playerData.healthIndicator.SetActive(true);
-        inventory.inventoryView.SetActive(false);
-        quest.questView.SetActive(false);
-        isOpen = false;
-        ResetMenu();
-        InputHolder.isInputHolded = true;
-        GameStatus.ResumeGame();
-    }
-
-    public void OpenInventoryBoxMenu() {
-        playerData.healthIndicator.SetActive(false);
-        inventory.inventoryView.SetActive(true);
-        inventory.MarkInventory();
-        inventoryBox.inventoryBoxView.SetActive(true);
-        inventoryBox.MarkInventoryBox();
-        inventoryBox.isItemBoxOpened = true;
-        StartCoroutine("ButtonInputHold");
-        isOpen = true;
-        ResetMenu();
-        GameStatus.PauseGame();
-        GameStatus.PauseMove();
-    }
-
-    void CloseInventoryBoxMenu()
-    {
-        playerData.healthIndicator.SetActive(true);
-        inventory.inventoryView.SetActive(false);
-        inventoryBox.inventoryBoxView.SetActive(false);
-        inventoryBox.isItemBoxOpened = false;
-        isOpen = false;
-        ResetMenu();
-        InputHolder.isInputHolded = true;
-        GameStatus.ResumeGame();
-        GameStatus.ResumeMove();
-    }
-
     void SelectMenu()
     {
-        if (shop.inShop)
+        if (menuState == MenuState.shopMenu)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
@@ -268,7 +256,7 @@ public class GameMenuManager : MonoBehaviour
             }
         }
         else {
-            if (inventoryBox.isItemBoxOpened == false && inventory.isSwapping == false)
+            if (menuState == MenuState.startMenu && !inventory.isSwapping && !inventory.isSettingQuantity)
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button5))
                 {
@@ -283,8 +271,7 @@ public class GameMenuManager : MonoBehaviour
                     ResetPointer(menuPointer);
                 }
             }
-            else if (inventoryBox.isItemBoxOpened && !inventory.isSwapping && !inventoryBox.isSwapping &&
-                !inventory.isSettingQuantity && !inventoryBox.isSettingQuantity)
+            else if (menuState == MenuState.inventoryBoxMenu && !inventoryBox.isSwapping && !inventoryBox.isSettingQuantity)
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button5))
                 {
@@ -302,33 +289,59 @@ public class GameMenuManager : MonoBehaviour
         }
     }
 
-    void ApplyNavigation()
+    void OpenMenu()
     {
-        if (shop.inShop)
-        {
-            if (menuNumber == 0) //inven
-                inventory.InventorySelection();
-            else if (menuNumber == 1) //itembox
-                shop.ShopSelection();
-        }
-        else {
-            if (!inventoryBox.isItemBoxOpened)
-            {
-                if (menuNumber == 0) //inven
-                    inventory.InventorySelection();
-                else if (menuNumber == 1) //quest
-                    quest.QuestSelection();
-            }
-            else if (inventoryBox.isItemBoxOpened)
-            {
-                if (menuNumber == 0) //inven
-                    inventory.InventorySelection();
-                else if (menuNumber == 1) //itembox
-                    inventoryBox.InventoryBoxSelection();
-            }
-        }
+        menuState = MenuState.startMenu;
+        playerData.healthIndicator.SetActive(false);
+        inventory.inventoryView.SetActive(true);
+        quest.questView.SetActive(true);
+        quest.RefreshQuest();
+        isOpen = true;
+        ResetMenu();
+        GameStatus.PauseGame();
     }
 
+    void CloseMenu()
+    {
+        menuState = MenuState.noMenu;
+        playerData.healthIndicator.SetActive(true);
+        inventory.inventoryView.SetActive(false);
+        quest.questView.SetActive(false);
+        isOpen = false;
+        ResetMenu();
+        InputHolder.isInputHolded = true;
+        GameStatus.ResumeGame();
+    }
+
+    public void OpenInventoryBoxMenu()
+    {
+        menuState = MenuState.inventoryBoxMenu;
+        playerData.healthIndicator.SetActive(false);
+        inventory.inventoryView.SetActive(true);
+        inventory.MarkInventory();
+        inventoryBox.inventoryBoxView.SetActive(true);
+        inventoryBox.MarkInventoryBox();
+        inventoryBox.isItemBoxOpened = true;
+        StartCoroutine("ButtonInputHold");
+        isOpen = true;
+        ResetMenu();
+        GameStatus.PauseGame();
+        GameStatus.PauseMove();
+    }
+
+    void CloseInventoryBoxMenu()
+    {
+        menuState = MenuState.noMenu;
+        playerData.healthIndicator.SetActive(true);
+        inventory.inventoryView.SetActive(false);
+        inventoryBox.inventoryBoxView.SetActive(false);
+        inventoryBox.isItemBoxOpened = false;
+        isOpen = false;
+        ResetMenu();
+        InputHolder.isInputHolded = true;
+        GameStatus.ResumeGame();
+        GameStatus.ResumeMove();
+    }
     #region UTIL
     void GetInputAxis()
     {
@@ -356,6 +369,7 @@ public class GameMenuManager : MonoBehaviour
         }
         pointer[menuNumber].SetActive(true);
     }
+
     public void ResetMenu()
     {
         menuNumber = 0;
@@ -367,6 +381,8 @@ public class GameMenuManager : MonoBehaviour
         inventory.inventoryColumnIndex = 0;
         inventory.inventoryRowIndex = 0;
         inventory.MarkInventory();
+        inventoryBox.inventoryBoxColumnIndex = 0;
+        inventoryBox.inventoryBoxRowIndex = 0;
         inventoryBox.MarkInventoryBox();
 
         //reset quest pointer

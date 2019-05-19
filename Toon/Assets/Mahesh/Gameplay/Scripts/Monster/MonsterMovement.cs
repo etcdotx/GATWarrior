@@ -54,50 +54,100 @@ public class MonsterMovement : MonoBehaviour
     public float fallingRecoveryTime;
     public bool canBeInterrupted;
     public bool canBeFall;
+    public Coroutine recover;
+
+    [Header("Change direction without agent")]
+    public bool isRotating;
+    public Vector3 newTargetPos;
 
     [Header("Set Condition")]
+    public bool moveWithAgent;
     public bool wanderingType;
     public bool awareType;
 
-    // Use this for initialization
-    void Start()
+    private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         monsterStatus = GetComponent<MonsterStatus>();
         monsterAttack = GetComponent<MonsterAttack>();
         rigid = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
-
         anim = GetComponent<Animator>();
+    }
 
+    // Use this for initialization
+    void Start()
+    {
         //wander
         float wanderTimer = Random.Range(2, 5);
         wanderTime = wanderTimer;
-        StartCoroutine(WanderHolder());
+
+        if(wanderingType)
+            StartCoroutine(WanderHolder());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (monsterStatus.hp > 0)
+        if (monsterStatus.hp > 0 && !isInterrupted && !isFalling)
         {
-            if (!monsterAttack.isAttacking)
+            if (moveWithAgent)
             {
-                if (wanderingType)
+                MoveWithAgent();
+            }
+            else
+            {
+                MoveWithAnimation();
+            }
+        } 
+    }
+
+    void MoveWithAgent() {
+        if (wanderingType)
+        {
+            if (playerOnSight && (awareType || inCombat))
+            {
+                LookAtPlayer();
+                if (distance > positionGap)
                 {
-                    if (playerOnSight && (awareType || inCombat))
+                    agent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    if (wanderTime < wanderTimer)
+                        Wandering();
+                }
+            }
+            else
+            {
+                if (wanderTime < wanderTimer)
+                    Wandering();
+            }
+        }
+        else
+        {
+            if (playerOnSight && (awareType || inCombat))
+            {
+                LookAtPlayer();
+            }
+        }
+    }
+
+    void MoveWithAnimation() {
+        if (isRotating)
+        {
+            ChangeDirection();
+        }
+        else {
+            if (wanderingType)
+            {
+                if (playerOnSight && (awareType || inCombat))
+                {
+                    LookAtPlayer();
+                    if (distance > positionGap)
                     {
-                        LookAtPlayer();
-                        if (distance > positionGap)
-                        {
-                            agent.SetDestination(player.transform.position);
-                            //Debug.Log(distance + " > " + positionGap);
-                        }
-                        else
-                        {
-                            if(wanderTime<wanderTimer)
-                                Wandering();
-                        }
+                        agent.SetDestination(player.transform.position);
+                        //Debug.Log(distance + " > " + positionGap);
                     }
                     else
                     {
@@ -105,20 +155,33 @@ public class MonsterMovement : MonoBehaviour
                             Wandering();
                     }
                 }
-                else {
-                    if (playerOnSight && (awareType || inCombat))
-                    {
-                        LookAtPlayer();
-                    }
+                else
+                {
+                    if (wanderTime < wanderTimer)
+                        Wandering();
                 }
             }
-        } 
+            else
+            {
+                if (playerOnSight && (awareType || inCombat))
+                {
+                    LookAtPlayer();
+                }
+            }
+        }
     }
 
     void LookAtPlayer() {
         distance = Vector3.Distance(transform.position, player.transform.position);
 
         Vector3 target = player.transform.position - transform.position;
+        target.y = 0.0f;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(target), Time.time * rotateSpeed);
+    }
+
+    void ChangeDirection()
+    {
+        Vector3 target = newTargetPos - transform.position;
         target.y = 0.0f;
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(target), Time.time * rotateSpeed);
     }
@@ -139,10 +202,13 @@ public class MonsterMovement : MonoBehaviour
 
     IEnumerator WanderHolder()
     {
+        isRotating = true;
         resetHold = false;
         agent.isStopped = true;
         wanderHoldTime = Random.Range(minWanderHoldTime, maxWanderHoldTime);
+        anim.SetBool("isMove", true);
         yield return new WaitForSeconds(wanderHoldTime);
+        isRotating = false;
         wanderTime = 0;
         agent.isStopped = false;
         resetHold = true;
@@ -158,8 +224,18 @@ public class MonsterMovement : MonoBehaviour
             wanderTimer = Random.Range(minWanderTime, maxWanderTime);
         }
 
+        anim.SetBool("isMove", false);
         Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
-        agent.SetDestination(newPos);
+        if (moveWithAgent)
+            agent.SetDestination(newPos);
+        else
+        {
+            if ((!playerOnSight || !awareType) && !inCombat)
+            {
+                newPos.y = 0;
+                newTargetPos = newPos;
+            }
+        }
     }
 
     public void StopCombat() {
@@ -180,31 +256,41 @@ public class MonsterMovement : MonoBehaviour
         return navHit.position;
     }
 
-    public IEnumerator Interrupted()
+    public void Interrupted()
     {
+        if(recover!=null)
+            StopCoroutine(recover);
+
         inCombat = true;
         playerOnSight = true;
         isInterrupted = true;
         agent.isStopped = true;
         anim.SetTrigger("attacked");
-        yield return new WaitForSeconds(interruptedRecoveryTime);
-        isInterrupted = false;
-        agent.isStopped = false;
-        agent.ResetPath();
+        recover = StartCoroutine(Recover(interruptedRecoveryTime));
     }
 
-    public IEnumerator Falling()
+    public void Falling()
     {
+        if (recover != null)
+            StopCoroutine(recover);
+
         inCombat = true;
         playerOnSight = true;
         agent.isStopped = true;
         anim.SetBool("fall", true);
-        isInterrupted = false;
         isFalling = true;
-        yield return new WaitForSeconds(fallingRecoveryTime);
-        isFalling = false;
+        recover = StartCoroutine(Recover(fallingRecoveryTime));
+    }
+
+    public IEnumerator Recover(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Debug.Log("recovering " + time);
         anim.SetBool("fall", false);
+        isInterrupted = false;
+        isFalling = false;
         agent.isStopped = false;
         agent.ResetPath();
+
     }
 }

@@ -16,7 +16,9 @@ public class UsableItemIndicator : MonoBehaviour
         {
             itemImage.sprite = null;
         }
-
-        itemImage.sprite = item.itemImage;
+        else
+        {
+            itemImage.sprite = item.itemImage;
+        }     
     }
 }
