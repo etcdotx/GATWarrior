@@ -18,7 +18,11 @@ public class CollectionQuest : ScriptableObject
     public bool isComplete;
     public bool isOptional;
 
-    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, Item itemToCollect, string title, string verb, string description, bool isOptional)
+    public Dialogue startDialogue;
+    public Dialogue endDialogue;
+
+    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, Item itemToCollect, 
+        string title, string verb, string description, bool isOptional, Dialogue startDialogue, Dialogue endDialogue)
     {
         this.sourceID = sourceID;
         this.id = id;
@@ -29,6 +33,8 @@ public class CollectionQuest : ScriptableObject
         this.verb = verb;
         this.description = description;
         this.isOptional = isOptional;
+        this.startDialogue = startDialogue;
+        this.endDialogue = endDialogue;
         //CheckProgress();
     }
 

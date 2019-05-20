@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6699831350171373713}
   m_Layer: 5
-  m_Name: DialogueUI
-  m_TagString: DialogueUI
+  m_Name: ConversationUI
+  m_TagString: ConversationUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 6699831350972110065}
   - component: {fileID: 6699831350972110068}
   m_Layer: 5
-  m_Name: DialogueText
+  m_Name: ConversationText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

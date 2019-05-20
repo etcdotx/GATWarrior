@@ -11,6 +11,7 @@ public class CharacterInteraction : MonoBehaviour
     public UsableItem usableItem;
 
     public Talk talk;
+    public Conversation conversation;
     public Collect collect;
     public GameMenuManager gameMenuManager;
     public GameObject interactButton;
@@ -20,11 +21,11 @@ public class CharacterInteraction : MonoBehaviour
     public Vector3 interactRaycastOffset;
 
     public InputSetup inputSetup;
-    public Dialogue dialogue;
     public InventoryBox inventoryBox;
     public Inventory inventory;
     
     public bool hideInteractButton;
+    public bool buttonInputHold;
 
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class CharacterInteraction : MonoBehaviour
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        dialogue = GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Dialogue>();
+        conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Conversation>();
 
         interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
         interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
@@ -53,11 +54,11 @@ public class CharacterInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (!GameStatus.IsPaused && !dialogue.isTalking && !InputHolder.isInputHolded
+        if (!GameStatus.IsPaused && !conversation.isTalking && !InputHolder.isInputHolded
             && gameMenuManager.menuState == GameMenuManager.MenuState.noMenu && !usableItem.isSelectingItem)
         {
-            Debug.Log("in");
-            InteractionRayCasting();
+            if(!buttonInputHold)
+                InteractionRayCasting();
         }
         else
         {
@@ -68,7 +69,7 @@ public class CharacterInteraction : MonoBehaviour
         {
             ShowButton();
         }
-        else if (hideInteractButton)
+        else if (hideInteractButton && !conversation.isTalking)
         {
             HideButton();
         }
@@ -95,6 +96,7 @@ public class CharacterInteraction : MonoBehaviour
                     //jika object tersebut bisa berbicara
                     if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking)
                     {
+                        StartCoroutine(ButtonInputHold());
                         cm.canMove = false;
                         animator.SetBool("isWalk", false);
                         talk.TalkToObject(interactable);
@@ -102,6 +104,7 @@ public class CharacterInteraction : MonoBehaviour
                     //jika object tersebut bisa dimasukkan kedalam koleksi
                     else if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable)
                     {
+                        StartCoroutine(ButtonInputHold());
                         //mengambil item tersebut
                         collect.CollectObject(interactable);
                     }
@@ -109,6 +112,7 @@ public class CharacterInteraction : MonoBehaviour
                     else if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" 
                         && gameMenuManager.menuState == GameMenuManager.MenuState.noMenu)
                     {
+                        StartCoroutine(ButtonInputHold());
                         animator.SetBool("isWalk", false);
                         gameMenuManager.OpenInventoryBoxMenu();
                     }
@@ -136,5 +140,12 @@ public class CharacterInteraction : MonoBehaviour
     {
         interactText.gameObject.SetActive(false);
         interactButton.gameObject.SetActive(false);
+    }
+
+    public IEnumerator ButtonInputHold()
+    {
+        buttonInputHold = true;
+        yield return new WaitForSeconds(0.15f);
+        buttonInputHold = false;
     }
 }

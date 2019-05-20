@@ -4,6 +4,4 @@ using UnityEngine;
 public static class QuestDataBase
 {
     public static List<CollectionQuest> collectionQuest;
-    public static List<QuestDialog> questDialog;
-    public static List<QuestDialog> questCompleteDialog;
 }

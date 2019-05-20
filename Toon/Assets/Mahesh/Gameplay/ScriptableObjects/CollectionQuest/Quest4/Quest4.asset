@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1d2a7092a9785441894e06d3feedcee, type: 3}
-  m_Name: Quest 3
+  m_Name: Quest4
   m_EditorClassIdentifier: 
   sourceID: 1
-  id: 3
+  id: 4
   chainQuestID: 
   colAmount: 7
   curAmount: 0
-  itemToCollect: {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
-  title: Collect 5 Cube
+  itemToCollect: {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
+  title: Collect apples
   verb: Collect
   resourcePath: 
-  description: Collect 5 Cube
+  description: Collect 7 Apples
   isComplete: 0
   isOptional: 0
+  startDialogue: {fileID: 11400000, guid: 8292cc74e0820944eb9b0be2858c73c5, type: 2}
+  endDialogue: {fileID: 11400000, guid: ae199680f67489e4ca73a7f030454882, type: 2}

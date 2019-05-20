@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1d2a7092a9785441894e06d3feedcee, type: 3}
+  m_Name: Quest3
+  m_EditorClassIdentifier: 
+  sourceID: 1
+  id: 3
+  chainQuestID: 
+  colAmount: 7
+  curAmount: 0
+  itemToCollect: {fileID: 11400000, guid: d7023ddf8efc92b48bd9c7535b0af61a, type: 2}
+  title: Collect 7 Slime
+  verb: Collect
+  resourcePath: 
+  description: Collect 7 Slime
+  isComplete: 0
+  isOptional: 0
+  startDialogue: {fileID: 11400000, guid: 1a02a323d8b57c547add8efa854d332c, type: 2}
+  endDialogue: {fileID: 11400000, guid: dbb8cf2014a6be748bcf92a6f7ed1d90, type: 2}

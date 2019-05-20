@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4967492369494412282}
   - component: {fileID: 4967492369494412277}
   m_Layer: 0
-  m_Name: Dialogue
-  m_TagString: Dialogue
+  m_Name: Conversation
+  m_TagString: Conversation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,12 +45,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
   inputSetup: {fileID: 0}
+  shop: {fileID: 0}
   quest: {fileID: 0}
   inventory: {fileID: 0}
   target: {fileID: 0}
-  dialog: []
+  dialog: {fileID: 0}
   colQuestList: []
-  interactDialogList: []
+  npcDialog: {fileID: 0}
+  isTalking: 0
   inputHold: 0
   haveDialogOption: 0
   isAQuestDialog: 0
@@ -58,15 +60,15 @@ MonoBehaviour:
   dialNum: 0
   dialogueOptionPrefab: {fileID: 4213920844080732649, guid: e27f38175576665459dcc2c1944461b2,
     type: 3}
-  dialogueUI: {fileID: 0}
+  ConversationUI: {fileID: 0}
   dialogueOptionView: {fileID: 0}
   dialogueOptionContent: {fileID: 0}
   dialogueOptionScrollbar: {fileID: 0}
   dialogueButton: {fileID: 0}
-  dialogueText: {fileID: 0}
+  conversationText: {fileID: 0}
   interactText: {fileID: 0}
   dialogOptionList: []
   inputAxis: {x: 0, y: 0, z: 0}
-  nonDialogueIndex: 0
+  nonQuestIndex: 0
   dialogueOptionIndex: 0
   dialogueOptionMaxIndex: 0

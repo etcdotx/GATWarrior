@@ -177,7 +177,8 @@ public class PlayerData : MonoBehaviour {
     public void AddQuest(CollectionQuest cq)
     {
         //memasukkan quest baru kedalam ke quest yang dimiliki player
-        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, cq.itemToCollect, cq.title, cq.verb, cq.description, cq.isOptional);
+        CollectionQuest newQuest = new CollectionQuest(cq.sourceID, cq.id, cq.chainQuestID, cq.colAmount, 
+            cq.itemToCollect, cq.title, cq.verb, cq.description, cq.isOptional, cq.startDialogue, cq.endDialogue);
         newQuest.chainQuestID = cq.chainQuestID;
         collectionQuest.Add(newQuest);
         //memasukkan quest list kedalam ui
@@ -350,7 +351,8 @@ public class PlayerData : MonoBehaviour {
         if (colQuestExist == false)
         {
             //jika quest yang sudah selesai, tidak ada di dalam koleksi quest yang sudah selesai, masukkan quest tersebut
-            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, cqc.itemToCollect, cqc.title, cqc.verb, cqc.description, cqc.isOptional);
+            CollectionQuest newQuestCom = new CollectionQuest(cqc.sourceID, cqc.id, cqc.chainQuestID, cqc.colAmount, 
+                cqc.itemToCollect, cqc.title, cqc.verb, cqc.description, cqc.isOptional, cqc.startDialogue, cqc.endDialogue);
             newQuestCom.chainQuestID = cqc.chainQuestID;
             collectionQuestComplete.Add(newQuestCom);
             //AddCompleteQuestList(newQuestCom);

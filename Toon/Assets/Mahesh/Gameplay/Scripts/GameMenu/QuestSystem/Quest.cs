@@ -66,17 +66,14 @@ public class Quest : MonoBehaviour
                     CollectionQuest cq = new CollectionQuest(collectionQuestActive[j].sourceID, 
                         collectionQuestActive[j].id, collectionQuestActive[j].chainQuestID, collectionQuestActive[j].colAmount, 
                         collectionQuestActive[j].itemToCollect, collectionQuestActive[j].title, 
-                        collectionQuestActive[j].verb, collectionQuestActive[j].description, collectionQuestActive[j].isOptional);
+                        collectionQuestActive[j].verb, collectionQuestActive[j].description, collectionQuestActive[j].isOptional,
+                        collectionQuestActive[j].startDialogue, collectionQuestActive[j].endDialogue);
                     npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Add(cq);
                 }
             }
         }
         for (int i = 0; i < npcAvailable.Length; i++)
         {
-            npcAvailable[i].GetComponent<NPC>().questDialogList.Clear();
-            npcAvailable[i].GetComponent<NPC>().questCompleteDialogList.Clear();
-            npcAvailable[i].GetComponent<NPC>().GetQuestCompleteDialog();
-            npcAvailable[i].GetComponent<NPC>().GetQuestDialog();
             npcAvailable[i].GetComponent<NPC>().activeCollectionQuestTotal = npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Count;
         }
     }

@@ -6,14 +6,14 @@ public class Talk : MonoBehaviour
 {
     public CharacterInteraction characterInteraction;
     public InputSetup inputSetup;
-    public Dialogue dialogue;
+    public Conversation conversation;
 
     // Start is called before the first frame update
     void Start()
     {
         characterInteraction = gameObject.GetComponent<CharacterInteraction>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        dialogue = GameObject.FindGameObjectWithTag("Dialogue").GetComponent<Dialogue>();
+        conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Conversation>();
     }
 
     public void TalkToObject(Interactable interactable)
@@ -22,17 +22,16 @@ public class Talk : MonoBehaviour
         {
             NPC thisNPC = interactable.gameObject.GetComponent<NPC>();
             int totalDialogueOption = thisNPC.activeCollectionQuest.Count;
-            dialogue.isTalking = true;
             if (thisNPC.isAShop == true)
                 totalDialogueOption += 1;
 
             if (totalDialogueOption != 0)
             {
-                dialogue.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);
+                conversation.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);
             }
             else
             {
-                dialogue.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);          
+                conversation.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);          
             }
         }
         catch {

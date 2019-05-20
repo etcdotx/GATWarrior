@@ -127,11 +127,9 @@ MonoBehaviour:
   isAShop: 1
   sourceID: 2
   activeCollectionQuestTotal: 0
-  questDialogListTotal: 0
-  questCompleteDialogListTotal: 0
   activeCollectionQuest: []
-  optionDialog: 
-  npcDialog: []
+  optionDialog: Whatsup
+  npcDialog: {fileID: 11400000, guid: 25b420e2bcc980a4bae598a2379d48f9, type: 2}
   shopItem:
   - {fileID: 11400000, guid: 50220ef3a5945bf49bf3cc03aac905a6, type: 2}
   - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}

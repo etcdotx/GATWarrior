@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   isCollectable: 0
-  itemID: 
+  items: []
   interactText: Ask
   readAble: []
   isTalking: 1
@@ -127,15 +127,9 @@ MonoBehaviour:
   isAShop: 1
   sourceID: 1
   activeCollectionQuestTotal: 0
-  questDialogListTotal: 0
-  questCompleteDialogListTotal: 0
   activeCollectionQuest: []
   optionDialog: Can i help you?
-  npcDialog:
-  - Hey
-  - I never see you around here
-  - Are you new here?
-  - Welcome, then!
+  npcDialog: {fileID: 11400000, guid: 840530cd0a67bb142a7a75cfc9e5ab0c, type: 2}
   shopItem:
   - {fileID: 11400000, guid: 50220ef3a5945bf49bf3cc03aac905a6, type: 2}
   - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}

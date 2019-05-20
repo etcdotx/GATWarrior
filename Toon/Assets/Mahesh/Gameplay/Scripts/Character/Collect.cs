@@ -60,19 +60,20 @@ public class Collect : MonoBehaviour
                 Debug.Log("item space is full");
                 return;
             }
-        }
 
-        for (int j = 0; j < ItemDataBase.item.Count; j++)
-        {
-            //jika item yang ada didatabase sesuai dengan item yang diinteract
-            //maka item tersebut dimasukkan kedalam koleksi item player
-            if (ItemDataBase.item[j].id == item.id)
+            for (int j = 0; j < ItemDataBase.item.Count; j++)
             {
-                interactable.items.RemoveAt(0);
-                playerData.AddItem(ItemDataBase.item[j]);
-                break;
+                //jika item yang ada didatabase sesuai dengan item yang diinteract
+                //maka item tersebut dimasukkan kedalam koleksi item player
+                if (ItemDataBase.item[j].id == item.id)
+                {
+                    interactable.items.RemoveAt(0);
+                    playerData.AddItem(ItemDataBase.item[j]);
+                    break;
+                }
             }
         }
+
         //gameobject item yang ada di hierarchy dihancurkan
         if (interactable.items.Count==0)
             Destroy(interactable.gameObject);

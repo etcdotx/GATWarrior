@@ -9,7 +9,6 @@ TagManager:
   - NPC
   - PlayerHead
   - InteractableUI
-  - Dialogue
   - Soils
   - UsableItem
   - Quest
@@ -21,7 +20,6 @@ TagManager:
   - InventoryUI
   - UsableItemUI
   - PlayerData
-  - DialogueUI
   - MonsterDatabase
   - GameDataBase
   - PlantDataBase
@@ -39,6 +37,7 @@ TagManager:
   - Ground
   - Shield
   - Shop
+  - Conversation
   layers:
   - Default
   - TransparentFX

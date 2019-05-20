@@ -9,6 +9,7 @@ public class UsableItem : MonoBehaviour
     public GameObject player;
     public CharacterCombat characterCombat;
     public Inventory inventory;
+    public GameMenuManager gameMenuManager;
 
     [Header("Indicator")]
     public GameObject usableItemUI;
@@ -33,6 +34,7 @@ public class UsableItem : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         characterCombat = player.GetComponent<CharacterCombat>();
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
+        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
 
         usableItemUI = GameObject.FindGameObjectWithTag("UsableItemUI");
         usableItemView = usableItemUI.transform.Find("UsableItemView").gameObject;
@@ -78,6 +80,14 @@ public class UsableItem : MonoBehaviour
                 Debug.Log("useitem");
                 UseItem();
             }
+        }
+        if (gameMenuManager.menuState != GameMenuManager.MenuState.noMenu)
+        {
+            usableItemView.SetActive(false);
+        }
+        else
+        {
+            usableItemView.SetActive(true);
         }
     }
 

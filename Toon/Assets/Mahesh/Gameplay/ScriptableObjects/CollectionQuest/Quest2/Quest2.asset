@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1d2a7092a9785441894e06d3feedcee, type: 3}
-  m_Name: Quest 1
+  m_Name: Quest2
   m_EditorClassIdentifier: 
-  sourceID: 1
-  id: 1
-  chainQuestID: 0200000003000000
+  sourceID: 2
+  id: 2
+  chainQuestID: 
   colAmount: 5
-  curAmount: 0
-  itemToCollect: {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
-  title: HAHAHAHAHAHA
-  verb: Collect
+  curAmount: 6
+  itemToCollect: {fileID: 11400000, guid: 335ca529d5ec8284f9ae0f17520c6f00, type: 2}
+  title: Help gather sphere!
+  verb: Gather
   resourcePath: 
-  description: Collect 5 Cube
+  description: Mystery sphere from the town
   isComplete: 0
   isOptional: 0
+  startDialogue: {fileID: 11400000, guid: 1a02a323d8b57c547add8efa854d332c, type: 2}
+  endDialogue: {fileID: 11400000, guid: dbb8cf2014a6be748bcf92a6f7ed1d90, type: 2}
