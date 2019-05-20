@@ -13,6 +13,7 @@ public class Item : ScriptableObject
 
     [Header("Quantity must be 1")]
     public int quantity;
+    public int maxQuantityOnInventory;
 
     [Header("Price")]
     public int price;
@@ -30,13 +31,14 @@ public class Item : ScriptableObject
     public bool isOnInventory;
     public bool isOnItemBox;
 
-    public Item(int id, Sprite itemImage, string itemName, string description, int price, bool isUsable, bool isConsumable, bool isASingleTool, string itemType)
+    public Item(int id, Sprite itemImage, string itemName, string description, int maxQuantityOnInventory,int price, bool isUsable, bool isConsumable, bool isASingleTool, string itemType)
     {
         quantity = 1;
         this.id = id;
         this.itemImage = itemImage;
         this.itemName = itemName;
         this.description = description;
+        this.maxQuantityOnInventory = maxQuantityOnInventory;
         this.price = price;
         this.isUsable = isUsable;
         this.isConsumable = isConsumable;

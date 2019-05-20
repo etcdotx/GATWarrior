@@ -79,7 +79,7 @@ public class Dialogue : MonoBehaviour
                     StartCoroutine(InputHold());
                     ChooseDialogue();
                 }
-                if (Input.GetKeyDown(inputSetup.interact))
+                if (Input.GetKeyDown(inputSetup.continueTalk))
                 {
                     ConfirmDialogSelection();
                     if (dialNum == dialog.Count - 1)

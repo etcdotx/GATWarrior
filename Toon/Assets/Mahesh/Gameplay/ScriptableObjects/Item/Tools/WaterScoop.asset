@@ -17,6 +17,7 @@ MonoBehaviour:
   itemName: Water Scoop
   description: A water scoop
   quantity: 1
+  maxQuantityOnInventory: 1
   price: 0
   isUsable: 1
   isConsumable: 0

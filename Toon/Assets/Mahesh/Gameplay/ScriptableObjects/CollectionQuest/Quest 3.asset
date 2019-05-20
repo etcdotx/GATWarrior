@@ -17,8 +17,7 @@ MonoBehaviour:
   chainQuestID: 
   colAmount: 7
   curAmount: 0
-  itemToCollect: {fileID: 958774200191809165, guid: a0b12d69a7217ef4aa63a953e931c1f3,
-    type: 3}
+  itemToCollect: {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
   title: Collect 5 Cube
   verb: Collect
   resourcePath: 

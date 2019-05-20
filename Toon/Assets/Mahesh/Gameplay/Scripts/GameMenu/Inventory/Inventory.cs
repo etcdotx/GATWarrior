@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     public PlayerData playerData;
-    public InputSetup inputSetup;
     public GameMenuManager gameMenuManager;
     public InventoryBox inventoryBox;
     public UsableItem usableItem;
@@ -19,8 +18,8 @@ public class Inventory : MonoBehaviour
     public int inventoryViewPortChildCount;
     public GameObject inventoryView;
     public GameObject inventoryViewPort;
-    public GameObject[] inventoryIndicator;
-    public GameObject[,] inventoryPos; //5 column
+    public InventoryIndicator[] inventoryIndicator;
+    public InventoryIndicator[,] inventoryIndicatorPos; //5 column
 
     public InventoryIndicator invenSwap1;
     public InventoryIndicator invenSwap2;
@@ -40,7 +39,6 @@ public class Inventory : MonoBehaviour
     private void Awake()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
         usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
@@ -49,10 +47,10 @@ public class Inventory : MonoBehaviour
         inventoryViewPort = inventoryView.transform.Find("InventoryViewPort").gameObject;
 
         int h = inventoryViewPort.transform.childCount;
-        inventoryIndicator = new GameObject[h];
+        inventoryIndicator = new InventoryIndicator[h];
         for (int i = 0; i < h; i++)
         {
-            inventoryIndicator[i] = inventoryViewPort.transform.GetChild(i).gameObject;
+            inventoryIndicator[i] = inventoryViewPort.transform.GetChild(i).GetComponent<InventoryIndicator>();
         }
         slider = inventoryView.transform.Find("Slider").gameObject;
         inventoryQuantitySlider = slider.transform.Find("InventoryQuantitySlider").GetComponent<Slider>();
@@ -60,7 +58,7 @@ public class Inventory : MonoBehaviour
         inventoryViewPortChildCount = inventoryViewPort.transform.childCount;
         inventoryColumn = inventoryViewPort.GetComponent<GridLayoutGroup>().constraintCount;
         inventoryRow = inventoryViewPortChildCount / inventoryColumn;
-        inventoryPos = new GameObject[inventoryRow, inventoryColumn];
+        inventoryIndicatorPos = new InventoryIndicator[inventoryRow, inventoryColumn];
         inventoryColumnIndex = 0;
         inventoryRowIndex = 0;
         int c = 0;
@@ -68,7 +66,7 @@ public class Inventory : MonoBehaviour
         {
             for (int j = 0; j < inventoryColumn; j++)
             {
-                inventoryPos[i, j] = inventoryViewPort.transform.GetChild(c).gameObject;
+                inventoryIndicatorPos[i, j] = inventoryViewPort.transform.GetChild(c).GetComponent<InventoryIndicator>();
                 c++;
             }
         }
@@ -136,31 +134,30 @@ public class Inventory : MonoBehaviour
         {
             for (int j = 0; j < inventoryColumn; j++)
             {
-                inventoryPos[i, j].GetComponent<InventoryIndicator>().markIndicator.SetActive(false);
+                inventoryIndicatorPos[i, j].markIndicator.SetActive(false);
             }
         }
 
-        inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().markIndicator.SetActive(true);
+        inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex].markIndicator.SetActive(true);
     }
 
     public void InventorySwapping()
     {
-        if (Input.GetKeyDown(inputSetup.select) && isSwapping == false)
+        if (!isSwapping)
         {
             Select1stItem();
         }
-        else if (Input.GetKeyDown(inputSetup.select) && isSwapping == true)
+        else if (isSwapping)
         {
             Select2ndItem();
             Swap();
-            //SetUsableItemPosition(); --> buat nyusun list nya
             RefreshInventory();
             ResetInventorySwap();
         }
     }
 
     void Select1stItem() {
-        invenSwap1 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
+        invenSwap1 = inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex];
         if (invenSwap1.item != null)
         {
             itemSwap1 = invenSwap1.item;
@@ -181,7 +178,7 @@ public class Inventory : MonoBehaviour
     }
 
     void Select2ndItem() {
-        invenSwap2 = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>();
+        invenSwap2 = inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex];
         if (invenSwap2.item != null)
         {
             itemSwap2 = invenSwap2.item;
@@ -231,11 +228,11 @@ public class Inventory : MonoBehaviour
             {
                 for (int j = 0; j < inventoryColumn; j++)
                 {
-                    if (inventoryPos[i, j].GetComponent<InventoryIndicator>().item != null)
+                    if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != null)
                     {
-                        if (inventoryPos[i, j].GetComponent<InventoryIndicator>().item != itemSwap1 && !stop)
+                        if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != itemSwap1 && !stop)
                         {
-                            Debug.Log(inventoryPos[i, j].GetComponent<InventoryIndicator>().item.itemName + " != " + itemSwap1.itemName);
+                            Debug.Log(inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item.itemName + " != " + itemSwap1.itemName);
                             placement++;
                         }
                         else
@@ -257,11 +254,11 @@ public class Inventory : MonoBehaviour
             {
                 for (int j = 0; j < inventoryColumn; j++)
                 {
-                    if (inventoryPos[i, j].GetComponent<InventoryIndicator>().item != null)
+                    if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != null)
                     {
-                        if (inventoryPos[i, j].GetComponent<InventoryIndicator>().item != itemSwap2 && !stop)
+                        if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != itemSwap2 && !stop)
                         {
-                            Debug.Log(inventoryPos[i, j].GetComponent<InventoryIndicator>().item.itemName + " != " + itemSwap2.itemName);
+                            Debug.Log(inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item.itemName + " != " + itemSwap2.itemName);
                             placement++;
                         }
                         else
@@ -286,14 +283,13 @@ public class Inventory : MonoBehaviour
         MarkInventory();
     }
 
-    public void PutInventory()
+    public void PutIntoInventoryBox()
     {
-        if (Input.GetKeyDown(inputSetup.putInventory) && isSettingQuantity == false && isSwapping==false)
+        if (!isSettingQuantity && !isSwapping)
         {
-            inventoryQuantitySlider.value = 1;
             SetInitialQuantityToPut();
         }
-        else if (Input.GetKeyDown(inputSetup.select) && isSettingQuantity == true)
+        else if (isSettingQuantity)
         {
             inventoryBox.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
             slider.SetActive(false);
@@ -303,9 +299,10 @@ public class Inventory : MonoBehaviour
 
     public void SetInitialQuantityToPut()
     {
-        if (inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().item != null)
+        if (inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex].item != null)
         {
-            temporaryItem = inventoryPos[inventoryRowIndex, inventoryColumnIndex].GetComponent<InventoryIndicator>().item;
+            inventoryQuantitySlider.value = 1;
+            temporaryItem = inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex].item;
             slider.SetActive(true);
             inventoryQuantitySlider.minValue = 1;
             inventoryQuantitySlider.maxValue = temporaryItem.quantity;
@@ -349,8 +346,8 @@ public class Inventory : MonoBehaviour
 
         if (isItemExist == false)
         {
-            Item newItemIn = new Item(newItem.id, newItem.itemImage, newItem.itemName, newItem.description, newItem.price,
-                newItem.isUsable, newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
+            Item newItemIn = new Item(newItem.id, newItem.itemImage, newItem.itemName, newItem.description, newItem.maxQuantityOnInventory, 
+                newItem.price, newItem.isUsable, newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
             if (newItem.itemType != null)
                 if (newItem.itemType.ToLower().Equals("seed".ToLower()))
                     newItemIn.plantID = newItem.plantID;
@@ -369,7 +366,7 @@ public class Inventory : MonoBehaviour
     {        
         for (int i = 0; i < inventoryIndicator.Length; i++)
         {
-            if (inventoryIndicator[i].GetComponent<InventoryIndicator>().item == null)
+            if (inventoryIndicator[i].item == null)
             {
                 try
                 {
@@ -377,8 +374,8 @@ public class Inventory : MonoBehaviour
                     {
                         if (playerData.inventoryItem[j].isOnInventory == false)
                         {
-                            inventoryIndicator[i].GetComponent<InventoryIndicator>().item = playerData.inventoryItem[j];
-                            inventoryIndicator[i].GetComponent<InventoryIndicator>().itemID = playerData.inventoryItem[j].id;
+                            inventoryIndicator[i].item = playerData.inventoryItem[j];
+                            inventoryIndicator[i].itemID = playerData.inventoryItem[j].id;
                             playerData.inventoryItem[j].isOnInventory = true;
                             break;
                         }
@@ -389,7 +386,7 @@ public class Inventory : MonoBehaviour
                     //Debug.Log("There is no item in " + i + " inventory slot.");
                 }
             }
-            inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
+            inventoryIndicator[i].RefreshInventory();
         }
         usableItem.GetUsableItem();
     }

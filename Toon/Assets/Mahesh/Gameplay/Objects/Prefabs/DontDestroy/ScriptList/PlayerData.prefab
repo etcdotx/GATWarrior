@@ -55,7 +55,7 @@ MonoBehaviour:
   body:
   - {fileID: 0}
   - {fileID: 0}
-  money: 0
+  gold: 0
   playerName: 
   maxHealth: 150
   curHealth: 0
@@ -63,6 +63,8 @@ MonoBehaviour:
   maxHealthImg: {fileID: 0}
   curHealthImg: {fileID: 0}
   gameMenuManager: {fileID: 0}
+  inventoryItem: []
+  inventoryBoxItem: []
   questListPrefab: {fileID: 8196887257004107974, guid: 67cd0da480ae4564da5b8dd9c53b7d92,
     type: 3}
   questListIndex: 0
@@ -75,3 +77,9 @@ MonoBehaviour:
   stateHpNotMax: 0
   DEVELOPERMODE: 1
   dontloadCharacter: 1
+  itemToAdd: []
+  itemBoxToAdd:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

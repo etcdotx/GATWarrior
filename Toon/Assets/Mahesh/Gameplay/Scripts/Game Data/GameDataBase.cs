@@ -17,11 +17,13 @@ public class GameDataBase: MonoBehaviour {
     public GameObject[] femaleHairType;
     public Color32[] hairColor;
 
-    [Header("Test")]
+    [Header("Data")]
     public CollectionQuest[] colQuestList;
-    public Item[] itemList;
-    public Item[] usableItem;
-    public Item[] plantItem;
+    public Item[] Consumables;
+    public Item[] Ingredients;
+    public Item[] Materials;
+    public Item[] Plants;
+    public Item[] Tools;
 
     public void Awake()
     {
@@ -167,17 +169,25 @@ public class GameDataBase: MonoBehaviour {
         if (ItemDataBase.item == null)
             ItemDataBase.item = new List<Item>();
 
-        for (int i = 0; i < itemList.Length; i++)
+        for (int i = 0; i <Consumables.Length; i++)
         {
-            ItemDataBase.item.Add(itemList[i]);
+            ItemDataBase.item.Add(Consumables[i]);
         }
-        for (int i = 0; i < usableItem.Length; i++)
+        for (int i = 0; i < Ingredients.Length; i++)
         {
-            ItemDataBase.item.Add(usableItem[i]);
+            ItemDataBase.item.Add(Ingredients[i]);
         }
-        for (int i = 0; i < plantItem.Length; i++)
+        for (int i = 0; i < Materials.Length; i++)
         {
-            ItemDataBase.item.Add(plantItem[i]);
+            ItemDataBase.item.Add(Materials[i]);
+        }
+        for (int i = 0; i < Plants.Length; i++)
+        {
+            ItemDataBase.item.Add(Plants[i]);
+        }
+        for (int i = 0; i < Tools.Length; i++)
+        {
+            ItemDataBase.item.Add(Tools[i]);
         }
     }
     #endregion

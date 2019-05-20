@@ -17,6 +17,7 @@ MonoBehaviour:
   itemName: Hoe
   description: Useful Hoe
   quantity: 1
+  maxQuantityOnInventory: 1
   price: 0
   isUsable: 1
   isConsumable: 0

@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   isCollectable: 0
-  itemID: 
+  items: []
   interactText: Ask
   readAble: []
   isTalking: 1
@@ -136,8 +136,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50220ef3a5945bf49bf3cc03aac905a6, type: 2}
   - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}
   - {fileID: 11400000, guid: 554c187a152e170498e49db16bf06b28, type: 2}
-  - {fileID: 11400000, guid: f1dd20cedd3215d4990f98137f2f8a25, type: 2}
-  - {fileID: 11400000, guid: 7cde836477f30fc40b88dc667c21f37b, type: 2}
+  - {fileID: 11400000, guid: f5c353c40687bb34996352a7b7436cdc, type: 2}
+  - {fileID: 11400000, guid: 4213805f228c10c47a1519ed41439ffc, type: 2}
   - {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
   - {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
   - {fileID: 11400000, guid: 335ca529d5ec8284f9ae0f17520c6f00, type: 2}

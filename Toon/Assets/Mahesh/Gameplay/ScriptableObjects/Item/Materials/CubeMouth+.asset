@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07f7ec0a891ff534d80ba814410c5022, type: 3}
-  m_Name: Cube
+  m_Name: CubeMouth+
   m_EditorClassIdentifier: 
-  id: 1
+  id: 38
   itemImage: {fileID: 21300000, guid: a99993a555a2e66428db4fbff1094ed0, type: 3}
-  itemName: Cube
-  description: A simple cube
+  itemName: CubeMouth+
+  description: A simple CubeMouth+
   quantity: 1
+  maxQuantityOnInventory: 5
   price: 10
   isUsable: 0
   isConsumable: 0
   isASingleTool: 0
-  itemType: Potion
+  itemType: 
   plantID: 0
   isOnInventory: 0
   isOnItemBox: 0

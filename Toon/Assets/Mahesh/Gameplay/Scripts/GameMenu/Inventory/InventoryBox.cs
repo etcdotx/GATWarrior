@@ -18,14 +18,13 @@ public class InventoryBox : MonoBehaviour
     public GameObject inventoryBoxContent;
     public Scrollbar inventoryBoxScrollbar;
 
-    public GameObject[] inventoryBoxIndicator;
-    public GameObject[,] inventoryBoxPos;
+    public InventoryIndicator[] inventoryBoxIndicator;
+    public InventoryIndicator[,] inventoryBoxIndicatorPos;
     public int inventoryBoxColumn;
     public int inventoryBoxRow;
     public int inventoryBoxContentChildCount;
     public int inventoryBoxColumnIndex;
     public int inventoryBoxRowIndex;
-    public bool isItemBoxOpened;
 
     //swap
     public InventoryIndicator invenSwap1;
@@ -60,18 +59,18 @@ public class InventoryBox : MonoBehaviour
         inventoryBoxContentChildCount = inventoryBoxContent.transform.childCount;
         inventoryBoxColumn = inventoryBoxContent.GetComponent<GridLayoutGroup>().constraintCount;
         inventoryBoxRow = inventoryBoxContentChildCount / inventoryBoxColumn;
-        inventoryBoxPos = new GameObject[inventoryBoxRow, inventoryBoxColumn];
+        inventoryBoxIndicatorPos = new InventoryIndicator[inventoryBoxRow, inventoryBoxColumn];
         inventoryBoxColumnIndex = 0;
         inventoryBoxRowIndex = 0;
 
         int c = 0;
-        inventoryBoxIndicator = new GameObject[inventoryBoxContent.transform.childCount];
+        inventoryBoxIndicator = new InventoryIndicator[inventoryBoxContent.transform.childCount];
         for (int i = 0; i < inventoryBoxRow; i++)
         {
             for (int j = 0; j < inventoryBoxColumn; j++)
             {
-                inventoryBoxPos[i, j] = inventoryBoxContent.transform.GetChild(c).gameObject;
-                inventoryBoxIndicator[c] = inventoryBoxPos[i, j].gameObject;
+                inventoryBoxIndicatorPos[i, j] = inventoryBoxContent.transform.GetChild(c).GetComponent<InventoryIndicator>();
+                inventoryBoxIndicator[c] = inventoryBoxIndicatorPos[i, j].GetComponent<InventoryIndicator>();
                 c++;
             }
         }
@@ -141,10 +140,10 @@ public class InventoryBox : MonoBehaviour
         {
             for (int j = 0; j < inventoryBoxColumn; j++)
             {
-                inventoryBoxPos[i, j].GetComponent<InventoryIndicator>().markIndicator.SetActive(false);
+                inventoryBoxIndicatorPos[i, j].markIndicator.SetActive(false);
             }
         }
-        inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().markIndicator.SetActive(true);
+        inventoryBoxIndicatorPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].markIndicator.SetActive(true);
     }
 
     public void ScrollInventoryBox()
@@ -165,11 +164,11 @@ public class InventoryBox : MonoBehaviour
 
     public void InventoryBoxSwapping()
     {
-        if (Input.GetKeyDown(inputSetup.select) && isSwapping == false)
+        if (!isSwapping)
         {
             Select1stItem();
         }
-        else if (Input.GetKeyDown(inputSetup.select) && isSwapping == true)
+        else if (isSwapping)
         {
             Select2ndItem();
             Swap();
@@ -179,7 +178,7 @@ public class InventoryBox : MonoBehaviour
     }
 
     void Select1stItem() {
-        invenSwap1 = inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>();
+        invenSwap1 = inventoryBoxIndicatorPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>();
         if (invenSwap1.item != null)
         {
             itemSwap1 = invenSwap1.item;
@@ -194,7 +193,7 @@ public class InventoryBox : MonoBehaviour
     }
 
     void Select2ndItem() {
-        invenSwap2 = inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>();
+        invenSwap2 = inventoryBoxIndicatorPos[inventoryBoxRowIndex, inventoryBoxColumnIndex];
         if (invenSwap2.item != null)
         {
             itemSwap2 = invenSwap2.item;
@@ -229,14 +228,13 @@ public class InventoryBox : MonoBehaviour
         MarkInventoryBox();
     }
 
-    public void PutInventory()
+    public void PutIntoInventory()
     {
-        if (Input.GetKeyDown(inputSetup.putInventory) && isSettingQuantity == false && isSwapping == false)
+        if (!isSettingQuantity && !isSwapping)
         {
-            inventoryBoxQuantitySlider.value = 1;
             SetInitialQuantityToPut();
         }
-        if (Input.GetKeyDown(inputSetup.select) && isSettingQuantity == true)
+        else if (isSettingQuantity)
         {
             inventory.PlaceItem(temporaryItem, (int)inventoryBoxQuantitySlider.value);
             slider.SetActive(false);
@@ -246,9 +244,43 @@ public class InventoryBox : MonoBehaviour
 
     public void SetInitialQuantityToPut()
     {
-        if (inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().item != null)
+        if (inventoryBoxIndicatorPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].item != null)
         {
-            temporaryItem = inventoryBoxPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].GetComponent<InventoryIndicator>().item;
+            bool thereIsSpace = false;
+            inventoryBoxQuantitySlider.value = 1;
+            temporaryItem = inventoryBoxIndicatorPos[inventoryBoxRowIndex, inventoryBoxColumnIndex].item;
+
+            for (int i = 0; i < playerData.inventoryItem.Count; i++)
+            {
+                if (playerData.inventoryItem[i].id == temporaryItem.id)
+                    if (playerData.inventoryItem[i].quantity == playerData.inventoryItem[i].maxQuantityOnInventory)
+                    {
+                        Debug.Log("you cannot carry more " + temporaryItem.itemName);
+                        return;
+                    }
+                    else
+                    {
+                        slider.SetActive(true);
+                        inventoryBoxQuantitySlider.minValue = 1;
+                        inventoryBoxQuantitySlider.maxValue = temporaryItem.quantity;
+                        if(temporaryItem.quantity > (playerData.inventoryItem[i].maxQuantityOnInventory - playerData.inventoryItem[i].quantity))
+                            inventoryBoxQuantitySlider.maxValue = (playerData.inventoryItem[i].maxQuantityOnInventory - playerData.inventoryItem[i].quantity);
+
+                        inventoryBoxQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryBoxQuantitySlider.value.ToString();
+                        isSettingQuantity = true;
+                        return;
+                    }
+            }
+
+            for (int i = 0; i < inventory.inventoryIndicator.Length; i++)
+            {
+                if (inventory.inventoryIndicator[i].item == null)
+                    thereIsSpace = true;
+            }
+
+            if (!thereIsSpace)
+                return;
+
             slider.SetActive(true);
             inventoryBoxQuantitySlider.minValue = 1;
             inventoryBoxQuantitySlider.maxValue = temporaryItem.quantity;
@@ -295,7 +327,8 @@ public class InventoryBox : MonoBehaviour
         if (isItemExist == false)
         {
             Item newItemInBox = new Item(newItem.id, newItem.itemImage, newItem.itemName,
-                newItem.description, newItem.price, newItem.isUsable, newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
+                newItem.description, newItem.maxQuantityOnInventory, newItem.price, newItem.isUsable, 
+                newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
             if (newItem.itemType != null)
                 if (newItem.itemType.ToLower().Equals("seed".ToLower()))
                     newItemInBox.plantID = newItem.plantID;
@@ -321,7 +354,7 @@ public class InventoryBox : MonoBehaviour
     {
         for (int i = 0; i < inventoryBoxIndicator.Length; i++)
         {
-            if (inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().itemID == 0)
+            if (inventoryBoxIndicator[i].itemID == 0)
             {
                 try
                 {
@@ -329,8 +362,8 @@ public class InventoryBox : MonoBehaviour
                     {
                         if (playerData.inventoryBoxItem[j].isOnItemBox == false)
                         {
-                            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().item = playerData.inventoryBoxItem[j];
-                            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().itemID = playerData.inventoryBoxItem[j].id;
+                            inventoryBoxIndicator[i].item = playerData.inventoryBoxItem[j];
+                            inventoryBoxIndicator[i].itemID = playerData.inventoryBoxItem[j].id;
                             playerData.inventoryBoxItem[j].isOnItemBox = true;
                             break;
                         }
@@ -341,7 +374,7 @@ public class InventoryBox : MonoBehaviour
                     //Debug.Log("There is no item in " + i + " inventory box.");
                 }
             }
-            inventoryBoxIndicator[i].GetComponent<InventoryIndicator>().RefreshInventoryBox();
+            inventoryBoxIndicator[i].RefreshInventoryBox();
         }
         usableItem.GetUsableItem();
     }

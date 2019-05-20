@@ -17,8 +17,7 @@ MonoBehaviour:
   chainQuestID: 
   colAmount: 5
   curAmount: 6
-  itemToCollect: {fileID: 4223603401072580017, guid: 89d1c540931907b4da8b5342fbf705c5,
-    type: 3}
+  itemToCollect: {fileID: 11400000, guid: 335ca529d5ec8284f9ae0f17520c6f00, type: 2}
   title: Gather 6 Sphere
   verb: Gather
   resourcePath: 

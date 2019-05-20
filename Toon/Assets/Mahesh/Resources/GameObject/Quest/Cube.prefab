@@ -106,7 +106,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   isCollectable: 1
-  itemID: 01000000
+  items:
+  - {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
   interactText: Pick Up
   readAble: []
   isTalking: 0

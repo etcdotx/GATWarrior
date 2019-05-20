@@ -10,7 +10,7 @@ public class CollectionQuest : ScriptableObject
     public List<int> chainQuestID = new List<int>();
     public int colAmount;
     public int curAmount;
-    public GameObject itemToCollect;
+    public Item itemToCollect;
     public string title;
     public string verb;
     public string resourcePath;
@@ -18,7 +18,7 @@ public class CollectionQuest : ScriptableObject
     public bool isComplete;
     public bool isOptional;
 
-    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, GameObject itemToCollect, string title, string verb, string description, bool isOptional)
+    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, Item itemToCollect, string title, string verb, string description, bool isOptional)
     {
         this.sourceID = sourceID;
         this.id = id;
@@ -42,7 +42,7 @@ public class CollectionQuest : ScriptableObject
         PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         for (int i = 0; i < playerData.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].name == itemToCollect.name)
+            if (playerData.inventoryItem[i].id == itemToCollect.id)
             {
                 curAmount = playerData.inventoryItem[i].quantity;
                 itemExist = true;
@@ -70,7 +70,7 @@ public class CollectionQuest : ScriptableObject
         PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         for (int i = 0; i < playerData.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].name == itemToCollect.name)
+            if (playerData.inventoryItem[i].id == itemToCollect.id)
             {
                 playerData.inventoryItem[i].quantity -= colAmount;
                 Debug.Log("innn");
@@ -95,6 +95,6 @@ public class CollectionQuest : ScriptableObject
 
     public override string ToString()
     {
-        return curAmount + "/" + colAmount + " " + itemToCollect.name + " " +verb + "ed.";
+        return curAmount + "/" + colAmount + " " + itemToCollect.itemName + " " +verb + "ed.";
     }
 }

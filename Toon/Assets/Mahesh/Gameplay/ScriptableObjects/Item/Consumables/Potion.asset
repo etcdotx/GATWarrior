@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07f7ec0a891ff534d80ba814410c5022, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
-  id: 5
+  id: 1
   itemImage: {fileID: 21300000, guid: 9dc06a6f3bd7f3948b659323345c57ca, type: 3}
   itemName: Potion
   description: A potion
   quantity: 1
+  maxQuantityOnInventory: 10
   price: 50
   isUsable: 1
   isConsumable: 0

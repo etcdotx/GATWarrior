@@ -9,7 +9,7 @@ public class Interactable : MonoBehaviour
 
     [Header("Is Collectable")]
     public bool isCollectable;
-    public List<int> itemID = new List<int>();
+    public List<Item> items = new List<Item>();
 
     [Header("Set interact text")]
     public string interactText;
