@@ -23,11 +23,15 @@ public class SunAndMoon : MonoBehaviour {
     public Gradient _DayNightHorizonColor;
     public Gradient _FogColor;
 
+    public Material cloudMat;
+
     private const float MINUTE = 1;
     private const float HOUR = 60 * MINUTE;
     private const float DAY = 24 * HOUR;
 
-	void Start () {
+
+
+    void Start () {
         _hour = 6;
         _minute = 0;
         hour.text = _hour.ToString();
@@ -37,8 +41,9 @@ public class SunAndMoon : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+
+    }
 
     void f_TimeCycle() {
         _minute++;
@@ -84,7 +89,9 @@ public class SunAndMoon : MonoBehaviour {
         float t_dot = (_hour * 60 + _minute) / DAY;
 
         RenderSettings.skybox.SetColor("_SkyTint", _DayNightSkyColor.Evaluate(t_dot));
-        RenderSettings.skybox.SetColor("_GroundColor", _DayNightSkyColor.Evaluate(t_dot));
+        RenderSettings.skybox.SetColor("_GroundColor", _DayNightHorizonColor.Evaluate(t_dot));
+        cloudMat.SetColor("_Sky", _DayNightSkyColor.Evaluate(t_dot));
+        cloudMat.SetColor("_Ground", _DayNightHorizonColor.Evaluate(t_dot));
         RenderSettings.fogColor = _FogColor.Evaluate(t_dot);
 
         //Debug.Log("Hour :" + _hour);

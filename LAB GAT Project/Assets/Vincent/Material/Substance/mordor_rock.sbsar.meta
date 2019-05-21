@@ -1,16 +1,33 @@
 fileFormatVersion: 2
 guid: 6b20df65db433ac4d9021deeffe5f8f6
 ScriptedImporter:
-  fileIDToRecycleName:
-    2100000: Mordor_Rock
-    2800000: Mordor_Rock - baseColor
-    2800002: Mordor_Rock - normal
-    2800004: Mordor_Rock - metallic
-    2800006: Mordor_Rock - height
-    2800008: Mordor_Rock - ambientOcclusion
-    11400000: sbsar
-    11400002: graph0
+  internalIDToNameTable:
+  - first:
+      21: 2100000
+    second: Mordor_Rock
+  - first:
+      28: 2800000
+    second: Mordor_Rock - baseColor
+  - first:
+      28: 2800002
+    second: Mordor_Rock - normal
+  - first:
+      28: 2800004
+    second: Mordor_Rock - metallic
+  - first:
+      28: 2800006
+    second: Mordor_Rock - height
+  - first:
+      28: 2800008
+    second: Mordor_Rock - ambientOcclusion
+  - first:
+      114: 11400000
+    second: sbsar
+  - first:
+      114: 11400002
+    second: graph0
   externalObjects: {}
+  serializedVersion: 2
   userData: 
   assetBundleName: 
   assetBundleVariant: 
@@ -23,21 +40,9 @@ ScriptedImporter:
     generateAllOutputs: 0
     generateMipMaps: 1
     preset: " <sbspreset pkgurl=\"pkg://Mordor_Rock\" label=\"\" >\n </sbspreset>\n"
-    shaderName: Standard
-    outputNames: baseColor,normal,metallic,height,ambientOcclusion
-    texturePackingList:
-    - outputName: baseColor
-      alphaSource: baseColor
-    - outputName: normal
-      alphaSource: normal
-    - outputName: roughness
-      alphaSource: roughness
-    - outputName: metallic
-      alphaSource: smoothness
-    - outputName: height
-      alphaSource: height
-    - outputName: ambientOcclusion
-      alphaSource: ambientOcclusion
+    shaderName: Ciconia Studio/Double Sided/Standard/Diffuse Bump
+    outputNames: baseColor,normal
+    texturePackingList: []
     textureParameters:
     - textureName: Mordor_Rock - roughness
       wrapMode: 0
