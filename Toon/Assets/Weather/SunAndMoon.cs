@@ -27,7 +27,9 @@ public class SunAndMoon : MonoBehaviour {
     private const float HOUR = 60 * MINUTE;
     private const float DAY = 24 * HOUR;
 
-	void Start () {
+    public Material cloudMat;
+
+    void Start () {
         _hour = 6;
         _minute = 0;
         hour.text = _hour.ToString();
@@ -86,6 +88,8 @@ public class SunAndMoon : MonoBehaviour {
 
         RenderSettings.skybox.SetColor("_SkyTint", _DayNightSkyColor.Evaluate(t_dot));
         RenderSettings.skybox.SetColor("_GroundColor", _DayNightSkyColor.Evaluate(t_dot));
+        cloudMat.SetColor("_Sky", _DayNightSkyColor.Evaluate(t_dot));
+        cloudMat.SetColor("_Ground", _DayNightHorizonColor.Evaluate(t_dot));
         RenderSettings.fogColor = _FogColor.Evaluate(t_dot);
 
         //Debug.Log("Hour :" + _hour);

@@ -45,7 +45,72 @@ ModelImporter:
   - first:
       74: -7301999851827404051
     second: Semi_Run
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bag__Bag_png_001
+    second: {fileID: 2100000, guid: 4c6b128f2926fdc4e8361d973eb77bc1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base_Character__Base_001_png
+    second: {fileID: 2100000, guid: d4d49b592c2ce2d4aa6352b32d337d3f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Belt_Bag__Belt_Bag_png
+    second: {fileID: 2100000, guid: ce3850ae470448c44bbbc84bcd24fd50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Belt__Belt_png
+    second: {fileID: 2100000, guid: d0fecf30a9c32b74fb92430060ada38b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Celana__Celana_001_png
+    second: {fileID: 2100000, guid: 119dfdbdd9a6fd3499fd0df41e956761, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cloth__Baju_png
+    second: {fileID: 2100000, guid: cd61f5760506df44685b97f450106852, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Grip__Shield_Grip__png_001
+    second: {fileID: 2100000, guid: 319906e54cce49f47a65ef26e52b755c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hair__Hair_png
+    second: {fileID: 2100000, guid: 4a747c8f71e515941ac9d68ff9c80951, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Head_Shield__Head_Shield_png
+    second: {fileID: 2100000, guid: ce22da37ae2629b4b9b30f18c747fe92, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Shield_Hip__Hip_Shield_png
+    second: {fileID: 2100000, guid: 182b36da45e16424cbfb6c8b5365b9f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Shield__Shield_png_001
+    second: {fileID: 2100000, guid: d7a47938fa62ec34691b4f4424963f23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Weapon_MIni_Bot_001__Weapon_MIni_001
+    second: {fileID: 2100000, guid: af9daadd7effa71489874697c00d91cb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Weapon_Mini_Top_001__Weapon_MIni_001
+    second: {fileID: 2100000, guid: 47c497d5c62cca747af486ae3a203800, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
