@@ -63,12 +63,11 @@ public class Quest : MonoBehaviour
             {
                 if (collectionQuestActive[j].sourceID == npcAvailable[i].GetComponent<NPC>().sourceID)
                 {
-                    CollectionQuest cq = new CollectionQuest(collectionQuestActive[j].sourceID, 
-                        collectionQuestActive[j].id, collectionQuestActive[j].chainQuestID, collectionQuestActive[j].colAmount, 
-                        collectionQuestActive[j].itemToCollect, collectionQuestActive[j].title, 
-                        collectionQuestActive[j].verb, collectionQuestActive[j].description, collectionQuestActive[j].isOptional,
-                        collectionQuestActive[j].startDialogue, collectionQuestActive[j].endDialogue);
+                    CollectionQuest cq = ScriptableObject.CreateInstance<CollectionQuest>();
+                    cq.Duplicate(collectionQuestActive[j]);
+
                     npcAvailable[i].GetComponent<NPC>().activeCollectionQuest.Add(cq);
+
                 }
             }
         }

@@ -9,6 +9,7 @@ public class CharacterInteraction : MonoBehaviour
     public Animator animator;
     public CharacterMovement cm;
     public UsableItem usableItem;
+    public SoundList soundList;
 
     public Talk talk;
     public Conversation conversation;
@@ -40,6 +41,7 @@ public class CharacterInteraction : MonoBehaviour
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Conversation>();
+        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
 
         interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
         interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
@@ -115,6 +117,7 @@ public class CharacterInteraction : MonoBehaviour
                         StartCoroutine(ButtonInputHold());
                         animator.SetBool("isWalk", false);
                         gameMenuManager.OpenInventoryBoxMenu();
+                        soundList.OpenInventory.Play();
                     }
                 }
             }

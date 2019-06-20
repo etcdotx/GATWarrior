@@ -18,7 +18,7 @@ public class ShopDescription : MonoBehaviour
     public void RefreshDescription()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        itemImage.sprite = item.itemImage;
+        itemImage.overrideSprite = item.itemImage;
         itemName.text = item.itemName;
         itemDescription.text = item.description;
         gold.text = item.price.ToString();

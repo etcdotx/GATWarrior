@@ -9,6 +9,7 @@ public class Conversation : MonoBehaviour
     [Header("Script List")]
     public PlayerData playerData;
     public InputSetup inputSetup;
+    public SoundList soundList;
     public Shop shop;
     public Quest quest;
     public Inventory inventory;
@@ -40,7 +41,7 @@ public class Conversation : MonoBehaviour
     public Vector3 inputAxis;
     public int dialogueOptionIndex;
 
-    public void Start()
+    private void Awake()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
@@ -57,6 +58,11 @@ public class Conversation : MonoBehaviour
         dialogueButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("DialogueButton").gameObject;
         interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
 
+        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
+    }
+
+    public void Start()
+    {
         dialogueOptionView.SetActive(false);
         conversationText.gameObject.SetActive(false);
         isTalking = false;
@@ -72,11 +78,13 @@ public class Conversation : MonoBehaviour
             {
                 if (inputAxis.y == 1 || inputAxis.y == -1)
                 {
+                    soundList.UINav.Play();
                     StartCoroutine(InputHold());
                     ChooseDialogue();
                 }
                 if (Input.GetKeyDown(inputSetup.continueTalk))
                 {
+                    soundList.UISelect.Play();
                     ConfirmDialogSelection();
                     if (dialogue != null)
                     {
@@ -88,6 +96,7 @@ public class Conversation : MonoBehaviour
                 }
                 if (Input.GetKeyDown(inputSetup.back))
                 {
+                    soundList.UISelect.Play();
                     CancelTalk();
                 }
             }
@@ -102,6 +111,7 @@ public class Conversation : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
+            soundList.UISelect.Play();
             NextDialogue();
             StartCoroutine(InputHold());
             if (dialogue != null)
@@ -243,9 +253,9 @@ public class Conversation : MonoBehaviour
     {
         for (int i = 0; i < cqList.Count; i++)
         {
-            CollectionQuest newCol = new CollectionQuest(cqList[i].sourceID, cqList[i].id, cqList[i].chainQuestID,
-                cqList[i].colAmount, cqList[i].itemToCollect, cqList[i].title, cqList[i].verb,
-                cqList[i].description, cqList[i].isOptional, cqList[i].startDialogue, cqList[i].endDialogue);
+            CollectionQuest newCol = ScriptableObject.CreateInstance<CollectionQuest>();
+            newCol.Duplicate(cqList[i]);
+
             colQuestList.Add(newCol);
         }
 

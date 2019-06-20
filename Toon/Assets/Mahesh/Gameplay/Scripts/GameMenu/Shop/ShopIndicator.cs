@@ -16,6 +16,6 @@ public class ShopIndicator : MonoBehaviour
     {
         itemNameText.text = item.itemName;
         priceText.text = item.price.ToString();
-        image.sprite = item.itemImage;
+        image.overrideSprite = item.itemImage;
     }
 }

@@ -14,11 +14,11 @@ public class UsableItemIndicator : MonoBehaviour
     {
         if (item == null)
         {
-            itemImage.sprite = null;
+            itemImage.overrideSprite = null;
         }
         else
         {
-            itemImage.sprite = item.itemImage;
+            itemImage.overrideSprite = item.itemImage;
         }     
     }
 }

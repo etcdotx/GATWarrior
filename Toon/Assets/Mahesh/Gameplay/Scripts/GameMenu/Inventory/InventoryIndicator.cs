@@ -37,7 +37,7 @@ public class InventoryIndicator : MonoBehaviour
             }
             else
             {
-                itemImage.sprite = item.itemImage;
+                itemImage.overrideSprite = item.itemImage;
                 transform.GetChild(0).GetComponent<Text>().text = item.quantity.ToString();
                 transform.GetChild(0).gameObject.SetActive(true);
                 if (item.isASingleTool)
@@ -64,7 +64,7 @@ public class InventoryIndicator : MonoBehaviour
             }
             else
             {
-                itemImage.sprite = item.itemImage;
+                itemImage.overrideSprite = item.itemImage;
                 transform.GetChild(0).GetComponent<Text>().text = item.quantity.ToString();
                 transform.GetChild(0).gameObject.SetActive(true);
                 if (item.isASingleTool)
@@ -87,7 +87,7 @@ public class InventoryIndicator : MonoBehaviour
         playerData.inventoryItem.Remove(item);
         item = null;
         itemID = 0;
-        itemImage.sprite = null;
+        itemImage.overrideSprite = null;
         transform.GetChild(0).GetComponent<Text>().text = 0.ToString();
         transform.GetChild(0).gameObject.SetActive(false);
     }

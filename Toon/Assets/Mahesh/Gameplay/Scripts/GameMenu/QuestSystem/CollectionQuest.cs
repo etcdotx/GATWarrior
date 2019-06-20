@@ -38,6 +38,20 @@ public class CollectionQuest : ScriptableObject
         //CheckProgress();
     }
 
+    public void Duplicate(CollectionQuest cq) {
+        this.sourceID = cq.sourceID;
+        this.id = cq.id;
+        this.chainQuestID = cq.chainQuestID;
+        this.colAmount = cq.colAmount;
+        this.itemToCollect = cq.itemToCollect;
+        this.title = cq.title;
+        this.verb = cq.verb;
+        this.description = cq.description;
+        this.isOptional = cq.isOptional;
+        this.startDialogue = cq.startDialogue;
+        this.endDialogue = cq.endDialogue;
+    }
+
     public string GetGameObjectName() {
         return itemToCollect.name;
     }

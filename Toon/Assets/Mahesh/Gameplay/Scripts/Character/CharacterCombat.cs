@@ -42,35 +42,41 @@ public class CharacterCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (combatMode && characterMovement.canMove)
+        if (characterMovement.canMove)
         {
-            if (usableItem.isSelectingItem == false)
+            if (combatMode)
             {
-                Shielding();
-                if (Input.GetKeyDown(inputSetup.attack) && attackCount < attackCountMax && attackInputHold==false)
+                if (usableItem.isSelectingItem == false)
                 {
-                    StopAllCoroutines();
-                    Attacking();
-
-                    if (attackCount == attackCountMax)
+                    Shielding();
+                    if (Input.GetKeyDown(inputSetup.attack) && attackCount < attackCountMax && attackInputHold == false)
                     {
-                        StartCoroutine(AttackInputHold());
+                        StopAllCoroutines();
+                        Attacking();
+
+                        if (attackCount == attackCountMax)
+                        {
+                            StartCoroutine(AttackInputHold());
+                        }
+                        else
+                        {
+                            StartCoroutine(StopAttack());
+                        }
                     }
-                    else {
-                        StartCoroutine(StopAttack());
+                    if (Input.GetKeyDown(inputSetup.useItem))
+                    {
+                        SheatheWeapon();
                     }
-                }
-                if (Input.GetKeyDown(inputSetup.useItem)) {
-                    SheatheWeapon();
                 }
             }
-        }
-        else {
-            if (usableItem.isSelectingItem == false)
+            else
             {
-                if (Input.GetKeyDown(inputSetup.attack))
+                if (usableItem.isSelectingItem == false)
                 {
-                    DrawWeapon();
+                    if (Input.GetKeyDown(inputSetup.attack))
+                    {
+                        DrawWeapon();
+                    }
                 }
             }
         }
@@ -108,7 +114,6 @@ public class CharacterCombat : MonoBehaviour
 
     public IEnumerator AttackInputHold()
     {
-        charAnim.SetBool("isAttacking", false);
         attackInputHold = true;
         isAttacking = true;
         yield return new WaitForSeconds(1);

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Potion
   m_EditorClassIdentifier: 
   id: 1
-  itemImage: {fileID: 21300000, guid: 9dc06a6f3bd7f3948b659323345c57ca, type: 3}
+  itemImage: {fileID: 21300000, guid: 2f4bc429510982b4e9f79f94374c6e1c, type: 3}
   itemName: Potion
   description: A potion
   quantity: 1

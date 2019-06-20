@@ -35,6 +35,7 @@ public class CharacterMovement : MonoBehaviour
 
     public float test;
     public bool canMove;
+    public bool holdRoll;
 
     // Use this for initialization
     void Start()
@@ -48,6 +49,7 @@ public class CharacterMovement : MonoBehaviour
 
         charRig = gameObject.GetComponent<Rigidbody>();
 
+	holdRoll = false;
         try
         {
             charAnim = GetComponent<Animator>();
@@ -199,8 +201,13 @@ public class CharacterMovement : MonoBehaviour
         if (lockWalk == false)
         {
             movedirection = a * transform.forward * Input.GetAxis("LeftJoystickVertical") + b * transform.forward * Input.GetAxis("LeftJoystickHorizontal");
+
         }
-        else {
+        else
+        {
+            Vector3 lookt = cameraMovement.nearestMonster[cameraMovement.monsterNum].transform.position;
+            //lookt.y = 0;
+            transform.LookAt(lookt);
             if (a > 0)
             {
                 if (b > 0)
@@ -225,10 +232,17 @@ public class CharacterMovement : MonoBehaviour
 
     void Roll()
     {
-        if (Input.GetKeyDown(inputSetup.jump))
+        if (Input.GetKeyDown(inputSetup.jump) && holdRoll == false)
         {
+	        StartCoroutine(HoldRoll());
             charAnim.SetTrigger("roll");
         }
+    }
+
+    public IEnumerator HoldRoll() {
+        holdRoll = true;
+        yield return new WaitForSeconds(1);
+        holdRoll = false;
     }
 
     public IEnumerator BlockFail() {

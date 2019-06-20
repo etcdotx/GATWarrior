@@ -38,6 +38,7 @@ TagManager:
   - Shield
   - Shop
   - Conversation
+  - SoundList
   layers:
   - Default
   - TransparentFX
