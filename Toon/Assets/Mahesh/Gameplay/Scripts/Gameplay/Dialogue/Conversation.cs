@@ -78,13 +78,13 @@ public class Conversation : MonoBehaviour
             {
                 if (inputAxis.y == 1 || inputAxis.y == -1)
                 {
-                    soundList.UINav.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
                     StartCoroutine(InputHold());
                     ChooseDialogue();
                 }
                 if (Input.GetKeyDown(inputSetup.continueTalk))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     ConfirmDialogSelection();
                     if (dialogue != null)
                     {
@@ -96,7 +96,7 @@ public class Conversation : MonoBehaviour
                 }
                 if (Input.GetKeyDown(inputSetup.back))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     CancelTalk();
                 }
             }
@@ -111,7 +111,7 @@ public class Conversation : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
-            soundList.UISelect.Play();
+            soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
             NextDialogue();
             StartCoroutine(InputHold());
             if (dialogue != null)

@@ -25,6 +25,29 @@ public class Soils : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    private void Update()
+    {
+        if (count > 0)
+        {
+            count -= Time.deltaTime;
+        }
+        else
+        {
+            for (int i = 0; i < plantNode.Length; i++)
+            {
+                if (plantID[i] != 0)
+                {
+                    GrowPlant(soilID[i]);
+                }
+            }
+            count = 5;
+        }
+
+    }
+
+    public void FindPlant() {
         plantDataBase = GameObject.FindGameObjectWithTag("PlantDataBase").GetComponent<PlantDataBase>();
         plantNodes = GameObject.FindGameObjectWithTag("PlantNodes");
         plantNode = new GameObject[plantNodes.transform.childCount];
@@ -49,26 +72,6 @@ public class Soils : MonoBehaviour
         }
 
         count = 5;
-    }
-
-    private void Update()
-    {
-        if (count > 0)
-        {
-            count -= Time.deltaTime;
-        }
-        else
-        {
-            for (int i = 0; i < plantNode.Length; i++)
-            {
-                if (plantID[i] != 0)
-                {
-                    GrowPlant(soilID[i]);
-                }
-            }
-            count = 5;
-        }
-
     }
 
     public void StartPlanting(int soilID, int plantID) {

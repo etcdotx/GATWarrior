@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -18,6 +19,7 @@ public class CameraMovement : MonoBehaviour {
     public bool getMonster;
     public GameObject monsterTarget;
     public GameObject[] nearestMonster;
+    public GameObject targetIndicator;
 
     private void Awake()
     {
@@ -40,6 +42,7 @@ public class CameraMovement : MonoBehaviour {
             }
             else
             {
+                targetIndicator.SetActive(false);
                 getMonster = false;
                 isLocking = false;
                 thirdVPersonCamera.SetActive(true);
@@ -61,6 +64,7 @@ public class CameraMovement : MonoBehaviour {
         }
         if (nearestMonster.Length != 0)
         {
+            targetIndicator.SetActive(true);
             isLocking = true;
             for (int i = 0; i < nearestMonster.Length; i++)
             {
@@ -80,6 +84,8 @@ public class CameraMovement : MonoBehaviour {
             }
 
             ctg.m_Targets[1].target = nearestMonster[monsterNum].transform;
+            Vector3 targetScreenPoint = Camera.main.WorldToScreenPoint(nearestMonster[monsterNum].transform.position);
+            targetIndicator.transform.position = targetScreenPoint;
         }
         else {
             getMonster = false;

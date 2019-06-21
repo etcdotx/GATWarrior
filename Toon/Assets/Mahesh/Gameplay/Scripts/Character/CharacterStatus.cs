@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterStatus : MonoBehaviour
 {
-    public PlayerData playerData;
+    public PlayerStatus playerStatus;
     public CharacterMovement characterMovement;
 
     [Header("Player Status")]
@@ -18,7 +18,7 @@ public class CharacterStatus : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
         characterMovement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
     }
@@ -27,8 +27,8 @@ public class CharacterStatus : MonoBehaviour
     {
         anim.SetTrigger("attacked");
         characterMovement.currentSpeed = 0;
-        playerData.curHealth -= dmg;
-        playerData.RefreshHp();
+        playerStatus.curHealth -= dmg;
+        playerStatus.RefreshHp();
     }
 
     public void Blocked(float dmg)

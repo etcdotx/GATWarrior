@@ -24,15 +24,22 @@ public class CharacterCombat : MonoBehaviour
     public GameObject shield;
     public GameObject weapon;
 
-    // Start is called before the first frame update
-    void Start()
+    [Header("Sound")]
+    public AudioSource attackSound;
+
+    private void Awake()
     {
         characterMovement = GetComponent<CharacterMovement>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
+        usableItem.characterCombat = this;
         charAnim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
         shield.SetActive(false);
         weapon.SetActive(false);
 
@@ -133,5 +140,9 @@ public class CharacterCombat : MonoBehaviour
             charAnim.SetBool("shielding", false);
             isShielding = false;
         }
+    }
+
+    void AttackSound() {
+        attackSound.PlayOneShot(attackSound.clip);
     }
 }

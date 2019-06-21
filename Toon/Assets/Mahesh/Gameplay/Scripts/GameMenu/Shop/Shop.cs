@@ -7,6 +7,7 @@ using TMPro;
 public class Shop : MonoBehaviour
 {
     public PlayerData playerData;
+    public PlayerStatus playerStatus;
     public InputSetup inputSetup;
     public GameMenuManager gameMenuManager;
     public InventoryBox inventoryBox;
@@ -47,6 +48,7 @@ public class Shop : MonoBehaviour
     private void Awake()
     {
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
@@ -311,7 +313,7 @@ public class Shop : MonoBehaviour
         cm.canMove = false;
 
         inShop = true;
-        playerData.healthIndicator.SetActive(false);
+        playerStatus.healthIndicator.SetActive(false);
         inventoryBox.inventoryBoxView.SetActive(true);
         inventoryBox.MarkInventoryBox();
         shopView.SetActive(true);
@@ -327,7 +329,7 @@ public class Shop : MonoBehaviour
         cm.canMove = true;
         GameStatus.ResumeGame();
         inShop = false;
-        playerData.healthIndicator.SetActive(true);
+        playerStatus.healthIndicator.SetActive(true);
         inventoryBox.inventoryBoxView.SetActive(false);
         shopView.SetActive(false);
     }

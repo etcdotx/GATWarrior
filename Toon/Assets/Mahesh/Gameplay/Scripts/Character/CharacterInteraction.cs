@@ -117,7 +117,7 @@ public class CharacterInteraction : MonoBehaviour
                         StartCoroutine(ButtonInputHold());
                         animator.SetBool("isWalk", false);
                         gameMenuManager.OpenInventoryBoxMenu();
-                        soundList.OpenInventory.Play();
+                        soundList.UIAudioSource.PlayOneShot(soundList.OpenInventoryClip);
                     }
                 }
             }

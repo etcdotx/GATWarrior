@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
+  - enabled: 1
+    path: Assets/Mahesh/Scenes/MainMenu.unity
+    guid: 9d5601f2e933b684e812136b94e8fd0f
+  - enabled: 1
+    path: Assets/Mahesh/Scenes/Rumah-Opening.unity
+    guid: 074939977856abc44a20a9e623625470
+  - enabled: 1
+    path: Assets/Mahesh/Scenes/Rumah.unity
+    guid: 379b439d688ecf24ead6cb1ebc023a43
   m_configObjects: {}

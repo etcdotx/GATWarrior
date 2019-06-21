@@ -10,32 +10,32 @@ public class CharacterEditor : MonoBehaviour
     enum ApperanceDetail { Gender_Type, Skin_Color, Hair_Type, Hair_Color, Eye_Type }
 
     [Header("Gender Settings")]
-    [SerializeField] private GameObject[] genderType;
+    public GameObject[] genderType;
     public int genderIndex;
     public string[] genderName;
     public Text genderText;
 
     [Header("Skin Settings")]
-    [SerializeField] private Color32[] skinColor;
+    public Color32[] skinColor;
     public int skinColorIndex;
     public string[] skinColorName;
     public Text skinColorText;
 
     [Header("Hair Settings")]
-    [SerializeField] private GameObject[] maleHairType;
-    [SerializeField] private GameObject[] femaleHairType;
+    public GameObject[] maleHairType;
+    public GameObject[] femaleHairType;
     public int hairIndex;
     public string[] maleHairName;
     public string[] femaleHairName;
     public Text hairTypeName;
 
     [Header("Hair Color Settings")]
-    [SerializeField] private Color32[] hairColor;
+    public Color32[] hairColor;
     public int hairColorIndex;
     public string[] hairColorName;
     public Text hairColorText;
 
-    [SerializeField] private GameObject[] eyeType;
+    public GameObject[] eyeType;
     public int eyeIndex;
 
     [Header("Set Object Parent Location")]

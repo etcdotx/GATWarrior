@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SoundList : MonoBehaviour
 {
-    public AudioSource HomeMusic;
-    public AudioSource UINav;
-    public AudioSource UISelect;
-    public AudioSource OpenInventory;
+    public AudioSource UIAudioSource;
+    public AudioClip UINavClip;
+    public AudioClip UISelectClip;
+    public AudioClip OpenInventoryClip;
 }

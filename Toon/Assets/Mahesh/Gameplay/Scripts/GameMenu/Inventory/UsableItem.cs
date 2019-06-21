@@ -10,6 +10,7 @@ public class UsableItem : MonoBehaviour
     public CharacterCombat characterCombat;
     public Inventory inventory;
     public GameMenuManager gameMenuManager;
+    public SoundList soundList;
 
     [Header("Indicator")]
     public GameObject usableItemUI;
@@ -32,9 +33,9 @@ public class UsableItem : MonoBehaviour
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
         player = GameObject.FindGameObjectWithTag("Player");
-        characterCombat = player.GetComponent<CharacterCombat>();
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
+        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
 
         usableItemUI = GameObject.FindGameObjectWithTag("UsableItemUI");
         usableItemView = usableItemUI.transform.Find("UsableItemView").gameObject;
@@ -63,10 +64,12 @@ public class UsableItem : MonoBehaviour
                 isSelectingItem = true;
                 if (Input.GetKeyDown(KeyCode.Joystick1Button1))
                 {
+                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
                     SlideItem(true);
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button2))
                 {
+                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
                     SlideItem(false);
                 }
             }
@@ -77,6 +80,7 @@ public class UsableItem : MonoBehaviour
 
             if (Input.GetKeyDown(inputSetup.useItem) && isItemUsable == true && characterCombat.combatMode==false && isSelectingItem==false)
             {
+                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                 Debug.Log("useitem");
                 UseItem();
             }

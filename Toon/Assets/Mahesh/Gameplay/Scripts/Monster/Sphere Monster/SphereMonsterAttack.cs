@@ -24,7 +24,8 @@ public class SphereMonsterAttack : MonoBehaviour
         monsterAttack = GetComponent<MonsterAttack>();
 
 
-        agent = GetComponent<NavMeshAgent>();
+        if (monsterMovement.moveWithAgent)
+            agent = GetComponent<NavMeshAgent>();
         hitBox.enabled = false;
         canAttack = true;
     }
@@ -45,7 +46,8 @@ public class SphereMonsterAttack : MonoBehaviour
     public void Attack(int num) {
         if (num == 1)
         {
-            agent.isStopped = true;
+            if(monsterMovement.moveWithAgent)
+                agent.isStopped = true;
             bonusAttack = Random.Range(0, 2);
             anim.SetTrigger("attack");
         }
@@ -97,9 +99,11 @@ public class SphereMonsterAttack : MonoBehaviour
             monsterAttack.attackNum = 0;
             monsterAttack.isAttacking = false;
             monsterStatus.canAttack = true;
-            agent.isStopped = false;
+            if (monsterMovement.moveWithAgent)
+                agent.isStopped = false;
             canAttack = true;
-            agent.ResetPath();
+            if (monsterMovement.moveWithAgent)
+                agent.ResetPath();
         }
         else if (bonusAttack > 0)
         {

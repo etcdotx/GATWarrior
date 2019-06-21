@@ -47,6 +47,8 @@ MonoBehaviour:
   inputSetup: {fileID: 0}
   player: {fileID: 0}
   characterCombat: {fileID: 0}
+  inventory: {fileID: 0}
+  gameMenuManager: {fileID: 0}
   usableItemUI: {fileID: 0}
   usableItemView: {fileID: 0}
   usableItemViewPort: {fileID: 0}
@@ -55,7 +57,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  selectedLocation: {fileID: 0}
-  usableItemID: 
+  usableItemList: []
+  selectedItem: {fileID: 0}
   isItemUsable: 0
   isSelectingItem: 0
+  isUsingItem: 0

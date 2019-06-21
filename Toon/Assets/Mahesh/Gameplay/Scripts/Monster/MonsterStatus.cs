@@ -47,7 +47,8 @@ public class MonsterStatus : MonoBehaviour
         characterCombat = player.GetComponent<CharacterCombat>();
         rigid = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        agent = GetComponent<NavMeshAgent>();
+        if (monsterMovement.moveWithAgent)
+            agent = GetComponent<NavMeshAgent>();
         interactable = GetComponent<Interactable>();
     }
 
@@ -123,7 +124,8 @@ public class MonsterStatus : MonoBehaviour
         gameObject.tag = "Untagged";
         monsterMovement.StopAllCoroutines();
         monsterAttack.StopAllCoroutines();
-        agent.isStopped = true;
+        if(monsterMovement.moveWithAgent)
+            agent.isStopped = true;
         monsterMovement.wanderingType = false;
         animator.SetBool("isMove", false);
         animator.SetTrigger("isDead");

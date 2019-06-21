@@ -48,11 +48,14 @@ MonoBehaviour:
   gameMenuManager: {fileID: 0}
   inventoryBox: {fileID: 0}
   inventory: {fileID: 0}
+  gridLayoutGroup: {fileID: 0}
   maxRow: 5
-  shopRow: 0
   shopRowIndex: 0
   shopList: 0
   maxShopList: 0
+  minRange: 0
+  maxRange: 0
+  padding: 0
   inShop: 0
   shopUI: {fileID: 0}
   shopView: {fileID: 0}
@@ -62,6 +65,12 @@ MonoBehaviour:
     type: 3}
   shopIndicator: []
   shopItem: []
+  gold: {fileID: 0}
+  shopDescription: {fileID: 0}
+  buyConfirmation: {fileID: 0}
+  sendToBoxConfirmation: {fileID: 0}
+  isBuying: 0
+  isSending: 0
 --- !u!1 &7865212617373398994
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +115,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
-  inputSetup: {fileID: 0}
   gameMenuManager: {fileID: 0}
   inventoryBox: {fileID: 0}
   usableItem: {fileID: 0}
@@ -188,7 +196,6 @@ MonoBehaviour:
   inventoryBoxContentChildCount: 0
   inventoryBoxColumnIndex: 0
   inventoryBoxRowIndex: 0
-  isItemBoxOpened: 0
   invenSwap1: {fileID: 0}
   invenSwap2: {fileID: 0}
   itemSwap1: {fileID: 0}
@@ -251,7 +258,7 @@ MonoBehaviour:
   shop: {fileID: 0}
   playerData: {fileID: 0}
   inputSetup: {fileID: 0}
-  isOpen: 0
+  soundList: {fileID: 0}
   cantOpenMenu: 0
   inputAxis: {x: 0, y: 0, z: 0}
   pointerInputHold: 0

@@ -70,7 +70,7 @@ public class CharacterMovement : MonoBehaviour
                 lookTarget.y = transform.position.y;
                 transform.LookAt(lookTarget);
             }
-            if (Mathf.Abs(inputAxis.x) > 0.15 || Mathf.Abs(inputAxis.y) > 0.15)
+            if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0)
             {
                 ManageSpeed();
                 if (characterCombat.isShielding == true && cameraMovement.isLocking == true)

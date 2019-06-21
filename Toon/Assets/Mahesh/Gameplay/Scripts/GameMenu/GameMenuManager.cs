@@ -10,6 +10,7 @@ public class GameMenuManager : MonoBehaviour
     public InventoryBox inventoryBox;
     public Shop shop;
     public PlayerData playerData;
+    public PlayerStatus playerStatus;
     public InputSetup inputSetup;
     public SoundList soundList;
     
@@ -46,6 +47,7 @@ public class GameMenuManager : MonoBehaviour
         inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
         shop = GameObject.FindGameObjectWithTag("Shop").GetComponent<Shop>();
         playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
         soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
 
         pointerInputHold = false;
@@ -82,7 +84,7 @@ public class GameMenuManager : MonoBehaviour
         {
             if (Input.GetKeyDown(inputSetup.openGameMenu)) //tombol start
             {
-                soundList.OpenInventory.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.OpenInventoryClip);
                 if (menuState == MenuState.noMenu)
                     OpenMenu();
 
@@ -100,14 +102,14 @@ public class GameMenuManager : MonoBehaviour
             {
                 StartCoroutine(PointerInputHold());
                 ApplyNavigation();
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
             else
             {
                 StartCoroutine(PointerInputHold());
                 if (inventory.isSettingQuantity)
                 {
-                    soundList.UINav.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
                     if (inputAxis.x == 1)
                         inventory.IncreaseQuantityToPut();
                     if (inputAxis.x == -1)
@@ -115,7 +117,7 @@ public class GameMenuManager : MonoBehaviour
                 }
                 else if (inventoryBox.isSettingQuantity)
                 {
-                    soundList.UINav.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
                     if (inputAxis.x == 1)
                         inventoryBox.IncreaseQuantityToPut();
                     if (inputAxis.x == -1)
@@ -176,7 +178,7 @@ public class GameMenuManager : MonoBehaviour
         {
             if (Input.GetKeyDown(inputSetup.select))
             {
-                soundList.UISelect.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                 StartCoroutine(ButtonInputHold());
                 inventory.InventorySwapping();
             }
@@ -188,7 +190,7 @@ public class GameMenuManager : MonoBehaviour
 
         if (Input.GetKeyDown(inputSetup.back)) //tombol back
         {
-            soundList.UISelect.Play();
+            soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
             StartCoroutine(ButtonInputHold());
             if (inventory.isSwapping)
                 inventory.ResetInventorySwap();
@@ -202,7 +204,7 @@ public class GameMenuManager : MonoBehaviour
         {
             if (Input.GetKeyDown(inputSetup.select))
             {
-                soundList.UISelect.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                 StartCoroutine(ButtonInputHold());
                 if (!shop.isBuying && !shop.isSending)
                     shop.BuySelectedItem();
@@ -213,7 +215,7 @@ public class GameMenuManager : MonoBehaviour
             }
             if (Input.GetKeyDown(inputSetup.back)) //tombol back
             {
-                soundList.UISelect.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                 StartCoroutine(ButtonInputHold());
                 if (!shop.isBuying && !shop.isSending)
                     shop.CloseShop();
@@ -222,7 +224,7 @@ public class GameMenuManager : MonoBehaviour
             }
             if (Input.GetKeyDown(inputSetup.sendToBox))
             {
-                soundList.UISelect.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                 StartCoroutine(ButtonInputHold());
                 if (!shop.isBuying && !shop.isSending)
                     shop.SendSelectedItem();
@@ -232,7 +234,7 @@ public class GameMenuManager : MonoBehaviour
         {
             if (Input.GetKeyDown(inputSetup.back)) //tombol back
             {
-                soundList.UISelect.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                 StartCoroutine(ButtonInputHold());
                 shop.CloseShop();
             }
@@ -246,13 +248,13 @@ public class GameMenuManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(inputSetup.select))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     StartCoroutine(ButtonInputHold());
                     inventory.InventorySwapping();
                 }
                 else if (Input.GetKeyDown(inputSetup.putInventory))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     StartCoroutine(ButtonInputHold());
                     inventory.PutIntoInventoryBox();
                 }
@@ -261,7 +263,7 @@ public class GameMenuManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(inputSetup.select))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     StartCoroutine(ButtonInputHold());
                     inventory.PutIntoInventoryBox();
                 }
@@ -273,13 +275,13 @@ public class GameMenuManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(inputSetup.select))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     StartCoroutine(ButtonInputHold());
                     inventoryBox.InventoryBoxSwapping();
                 }
                 else if (Input.GetKeyDown(inputSetup.putInventory))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     StartCoroutine(ButtonInputHold());
                     inventoryBox.PutIntoInventory();
                 }
@@ -288,7 +290,7 @@ public class GameMenuManager : MonoBehaviour
             {                
                 if (Input.GetKeyDown(inputSetup.select))
                 {
-                    soundList.UISelect.Play();
+                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
                     StartCoroutine(ButtonInputHold());
                     inventoryBox.PutIntoInventory();
                 }
@@ -297,7 +299,7 @@ public class GameMenuManager : MonoBehaviour
 
         if (Input.GetKeyDown(inputSetup.back))
         {
-            soundList.UISelect.Play();
+            soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
             StartCoroutine(ButtonInputHold());
             if (inventory.isSwapping)
             {
@@ -333,14 +335,14 @@ public class GameMenuManager : MonoBehaviour
                 if (menuNumber < shopPointer.Length - 1)
                     menuNumber++;
                 ResetPointer(shopPointer);
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
                     menuNumber--;
                 ResetPointer(shopPointer);
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
         }
         else if (menuState == MenuState.startMenu && !inventory.isSwapping && !inventory.isSettingQuantity)
@@ -350,14 +352,14 @@ public class GameMenuManager : MonoBehaviour
                 if (menuNumber < menuPointer.Length - 1)
                     menuNumber++;
                 ResetPointer(menuPointer);
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
                     menuNumber--;
                 ResetPointer(menuPointer);
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
         }
         else if (menuState == MenuState.inventoryBoxMenu && !inventoryBox.isSwapping && !inventoryBox.isSettingQuantity)
@@ -367,14 +369,14 @@ public class GameMenuManager : MonoBehaviour
                 if (menuNumber < itemBoxPointer.Length - 1)
                     menuNumber++;
                 ResetPointer(itemBoxPointer);
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
                     menuNumber--;
                 ResetPointer(itemBoxPointer);
-                soundList.UINav.Play();
+                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
             }
         }
 
@@ -383,18 +385,19 @@ public class GameMenuManager : MonoBehaviour
     void OpenMenu()
     {
         menuState = MenuState.startMenu;
-        playerData.healthIndicator.SetActive(false);
+        playerStatus.healthIndicator.SetActive(false);
         inventory.inventoryView.SetActive(true);
         quest.questView.SetActive(true);
         quest.RefreshQuest();
         ResetMenu();
+        Debug.Log("in");
         GameStatus.PauseGame();
     }
 
     public void OpenInventoryBoxMenu()
     {
         menuState = MenuState.inventoryBoxMenu;
-        playerData.healthIndicator.SetActive(false);
+        playerStatus.healthIndicator.SetActive(false);
         inventory.inventoryView.SetActive(true);
         inventoryBox.inventoryBoxView.SetActive(true);
         StartCoroutine("ButtonInputHold");
@@ -406,7 +409,7 @@ public class GameMenuManager : MonoBehaviour
     void CloseMenu()
     {
         menuState = MenuState.noMenu;
-        playerData.healthIndicator.SetActive(true);
+        playerStatus.healthIndicator.SetActive(true);
         inventory.inventoryView.SetActive(false);
         quest.questView.SetActive(false);
         ResetMenu();
@@ -417,7 +420,7 @@ public class GameMenuManager : MonoBehaviour
     void CloseInventoryBoxMenu()
     {
         menuState = MenuState.noMenu;
-        playerData.healthIndicator.SetActive(true);
+        playerStatus.healthIndicator.SetActive(true);
         inventory.inventoryView.SetActive(false);
         inventoryBox.inventoryBoxView.SetActive(false);
         ResetMenu();

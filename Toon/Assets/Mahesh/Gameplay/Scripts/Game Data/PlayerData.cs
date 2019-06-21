@@ -22,14 +22,6 @@ public class PlayerData : MonoBehaviour {
     [Header("Player Wealth")]
     public int gold;
 
-    [Header("Player Status")]
-    public string playerName;
-    public float maxHealth;
-    public float curHealth;
-    public GameObject healthIndicator;
-    public Image maxHealthImg;
-    public Image curHealthImg;
-
     [Header("Menu Manager")]
     public GameMenuManager gameMenuManager;
 
@@ -81,8 +73,6 @@ public class PlayerData : MonoBehaviour {
         quest.questView.SetActive(false);
 
         //characterstats
-        curHealth = maxHealth;
-        RefreshHp();
         gold = 1250;
 
         //additem
@@ -97,10 +87,6 @@ public class PlayerData : MonoBehaviour {
                 AddItemToBox(itemBoxToAdd[i]);
             }
         }
-    }
-
-    public void RefreshHp() {
-        curHealthImg.fillAmount = curHealth / maxHealth;
     }
 
     public void SavePlayer()

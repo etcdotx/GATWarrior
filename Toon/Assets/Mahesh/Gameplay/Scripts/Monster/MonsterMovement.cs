@@ -17,7 +17,7 @@ public class MonsterMovement : MonoBehaviour
 
     [Header("Movement with distance gap (FILL)")]
     public float positionGap;
-    float distance;
+    public float distance;
 
     [Header("View (FILL)")]
     public float fieldOfViewAngle;
@@ -134,39 +134,22 @@ public class MonsterMovement : MonoBehaviour
     }
 
     void MoveWithAnimation() {
+
+        if (playerOnSight && (awareType || inCombat) && !isRotating)
+        {
+            LookAtPlayer();
+        }
+
         if (isRotating)
         {
             ChangeDirection();
         }
-        else {
+        else
+        {
             if (wanderingType)
             {
-                if (playerOnSight && (awareType || inCombat))
-                {
-                    LookAtPlayer();
-                    if (distance > positionGap)
-                    {
-                        agent.SetDestination(player.transform.position);
-                        //Debug.Log(distance + " > " + positionGap);
-                    }
-                    else
-                    {
-                        if (wanderTime < wanderTimer)
-                            Wandering();
-                    }
-                }
-                else
-                {
-                    if (wanderTime < wanderTimer)
-                        Wandering();
-                }
-            }
-            else
-            {
-                if (playerOnSight && (awareType || inCombat))
-                {
-                    LookAtPlayer();
-                }
+                if (wanderTime < wanderTimer)
+                    Wandering();
             }
         }
     }
@@ -204,13 +187,15 @@ public class MonsterMovement : MonoBehaviour
     {
         isRotating = true;
         resetHold = false;
-        agent.isStopped = true;
+        if (moveWithAgent)
+            agent.isStopped = true;
         wanderHoldTime = Random.Range(minWanderHoldTime, maxWanderHoldTime);
         anim.SetBool("isMove", true);
         yield return new WaitForSeconds(wanderHoldTime);
         isRotating = false;
         wanderTime = 0;
-        agent.isStopped = false;
+        if (moveWithAgent)
+            agent.isStopped = false;
         resetHold = true;
 
         if (playerOnSight == true)
@@ -264,7 +249,8 @@ public class MonsterMovement : MonoBehaviour
         inCombat = true;
         playerOnSight = true;
         isInterrupted = true;
-        agent.isStopped = true;
+        if (moveWithAgent)
+            agent.isStopped = true;
         anim.SetTrigger("attacked");
         recover = StartCoroutine(Recover(interruptedRecoveryTime));
     }
@@ -276,7 +262,8 @@ public class MonsterMovement : MonoBehaviour
 
         inCombat = true;
         playerOnSight = true;
-        agent.isStopped = true;
+        if (moveWithAgent)
+            agent.isStopped = true;
         anim.SetBool("fall", true);
         isFalling = true;
         recover = StartCoroutine(Recover(fallingRecoveryTime));
@@ -289,8 +276,10 @@ public class MonsterMovement : MonoBehaviour
         anim.SetBool("fall", false);
         isInterrupted = false;
         isFalling = false;
-        agent.isStopped = false;
-        agent.ResetPath();
-
+        if (moveWithAgent)
+        {
+            agent.isStopped = false;
+            agent.ResetPath();
+        }
     }
 }

@@ -39,6 +39,7 @@ TagManager:
   - Shop
   - Conversation
   - SoundList
+  - PlayerStatus
   layers:
   - Default
   - TransparentFX

@@ -37,7 +37,7 @@ public class WeaponStatus : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Monster"))
         {
-            Debug.Log(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
+            //Debug.Log(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
             hitPosition = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
 
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
@@ -47,7 +47,7 @@ public class WeaponStatus : MonoBehaviour
     }
 
     public void HitSuccessful() {
-        Debug.Log(hitPosition);
+        //Debug.Log(hitPosition);
         Instantiate(hitIndicatorPrefab, hitPosition, Quaternion.identity, null);
     }
 }

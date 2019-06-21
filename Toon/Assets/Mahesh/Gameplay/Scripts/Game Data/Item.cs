@@ -114,13 +114,12 @@ public class Item : ScriptableObject
 
     void UseConsumable()
     {
-        PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
+        PlayerStatus playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
         if (itemName.ToLower().Equals("potion".ToLower()))
         {
             quantity--;
-            playerData.curHealth += 20;
-            playerData.RefreshHp();
-            Debug.Log("cur health : " + playerData.curHealth);
+            playerStatus.curHealth += 20;
+            playerStatus.RefreshHp();
             return;
         }
     }
