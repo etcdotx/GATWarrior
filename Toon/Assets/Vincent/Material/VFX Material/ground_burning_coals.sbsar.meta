@@ -1,0 +1,145 @@
+fileFormatVersion: 2
+guid: f8c30a97ae235e1479d553cfedbd65e1
+ScriptedImporter:
+  internalIDToNameTable:
+  - first:
+      21: 2100000
+    second: Burning Coals
+  - first:
+      28: 2800000
+    second: Burning Coals - baseColor
+  - first:
+      28: 2800002
+    second: Burning Coals - normal
+  - first:
+      28: 2800004
+    second: Burning Coals - emissive
+  - first:
+      28: 2800006
+    second: Burning Coals - metallic
+  - first:
+      28: 2800008
+    second: Burning Coals - ambientOcclusion
+  - first:
+      28: 2800010
+    second: Burning Coals - height
+  - first:
+      114: 11400000
+    second: sbsar
+  - first:
+      114: 11400002
+    second: graph0
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 232528478, guid: 43a8bbf65be290d44ba52b94476242b9, type: 3}
+  version: 17
+  mGraphInstanceData:
+  - graphLabel: Burning Coals
+    prototypeName: Burning Coals
+    graphDescIndex: 0
+    generateAllOutputs: 0
+    generateMipMaps: 1
+    preset: " <sbspreset pkgurl=\"pkg://ground_burning_coals\" label=\"\" >\n  <presetinput
+      identifier=\"$outputsize\" uid=\"3300109706\" type=\"8\" value=\"11,11\" />\n
+      \ <presetinput identifier=\"normal_intensity\" uid=\"3107105370\" type=\"0\"
+      value=\"0.523\" />\n  <presetinput identifier=\"height_range\" uid=\"3114983322\"
+      type=\"0\" value=\"0.349\" />\n  <presetinput identifier=\"height_level\" uid=\"3114983320\"
+      type=\"0\" value=\"0.794\" />\n </sbspreset>\n"
+    shaderName: Standard
+    outputNames: baseColor,normal,emissive,metallic,ambientOcclusion,height
+    texturePackingList:
+    - outputName: diffuse
+      alphaSource: diffuse
+    - outputName: baseColor
+      alphaSource: baseColor
+    - outputName: normal
+      alphaSource: normal
+    - outputName: specular
+      alphaSource: specular
+    - outputName: emissive
+      alphaSource: emissive
+    - outputName: glossiness
+      alphaSource: glossiness
+    - outputName: roughness
+      alphaSource: roughness
+    - outputName: metallic
+      alphaSource: smoothness
+    - outputName: ambientOcclusion
+      alphaSource: ambientOcclusion
+    - outputName: height
+      alphaSource: height
+    textureParameters:
+    - textureName: Burning Coals - glossiness
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - diffuse
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - baseColor
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - normal
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - specular
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - emissive
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - roughness
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - metallic
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - ambientOcclusion
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Burning Coals - height
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    colorSpaceList:
+    - outputName: diffuse
+      bLinear: 0
+    - outputName: baseColor
+      bLinear: 0
+    - outputName: normal
+      bLinear: 1
+    - outputName: specular
+      bLinear: 0
+    - outputName: emissive
+      bLinear: 0
+    - outputName: glossiness
+      bLinear: 1
+    - outputName: roughness
+      bLinear: 1
+    - outputName: metallic
+      bLinear: 1
+    - outputName: ambientOcclusion
+      bLinear: 1
+    - outputName: height
+      bLinear: 1
+    inputTextureMap: []
+    targetSettingList:
+    - label: 
+      bLockRatio: 1
+      textureWidth: 2048
+      textureHeight: 2048
+      textureFormat: 2
+      bGenerateOnLoad: 1
+    material: {fileID: 2100000, guid: f8c30a97ae235e1479d553cfedbd65e1, type: 3}
+    generatedTextures: []

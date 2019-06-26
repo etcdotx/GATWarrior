@@ -66,7 +66,7 @@ public class CharacterMovement : MonoBehaviour
             GetInputAxis();
             if (characterCombat.isShielding == true && cameraMovement.isLocking == true && cameraMovement.monsterTarget!=null)
             {
-                Vector3 lookTarget = cameraMovement.monsterTarget.transform.position;
+                Vector3 lookTarget = cameraMovement.monsterTarget.position;
                 lookTarget.y = transform.position.y;
                 transform.LookAt(lookTarget);
             }

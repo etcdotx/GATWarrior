@@ -10,6 +10,7 @@ public class CameraMovement : MonoBehaviour {
     public Transform camTransform;
 
     public CinemachineTargetGroup ctg;
+    public CinemachineVirtualCamera cenemytarget;
     public GameObject thirdVPersonCamera;
     public GameObject lockVCamera;
 
@@ -17,13 +18,13 @@ public class CameraMovement : MonoBehaviour {
     public bool isLocking;
     public int monsterNum;
     public bool getMonster;
-    public GameObject monsterTarget;
+    public Transform monsterTarget;
     public GameObject[] nearestMonster;
     public GameObject targetIndicator;
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        //player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Start()
@@ -83,7 +84,10 @@ public class CameraMovement : MonoBehaviour {
                 }
             }
 
-            ctg.m_Targets[1].target = nearestMonster[monsterNum].transform;
+            //ctg.m_Targets[1].target = nearestMonster[monsterNum].transform;
+            cenemytarget.LookAt = nearestMonster[monsterNum].transform;
+            monsterTarget = nearestMonster[monsterNum].transform;
+
             Vector3 targetScreenPoint = Camera.main.WorldToScreenPoint(nearestMonster[monsterNum].transform.position);
             targetIndicator.transform.position = targetScreenPoint;
         }

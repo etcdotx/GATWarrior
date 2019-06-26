@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class GameMenuManager : MonoBehaviour
 {
     public Inventory inventory;
-    public Quest quest;
     public InventoryBox inventoryBox;
+    public Quest quest;
     public Shop shop;
     public PlayerData playerData;
     public PlayerStatus playerStatus;
