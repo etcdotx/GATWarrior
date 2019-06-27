@@ -7,12 +7,11 @@ using UnityEngine.UI;
 public class CameraMovement : MonoBehaviour {
 
     public GameObject player;
-    public Transform camTransform;
-
     public CinemachineTargetGroup ctg;
+    public CinemachineFreeLook cameraNormal;
+    public CinemachineFreeLook cameraFight;
+    public CinemachineFreeLook cameraTurnBack;
     public CinemachineVirtualCamera cenemytarget;
-    public GameObject thirdVPersonCamera;
-    public GameObject lockVCamera;
 
     [Header("Camera Lock")]
     public bool isLocking;
@@ -22,32 +21,54 @@ public class CameraMovement : MonoBehaviour {
     public GameObject[] nearestMonster;
     public GameObject targetIndicator;
 
+    public bool characterInCombat;
+    public bool turningBack;
+
     private void Awake()
     {
-        //player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Start()
     {
-        thirdVPersonCamera.SetActive(true);
-        lockVCamera.SetActive(false);
+        cameraTurnBack.gameObject.SetActive(false);
+        characterInCombat = false;
+
+        cameraNormal.Priority = 3;
+        cameraFight.Priority = 2;
+        cenemytarget.Priority = 1;
     }
 
     private void Update()
     {
-        if (GameStatus.isTalking == false && GameStatus.CanMove == true)
+        if (Input.GetAxisRaw("LT Button") == 1)
         {
-            if (Input.GetAxisRaw("LT Button") == 1)
+            CameraLock();
+        }
+        else
+        {
+            targetIndicator.SetActive(false);
+            getMonster = false;
+            isLocking = false;
+
+            if (characterInCombat)
             {
-                CameraLock();
+                cameraNormal.gameObject.SetActive(false);
+                cameraFight.gameObject.SetActive(true);
+                cenemytarget.gameObject.SetActive(false);
+
+                //cameraNormal.Priority = 2;
+                //cameraFight.Priority = 3;
+                //cenemytarget.Priority = 1;
             }
             else
             {
-                targetIndicator.SetActive(false);
-                getMonster = false;
-                isLocking = false;
-                thirdVPersonCamera.SetActive(true);
-                lockVCamera.SetActive(false);
+                cameraNormal.gameObject.SetActive(true);
+                cameraFight.gameObject.SetActive(false);
+                cenemytarget.gameObject.SetActive(false);
+                //cameraNormal.Priority = 3;
+                //cameraFight.Priority = 2;
+                //cenemytarget.Priority = 1;
             }
         }
     }
@@ -60,8 +81,10 @@ public class CameraMovement : MonoBehaviour {
             monsterNum = 0;
             nearestMonster = GameObject.FindGameObjectsWithTag("Monster");
             getMonster = true;
-            thirdVPersonCamera.SetActive(false);
-            lockVCamera.SetActive(true);
+
+            cameraNormal.gameObject.SetActive(false);
+            cameraFight.gameObject.SetActive(false);
+            cenemytarget.gameObject.SetActive(true);
         }
         if (nearestMonster.Length != 0)
         {
@@ -94,8 +117,26 @@ public class CameraMovement : MonoBehaviour {
         else {
             getMonster = false;
             isLocking = false;
-            thirdVPersonCamera.SetActive(true);
-            lockVCamera.SetActive(false);
+
+            if (characterInCombat)
+            {
+                cameraNormal.gameObject.SetActive(false);
+                cameraFight.gameObject.SetActive(true);
+                cenemytarget.gameObject.SetActive(false);
+
+                //cameraNormal.Priority = 2;
+                //cameraFight.Priority = 3;
+                //cenemytarget.Priority = 1;
+            }
+            else
+            {
+                cameraNormal.gameObject.SetActive(true);
+                cameraFight.gameObject.SetActive(false);
+                cenemytarget.gameObject.SetActive(false);
+                //cameraNormal.Priority = 3;
+                //cameraFight.Priority = 2;
+                //cenemytarget.Priority = 1;
+            }
         }
     }
 

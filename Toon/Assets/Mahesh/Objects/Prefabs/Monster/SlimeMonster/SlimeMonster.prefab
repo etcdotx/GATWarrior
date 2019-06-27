@@ -562,12 +562,12 @@ GameObject:
   - component: {fileID: 4786882015294279871}
   - component: {fileID: 3234824872186543557}
   - component: {fileID: 813535834007962094}
-  - component: {fileID: 3042259015782450778}
   - component: {fileID: 4069000387198807385}
   - component: {fileID: 4392761208494304721}
   - component: {fileID: 1182508063124109344}
   - component: {fileID: 7335094597042426441}
   - component: {fileID: 6486213674667118460}
+  - component: {fileID: 3973888529757626199}
   m_Layer: 10
   m_Name: SlimeMonster
   m_TagString: Monster
@@ -628,19 +628,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!135 &3042259015782450778
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8373654110775583404}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.9003325
-  m_Center: {x: 0, y: 0.9004603, z: 0.028305413}
 --- !u!114 &4069000387198807385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,6 +646,7 @@ MonoBehaviour:
   monsterMovement: {fileID: 0}
   monsterAttack: {fileID: 0}
   characterCombat: {fileID: 0}
+  characterInput: {fileID: 0}
   interactable: {fileID: 0}
   col: {fileID: 0}
   agent: {fileID: 0}
@@ -668,6 +656,7 @@ MonoBehaviour:
   hp: 0
   playerAttack: 
   isDamaged: 0
+  resetDamage: 0
   isDead: 0
   itemID: 
   itemDropPercentage: 
@@ -786,6 +775,20 @@ MonoBehaviour:
   damage: 10
   hitBox: {fileID: 31128027}
   canAttack: 0
+--- !u!136 &3973888529757626199
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8373654110775583404}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.1276779
+  m_Height: 2.3220224
+  m_Direction: 1
+  m_Center: {x: -0.00000009056208, y: 1.0780813, z: 0.013804453}
 --- !u!1 &8448964014961711837
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,14 +19,29 @@ public class CharacterStatus : MonoBehaviour
     void Start()
     {
         playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
-        characterMovement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
     }
 
-    public void Damaged(float dmg)
+    public void Damaged(float dmg, Vector3 sourceVec)
     {
-        anim.SetTrigger("attacked");
-        characterMovement.currentSpeed = 0;
+        anim.SetFloat("damagedPosY", 0);
+        anim.SetFloat("damagedPosX", 0);
+        Vector3 impact = sourceVec - transform.position;
+        if (Mathf.Abs(impact.x) > Mathf.Abs(impact.z))
+        {
+            if (impact.x > 0)
+                anim.SetFloat("damagedPosX", 1);
+            else if (impact.x < 0)
+                anim.SetFloat("damagedPosX", -1);
+        }
+        else {
+            if (impact.y > 0)
+                anim.SetFloat("damagedPosY", 1);
+            else if (impact.y < 0)
+                anim.SetFloat("damagedPosY", -1);
+        }
+
+        anim.SetTrigger("damaged");
         playerStatus.curHealth -= dmg;
         playerStatus.RefreshHp();
     }

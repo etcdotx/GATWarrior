@@ -17,6 +17,7 @@ public class CharacterInput : MonoBehaviour
     public float speedMultiplierLerp;
     public bool isRolling;
     public bool combatMode;
+    public bool turningBack;
 
     public AudioSource lightAttack;
     public AudioSource heavyAttack;
@@ -37,6 +38,7 @@ public class CharacterInput : MonoBehaviour
 
         combatMode = false;
         isRolling = false;
+        turningBack = false;
 
         fakeWeapon.SetActive(true);
         trueWeapon.SetActive(false);
@@ -53,7 +55,7 @@ public class CharacterInput : MonoBehaviour
             lookTarget.y = transform.position.y;
             transform.LookAt(lookTarget);
         }
-        else if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0 && !isRolling)
+        else if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0 && !isRolling && !turningBack)
         {
             if (Input.GetAxis("RT Button") > 0)
             {
@@ -67,6 +69,10 @@ public class CharacterInput : MonoBehaviour
             Rotate();
         }
 
+        if(!cameraMovement.isLocking)
+            TurnBack();
+
+        Block();
         Roll();        
         DrawOrSheathe();
         Attack();
@@ -94,6 +100,15 @@ public class CharacterInput : MonoBehaviour
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
 
+    void TurnBack() {
+        if (Input.GetAxis("D-Pad Down") > 0 && !turningBack)
+        {
+            StopCoroutine(TurningBack());
+            turningBack = true;
+            StartCoroutine(TurningBack());
+        }
+    }
+
     void Roll()
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button0) && !isRolling)
@@ -107,11 +122,15 @@ public class CharacterInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Joystick1Button3) && !combatMode)
         {
             anim.SetBool("combatMode", true);
+            cameraMovement.characterInCombat = true;
+            rotateDamp = 5;
             StartCoroutine(ChangeMode());
         }
         else if (Input.GetKeyDown(KeyCode.Joystick1Button2) && combatMode)
         {
             anim.SetBool("combatMode", false);
+            cameraMovement.characterInCombat = false;
+            rotateDamp = 0;
             StartCoroutine(ChangeMode());
         }
     }
@@ -130,12 +149,38 @@ public class CharacterInput : MonoBehaviour
         }
     }
 
+    void Block()
+    {
+        if (Input.GetKey(KeyCode.Joystick1Button5))
+        {
+            anim.SetBool("block", true);
+        }
+        else if (Input.GetKeyUp(KeyCode.Joystick1Button5))
+        {
+            anim.SetBool("block", false);
+        }
+    }
+
     IEnumerator ChangeMode() {
         yield return new WaitForSeconds(0.5f);
         if (combatMode)
             combatMode = false;
         else
             combatMode = true;
+    }
+
+    IEnumerator TurningBack()
+    {
+        cameraMovement.cameraTurnBack.gameObject.SetActive(true);
+        if (anim.GetFloat("floatY") > 1)
+            anim.SetFloat("floatTurn", 1);
+        else
+            anim.SetFloat("floatTurn", 0);
+
+        anim.SetTrigger("turn180");
+        yield return new WaitForSeconds(1f);
+        cameraMovement.cameraTurnBack.gameObject.SetActive(false);
+        turningBack = false;
     }
 
     void ResetTrigger()

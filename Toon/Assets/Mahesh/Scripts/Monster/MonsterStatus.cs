@@ -12,6 +12,7 @@ public class MonsterStatus : MonoBehaviour
     public MonsterMovement monsterMovement;
     public MonsterAttack monsterAttack;
     public CharacterCombat characterCombat;
+    public CharacterInput characterInput;
     public Interactable interactable;
     public Collider col;
     public NavMeshAgent agent;
@@ -27,6 +28,7 @@ public class MonsterStatus : MonoBehaviour
     [Header("Damaged")]
     public List<int> playerAttack = new List<int>();
     public bool isDamaged = false;
+    public bool resetDamage;
     public bool isDead;
 
     [Header("Drop rate")]
@@ -45,6 +47,7 @@ public class MonsterStatus : MonoBehaviour
         monsterMovement = GetComponent<MonsterMovement>();
         monsterAttack = GetComponent<MonsterAttack>();
         characterCombat = player.GetComponent<CharacterCombat>();
+        characterInput = player.GetComponent<CharacterInput>();
         rigid = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         if (monsterMovement.moveWithAgent)
@@ -62,9 +65,9 @@ public class MonsterStatus : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDamaged == true && characterCombat.attackCount==0)
+        if (resetDamage)
         {
-            isDamaged = false;
+            resetDamage = false;
             playerAttack.Clear();
         }
         if (!monsterAttack.isAttacking && monsterMovement.playerOnSight
@@ -92,7 +95,9 @@ public class MonsterStatus : MonoBehaviour
             playerAttack.Add(attackNum);
             weapon.HitSuccessful();
             hp -= damage;
-            isDamaged = true;
+
+            StopCoroutine(ResetCount());
+            StartCoroutine(ResetCount());
 
             bool checkForce = CheckForce(attackNum);
 
@@ -107,6 +112,12 @@ public class MonsterStatus : MonoBehaviour
             }
         }
     }
+
+    IEnumerator ResetCount() {
+        yield return new WaitForSeconds(1f);
+        resetDamage = true;
+    }
+
 
     IEnumerator Attacking()
     {
