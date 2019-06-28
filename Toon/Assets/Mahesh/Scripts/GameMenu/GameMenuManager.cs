@@ -134,15 +134,11 @@ public class GameMenuManager : MonoBehaviour
         }
         else if (menuState == MenuState.startMenu)
         {
-            if (menuNumber == 0) //inven
-                Inventory.instance.InventorySelection();
         }
             
         else if (menuState == MenuState.inventoryBoxMenu)
         {
-            if (menuNumber == 0) //inven
-                Inventory.instance.InventorySelection();
-            else if (menuNumber == 1) //itembox
+             if (menuNumber == 1) //itembox
                 InventoryBox.instance.InventoryBoxSelection();
         }
     }
@@ -164,12 +160,6 @@ public class GameMenuManager : MonoBehaviour
     void ButtonOnStartMenu() {
         if (menuNumber == 0) //inventory
         {
-            if (Input.GetKeyDown(InputSetup.instance.select))
-            {
-                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                StartCoroutine(ButtonInputHold());
-                Inventory.instance.InventorySwapping();
-            }
         }
         if (menuNumber == 1) // quest
         {
@@ -178,12 +168,6 @@ public class GameMenuManager : MonoBehaviour
 
         if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
         {
-            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-            StartCoroutine(ButtonInputHold());
-            if (Inventory.instance.isSwapping)
-                Inventory.instance.ResetInventorySwap();
-            else
-                CloseMenu();
         }
     }
 
@@ -236,9 +220,7 @@ public class GameMenuManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(InputSetup.instance.select))
                 {
-                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                    StartCoroutine(ButtonInputHold());
-                    Inventory.instance.InventorySwapping();
+
                 }
                 else if (Input.GetKeyDown(InputSetup.instance.putInventory))
                 {
@@ -291,7 +273,6 @@ public class GameMenuManager : MonoBehaviour
             StartCoroutine(ButtonInputHold());
             if (Inventory.instance.isSwapping)
             {
-                Inventory.instance.ResetInventorySwap();
             }
             else if (InventoryBox.instance.isSwapping)
             {
@@ -443,12 +424,10 @@ public class GameMenuManager : MonoBehaviour
         if (menuState == MenuState.startMenu)
         {
             ResetPointer(menuPointer);
-            ResetInventory();
         }
         else if (menuState == MenuState.inventoryBoxMenu)
         {
             ResetPointer(itemBoxPointer);
-            ResetInventory();
             ResetInventoryBox();
         }
         else if (menuState == MenuState.shopMenu)
@@ -456,12 +435,6 @@ public class GameMenuManager : MonoBehaviour
             ResetPointer(shopPointer);
             ResetInventoryBox();
         }
-    }
-
-    void ResetInventory() {
-        Inventory.instance.inventoryColumnIndex = 0;
-        Inventory.instance.inventoryRowIndex = 0;
-        Inventory.instance.MarkInventory();
     }
 
     void ResetInventoryBox()

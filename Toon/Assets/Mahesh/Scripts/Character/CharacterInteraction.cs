@@ -8,13 +8,13 @@ public class CharacterInteraction : MonoBehaviour
     public static CharacterInteraction instance;
 
     public Animator animator;
-    public Talk talk;
-    public Collect collect;
     public Interactable tempInteractable;
+    public Interactable gatherTarget;
 
     public bool hideInteractButton;
     public bool buttonShowed;
     public bool isRaycasting;
+    public bool isGathering;
 
     [Header("RayCast Settings")]
     public float maxRayDistance;
@@ -28,8 +28,6 @@ public class CharacterInteraction : MonoBehaviour
             instance = this;
 
         animator = GetComponent<Animator>();
-        talk = gameObject.GetComponent<Talk>();
-        collect = gameObject.GetComponent<Collect>();
     }
 
     // Start is called before the first frame update
@@ -38,6 +36,7 @@ public class CharacterInteraction : MonoBehaviour
         buttonShowed = false;
         isRaycasting = true;
         hideInteractButton = true;
+        isGathering = false;
         HideButton();
     }
 
@@ -110,6 +109,72 @@ public class CharacterInteraction : MonoBehaviour
             Conversation.instance.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);
         }
     }
+    public void CollectObject()
+    {
+        //mengecek id dari item tersebut
+        Item item = gatherTarget.items[0];
+        bool itemExist = false;
+
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
+        {
+            if (PlayerData.instance.inventoryItem[i].id == item.id)
+                if (PlayerData.instance.inventoryItem[i].quantity == PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
+                {
+                    Debug.Log("you cannot carry more " + item.itemName);
+                    return;
+                }
+                else
+                {
+                    for (int j = 0; j < ItemDataBase.item.Count; j++)
+                    {
+                        //jika item yang ada didatabase sesuai dengan item yang diinteract
+                        //maka item tersebut dimasukkan kedalam koleksi item player
+                        if (ItemDataBase.item[j].id == item.id)
+                        {
+                            gatherTarget.items.RemoveAt(0);
+                            PlayerData.instance.AddItem(ItemDataBase.item[j]);
+                            itemExist = true;
+                            break;
+                        }
+                    }
+                    break;
+                }
+        }
+
+        if (!itemExist)
+        {
+            bool thereIsSpace = false;
+            for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
+            {
+                if (Inventory.instance.inventoryIndicator[i].item == null)
+                {
+                    thereIsSpace = true;
+                    break;
+                }
+            }
+            if (!thereIsSpace)
+            {
+                Debug.Log("item space is full");
+                return;
+            }
+
+            for (int j = 0; j < ItemDataBase.item.Count; j++)
+            {
+                //jika item yang ada didatabase sesuai dengan item yang diinteract
+                //maka item tersebut dimasukkan kedalam koleksi item player
+                if (ItemDataBase.item[j].id == item.id)
+                {
+                    gatherTarget.items.RemoveAt(0);
+                    PlayerData.instance.AddItem(ItemDataBase.item[j]);
+                    break;
+                }
+            }
+        }
+
+        //gameobject item yang ada di hierarchy dihancurkan
+        if (gatherTarget.items.Count == 0)
+            Destroy(gatherTarget.gameObject);
+    }
 
     public void ShowButton()
     {
@@ -130,5 +195,13 @@ public class CharacterInteraction : MonoBehaviour
             InteractableIndicator.instance.interactButton.gameObject.SetActive(false);
             buttonShowed = false;
         }
+    }
+
+    public IEnumerator Gather()
+    {
+        isGathering = true;
+        yield return new WaitForSeconds(1.5f);
+        isGathering = false;
+        animator.ResetTrigger("gather");
     }
 }

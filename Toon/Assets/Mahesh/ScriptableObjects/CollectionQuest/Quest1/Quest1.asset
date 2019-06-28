@@ -18,7 +18,7 @@ MonoBehaviour:
   colAmount: 5
   curAmount: 0
   itemToCollect: {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
-  title: HAHAHAHAHAHA
+  title: Help collect annoying cube!
   verb: Collect
   resourcePath: 
   description: Collect 5 Cube

@@ -4,23 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class QuestIndicator : MonoBehaviour, ISelectHandler, ICancelHandler
+public class QuestIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDeselectHandler
 {
     public Text questText;
     public int questID;
     public float itemNum;
     public float itemTotal;
+    public GameObject markIndicator;
 
     // Start is called before the first frame update
     void Start()
     {
         itemTotal = transform.parent.childCount;
         itemNum = transform.GetSiblingIndex();
+        markIndicator.SetActive(false);
     }
 
     public void OnSelect(BaseEventData eventData)
     {
         //set the scrollbar position by selected item
+        markIndicator.SetActive(true);
         if (itemNum == 1)
             itemNum = 0;
 
@@ -36,11 +39,23 @@ public class QuestIndicator : MonoBehaviour, ISelectHandler, ICancelHandler
 
     public void OnCancel(BaseEventData eventData)
     {
-        Inventory.instance.inventoryView.SetActive(false);
-        Quest.instance.questView.SetActive(false);
-        UsableItem.instance.usableItemView.SetActive(true);
-        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
-        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+        if (Inventory.instance.isSwapping)
+        {
+            Inventory.instance.CancelSwap();
+        }
+        else
+        {
+            Inventory.instance.inventoryView.SetActive(false);
+            Quest.instance.questView.SetActive(false);
+            UsableItem.instance.usableItemView.SetActive(true);
+            UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+            UIManager.instance.StartGamePlayState();
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+        }
     }
 
+    public void OnDeselect(BaseEventData eventData)
+    {
+        markIndicator.SetActive(false);
+    }
 }

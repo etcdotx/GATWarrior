@@ -98,6 +98,17 @@ public class UIManager : MonoBehaviour
         
     }
 
+    public void StartConversationState()
+    {
+        UsableItem.instance.usableItemView.SetActive(false);
+
+    }
+
+    public void ExitConversationState()
+    {
+        UsableItem.instance.usableItemView.SetActive(true);
+    }
+
     public IEnumerator ChangeState(UIState nextState) {
         yield return new WaitForSeconds(0.2f);
         uiState = nextState;

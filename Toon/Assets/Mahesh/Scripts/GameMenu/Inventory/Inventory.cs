@@ -29,9 +29,9 @@ public class Inventory : MonoBehaviour
     public Slider inventoryQuantitySlider;
     public bool isSettingQuantity;
 
-    [Header("Swap Setting")]
-    public int swapIndex1;
-    public int swapIndex2;
+    //[Header("Swap Setting")]
+    //public int swapIndex1;
+    //public int swapIndex2;
 
     private void Awake()
     {
@@ -76,86 +76,8 @@ public class Inventory : MonoBehaviour
         slider.SetActive(false);
     }
 
-    public void InventorySelection()
-    {
-        if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
-        {
-            if (inventoryRowIndex < inventoryRow - 1)
-            {
-                inventoryRowIndex++;
-            }
-            else
-            {
-                inventoryRowIndex = 0;
-            }
-        }
-        else if (GameMenuManager.instance.inputAxis.y == 1) // keatas
-        {
-            if (inventoryRowIndex > 0)
-            {
-                inventoryRowIndex--;
-            }
-            else
-            {
-                inventoryRowIndex = inventoryRow - 1;
-            }
-        }
-
-        if (GameMenuManager.instance.inputAxis.x == -1) // kekiri
-        {
-            if (inventoryColumnIndex > 0)
-            {
-                inventoryColumnIndex--;
-            }
-            else
-            {
-                inventoryColumnIndex = inventoryColumn - 1;
-            }
-        }
-        else if (GameMenuManager.instance.inputAxis.x == 1) //kekanan
-        {
-            if (inventoryColumnIndex < inventoryColumn - 1)
-            {
-                inventoryColumnIndex++;
-            }
-            else
-            {
-                inventoryColumnIndex = 0;
-            }
-        }
-        MarkInventory();
-    }
-
-    public void MarkInventory()
-    {
-        for (int i = 0; i < inventoryRow; i++)
-        {
-            for (int j = 0; j < inventoryColumn; j++)
-            {
-                inventoryIndicatorPos[i, j].markIndicator.SetActive(false);
-            }
-        }
-
-        inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex].markIndicator.SetActive(true);
-    }
-
-    public void InventorySwapping()
-    {
-        if (!isSwapping)
-        {
-            Select1stItem();
-        }
-        else if (isSwapping)
-        {
-            Select2ndItem();
-            Swap();
-            RefreshInventory();
-            ResetInventorySwap();
-        }
-    }
-
-    void Select1stItem() {
-        invenSwap1 = inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex];
+    public void Select1stItem(InventoryIndicator inventoryIndicator1) {
+        invenSwap1 = inventoryIndicator1;
         if (invenSwap1.item != null)
         {
             itemSwap1 = invenSwap1.item;
@@ -163,20 +85,12 @@ public class Inventory : MonoBehaviour
         else
             itemSwap1 = null;
 
-        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
-            if (invenSwap1.item == PlayerData.instance.inventoryItem[i]){
-                swapIndex1 = i;
-                break;
-            }
-
-
-        invenSwap1.selectIndicator.SetActive(true);
+        invenSwap1.markIndicator.SetActive(true);
         isSwapping = true;
-        StartCoroutine(GameMenuManager.instance.ButtonInputHold());
     }
 
-    void Select2ndItem() {
-        invenSwap2 = inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex];
+    public void Select2ndItem(InventoryIndicator inventoryIndicator2) {
+        invenSwap2 = inventoryIndicator2;
         if (invenSwap2.item != null)
         {
             itemSwap2 = invenSwap2.item;
@@ -184,12 +98,11 @@ public class Inventory : MonoBehaviour
         else
             itemSwap2 = null;
 
-        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
-            if (invenSwap2.item == PlayerData.instance.inventoryItem[i])
-            {
-                swapIndex2 = i;
-                break;
-            }
+
+        invenSwap1.markIndicator.SetActive(false);
+        isSwapping = false;
+        Swap();
+        RefreshInventory();
     }
 
     void Swap() {
@@ -210,75 +123,10 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    void SetUsableItemPosition() {
-        int placement = 0;
-        if (itemSwap1 != null && itemSwap2 != null)
-        {
-            PlayerData.instance.inventoryItem[swapIndex1] = itemSwap2;
-            Debug.Log(PlayerData.instance.inventoryItem[swapIndex1].itemName);
-            PlayerData.instance.inventoryItem[swapIndex2] = itemSwap1;
-            Debug.Log(PlayerData.instance.inventoryItem[swapIndex2].itemName);
-        }
-        else if (itemSwap1 != null && itemSwap2 == null)
-        {
-            bool stop = false;
-            for (int i = 0; i < inventoryRow; i++)
-            {
-                for (int j = 0; j < inventoryColumn; j++)
-                {
-                    if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != null)
-                    {
-                        if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != itemSwap1 && !stop)
-                        {
-                            Debug.Log(inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item.itemName + " != " + itemSwap1.itemName);
-                            placement++;
-                        }
-                        else
-                            stop = true;
-                    }
-                    if (stop)
-                        break;
-                }
-                if (stop)
-                    break;
-            }
-            PlayerData.instance.inventoryItem.Remove(itemSwap1);
-            PlayerData.instance.inventoryItem.Insert(placement, itemSwap1);
-        }
-        else if (itemSwap1 == null && itemSwap2 != null)
-        {
-            bool stop = false;
-            for (int i = 0; i < inventoryRow; i++)
-            {
-                for (int j = 0; j < inventoryColumn; j++)
-                {
-                    if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != null)
-                    {
-                        if (inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item != itemSwap2 && !stop)
-                        {
-                            Debug.Log(inventoryIndicatorPos[i, j].GetComponent<InventoryIndicator>().item.itemName + " != " + itemSwap2.itemName);
-                            placement++;
-                        }
-                        else
-                            stop = true;
-                    }
-                    if (stop)
-                        break;
-                }
-                if (stop)
-                    break;
-            }
-            PlayerData.instance.inventoryItem.Remove(itemSwap2);
-            PlayerData.instance.inventoryItem.Insert(placement, itemSwap2);
-        }
-    }
-
-    public void ResetInventorySwap()
-    {
-        invenSwap1.selectIndicator.SetActive(false);
+    public void CancelSwap() {
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
         isSwapping = false;
-        StartCoroutine(GameMenuManager.instance.ButtonInputHold());
-        MarkInventory();
+        invenSwap1.markIndicator.SetActive(false);
     }
 
     public void PutIntoInventoryBox()

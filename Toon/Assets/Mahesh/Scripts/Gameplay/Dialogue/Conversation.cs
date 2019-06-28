@@ -259,11 +259,13 @@ public class Conversation : MonoBehaviour
         DestroyOption();
         ClearList();
         conversationButton.gameObject.SetActive(false);
+        conversationButton.interactable = false;
         InteractableIndicator.instance.interactText.gameObject.SetActive(false);
         conversationText.gameObject.SetActive(false);
 
         UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
         UIManager.instance.StartGamePlayState();
+        UIManager.instance.ExitConversationState();
     }
 
     void ClearList()

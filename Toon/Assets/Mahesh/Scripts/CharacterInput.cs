@@ -54,7 +54,6 @@ public class CharacterInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (UIManager.instance.uiState == UIManager.UIState.Gameplay || UIManager.instance.uiState == UIManager.UIState.InventoryAndSave)
         {
             GetInputAxis();
@@ -75,7 +74,11 @@ public class CharacterInput : MonoBehaviour
                 {
                     speedMultiplier = 1;
                 }
-                Rotate();
+
+                if (!CharacterInteraction.instance.isGathering)
+                {
+                    Rotate();
+                }
             }
 
             if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
@@ -134,16 +137,18 @@ public class CharacterInput : MonoBehaviour
     {
         if (Input.GetKeyDown(InputSetup.instance.attack) && !combatMode)
         {
+            anim.SetBool("cantBeInterrupted", true);
             anim.SetBool("combatMode", true);
             cameraMovement.characterInCombat = true;
-            rotateDamp = 5;
+            //rotateDamp = 5;
             StartCoroutine(ChangeMode());
         }
         else if (Input.GetKeyDown(InputSetup.instance.sheatheWeapon) && combatMode)
         {
+            anim.SetBool("cantBeInterrupted", true);
             anim.SetBool("combatMode", false);
             cameraMovement.characterInCombat = false;
-            rotateDamp = 0;
+            //rotateDamp = 0;
             StartCoroutine(ChangeMode());
         }
     }
@@ -180,6 +185,7 @@ public class CharacterInput : MonoBehaviour
             combatMode = false;
         else
             combatMode = true;
+        anim.SetBool("cantBeInterrupted", false);
     }
 
     IEnumerator TurningBack()

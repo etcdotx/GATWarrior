@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InteractableIndicator : MonoBehaviour
-{
+{ 
     public static InteractableIndicator instance;
 
     public Button interactButton;
@@ -20,25 +21,31 @@ public class InteractableIndicator : MonoBehaviour
 
     public void Interact()
     {
-        Interactable tempInteractable = CharacterInteraction.instance.tempInteractable;
-        if (!CharacterInteraction.instance.hideInteractButton)
+        try
         {
-            if (tempInteractable.isTalking)
+            Interactable tempInteractable = CharacterInteraction.instance.tempInteractable;
+            if (!CharacterInteraction.instance.hideInteractButton)
             {
-                CharacterInteraction.instance.TalkToObject(tempInteractable);
+                if (tempInteractable.isTalking)
+                {
+                    CharacterInteraction.instance.TalkToObject(tempInteractable);
 
-                UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Conversation));
-                UIManager.instance.ExitGamePlayState();
+                    StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Conversation));
+                    UIManager.instance.ExitGamePlayState();
+                    UIManager.instance.StartConversationState();
+                }
+                else if (tempInteractable.isCollectable)
+                {
+                    CharacterInteraction.instance.gatherTarget = tempInteractable;
+                    CharacterInteraction.instance.animator.SetTrigger("gather");
+                    StartCoroutine(CharacterInteraction.instance.Gather());
+                }
+                else if (tempInteractable.isItemBox)
+                {
+                    GameMenuManager.instance.OpenInventoryBoxMenu();
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+                }
             }
-            else if (tempInteractable.isCollectable)
-            {
-                CharacterInteraction.instance.collect.CollectObject(tempInteractable);
-            }
-            else if (tempInteractable.isItemBox)
-            {
-                GameMenuManager.instance.OpenInventoryBoxMenu();
-                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
-            }
-        }
+        } catch { }
     }
 }

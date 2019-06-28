@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryIndicator : MonoBehaviour, ICancelHandler
+public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler
 {
     public int itemID;
     public Item item;
@@ -13,11 +13,9 @@ public class InventoryIndicator : MonoBehaviour, ICancelHandler
     public bool isSelected;
     public bool marked;
     public GameObject markIndicator;
-    public GameObject selectIndicator;
 
     private void Start()
     {
-        selectIndicator.SetActive(false);
         markIndicator.SetActive(false);
     }
 
@@ -89,10 +87,32 @@ public class InventoryIndicator : MonoBehaviour, ICancelHandler
 
     public void OnCancel(BaseEventData eventData)
     {
-        Inventory.instance.inventoryView.SetActive(false);
-        Quest.instance.questView.SetActive(false);
-        UsableItem.instance.usableItemView.SetActive(true);
-        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
-        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+        if (Inventory.instance.isSwapping)
+        {
+            Inventory.instance.CancelSwap();
+        }
+        else
+        {
+            Inventory.instance.inventoryView.SetActive(false);
+            Quest.instance.questView.SetActive(false);
+            UsableItem.instance.usableItemView.SetActive(true);
+            UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+            UIManager.instance.StartGamePlayState();
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+        }
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
+    }
+
+    public void SwapInventory()
+    {
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
+        if (!Inventory.instance.isSwapping)
+            Inventory.instance.Select1stItem(this);
+        else
+            Inventory.instance.Select2ndItem(this);
     }
 }

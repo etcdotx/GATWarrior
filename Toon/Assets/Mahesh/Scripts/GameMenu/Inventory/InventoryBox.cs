@@ -180,7 +180,7 @@ public class InventoryBox : MonoBehaviour
             itemSwap1 = null;
 
 
-        invenSwap1.selectIndicator.SetActive(true);
+        invenSwap1.markIndicator.SetActive(true);
         isSwapping = true;
         StartCoroutine(GameMenuManager.instance.ButtonInputHold());
     }
@@ -215,7 +215,7 @@ public class InventoryBox : MonoBehaviour
 
     public void ResetInventoryBoxSwap()
     {
-        invenSwap1.selectIndicator.SetActive(false);
+        invenSwap1.markIndicator.SetActive(false);
         isSwapping = false;
         StartCoroutine(GameMenuManager.instance.ButtonInputHold());
         MarkInventoryBox();
