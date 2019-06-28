@@ -68,20 +68,16 @@ public class Item : ScriptableObject
 
     void UseTool()
     {
-        PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         if (itemName.ToLower().Equals("hoe".ToLower()))
         {
-            if (playerData.stateNearSoil == true)
+            if (PlayerData.instance.stateNearSoil == true)
             {
-                PlantTrigger plantTrigger = GameObject.FindGameObjectWithTag("PlantTrigger").GetComponent<PlantTrigger>();
-                Soils soils = GameObject.FindGameObjectWithTag("Soils").GetComponent<Soils>();
-
-                for (int i = 0; i < soils.soilID.Length; i++)
+                for (int i = 0; i < Soils.instance.soilID.Length; i++)
                 {
-                    if (plantTrigger.target.GetComponent<Soil>().soilID == soils.soilID[i])
+                    if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
                     {
-                        soils.canBeHooed[i] = false;
-                        plantTrigger.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = soils.soilHooed;
+                        Soils.instance.canBeHooed[i] = false;
+                        PlantTrigger.instance.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = Soils.instance.soilHooed;
                         break;
                     }
                 }
@@ -90,19 +86,16 @@ public class Item : ScriptableObject
         }
         else if (itemName.ToLower().Equals("waterscoop".ToLower()))
         {
-            if (playerData.stateNearSoil == true)
+            if (PlayerData.instance.stateNearSoil == true)
             {
-                PlantTrigger plantTrigger = GameObject.FindGameObjectWithTag("PlantTrigger").GetComponent<PlantTrigger>();
-                Soils soils = GameObject.FindGameObjectWithTag("Soils").GetComponent<Soils>();
-
-                for (int i = 0; i < soils.soilID.Length; i++)
+                for (int i = 0; i < Soils.instance.soilID.Length; i++)
                 {
-                    if (plantTrigger.target.GetComponent<Soil>().soilID == soils.soilID[i])
+                    if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
                     {
-                        if (soils.canBeHooed[i] == false)
+                        if (Soils.instance.canBeHooed[i] == false)
                         {
-                            soils.needWater[i] = false;
-                            plantTrigger.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = soils.soilWet;
+                            Soils.instance.needWater[i] = false;
+                            PlantTrigger.instance.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = Soils.instance.soilWet;
                             break;
                         }
                     }
@@ -114,29 +107,25 @@ public class Item : ScriptableObject
 
     void UseConsumable()
     {
-        PlayerStatus playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
         if (itemName.ToLower().Equals("potion".ToLower()))
         {
             quantity--;
-            playerStatus.curHealth += 20;
-            playerStatus.RefreshHp();
+            PlayerStatus.instance.curHealth += 20;
+            PlayerStatus.instance.RefreshHp();
             return;
         }
     }
 
     void UseSeed() {
-        PlantTrigger plantTrigger = GameObject.FindGameObjectWithTag("PlantTrigger").GetComponent<PlantTrigger>();
-        Soils soils = GameObject.FindGameObjectWithTag("Soils").GetComponent<Soils>();
-
-        for (int i = 0; i < soils.soilID.Length; i++)
+        for (int i = 0; i < Soils.instance.soilID.Length; i++)
         {
-            if (plantTrigger.target.GetComponent<Soil>().soilID == soils.soilID[i])
+            if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
             {
-                if (soils.state[i] == 0 && soils.canBeHooed[i] == false)
+                if (Soils.instance.state[i] == 0 && Soils.instance.canBeHooed[i] == false)
                 {
-                    soils.plantID[i] = plantID;
-                    soils.state[i] = 1;
-                    soils.StartPlanting(soils.soilID[i], plantID);
+                    Soils.instance.plantID[i] = plantID;
+                    Soils.instance.state[i] = 1;
+                    Soils.instance.StartPlanting(Soils.instance.soilID[i], plantID);
                     break;
                 }
             }
@@ -148,7 +137,6 @@ public class Item : ScriptableObject
     {
         if (itemType != null)
         {
-            PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
             if (itemType.ToLower().Equals("consumable".ToLower()))
             {
                 return true;
@@ -156,7 +144,7 @@ public class Item : ScriptableObject
             if (itemName.ToLower().Equals("hoe".ToLower()) || itemType.ToLower().Equals("waterscoop".ToLower()) || 
                 itemType.ToLower().Equals("seed".ToLower()))
             {
-                if (playerData.stateNearSoil == true)
+                if (PlayerData.instance.stateNearSoil == true)
                     return true;
             }
         }

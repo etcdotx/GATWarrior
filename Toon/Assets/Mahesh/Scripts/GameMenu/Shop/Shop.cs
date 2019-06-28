@@ -6,12 +6,7 @@ using TMPro;
 
 public class Shop : MonoBehaviour
 {
-    public PlayerData playerData;
-    public PlayerStatus playerStatus;
-    public InputSetup inputSetup;
-    public GameMenuManager gameMenuManager;
-    public InventoryBox inventoryBox;
-    public Inventory inventory;
+    public static Shop instance;
 
     [Header("UI Settings")]
     public GridLayoutGroup gridLayoutGroup;
@@ -24,7 +19,6 @@ public class Shop : MonoBehaviour
     public float padding;
     public bool inShop;
 
-    public GameObject shopUI;
     public GameObject shopView;
     public GameObject shopViewPort;
     public GameObject shopContent;
@@ -47,15 +41,13 @@ public class Shop : MonoBehaviour
 
     private void Awake()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
-        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
+        //singleton
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
 
-        shopUI = GameObject.FindGameObjectWithTag("ShopUI");
-        shopView = shopUI.transform.Find("ShopView").gameObject;
+        shopView = transform.GetChild(0).Find("ShopView").gameObject;
         shopViewPort = shopView.transform.Find("ShopViewPort").gameObject;
         shopDescription = shopView.transform.Find("ShopDescription").GetComponent<ShopDescription>();
         buyConfirmation = shopView.transform.Find("BuyConfirmation").GetComponent<BuyConfirmation>();
@@ -78,17 +70,17 @@ public class Shop : MonoBehaviour
 
     public void BuySelectedItem()
     {
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].id == shopIndicator[shopRowIndex].item.id)
+            if (PlayerData.instance.inventoryItem[i].id == shopIndicator[shopRowIndex].item.id)
             {
-                if (playerData.inventoryItem[i].quantity < playerData.inventoryItem[i].maxQuantityOnInventory)
+                if (PlayerData.instance.inventoryItem[i].quantity < PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
-                    if (playerData.gold >= playerData.inventoryItem[i].price)
+                    if (PlayerData.instance.gold >= PlayerData.instance.inventoryItem[i].price)
                     {
                         isBuying = true;
                         buyConfirmation.gameObject.SetActive(true);
-                        buyConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item, playerData);
+                        buyConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item);
                         return;
                     }
                     else {
@@ -104,11 +96,11 @@ public class Shop : MonoBehaviour
             }
         }
 
-        if (playerData.gold >= shopIndicator[shopRowIndex].item.price)
+        if (PlayerData.instance.gold >= shopIndicator[shopRowIndex].item.price)
         {
             isBuying = true;
             buyConfirmation.gameObject.SetActive(true);
-            buyConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item, playerData);
+            buyConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item);
         }
         else
         {
@@ -118,11 +110,11 @@ public class Shop : MonoBehaviour
 
     public void SendSelectedItem()
     {
-        if (playerData.gold >= shopIndicator[shopRowIndex].item.price)
+        if (PlayerData.instance.gold >= shopIndicator[shopRowIndex].item.price)
         {
             isSending = true;
             sendToBoxConfirmation.gameObject.SetActive(true);
-            sendToBoxConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item, playerData);
+            sendToBoxConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item);
         }
         else
         {
@@ -133,38 +125,38 @@ public class Shop : MonoBehaviour
     public void ManageQuantity() {
         if (isBuying)
         {
-            if (gameMenuManager.inputAxis.y == -1) // kebawah
+            if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
             {
                 buyConfirmation.DecreaseQuantity();
             }
-            else if (gameMenuManager.inputAxis.y == 1)
+            else if (GameMenuManager.instance.inputAxis.y == 1)
             {
                 buyConfirmation.IncreaseQuantity();
             }
-            if (gameMenuManager.inputAxis.x == -1) // kebawah
+            if (GameMenuManager.instance.inputAxis.x == -1) // kebawah
             {
                 buyConfirmation.SetMinQuantity();
             }
-            else if (gameMenuManager.inputAxis.x == 1)
+            else if (GameMenuManager.instance.inputAxis.x == 1)
             {
                 buyConfirmation.SetMaxQuantity();
             }
         }
         else if (isSending)
         {
-            if (gameMenuManager.inputAxis.y == -1) // kebawah
+            if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
             {
                 sendToBoxConfirmation.DecreaseQuantity();
             }
-            else if (gameMenuManager.inputAxis.y == 1)
+            else if (GameMenuManager.instance.inputAxis.y == 1)
             {
                 sendToBoxConfirmation.IncreaseQuantity();
             }
-            if (gameMenuManager.inputAxis.x == -1) // kebawah
+            if (GameMenuManager.instance.inputAxis.x == -1) // kebawah
             {
                 sendToBoxConfirmation.SetMinQuantity();
             }
-            else if (gameMenuManager.inputAxis.x == 1)
+            else if (GameMenuManager.instance.inputAxis.x == 1)
             {
                 sendToBoxConfirmation.SetMaxQuantity();
             }
@@ -172,16 +164,16 @@ public class Shop : MonoBehaviour
     }
 
     public void ConfirmBuy() {
-        buyConfirmation.ConfirmBuy(inventory, playerData);
-        gold.text = playerData.gold.ToString();
+        buyConfirmation.ConfirmBuy();
+        gold.text = PlayerData.instance.gold.ToString();
         buyConfirmation.gameObject.SetActive(false);
         isBuying = false;
         shopDescription.RefreshDescription();
     }
 
     public void ConfirmSend() {
-        sendToBoxConfirmation.ConfirmSend(inventoryBox, playerData);
-        gold.text = playerData.gold.ToString();
+        sendToBoxConfirmation.ConfirmSend();
+        gold.text = PlayerData.instance.gold.ToString();
         sendToBoxConfirmation.gameObject.SetActive(false);
         isSending = false;
         shopDescription.RefreshDescription();
@@ -196,7 +188,7 @@ public class Shop : MonoBehaviour
 
     public void ShopSelection()
     {
-        if (gameMenuManager.inputAxis.y == -1) // kebawah
+        if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
         {
             if (shopRowIndex < maxRange-1)
             {
@@ -207,7 +199,7 @@ public class Shop : MonoBehaviour
                 shopRowIndex = minRange;
             }
         }
-        else if (gameMenuManager.inputAxis.y == 1) // keatas
+        else if (GameMenuManager.instance.inputAxis.y == 1) // keatas
         {
             if (shopRowIndex > minRange)
             {
@@ -218,7 +210,7 @@ public class Shop : MonoBehaviour
                 shopRowIndex = maxRange-1;
             }
         }
-        if (gameMenuManager.inputAxis.x == -1) // kekiri
+        if (GameMenuManager.instance.inputAxis.x == -1) // kekiri
         {
             if (maxShopList > 1)
             {
@@ -243,7 +235,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
-        else if (gameMenuManager.inputAxis.x == 1) //kekanan
+        else if (GameMenuManager.instance.inputAxis.x == 1) //kekanan
         {
             if (maxShopList > 1)
             {
@@ -292,7 +284,7 @@ public class Shop : MonoBehaviour
     {
         shopIndicator.Clear();
         shopItem.Clear();
-        gold.text = playerData.gold.ToString();
+        gold.text = PlayerData.instance.gold.ToString();
         for (int i = 0; i < target.shopItem.Count; i++)
         {
             Item temp = target.shopItem[i];
@@ -307,30 +299,24 @@ public class Shop : MonoBehaviour
         ResetRange();        
         AddShopIndicator();
 
-        gameMenuManager.menuState = GameMenuManager.MenuState.shopMenu;
+        GameMenuManager.instance.menuState = GameMenuManager.MenuState.shopMenu;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        CharacterMovement cm = player.GetComponent<CharacterMovement>();
-        cm.canMove = false;
 
         inShop = true;
-        playerStatus.healthIndicator.SetActive(false);
-        inventoryBox.inventoryBoxView.SetActive(true);
-        inventoryBox.MarkInventoryBox();
+        PlayerStatus.instance.healthIndicator.SetActive(false);
+        InventoryBox.instance.inventoryBoxView.SetActive(true);
+        InventoryBox.instance.MarkInventoryBox();
         shopView.SetActive(true);
-        GameStatus.PauseGame();
     }
 
     public void CloseShop()
     {
         RemoveShopIndicator();
-        gameMenuManager.menuState = GameMenuManager.MenuState.noMenu;
+        GameMenuManager.instance.menuState = GameMenuManager.MenuState.noMenu;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        CharacterMovement cm = player.GetComponent<CharacterMovement>();
-        cm.canMove = true;
-        GameStatus.ResumeGame();
         inShop = false;
-        playerStatus.healthIndicator.SetActive(true);
-        inventoryBox.inventoryBoxView.SetActive(false);
+        PlayerStatus.instance.healthIndicator.SetActive(true);
+        InventoryBox.instance.inventoryBoxView.SetActive(false);
         shopView.SetActive(false);
     }
 

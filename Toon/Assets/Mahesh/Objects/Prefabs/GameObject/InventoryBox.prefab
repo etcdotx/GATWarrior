@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 8217592346459639556}
   - component: {fileID: 1004084380}
   m_Layer: 0
-  m_Name: ItemBox
-  m_TagString: GameObject_InventoryBox
+  m_Name: InventoryBox
+  m_TagString: InventoryBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,8 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   isCollectable: 0
-  itemID: 0
+  items: []
   interactText: Open
+  readAble: []
   isTalking: 0
-  interactView: {fileID: 0}
-  dialog: []

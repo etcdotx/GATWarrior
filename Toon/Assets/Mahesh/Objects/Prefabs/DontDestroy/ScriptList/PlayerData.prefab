@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6074646496296388119}
   m_Layer: 0
   m_Name: PlayerData
-  m_TagString: PlayerData
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,25 +43,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c24d3330f7f8e61478e12ab2a8736edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameDataBase: {fileID: 0}
   startGame: {fileID: 0}
   cm: {fileID: 0}
   inventory: {fileID: 0}
   quest: {fileID: 0}
   inventoryBox: {fileID: 0}
-  inputSetup: {fileID: 0}
   characterAppearance: 00000000000000000000000000000000
   character: {fileID: 0}
   body:
   - {fileID: 0}
   - {fileID: 0}
   gold: 0
-  playerName: 
-  maxHealth: 150
-  curHealth: 0
-  healthIndicator: {fileID: 0}
-  maxHealthImg: {fileID: 0}
-  curHealthImg: {fileID: 0}
   gameMenuManager: {fileID: 0}
   inventoryItem: []
   inventoryBoxItem: []

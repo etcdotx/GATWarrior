@@ -6,18 +6,13 @@ using TMPro;
 
 public class Quest : MonoBehaviour
 {
-    public PlayerData playerData;
-    public GameMenuManager gameMenuManager;
+    public static Quest instance;
 
     [Header("QuestDataBase")]
     public List<CollectionQuest> collectionQuestActive = new List<CollectionQuest>();
     public GameObject[] npcAvailable;
 
     [Header("Quest Menu Settings")]
-    public int questIndex;
-    public int questMaxIndex;
-    //public int questCompleteIndex;
-    //public int questCompleteMaxIndex;
     public GameObject questView;
     public GameObject questContent;
     //public GameObject questCompleteContent;
@@ -28,20 +23,21 @@ public class Quest : MonoBehaviour
     public TextMeshProUGUI questDescription;
     public TextMeshProUGUI questObjective;
 
+    private void Awake()
+    {
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-
-        questView = GameObject.FindGameObjectWithTag("QuestUI").transform.Find("QuestView").gameObject;
+        questView = transform.GetChild(0).Find("QuestView").gameObject;
         questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
         questViewScrollbar = questView.transform.Find("QuestViewScrollbar").GetComponent<Scrollbar>();
         questDetail = questView.transform.Find("QuestDetail").gameObject;
-        questIndex = 0;
-        //questCompleteMaxIndex = 0;
-        questMaxIndex = questContent.transform.childCount - 1;
-        //questCompleteMaxIndex = questCompleteContent.transform.childCount - 1;
 
         questDescription = questDetail.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         questObjective = questDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -77,84 +73,22 @@ public class Quest : MonoBehaviour
         }
     }
 
-    public void QuestSelection()
-    {
-        if (gameMenuManager.inputAxis.y == -1)
-        {
-            if (questIndex < questMaxIndex)
-            {
-                questIndex += 1;
-            }
-            else
-            {
-                questIndex = 0;
-            }
-            //Debug.Log("in");
-        }
-        else if (gameMenuManager.inputAxis.y == 1)
-        {
-            if (questIndex > 0)
-            {
-                questIndex -= 1;
-            }
-            else
-            {
-                questIndex = questMaxIndex;
-            }
-            //Debug.Log("in");
-        }
-        ScrollQuest();
-        MarkQuest();
-        RefreshQuest();
-    }
-
-    public void ScrollQuest()
-    {
-        if (questIndex == questMaxIndex)
-        {
-            questViewScrollbar.value = 0;
-        }
-        else
-        {
-            float a = (float)questMaxIndex;
-            float b = (float)questIndex;
-            float c = a - b;
-            float d = c / a;
-            questViewScrollbar.value = c / a;
-        }
-    }
-
-    public void MarkQuest()
-    {
-        try
-        {
-            for (int i = 0; i <= questMaxIndex; i++)
-            {
-                questContent.transform.GetChild(i).GetComponent<Image>().color = gameMenuManager.normalColor;
-            }
-            questContent.transform.GetChild(questIndex).GetComponent<Image>().color = gameMenuManager.selectedColor;
-        }
-        catch
-        {
-        }
-    }
-
-    public void RefreshQuest()
+    public void RefreshQuestDetail(int questID)
     {
         questDescription.text = "";
         questObjective.text = "";
-        for (int i = 0; i < playerData.collectionQuest.Count; i++)
+        for (int i = 0; i < PlayerData.instance.collectionQuest.Count; i++)
         {
-            if (playerData.collectionQuest[i].id == questContent.transform.GetChild(questIndex).GetComponent<QuestIndicator>().questID)
+            if (PlayerData.instance.collectionQuest[i].id == questID)
             {
-                if (playerData.collectionQuest[i].isComplete == true)
+                if (PlayerData.instance.collectionQuest[i].isComplete == true)
                 {
-                    questObjective.text = playerData.collectionQuest[i].ToString() + "\n" + "Quest Complete";
+                    questObjective.text = PlayerData.instance.collectionQuest[i].ToString() + "\n" + "Quest Complete";
                 }
                 else
-                    questObjective.text = playerData.collectionQuest[i].ToString();
+                    questObjective.text = PlayerData.instance.collectionQuest[i].ToString();
 
-                questDescription.text = playerData.collectionQuest[i].description;
+                questDescription.text = PlayerData.instance.collectionQuest[i].description;
                 break;
             }
         }

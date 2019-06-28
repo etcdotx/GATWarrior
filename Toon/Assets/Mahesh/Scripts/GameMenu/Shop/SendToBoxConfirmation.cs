@@ -33,7 +33,7 @@ public class SendToBoxConfirmation : MonoBehaviour
     public GameObject increase;
     public GameObject decrease;
 
-    public void InitiateConfirmation(Item getItem, PlayerData playerData)
+    public void InitiateConfirmation(Item getItem)
     {
         increase.SetActive(true);
         item = getItem;
@@ -46,16 +46,16 @@ public class SendToBoxConfirmation : MonoBehaviour
         setMaxQty = 1;
         prc = item.price;
 
-        for (int i = 0; i < playerData.inventoryBoxItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryBoxItem.Count; i++)
         {
-            if (playerData.inventoryBoxItem[i].id == item.id)
+            if (PlayerData.instance.inventoryBoxItem[i].id == item.id)
             {
-                curQty = playerData.inventoryBoxItem[i].quantity;
+                curQty = PlayerData.instance.inventoryBoxItem[i].quantity;
                 break;
             }
         }
 
-        curGold = playerData.gold;
+        curGold = PlayerData.instance.gold;
         cGold.text = curGold.ToString();
         setMaxQty = 99999;
         if (setMaxQty > (curGold / prc))
@@ -131,10 +131,10 @@ public class SendToBoxConfirmation : MonoBehaviour
         RefreshText();
     }
 
-    public void ConfirmSend(InventoryBox inventoryBox, PlayerData playerData)
+    public void ConfirmSend()
     {
-        int gold = playerData.gold;
-        playerData.gold -= totalprc;
-        inventoryBox.PlaceItem(item, setQty);
+        int gold = PlayerData.instance.gold;
+        PlayerData.instance.gold -= totalprc;
+        InventoryBox.instance.PlaceItem(item, setQty);
     }
 }

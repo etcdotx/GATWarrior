@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 486938262607021148}
   m_Layer: 0
   m_Name: Shop
-  m_TagString: Shop
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,11 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256c814f11cf5fc42a693326df22bee2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
-  inputSetup: {fileID: 0}
-  gameMenuManager: {fileID: 0}
-  inventoryBox: {fileID: 0}
-  inventory: {fileID: 0}
   gridLayoutGroup: {fileID: 0}
   maxRow: 5
   shopRowIndex: 0
@@ -83,7 +78,7 @@ GameObject:
   - component: {fileID: 7865212617373398992}
   m_Layer: 0
   m_Name: Inventory
-  m_TagString: Inventory
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,10 +109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79afeb89dda4a2c4985bc233778a8eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
-  gameMenuManager: {fileID: 0}
-  inventoryBox: {fileID: 0}
-  usableItem: {fileID: 0}
   inventoryColumn: 0
   inventoryRow: 0
   inventoryColumnIndex: 0
@@ -149,7 +140,7 @@ GameObject:
   - component: {fileID: 7865212618385263040}
   m_Layer: 0
   m_Name: InventoryBox
-  m_TagString: InventoryBox
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,11 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427512fc4e649ef469f75124630c7322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
-  inputSetup: {fileID: 0}
-  inventory: {fileID: 0}
-  gameMenuManager: {fileID: 0}
-  usableItem: {fileID: 0}
   inventoryBoxUI: {fileID: 0}
   inventoryBoxView: {fileID: 0}
   inventoryBoxViewPort: {fileID: 0}
@@ -217,7 +203,7 @@ GameObject:
   - component: {fileID: 7865212618456801509}
   m_Layer: 0
   m_Name: GameMenuManager
-  m_TagString: GameMenuManager
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -252,12 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83794b118fb969743a828900d6e85b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
-  quest: {fileID: 0}
-  inventoryBox: {fileID: 0}
-  shop: {fileID: 0}
-  playerData: {fileID: 0}
-  inputSetup: {fileID: 0}
   soundList: {fileID: 0}
   cantOpenMenu: 0
   inputAxis: {x: 0, y: 0, z: 0}
@@ -295,7 +275,7 @@ GameObject:
   - component: {fileID: 7865212618573120341}
   m_Layer: 0
   m_Name: Quest
-  m_TagString: Quest
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -326,8 +306,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97edbebe32daa5d4396c67ba56ab98c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
-  gameMenuManager: {fileID: 0}
   collectionQuestActive: []
   npcAvailable: []
   questIndex: 0

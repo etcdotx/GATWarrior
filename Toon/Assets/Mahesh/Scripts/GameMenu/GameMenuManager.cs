@@ -5,14 +5,7 @@ using UnityEngine.UI;
 
 public class GameMenuManager : MonoBehaviour
 {
-    public Inventory inventory;
-    public InventoryBox inventoryBox;
-    public Quest quest;
-    public Shop shop;
-    public PlayerData playerData;
-    public PlayerStatus playerStatus;
-    public InputSetup inputSetup;
-    public SoundList soundList;
+    public static GameMenuManager instance;
     
     public bool cantOpenMenu;
 
@@ -40,20 +33,17 @@ public class GameMenuManager : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+
         cantOpenMenu = true;
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
-        quest = GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>();
-        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
-        shop = GameObject.FindGameObjectWithTag("Shop").GetComponent<Shop>();
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
-        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
 
         pointerInputHold = false;
         buttonInputHold = false;
 
-        if (playerData.DEVELOPERMODE == true)
+        if (PlayerData.instance.DEVELOPERMODE == true)
         {
             cantOpenMenu = false;
         }
@@ -80,11 +70,11 @@ public class GameMenuManager : MonoBehaviour
     }
 
     void OpenCloseMenu() {
-        if (!GameStatus.isTalking && !cantOpenMenu)
+        if (!cantOpenMenu)
         {
-            if (Input.GetKeyDown(inputSetup.openGameMenu)) //tombol start
+            if (Input.GetKeyDown(InputSetup.instance.openGameMenu)) //tombol start
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.OpenInventoryClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
                 if (menuState == MenuState.noMenu)
                     OpenMenu();
 
@@ -98,30 +88,30 @@ public class GameMenuManager : MonoBehaviour
         if (!pointerInputHold && 
             (inputAxis.y == 1 || inputAxis.y == -1 || inputAxis.x == 1 || inputAxis.x == -1))
         {
-            if (!inventory.isSettingQuantity && !inventoryBox.isSettingQuantity)
+            if (!Inventory.instance.isSettingQuantity && !InventoryBox.instance.isSettingQuantity)
             {
                 StartCoroutine(PointerInputHold());
                 ApplyNavigation();
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
             else
             {
                 StartCoroutine(PointerInputHold());
-                if (inventory.isSettingQuantity)
+                if (Inventory.instance.isSettingQuantity)
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
                     if (inputAxis.x == 1)
-                        inventory.IncreaseQuantityToPut();
+                        Inventory.instance.IncreaseQuantityToPut();
                     if (inputAxis.x == -1)
-                        inventory.DecreaseQuantityToPut();
+                        Inventory.instance.DecreaseQuantityToPut();
                 }
-                else if (inventoryBox.isSettingQuantity)
+                else if (InventoryBox.instance.isSettingQuantity)
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
                     if (inputAxis.x == 1)
-                        inventoryBox.IncreaseQuantityToPut();
+                        InventoryBox.instance.IncreaseQuantityToPut();
                     if (inputAxis.x == -1)
-                        inventoryBox.DecreaseQuantityToPut();
+                        InventoryBox.instance.DecreaseQuantityToPut();
                 }
             }
         }
@@ -133,29 +123,27 @@ public class GameMenuManager : MonoBehaviour
         {
             if (menuNumber == 0) //itembox
             {
-                if (!shop.isBuying && !shop.isSending)
-                    shop.ShopSelection();
+                if (!Shop.instance.isBuying && !Shop.instance.isSending)
+                    Shop.instance.ShopSelection();
                 else
-                    shop.ManageQuantity();
+                    Shop.instance.ManageQuantity();
 
             }
             else if (menuNumber == 1) //inven
-                inventoryBox.InventoryBoxSelection();
+                InventoryBox.instance.InventoryBoxSelection();
         }
         else if (menuState == MenuState.startMenu)
         {
             if (menuNumber == 0) //inven
-                inventory.InventorySelection();
-            else if (menuNumber == 1) //quest
-                quest.QuestSelection();
+                Inventory.instance.InventorySelection();
         }
             
         else if (menuState == MenuState.inventoryBoxMenu)
         {
             if (menuNumber == 0) //inven
-                inventory.InventorySelection();
+                Inventory.instance.InventorySelection();
             else if (menuNumber == 1) //itembox
-                inventoryBox.InventoryBoxSelection();
+                InventoryBox.instance.InventoryBoxSelection();
         }
     }
 
@@ -176,11 +164,11 @@ public class GameMenuManager : MonoBehaviour
     void ButtonOnStartMenu() {
         if (menuNumber == 0) //inventory
         {
-            if (Input.GetKeyDown(inputSetup.select))
+            if (Input.GetKeyDown(InputSetup.instance.select))
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 StartCoroutine(ButtonInputHold());
-                inventory.InventorySwapping();
+                Inventory.instance.InventorySwapping();
             }
         }
         if (menuNumber == 1) // quest
@@ -188,12 +176,12 @@ public class GameMenuManager : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(inputSetup.back)) //tombol back
+        if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
         {
-            soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
             StartCoroutine(ButtonInputHold());
-            if (inventory.isSwapping)
-                inventory.ResetInventorySwap();
+            if (Inventory.instance.isSwapping)
+                Inventory.instance.ResetInventorySwap();
             else
                 CloseMenu();
         }
@@ -202,41 +190,41 @@ public class GameMenuManager : MonoBehaviour
     void ButtonOnShop() {
         if (menuNumber==0)//shop
         {
-            if (Input.GetKeyDown(inputSetup.select))
+            if (Input.GetKeyDown(InputSetup.instance.select))
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 StartCoroutine(ButtonInputHold());
-                if (!shop.isBuying && !shop.isSending)
-                    shop.BuySelectedItem();
-                else if (shop.isBuying)
-                    shop.ConfirmBuy();
-                else if (shop.isSending)
-                    shop.ConfirmSend();
+                if (!Shop.instance.isBuying && !Shop.instance.isSending)
+                    Shop.instance.BuySelectedItem();
+                else if (Shop.instance.isBuying)
+                    Shop.instance.ConfirmBuy();
+                else if (Shop.instance.isSending)
+                    Shop.instance.ConfirmSend();
             }
-            if (Input.GetKeyDown(inputSetup.back)) //tombol back
+            if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 StartCoroutine(ButtonInputHold());
-                if (!shop.isBuying && !shop.isSending)
-                    shop.CloseShop();
-                else if(shop.isBuying || shop.isSending)
-                    shop.CancelBuy();
+                if (!Shop.instance.isBuying && !Shop.instance.isSending)
+                    Shop.instance.CloseShop();
+                else if(Shop.instance.isBuying || Shop.instance.isSending)
+                    Shop.instance.CancelBuy();
             }
-            if (Input.GetKeyDown(inputSetup.sendToBox))
+            if (Input.GetKeyDown(InputSetup.instance.sendToBox))
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 StartCoroutine(ButtonInputHold());
-                if (!shop.isBuying && !shop.isSending)
-                    shop.SendSelectedItem();
+                if (!Shop.instance.isBuying && !Shop.instance.isSending)
+                    Shop.instance.SendSelectedItem();
             }
         }
         if (menuNumber == 1)
         {
-            if (Input.GetKeyDown(inputSetup.back)) //tombol back
+            if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 StartCoroutine(ButtonInputHold());
-                shop.CloseShop();
+                Shop.instance.CloseShop();
             }
         }
     }
@@ -244,80 +232,80 @@ public class GameMenuManager : MonoBehaviour
     void ButtonOnInventoryBox() {
         if (menuNumber == 0) //inventory
         {
-            if (!inventory.isSettingQuantity)
+            if (!Inventory.instance.isSettingQuantity)
             {
-                if (Input.GetKeyDown(inputSetup.select))
+                if (Input.GetKeyDown(InputSetup.instance.select))
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                     StartCoroutine(ButtonInputHold());
-                    inventory.InventorySwapping();
+                    Inventory.instance.InventorySwapping();
                 }
-                else if (Input.GetKeyDown(inputSetup.putInventory))
+                else if (Input.GetKeyDown(InputSetup.instance.putInventory))
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                     StartCoroutine(ButtonInputHold());
-                    inventory.PutIntoInventoryBox();
+                    Inventory.instance.PutIntoInventoryBox();
                 }
             }
-            else if (inventory.isSettingQuantity)
+            else if (Inventory.instance.isSettingQuantity)
             {
-                if (Input.GetKeyDown(inputSetup.select))
+                if (Input.GetKeyDown(InputSetup.instance.select))
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                     StartCoroutine(ButtonInputHold());
-                    inventory.PutIntoInventoryBox();
+                    Inventory.instance.PutIntoInventoryBox();
                 }
             }
         }
         if (menuNumber == 1)//itemBox
         {
-            if (!inventoryBox.isSettingQuantity)
+            if (!InventoryBox.instance.isSettingQuantity)
             {
-                if (Input.GetKeyDown(inputSetup.select))
+                if (Input.GetKeyDown(InputSetup.instance.select))
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                     StartCoroutine(ButtonInputHold());
-                    inventoryBox.InventoryBoxSwapping();
+                    InventoryBox.instance.InventoryBoxSwapping();
                 }
-                else if (Input.GetKeyDown(inputSetup.putInventory))
+                else if (Input.GetKeyDown(InputSetup.instance.putInventory))
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                     StartCoroutine(ButtonInputHold());
-                    inventoryBox.PutIntoInventory();
+                    InventoryBox.instance.PutIntoInventory();
                 }
             }
-            else if(inventoryBox.isSettingQuantity)
+            else if(InventoryBox.instance.isSettingQuantity)
             {                
-                if (Input.GetKeyDown(inputSetup.select))
+                if (Input.GetKeyDown(InputSetup.instance.select))
                 {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                     StartCoroutine(ButtonInputHold());
-                    inventoryBox.PutIntoInventory();
+                    InventoryBox.instance.PutIntoInventory();
                 }
             }
         }
 
-        if (Input.GetKeyDown(inputSetup.back))
+        if (Input.GetKeyDown(InputSetup.instance.back))
         {
-            soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
             StartCoroutine(ButtonInputHold());
-            if (inventory.isSwapping)
+            if (Inventory.instance.isSwapping)
             {
-                inventory.ResetInventorySwap();
+                Inventory.instance.ResetInventorySwap();
             }
-            else if (inventoryBox.isSwapping)
+            else if (InventoryBox.instance.isSwapping)
             {
-                inventoryBox.ResetInventoryBoxSwap();
+                InventoryBox.instance.ResetInventoryBoxSwap();
             }
-            else if (inventory.isSettingQuantity)
+            else if (Inventory.instance.isSettingQuantity)
             {
-                inventory.slider.SetActive(false);
-                inventory.isSettingQuantity = false;
+                Inventory.instance.slider.SetActive(false);
+                Inventory.instance.isSettingQuantity = false;
             }
-            else if (inventoryBox.isSettingQuantity)
+            else if (InventoryBox.instance.isSettingQuantity)
             {
-                inventoryBox.slider.SetActive(false);
-                inventoryBox.isSettingQuantity = false;
+                InventoryBox.instance.slider.SetActive(false);
+                InventoryBox.instance.isSettingQuantity = false;
             }
             else
             {
@@ -335,48 +323,48 @@ public class GameMenuManager : MonoBehaviour
                 if (menuNumber < shopPointer.Length - 1)
                     menuNumber++;
                 ResetPointer(shopPointer);
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
                     menuNumber--;
                 ResetPointer(shopPointer);
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
         }
-        else if (menuState == MenuState.startMenu && !inventory.isSwapping && !inventory.isSettingQuantity)
+        else if (menuState == MenuState.startMenu && !Inventory.instance.isSwapping && !Inventory.instance.isSettingQuantity)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
                 if (menuNumber < menuPointer.Length - 1)
                     menuNumber++;
                 ResetPointer(menuPointer);
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
                     menuNumber--;
                 ResetPointer(menuPointer);
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
         }
-        else if (menuState == MenuState.inventoryBoxMenu && !inventoryBox.isSwapping && !inventoryBox.isSettingQuantity)
+        else if (menuState == MenuState.inventoryBoxMenu && !InventoryBox.instance.isSwapping && !InventoryBox.instance.isSettingQuantity)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5))
             {
                 if (menuNumber < itemBoxPointer.Length - 1)
                     menuNumber++;
                 ResetPointer(itemBoxPointer);
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button4))
             {
                 if (menuNumber > 0)
                     menuNumber--;
                 ResetPointer(itemBoxPointer);
-                soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             }
         }
 
@@ -385,48 +373,39 @@ public class GameMenuManager : MonoBehaviour
     void OpenMenu()
     {
         menuState = MenuState.startMenu;
-        playerStatus.healthIndicator.SetActive(false);
-        inventory.inventoryView.SetActive(true);
-        quest.questView.SetActive(true);
-        quest.RefreshQuest();
+        PlayerStatus.instance.healthIndicator.SetActive(false);
+        Inventory.instance.inventoryView.SetActive(true);
+        Quest.instance.questView.SetActive(true);
         ResetMenu();
         Debug.Log("in");
-        GameStatus.PauseGame();
     }
 
     public void OpenInventoryBoxMenu()
     {
         menuState = MenuState.inventoryBoxMenu;
-        playerStatus.healthIndicator.SetActive(false);
-        inventory.inventoryView.SetActive(true);
-        inventoryBox.inventoryBoxView.SetActive(true);
+        PlayerStatus.instance.healthIndicator.SetActive(false);
+        Inventory.instance.inventoryView.SetActive(true);
+        InventoryBox.instance.inventoryBoxView.SetActive(true);
         StartCoroutine("ButtonInputHold");
         ResetMenu();
-        GameStatus.PauseGame();
-        GameStatus.PauseMove();
     }
 
     void CloseMenu()
     {
         menuState = MenuState.noMenu;
-        playerStatus.healthIndicator.SetActive(true);
-        inventory.inventoryView.SetActive(false);
-        quest.questView.SetActive(false);
+        PlayerStatus.instance.healthIndicator.SetActive(true);
+        Inventory.instance.inventoryView.SetActive(false);
+        Quest.instance.questView.SetActive(false);
         ResetMenu();
-        InputHolder.isInputHolded = true;
-        GameStatus.ResumeGame();
     }
 
     void CloseInventoryBoxMenu()
     {
         menuState = MenuState.noMenu;
-        playerStatus.healthIndicator.SetActive(true);
-        inventory.inventoryView.SetActive(false);
-        inventoryBox.inventoryBoxView.SetActive(false);
+        PlayerStatus.instance.healthIndicator.SetActive(true);
+        Inventory.instance.inventoryView.SetActive(false);
+        InventoryBox.instance.inventoryBoxView.SetActive(false);
         ResetMenu();
-        InputHolder.isInputHolded = true;
-        GameStatus.ResumeGame();
-        GameStatus.ResumeMove();
     }
 
 
@@ -465,7 +444,6 @@ public class GameMenuManager : MonoBehaviour
         {
             ResetPointer(menuPointer);
             ResetInventory();
-            ResetQuest();
         }
         else if (menuState == MenuState.inventoryBoxMenu)
         {
@@ -481,23 +459,16 @@ public class GameMenuManager : MonoBehaviour
     }
 
     void ResetInventory() {
-        inventory.inventoryColumnIndex = 0;
-        inventory.inventoryRowIndex = 0;
-        inventory.MarkInventory();
+        Inventory.instance.inventoryColumnIndex = 0;
+        Inventory.instance.inventoryRowIndex = 0;
+        Inventory.instance.MarkInventory();
     }
 
     void ResetInventoryBox()
     {
-        inventoryBox.inventoryBoxColumnIndex = 0;
-        inventoryBox.inventoryBoxRowIndex = 0;
-        inventoryBox.MarkInventoryBox();
-    }
-
-    void ResetQuest() {
-        quest.questIndex = 0;
-        quest.ScrollQuest();
-        quest.MarkQuest();
-        quest.RefreshQuest();
+        InventoryBox.instance.inventoryBoxColumnIndex = 0;
+        InventoryBox.instance.inventoryBoxRowIndex = 0;
+        InventoryBox.instance.MarkInventoryBox();
     }
     #endregion
 

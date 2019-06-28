@@ -19,4 +19,7 @@ public class Interactable : MonoBehaviour
 
     [Header("Is talking")]
     public bool isTalking;
+
+    [Header("Is an item box")]
+    public bool isItemBox;
 }

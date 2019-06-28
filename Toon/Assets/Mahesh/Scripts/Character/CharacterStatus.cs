@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class CharacterStatus : MonoBehaviour
 {
-    public PlayerStatus playerStatus;
-    public CharacterMovement characterMovement;
-
     [Header("Player Status")]
     public string playerName;
     public Animator anim;
@@ -18,7 +15,6 @@ public class CharacterStatus : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerStatus = GameObject.FindGameObjectWithTag("PlayerStatus").GetComponent<PlayerStatus>();
         anim = GetComponent<Animator>();
     }
 
@@ -42,8 +38,8 @@ public class CharacterStatus : MonoBehaviour
         }
 
         anim.SetTrigger("damaged");
-        playerStatus.curHealth -= dmg;
-        playerStatus.RefreshHp();
+        PlayerStatus.instance.curHealth -= dmg;
+        PlayerStatus.instance.RefreshHp();
     }
 
     public void Blocked(float dmg)

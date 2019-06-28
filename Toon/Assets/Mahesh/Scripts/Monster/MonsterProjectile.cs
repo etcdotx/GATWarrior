@@ -7,11 +7,9 @@ public class MonsterProjectile : MonoBehaviour
     public float damage;
     public float destroyTime;
     public float speed;
-    public PlayerData playerData;
     // Start is called before the first frame update
     void Start()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         Destroy(gameObject, destroyTime);
     }
 

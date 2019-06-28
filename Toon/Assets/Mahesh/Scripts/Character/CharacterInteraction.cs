@@ -5,75 +5,56 @@ using UnityEngine.UI;
 
 public class CharacterInteraction : MonoBehaviour
 {
-    public PlayerData playerData;
+    public static CharacterInteraction instance;
+
     public Animator animator;
-    public CharacterMovement cm;
-    public UsableItem usableItem;
-    public SoundList soundList;
-
     public Talk talk;
-    public Conversation conversation;
     public Collect collect;
-    public GameMenuManager gameMenuManager;
-    public GameObject interactButton;
-    public Text interactText;
+    public Interactable tempInteractable;
 
+    public bool hideInteractButton;
+
+    [Header("RayCast Settings")]
+    public bool isRaycasting;
     public float maxRayDistance;
     public Vector3 interactRaycastOffset;
 
-    public InputSetup inputSetup;
-    public InventoryBox inventoryBox;
-    public Inventory inventory;
-    
-    public bool hideInteractButton;
-    public bool buttonInputHold;
-
     private void Awake()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        cm = GetComponent<CharacterMovement>();
-        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
+        if (instance != null)
+            Destroy(instance);
+        else
+            instance = this;
+
         animator = GetComponent<Animator>();
         talk = gameObject.GetComponent<Talk>();
         collect = gameObject.GetComponent<Collect>();
-        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
-        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Conversation>();
-        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
-
-        interactButton = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractButton").gameObject;
-        interactText = GameObject.FindGameObjectWithTag("InteractableUI").transform.Find("InteractText").GetComponent<Text>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        isRaycasting = false;
         hideInteractButton = true;
         HideButton();
     }
 
     private void Update()
     {
-        if (!GameStatus.IsPaused && !conversation.isTalking && !InputHolder.isInputHolded
-            && gameMenuManager.menuState == GameMenuManager.MenuState.noMenu && !usableItem.isSelectingItem)
+        if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
         {
-            if(!buttonInputHold)
+            if (!UsableItem.instance.isSelectingItem)
+            {
                 InteractionRayCasting();
-        }
-        else
-        {
-            hideInteractButton = true;
-        }
+            }
 
-        if (!hideInteractButton)
-        {
-            ShowButton();
-        }
-        else if (hideInteractButton && !conversation.isTalking)
-        {
-            HideButton();
+            if (isRaycasting)
+            {
+                if (hideInteractButton)
+                    HideButton();
+                else
+                    ShowButton();
+            }
         }
     }
 
@@ -82,50 +63,11 @@ public class CharacterInteraction : MonoBehaviour
         Ray ray = new Ray(transform.position + interactRaycastOffset, transform.forward + interactRaycastOffset);
         Debug.DrawLine(transform.position + interactRaycastOffset, transform.position + interactRaycastOffset + transform.forward * maxRayDistance, Color.red);
         RaycastHit hit;
+        isRaycasting = true;
 
         if (Physics.Raycast(ray, out hit, maxRayDistance))
         {
-            try
-            {
-                //Debug.Log(hit.collider.gameObject);
-                Interactable interactable = hit.collider.gameObject.GetComponent<Interactable>();
-                //mengecek apakah object tersebut interactable
-                if (interactable.isInteractable)
-                {
-                    //menunjukkan ui interact
-                    interactText.text = interactable.interactText;
-                    hideInteractButton = false;
-                    //jika object tersebut bisa berbicara
-                    if (Input.GetKeyDown(inputSetup.interact) && interactable.isTalking)
-                    {
-                        StartCoroutine(ButtonInputHold());
-                        cm.canMove = false;
-                        animator.SetBool("isWalk", false);
-                        talk.TalkToObject(interactable);
-                    }
-                    //jika object tersebut bisa dimasukkan kedalam koleksi
-                    else if (Input.GetKeyDown(inputSetup.interact) && interactable.isCollectable)
-                    {
-                        StartCoroutine(ButtonInputHold());
-                        //mengambil item tersebut
-                        collect.CollectObject(interactable);
-                    }
-                    //jika object tersebut adalah inventorybox
-                    else if (Input.GetKeyDown(inputSetup.interact) && interactable.gameObject.tag == "GameObject_InventoryBox" 
-                        && gameMenuManager.menuState == GameMenuManager.MenuState.noMenu)
-                    {
-                        StartCoroutine(ButtonInputHold());
-                        animator.SetBool("isWalk", false);
-                        gameMenuManager.OpenInventoryBoxMenu();
-                        soundList.UIAudioSource.PlayOneShot(soundList.OpenInventoryClip);
-                    }
-                }
-            }
-            catch
-            {
-                //Debug.Log(hit.collider.gameObject + "not interactable");
-                hideInteractButton = true;
-            }
+            Interact(hit);
         }
         else
         {
@@ -133,22 +75,51 @@ public class CharacterInteraction : MonoBehaviour
         }
     }
 
+    public void Interact(RaycastHit hit)
+    {
+        try
+        {
+            tempInteractable = hit.collider.gameObject.GetComponent<Interactable>();
+            if (tempInteractable.isInteractable)
+            {
+                InteractableIndicator.instance.interactText.text = tempInteractable.interactText;
+                hideInteractButton = false;
+            }
+        }
+        catch
+        {
+            hideInteractButton = true;
+        }
+    }
+
+    public void TalkToObject(Interactable interactable)
+    {
+        HideButton();
+        NPC thisNPC = interactable.gameObject.GetComponent<NPC>();
+        int totalDialogueOption = thisNPC.activeCollectionQuest.Count;
+        if (thisNPC.isAShop == true)
+            totalDialogueOption += 1;
+
+        if (totalDialogueOption != 0)
+        {
+            Conversation.instance.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);
+        }
+        else
+        {
+            Conversation.instance.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);
+        }
+    }
+
     public void ShowButton()
     {
-        interactText.gameObject.SetActive(true);
-        interactButton.gameObject.SetActive(true);
+        InteractableIndicator.instance.interactText.gameObject.SetActive(true);
+        InteractableIndicator.instance.interactButton.gameObject.SetActive(true);
+        UIManager.instance.eventSystem.SetSelectedGameObject(InteractableIndicator.instance.interactButton.gameObject);
     }
 
     public void HideButton()
     {
-        interactText.gameObject.SetActive(false);
-        interactButton.gameObject.SetActive(false);
-    }
-
-    public IEnumerator ButtonInputHold()
-    {
-        buttonInputHold = true;
-        yield return new WaitForSeconds(0.15f);
-        buttonInputHold = false;
+        InteractableIndicator.instance.interactText.gameObject.SetActive(false);
+        InteractableIndicator.instance.interactButton.gameObject.SetActive(false);
     }
 }

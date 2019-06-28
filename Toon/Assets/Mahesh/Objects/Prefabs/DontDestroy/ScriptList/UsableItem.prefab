@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5097504526545871627}
   m_Layer: 0
   m_Name: UsableItem
-  m_TagString: UsableItem
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,12 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7caa23b6ac3434cab0955168c9d886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
-  inputSetup: {fileID: 0}
   player: {fileID: 0}
   characterCombat: {fileID: 0}
-  inventory: {fileID: 0}
   gameMenuManager: {fileID: 0}
+  soundList: {fileID: 0}
   usableItemUI: {fileID: 0}
   usableItemView: {fileID: 0}
   usableItemViewPort: {fileID: 0}

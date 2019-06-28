@@ -5,6 +5,8 @@ using System.IO;
 using UnityEngine;
 
 public class GameDataBase: MonoBehaviour {
+    public static GameDataBase instance;
+
     [Header("SaveSlot")]
     public MainMenuScript mms;
     public int saveSlot;
@@ -29,6 +31,12 @@ public class GameDataBase: MonoBehaviour {
 
     public void Awake()
     {
+        //singleton
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+
         CheckSaveSlot();
         AddItem();
         AddCollectionQuest();  

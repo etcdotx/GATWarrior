@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class CharacterEditor : MonoBehaviour
 {
-    public PlayerData playerData;
     enum ApperanceDetail { Gender_Type, Skin_Color, Hair_Type, Hair_Color, Eye_Type }
 
     [Header("Gender Settings")]
@@ -53,7 +52,6 @@ public class CharacterEditor : MonoBehaviour
 
     private void Start()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         ApplyChange(ApperanceDetail.Gender_Type, 0);
     }
 
@@ -238,14 +236,14 @@ public class CharacterEditor : MonoBehaviour
                 ApplyChange(ApperanceDetail.Hair_Type, 0);
                 ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
 
-                playerData.characterAppearance[0] = genderIndex;
+                PlayerData.instance.characterAppearance[0] = genderIndex;
                 break;
 
             case ApperanceDetail.Skin_Color:
                 activeGender.GetComponent<Renderer>().material.color = skinColor[id];
 
                 skinColorText.text = skinColorName[id];
-                playerData.characterAppearance[1] = skinColorIndex;
+                PlayerData.instance.characterAppearance[1] = skinColorIndex;
                 break;
 
             case ApperanceDetail.Hair_Type:
@@ -266,13 +264,13 @@ public class CharacterEditor : MonoBehaviour
 
                 activeHair.transform.SetParent(activeGender.transform.Find(hairParent));
                 ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
-                playerData.characterAppearance[2] = hairIndex;
+                PlayerData.instance.characterAppearance[2] = hairIndex;
                 break;
 
             case ApperanceDetail.Hair_Color:
                 activeHair.GetComponent<Renderer>().material.color = hairColor[id];
                 hairColorText.text = hairColorName[id];
-                playerData.characterAppearance[3] = hairColorIndex;
+                PlayerData.instance.characterAppearance[3] = hairColorIndex;
                 break;
 
             case ApperanceDetail.Eye_Type:
@@ -286,7 +284,7 @@ public class CharacterEditor : MonoBehaviour
 
     public void ConfirmCharacterCreation()
     {
-        playerData.SavePlayer();
+        PlayerData.instance.SavePlayer();
         SceneManager.LoadScene(sceneName);
     }
 }

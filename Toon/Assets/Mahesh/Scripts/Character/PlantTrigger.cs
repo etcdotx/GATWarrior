@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PlantTrigger : MonoBehaviour
 {
-    PlayerData playerData;
-    UsableItem usableItem;
-
+    public static PlantTrigger instance;
     public GameObject target;
 
-    private void Start()
+    private void Awake()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
     }
 
     private void OnTriggerStay(Collider other)
@@ -23,8 +23,8 @@ public class PlantTrigger : MonoBehaviour
             {
                 other.GetComponentInParent<Soil>().selectedIndicator.SetActive(true);
                 target = other.gameObject.transform.parent.gameObject;
-                playerData.stateNearSoil = true;
-                usableItem.CheckIfItemIsUsable();
+                PlayerData.instance.stateNearSoil = true;
+                UsableItem.instance.CheckIfItemIsUsable();
             }
         }
     }
@@ -37,8 +37,8 @@ public class PlantTrigger : MonoBehaviour
             {
                 other.GetComponentInParent<Soil>().selectedIndicator.SetActive(false);
                 target = null;
-                playerData.stateNearSoil = false;
-                usableItem.CheckIfItemIsUsable();
+                PlayerData.instance.stateNearSoil = false;
+                UsableItem.instance.CheckIfItemIsUsable();
             }
         }
     }

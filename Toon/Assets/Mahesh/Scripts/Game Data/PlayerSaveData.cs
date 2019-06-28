@@ -7,13 +7,13 @@ public class PlayerSaveData
 {
     public int[] characterAppearance; //gender,skincolor,hairtype,haircolor
 
-    public PlayerSaveData(PlayerData player)
+    public PlayerSaveData()
     {
-        characterAppearance = new int[player.characterAppearance.Length];
+        characterAppearance = new int[PlayerData.instance.characterAppearance.Length];
 
         for (int i = 0; i < characterAppearance.Length; i++)
         {
-            characterAppearance[i] = player.characterAppearance[i];
+            characterAppearance[i] = PlayerData.instance.characterAppearance[i];
         }
     }
 }

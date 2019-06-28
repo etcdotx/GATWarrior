@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class UsableItem : MonoBehaviour
 {
-    public PlayerData playerData;
-    public InputSetup inputSetup;
+    public static UsableItem instance;
+
     public GameObject player;
-    public CharacterCombat characterCombat;
-    public Inventory inventory;
-    public GameMenuManager gameMenuManager;
-    public SoundList soundList;
 
     [Header("Indicator")]
-    public GameObject usableItemUI;
     public GameObject usableItemView;
     public GameObject usableItemViewPort;
     public GameObject usableItemContent;
@@ -30,15 +25,13 @@ public class UsableItem : MonoBehaviour
 
     private void Awake()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        player = GameObject.FindGameObjectWithTag("Player");
-        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
 
-        usableItemUI = GameObject.FindGameObjectWithTag("UsableItemUI");
-        usableItemView = usableItemUI.transform.Find("UsableItemView").gameObject;
+        player = GameObject.FindGameObjectWithTag("Player");
+        usableItemView = transform.GetChild(0).Find("UsableItemView").gameObject;
         usableItemViewPort = usableItemView.transform.Find("UsableItemViewPort").gameObject;
         usableItemContent = usableItemViewPort.transform.Find("UsableItemContent").gameObject;
 
@@ -57,41 +50,30 @@ public class UsableItem : MonoBehaviour
 
     private void Update()
     {
-        if (GameStatus.isTalking == false && GameStatus.IsPaused == false)
+        if (Input.GetKey(KeyCode.Joystick1Button4))
         {
-            if (Input.GetKey(KeyCode.Joystick1Button4))
+            isSelectingItem = true;
+            if (Input.GetKeyDown(KeyCode.Joystick1Button1))
             {
-                isSelectingItem = true;
-                if (Input.GetKeyDown(KeyCode.Joystick1Button1))
-                {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
-                    SlideItem(true);
-                }
-                if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-                {
-                    soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
-                    SlideItem(false);
-                }
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
+                SlideItem(true);
             }
-            if (Input.GetKeyUp(KeyCode.Joystick1Button4))
+            if (Input.GetKeyDown(KeyCode.Joystick1Button2))
             {
-                isSelectingItem = false;
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
+                SlideItem(false);
             }
+        }
+        if (Input.GetKeyUp(KeyCode.Joystick1Button4))
+        {
+            isSelectingItem = false;
+        }
 
-            if (Input.GetKeyDown(inputSetup.useItem) && isItemUsable == true && characterCombat.combatMode==false && isSelectingItem==false)
-            {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
-                Debug.Log("useitem");
-                UseItem();
-            }
-        }
-        if (gameMenuManager.menuState != GameMenuManager.MenuState.noMenu)
+        if (Input.GetKeyDown(InputSetup.instance.useItem) && isItemUsable == true && isSelectingItem == false)
         {
-            usableItemView.SetActive(false);
-        }
-        else
-        {
-            usableItemView.SetActive(true);
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
+            Debug.Log("useitem");
+            UseItem();
         }
     }
 
@@ -99,11 +81,11 @@ public class UsableItem : MonoBehaviour
     {
         isUsingItem = true;
         selectedItem.Use();
-        for (int i = 0; i < inventory.inventoryIndicator.Length; i++)
+        for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
         {
-            inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
+            Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
         }
-        inventory.RefreshInventory();
+        Inventory.instance.RefreshInventory();
     }
 
     public void SlideItem(bool isRight)
@@ -161,13 +143,13 @@ public class UsableItem : MonoBehaviour
         if (!isUsingItem)
         {
             usableItemList.Clear();
-            for (int i = 0; i < inventory.inventoryIndicator.Length; i++)
+            for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
             {
-                if (inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().item != null)
+                if (Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().item != null)
                 {
-                    if (inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().item.isUsable == true)
+                    if (Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().item.isUsable == true)
                     {
-                        usableItemList.Add(inventory.inventoryIndicator[i].GetComponent<InventoryIndicator>().item);
+                        usableItemList.Add(Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().item);
                     }
                 }
             }

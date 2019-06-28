@@ -7,39 +7,15 @@ TagManager:
   - Soil
   - Monster
   - NPC
-  - PlayerHead
   - InteractableUI
-  - Soils
-  - UsableItem
-  - Quest
-  - InputSetup
-  - InventoryBox
-  - GameMenuManager
   - PlayerStatusUI
-  - QuestUI
-  - InventoryUI
-  - UsableItemUI
-  - PlayerData
   - MonsterDatabase
-  - GameDataBase
-  - PlantDataBase
-  - Inventory
-  - InventoryBoxUI
-  - ShopUI
   - PlayerWeapon
-  - PlantTrigger
-  - GameObject_InventoryBox
-  - DialogueOption
-  - ConversationUI
-  - ShowDialog
-  - MenuManager
-  - PlantNodes
   - Ground
   - Shield
-  - Shop
-  - Conversation
-  - SoundList
-  - PlayerStatus
+  - DialogueOption
+  - InventoryBox
+  - ConversationUI
   layers:
   - Default
   - TransparentFX

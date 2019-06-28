@@ -5,10 +5,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public PlayerData playerData;
-    public GameMenuManager gameMenuManager;
-    public InventoryBox inventoryBox;
-    public UsableItem usableItem;
+    public static Inventory instance;
 
     [Header("Inventory Settings")]
     public int inventoryColumn;
@@ -38,12 +35,13 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
-        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
+        //singleton
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
 
-        inventoryView = GameObject.FindGameObjectWithTag("InventoryUI").transform.Find("InventoryView").gameObject;
+        inventoryView = transform.GetChild(0).Find("InventoryView").gameObject;
         inventoryViewPort = inventoryView.transform.Find("InventoryViewPort").gameObject;
 
         int h = inventoryViewPort.transform.childCount;
@@ -80,7 +78,7 @@ public class Inventory : MonoBehaviour
 
     public void InventorySelection()
     {
-        if (gameMenuManager.inputAxis.y == -1) // kebawah
+        if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
         {
             if (inventoryRowIndex < inventoryRow - 1)
             {
@@ -91,7 +89,7 @@ public class Inventory : MonoBehaviour
                 inventoryRowIndex = 0;
             }
         }
-        else if (gameMenuManager.inputAxis.y == 1) // keatas
+        else if (GameMenuManager.instance.inputAxis.y == 1) // keatas
         {
             if (inventoryRowIndex > 0)
             {
@@ -103,7 +101,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if (gameMenuManager.inputAxis.x == -1) // kekiri
+        if (GameMenuManager.instance.inputAxis.x == -1) // kekiri
         {
             if (inventoryColumnIndex > 0)
             {
@@ -114,7 +112,7 @@ public class Inventory : MonoBehaviour
                 inventoryColumnIndex = inventoryColumn - 1;
             }
         }
-        else if (gameMenuManager.inputAxis.x == 1) //kekanan
+        else if (GameMenuManager.instance.inputAxis.x == 1) //kekanan
         {
             if (inventoryColumnIndex < inventoryColumn - 1)
             {
@@ -165,8 +163,8 @@ public class Inventory : MonoBehaviour
         else
             itemSwap1 = null;
 
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
-            if (invenSwap1.item == playerData.inventoryItem[i]){
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
+            if (invenSwap1.item == PlayerData.instance.inventoryItem[i]){
                 swapIndex1 = i;
                 break;
             }
@@ -174,7 +172,7 @@ public class Inventory : MonoBehaviour
 
         invenSwap1.selectIndicator.SetActive(true);
         isSwapping = true;
-        StartCoroutine(gameMenuManager.ButtonInputHold());
+        StartCoroutine(GameMenuManager.instance.ButtonInputHold());
     }
 
     void Select2ndItem() {
@@ -186,8 +184,8 @@ public class Inventory : MonoBehaviour
         else
             itemSwap2 = null;
 
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
-            if (invenSwap2.item == playerData.inventoryItem[i])
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
+            if (invenSwap2.item == PlayerData.instance.inventoryItem[i])
             {
                 swapIndex2 = i;
                 break;
@@ -216,10 +214,10 @@ public class Inventory : MonoBehaviour
         int placement = 0;
         if (itemSwap1 != null && itemSwap2 != null)
         {
-            playerData.inventoryItem[swapIndex1] = itemSwap2;
-            Debug.Log(playerData.inventoryItem[swapIndex1].itemName);
-            playerData.inventoryItem[swapIndex2] = itemSwap1;
-            Debug.Log(playerData.inventoryItem[swapIndex2].itemName);
+            PlayerData.instance.inventoryItem[swapIndex1] = itemSwap2;
+            Debug.Log(PlayerData.instance.inventoryItem[swapIndex1].itemName);
+            PlayerData.instance.inventoryItem[swapIndex2] = itemSwap1;
+            Debug.Log(PlayerData.instance.inventoryItem[swapIndex2].itemName);
         }
         else if (itemSwap1 != null && itemSwap2 == null)
         {
@@ -244,8 +242,8 @@ public class Inventory : MonoBehaviour
                 if (stop)
                     break;
             }
-            playerData.inventoryItem.Remove(itemSwap1);
-            playerData.inventoryItem.Insert(placement, itemSwap1);
+            PlayerData.instance.inventoryItem.Remove(itemSwap1);
+            PlayerData.instance.inventoryItem.Insert(placement, itemSwap1);
         }
         else if (itemSwap1 == null && itemSwap2 != null)
         {
@@ -270,8 +268,8 @@ public class Inventory : MonoBehaviour
                 if (stop)
                     break;
             }
-            playerData.inventoryItem.Remove(itemSwap2);
-            playerData.inventoryItem.Insert(placement, itemSwap2);
+            PlayerData.instance.inventoryItem.Remove(itemSwap2);
+            PlayerData.instance.inventoryItem.Insert(placement, itemSwap2);
         }
     }
 
@@ -279,7 +277,7 @@ public class Inventory : MonoBehaviour
     {
         invenSwap1.selectIndicator.SetActive(false);
         isSwapping = false;
-        StartCoroutine(gameMenuManager.ButtonInputHold());
+        StartCoroutine(GameMenuManager.instance.ButtonInputHold());
         MarkInventory();
     }
 
@@ -291,7 +289,7 @@ public class Inventory : MonoBehaviour
         }
         else if (isSettingQuantity)
         {
-            inventoryBox.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
+            InventoryBox.instance.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
             slider.SetActive(false);
             isSettingQuantity = false;
         }
@@ -331,14 +329,14 @@ public class Inventory : MonoBehaviour
     {
         bool isItemExist = false;
         //check if item exist or not
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].id == newItem.id)
+            if (PlayerData.instance.inventoryItem[i].id == newItem.id)
             {
                 isItemExist = true;
                 //quantity item ditambah quantity baru
-                playerData.inventoryItem[i].quantity += quantity;
-                playerData.CheckNewItem(playerData.inventoryItem[i]);
+                PlayerData.instance.inventoryItem[i].quantity += quantity;
+                PlayerData.instance.CheckNewItem(PlayerData.instance.inventoryItem[i]);
                 newItem.quantity -= quantity;
                 break;
             }
@@ -353,12 +351,12 @@ public class Inventory : MonoBehaviour
                     newItemIn.plantID = newItem.plantID;
 
             newItemIn.quantity = quantity;
-            playerData.inventoryItem.Add(newItemIn);
-            playerData.CheckNewItem(playerData.inventoryItem[playerData.inventoryItem.Count-1]);
+            PlayerData.instance.inventoryItem.Add(newItemIn);
+            PlayerData.instance.CheckNewItem(PlayerData.instance.inventoryItem[PlayerData.instance.inventoryItem.Count-1]);
             newItem.quantity -= quantity;
         }
 
-        inventoryBox.RefreshInventoryBox();
+        InventoryBox.instance.RefreshInventoryBox();
         RefreshInventory();
     }
 
@@ -370,13 +368,13 @@ public class Inventory : MonoBehaviour
             {
                 try
                 {
-                    for (int j = 0; j < playerData.inventoryItem.Count; j++)
+                    for (int j = 0; j < PlayerData.instance.inventoryItem.Count; j++)
                     {
-                        if (playerData.inventoryItem[j].isOnInventory == false)
+                        if (PlayerData.instance.inventoryItem[j].isOnInventory == false)
                         {
-                            inventoryIndicator[i].item = playerData.inventoryItem[j];
-                            inventoryIndicator[i].itemID = playerData.inventoryItem[j].id;
-                            playerData.inventoryItem[j].isOnInventory = true;
+                            inventoryIndicator[i].item = PlayerData.instance.inventoryItem[j];
+                            inventoryIndicator[i].itemID = PlayerData.instance.inventoryItem[j].id;
+                            PlayerData.instance.inventoryItem[j].isOnInventory = true;
                             break;
                         }
                     }
@@ -388,6 +386,6 @@ public class Inventory : MonoBehaviour
             }
             inventoryIndicator[i].RefreshInventory();
         }
-        usableItem.GetUsableItem();
+        UsableItem.instance.GetUsableItem();
     }
 }

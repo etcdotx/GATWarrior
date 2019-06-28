@@ -59,12 +59,11 @@ public class CollectionQuest : ScriptableObject
     public void CheckProgress()
     {
         bool itemExist=false;
-        PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].id == itemToCollect.id)
+            if (PlayerData.instance.inventoryItem[i].id == itemToCollect.id)
             {
-                curAmount = playerData.inventoryItem[i].quantity;
+                curAmount = PlayerData.instance.inventoryItem[i].quantity;
                 itemExist = true;
                 break;
             }
@@ -87,12 +86,11 @@ public class CollectionQuest : ScriptableObject
 
     public void QuestComplete()
     {
-        PlayerData playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].id == itemToCollect.id)
+            if (PlayerData.instance.inventoryItem[i].id == itemToCollect.id)
             {
-                playerData.inventoryItem[i].quantity -= colAmount;
+                PlayerData.instance.inventoryItem[i].quantity -= colAmount;
                 Debug.Log("innn");
                 break;
             }
@@ -104,7 +102,7 @@ public class CollectionQuest : ScriptableObject
                 for (int j = 0; j < QuestDataBase.collectionQuest.Count; j++)
                     if (chainQuestID[i] == QuestDataBase.collectionQuest[j].id)
                     {
-                        GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>().collectionQuestActive.Add(QuestDataBase.collectionQuest[j]);
+                        Quest.instance.collectionQuestActive.Add(QuestDataBase.collectionQuest[j]);
                         break;
                     }
         }

@@ -1,13 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryIndicator : MonoBehaviour
+public class InventoryIndicator : MonoBehaviour, ICancelHandler
 {
-    public PlayerData playerData;
-    public UsableItem usableItem;
-
     public int itemID;
     public Item item;
     public Image itemImage;
@@ -25,14 +23,12 @@ public class InventoryIndicator : MonoBehaviour
 
     public void RefreshInventory()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        usableItem = GameObject.FindGameObjectWithTag("UsableItem").GetComponent<UsableItem>();
         if (item != null)
         {
             if (item.quantity == 0)
             {
-                playerData.inventoryItem.Remove(item);
-                usableItem.isUsingItem = false;
+                PlayerData.instance.inventoryItem.Remove(item);
+                UsableItem.instance.isUsingItem = false;
                 MakeEmpty();
             }
             else
@@ -54,12 +50,11 @@ public class InventoryIndicator : MonoBehaviour
 
     public void RefreshInventoryBox()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         if (item != null)
         {
             if (item.quantity == 0)
             {
-                playerData.inventoryBoxItem.Remove(item);
+                PlayerData.instance.inventoryBoxItem.Remove(item);
                 MakeEmpty();
             }
             else
@@ -84,11 +79,20 @@ public class InventoryIndicator : MonoBehaviour
         try {
             Debug.Log(item.itemName + " removed");
         } catch { }
-        playerData.inventoryItem.Remove(item);
+        PlayerData.instance.inventoryItem.Remove(item);
         item = null;
         itemID = 0;
         itemImage.overrideSprite = null;
         transform.GetChild(0).GetComponent<Text>().text = 0.ToString();
         transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    public void OnCancel(BaseEventData eventData)
+    {
+        Inventory.instance.inventoryView.SetActive(false);
+        Quest.instance.questView.SetActive(false);
+        UsableItem.instance.usableItemView.SetActive(true);
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
     }
 }

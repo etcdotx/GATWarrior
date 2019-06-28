@@ -11,7 +11,6 @@ public class MonsterStatus : MonoBehaviour
     public GameObject player;
     public MonsterMovement monsterMovement;
     public MonsterAttack monsterAttack;
-    public CharacterCombat characterCombat;
     public CharacterInput characterInput;
     public Interactable interactable;
     public Collider col;
@@ -46,7 +45,6 @@ public class MonsterStatus : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         monsterMovement = GetComponent<MonsterMovement>();
         monsterAttack = GetComponent<MonsterAttack>();
-        characterCombat = player.GetComponent<CharacterCombat>();
         characterInput = player.GetComponent<CharacterInput>();
         rigid = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();

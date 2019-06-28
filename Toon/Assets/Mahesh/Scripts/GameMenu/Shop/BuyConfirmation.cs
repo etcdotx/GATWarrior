@@ -36,7 +36,7 @@ public class BuyConfirmation : MonoBehaviour
     public GameObject increase;
     public GameObject decrease;
 
-    public void InitiateConfirmation(Item getItem, PlayerData playerData) {        
+    public void InitiateConfirmation(Item getItem) {        
         increase.SetActive(true);
         item = getItem;
         itemImage.sprite = item.itemImage;
@@ -51,16 +51,16 @@ public class BuyConfirmation : MonoBehaviour
         maxQuantity.text = "/"+maxQty.ToString();
         prc = item.price;
 
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (playerData.inventoryItem[i].id == item.id)
+            if (PlayerData.instance.inventoryItem[i].id == item.id)
             {
-                curQty = playerData.inventoryItem[i].quantity;
+                curQty = PlayerData.instance.inventoryItem[i].quantity;
                 break;
             }
         }
 
-        curGold = playerData.gold;
+        curGold = PlayerData.instance.gold;
         cGold.text = curGold.ToString();
         setMaxQty = maxQty-curQty;
         if (setMaxQty > (curGold / prc))
@@ -133,9 +133,9 @@ public class BuyConfirmation : MonoBehaviour
         RefreshText();
     }
 
-    public void ConfirmBuy(Inventory inventory, PlayerData playerData) {
-        int gold = playerData.gold;
-        playerData.gold -= totalprc;
-        inventory.PlaceItem(item, setQty);
+    public void ConfirmBuy() {
+        int gold = PlayerData.instance.gold;
+        PlayerData.instance.gold -= totalprc;
+        Inventory.instance.PlaceItem(item, setQty);
     }
 }

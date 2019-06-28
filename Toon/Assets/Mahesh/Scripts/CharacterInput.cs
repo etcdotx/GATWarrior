@@ -69,13 +69,16 @@ public class CharacterInput : MonoBehaviour
             Rotate();
         }
 
-        if(!cameraMovement.isLocking)
-            TurnBack();
+        if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
+        {
+            Roll();
+            DrawOrSheathe();
+            Attack();
+            Block();
 
-        Block();
-        Roll();        
-        DrawOrSheathe();
-        Attack();
+            if (!cameraMovement.isLocking)
+                TurnBack();
+        }
     }
 
     void GetInputAxis()
@@ -119,14 +122,14 @@ public class CharacterInput : MonoBehaviour
 
     void DrawOrSheathe()
     {
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3) && !combatMode)
+        if (Input.GetKeyDown(InputSetup.instance.attack) && !combatMode)
         {
             anim.SetBool("combatMode", true);
             cameraMovement.characterInCombat = true;
             rotateDamp = 5;
             StartCoroutine(ChangeMode());
         }
-        else if (Input.GetKeyDown(KeyCode.Joystick1Button2) && combatMode)
+        else if (Input.GetKeyDown(InputSetup.instance.sheatheWeapon) && combatMode)
         {
             anim.SetBool("combatMode", false);
             cameraMovement.characterInCombat = false;
@@ -138,11 +141,11 @@ public class CharacterInput : MonoBehaviour
     void Attack() {
         if (combatMode)
         {
-            if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+            if (Input.GetKeyDown(InputSetup.instance.attack))
             {
                 anim.SetTrigger("lightAttack");
             }
-            if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+            if (Input.GetKeyDown(InputSetup.instance.attack2))
             {
                 anim.SetTrigger("heavyAttack");
             }
@@ -151,11 +154,11 @@ public class CharacterInput : MonoBehaviour
 
     void Block()
     {
-        if (Input.GetKey(KeyCode.Joystick1Button5))
+        if (Input.GetKey(InputSetup.instance.block))
         {
             anim.SetBool("block", true);
         }
-        else if (Input.GetKeyUp(KeyCode.Joystick1Button5))
+        else if (Input.GetKeyUp(InputSetup.instance.block))
         {
             anim.SetBool("block", false);
         }

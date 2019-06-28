@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Soils : MonoBehaviour
 {
-    public PlantDataBase plantDataBase;
-    public GameObject plantNodes;
+    public static Soils instance;
     public GameObject[] plantNode;
     public Soil[] plantNodeSoil;
     public int[] plantID;
@@ -22,9 +21,12 @@ public class Soils : MonoBehaviour
 
     public float count;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
     }
 
     private void Update()
@@ -48,21 +50,19 @@ public class Soils : MonoBehaviour
     }
 
     public void FindPlant() {
-        plantDataBase = GameObject.FindGameObjectWithTag("PlantDataBase").GetComponent<PlantDataBase>();
-        plantNodes = GameObject.FindGameObjectWithTag("PlantNodes");
-        plantNode = new GameObject[plantNodes.transform.childCount];
-        plantNodeSoil = new Soil[plantNodes.transform.childCount];
-        plantID = new int[plantNodes.transform.childCount];
-        soilID = new int[plantNodes.transform.childCount];
-        state = new int[plantNodes.transform.childCount];
-        day = new int[plantNodes.transform.childCount];
-        needWater = new bool[plantNodes.transform.childCount];
-        gatherable = new bool[plantNodes.transform.childCount];
-        canBeHooed = new bool[plantNodes.transform.childCount];
+        plantNode = new GameObject[transform.childCount];
+        plantNodeSoil = new Soil[transform.childCount];
+        plantID = new int[transform.childCount];
+        soilID = new int[transform.childCount];
+        state = new int[transform.childCount];
+        day = new int[transform.childCount];
+        needWater = new bool[transform.childCount];
+        gatherable = new bool[transform.childCount];
+        canBeHooed = new bool[transform.childCount];
 
-        for (int i = 0; i < plantNodes.transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            plantNode[i] = plantNodes.transform.GetChild(i).gameObject;
+            plantNode[i] = transform.GetChild(i).gameObject;
             plantNodeSoil[i] = plantNode[i].GetComponent<Soil>();
             plantNodeSoil[i].soilID = i;
             soilID[i] = i;
@@ -79,7 +79,7 @@ public class Soils : MonoBehaviour
         {
             if (plantNodeSoil[i].soilID == soilID)
             {
-                Instantiate(plantDataBase.plantState1[plantID],
+                Instantiate(PlantDataBase.instance.plantState1[plantID],
                      plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity ,
                      plantNodeSoil[i].plantLocation.transform);
                 break;
@@ -92,7 +92,7 @@ public class Soils : MonoBehaviour
         {
             if (plantNodeSoil[i].soilID == soilID)
             {
-                if (state[i] == plantDataBase.plantMaxState[plantID[i]])
+                if (state[i] == PlantDataBase.instance.plantMaxState[plantID[i]])
                 {
                     if (plantNodeSoil[i].plantLocation.transform.childCount == 0)
                     {
@@ -109,11 +109,11 @@ public class Soils : MonoBehaviour
                     {
                         state[i]++;
                     }
-                    Debug.Log("Plant ID = " + plantID[i] + ", State = " + state[i] + ", Max State = " + plantDataBase.plantMaxState[plantID[i]]);
+                    Debug.Log("Plant ID = " + plantID[i] + ", State = " + state[i] + ", Max State = " + PlantDataBase.instance.plantMaxState[plantID[i]]);
                     if (state[i] == 2)
                     {
                         Destroy(plantNodeSoil[i].plantLocation.transform.GetChild(0).gameObject);
-                        Instantiate(plantDataBase.plantState2[plantID[i]],
+                        Instantiate(PlantDataBase.instance.plantState2[plantID[i]],
                              plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity,
                              plantNodeSoil[i].plantLocation.transform);
                         needWater[i] = true;
@@ -122,7 +122,7 @@ public class Soils : MonoBehaviour
                     else if (state[i] == 3)
                     {
                         Destroy(plantNodeSoil[i].plantLocation.transform.GetChild(0).gameObject);
-                        Instantiate(plantDataBase.plantState3[plantID[i]],
+                        Instantiate(PlantDataBase.instance.plantState3[plantID[i]],
                              plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity,
                              plantNodeSoil[i].plantLocation.transform);
                         needWater[i] = true;
@@ -131,14 +131,14 @@ public class Soils : MonoBehaviour
                     else if(state[i] == 4)
                     {
                         Destroy(plantNodeSoil[i].plantLocation.transform.GetChild(0).gameObject);
-                        Instantiate(plantDataBase.plantState4[plantID[i]],
+                        Instantiate(PlantDataBase.instance.plantState4[plantID[i]],
                              plantNodeSoil[i].plantLocation.transform.position, Quaternion.identity,
                              plantNodeSoil[i].plantLocation.transform);
                         needWater[i] = true;
                         plantNodeSoil[i].soil.GetComponent<MeshRenderer>().material.color = soilNormal;
                     }
 
-                    if (state[i] == plantDataBase.plantMaxState[plantID[i]])
+                    if (state[i] == PlantDataBase.instance.plantMaxState[plantID[i]])
                     {
                         Debug.Log("Seed " + plantID[i] + " on soil " + soilID + " is fully grow");
                     }

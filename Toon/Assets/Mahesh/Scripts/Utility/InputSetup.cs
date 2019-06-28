@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InputSetup : MonoBehaviour
 {
+    public static InputSetup instance;
     [Header("A")]
     public KeyCode back;
     public KeyCode jump;
@@ -15,6 +16,7 @@ public class InputSetup : MonoBehaviour
     public KeyCode buy;
 
     [Header("X")]
+    public KeyCode sheatheWeapon;
     public KeyCode deleteSave;
     public KeyCode putInventory;
     public KeyCode useItem;
@@ -22,9 +24,10 @@ public class InputSetup : MonoBehaviour
 
     [Header("Y")]
     public KeyCode attack;
+    public KeyCode attack2;
 
     [Header("RB")]
-    public KeyCode shielding;
+    public KeyCode block;
 
     [Header("RT")]
 
@@ -37,6 +40,15 @@ public class InputSetup : MonoBehaviour
     public KeyCode openGameMenu;
     // Start is called before the first frame update
 
+    private void Awake()
+    {
+        //singleton
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+    }
+
     void Start()
     {
         //A
@@ -44,12 +56,14 @@ public class InputSetup : MonoBehaviour
         jump = KeyCode.Joystick1Button0;
 
         //B
+        attack2 = KeyCode.Joystick1Button1;
         continueTalk = KeyCode.Joystick1Button1;
         interact = KeyCode.Joystick1Button1;
         select = KeyCode.Joystick1Button1;
         buy = KeyCode.Joystick1Button1;
 
         //X
+        sheatheWeapon = KeyCode.Joystick1Button2;
         deleteSave = KeyCode.Joystick1Button2;
         putInventory = KeyCode.Joystick1Button2;
         useItem = KeyCode.Joystick1Button2;
@@ -59,7 +73,7 @@ public class InputSetup : MonoBehaviour
         attack = KeyCode.Joystick1Button3;
 
         //rb
-        shielding = KeyCode.Joystick1Button5;
+        block = KeyCode.Joystick1Button5;
 
         //lt
         lockEnemy = KeyCode.Joystick1Button9;

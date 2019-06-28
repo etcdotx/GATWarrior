@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8369043215047616324}
   m_Layer: 0
   m_Name: SoundList
-  m_TagString: SoundList
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -325,6 +325,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: InputSetup
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101467173129629622, guid: 6fe586e16d9c6544d88c58c7542bc29e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 1101467173129629621, guid: 6fe586e16d9c6544d88c58c7542bc29e,
         type: 3}

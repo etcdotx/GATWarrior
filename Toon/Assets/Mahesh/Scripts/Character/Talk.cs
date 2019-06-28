@@ -5,15 +5,11 @@ using UnityEngine;
 public class Talk : MonoBehaviour
 {
     public CharacterInteraction characterInteraction;
-    public InputSetup inputSetup;
-    public Conversation conversation;
 
     // Start is called before the first frame update
     void Start()
     {
         characterInteraction = gameObject.GetComponent<CharacterInteraction>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        conversation = GameObject.FindGameObjectWithTag("Conversation").GetComponent<Conversation>();
     }
 
     public void TalkToObject(Interactable interactable)
@@ -27,11 +23,11 @@ public class Talk : MonoBehaviour
 
             if (totalDialogueOption != 0)
             {
-                conversation.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);
+                Conversation.instance.StartNewDialogue(thisNPC, thisNPC.activeCollectionQuest, thisNPC.npcDialog, thisNPC.optionDialog, true);
             }
             else
             {
-                conversation.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);          
+                Conversation.instance.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);          
             }
         }
         catch {

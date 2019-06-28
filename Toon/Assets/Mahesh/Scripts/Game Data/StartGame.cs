@@ -5,11 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
-    public PlayerData playerData;
-    public GameMenuManager gameMenuManager;
     public GameObject character;
-    public GameDataBase gameDataBase;
-    public SoundList soundList;
 
     public string selectSpawnLocationName;
     public Vector3 characterScale;
@@ -25,27 +21,17 @@ public class StartGame : MonoBehaviour
     public string Hutan1_3;
     public string Hutan1_4;
 
-    private void Awake()
-    {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-        gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
-        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
-    }
-
     private void Start()
     {
         CheckScene();
-        GameStatus.isTalking = false;
-        GameStatus.ResumeGame();
-        gameMenuManager.cantOpenMenu = false;
+        GameMenuManager.instance.cantOpenMenu = false;
 
         //DEVELOPERMODE
-        if (playerData.DEVELOPERMODE == true)
+        if (PlayerData.instance.DEVELOPERMODE == true)
         {
-            gameDataBase.saveSlot = 0;
+            GameDataBase.instance.saveSlot = 0;
         }
-        playerData.LoadPlayer(selectSpawnLocationName);
+        PlayerData.instance.LoadPlayer(selectSpawnLocationName);
     }
 
     void CheckScene()

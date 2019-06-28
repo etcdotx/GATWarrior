@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    public PlayerData playerData;
-
     public bool isAShop;
 
     [Header("Set source number")]
@@ -19,10 +17,4 @@ public class NPC : MonoBehaviour
 
     [Header("Shop")]
     public List<Item> shopItem = new List<Item>();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
-    }
 }

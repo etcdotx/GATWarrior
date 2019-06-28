@@ -13,11 +13,9 @@ public class ShopDescription : MonoBehaviour
     public TextMeshProUGUI gold;
     public TextMeshProUGUI inventoryQuantity;
     public TextMeshProUGUI inventoryBoxQuantity;
-    public PlayerData playerData;
 
     public void RefreshDescription()
     {
-        playerData = GameObject.FindGameObjectWithTag("PlayerData").GetComponent<PlayerData>();
         itemImage.overrideSprite = item.itemImage;
         itemName.text = item.itemName;
         itemDescription.text = item.description;
@@ -26,19 +24,19 @@ public class ShopDescription : MonoBehaviour
         inventoryBoxQuantity.text = "0";
         inventoryQuantity.text = "0/"+item.maxQuantityOnInventory.ToString();
 
-        for (int i = 0; i < playerData.inventoryBoxItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryBoxItem.Count; i++)
         {
-            if (item.id == playerData.inventoryBoxItem[i].id)
+            if (item.id == PlayerData.instance.inventoryBoxItem[i].id)
             {
-                inventoryBoxQuantity.text = playerData.inventoryBoxItem[i].quantity.ToString();
+                inventoryBoxQuantity.text = PlayerData.instance.inventoryBoxItem[i].quantity.ToString();
                 break;
             }
         }
-        for (int i = 0; i < playerData.inventoryItem.Count; i++)
+        for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (item.id == playerData.inventoryItem[i].id)
+            if (item.id == PlayerData.instance.inventoryItem[i].id)
             {
-                inventoryQuantity.text = playerData.inventoryItem[i].quantity.ToString() + "/" + playerData.inventoryItem[i].maxQuantityOnInventory.ToString();
+                inventoryQuantity.text = PlayerData.instance.inventoryItem[i].quantity.ToString() + "/" + PlayerData.instance.inventoryItem[i].maxQuantityOnInventory.ToString();
                 break;
             }
         }

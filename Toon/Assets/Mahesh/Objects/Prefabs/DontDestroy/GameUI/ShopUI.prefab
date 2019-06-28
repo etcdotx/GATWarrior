@@ -6412,7 +6412,7 @@ GameObject:
   - component: {fileID: 7606876990899139717}
   m_Layer: 5
   m_Name: ShopUI
-  m_TagString: ShopUI
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6911,7 +6911,6 @@ MonoBehaviour:
   gold: {fileID: 4891412561527062691}
   inventoryQuantity: {fileID: 7996851600003577380}
   inventoryBoxQuantity: {fileID: 4573210006373042645}
-  playerData: {fileID: 0}
 --- !u!1 &9130404832695975726
 GameObject:
   m_ObjectHideFlags: 0

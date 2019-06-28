@@ -4,15 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerData : MonoBehaviour {
+    public static PlayerData instance;
 
     [Header("Script List")]
-    public GameDataBase gameDataBase;
     public StartGame startGame;
     public CameraMovement cm;
-    public Inventory inventory;
-    public Quest quest;
-    public InventoryBox inventoryBox;
-    public InputSetup inputSetup;
 
     [Header("Player Data")]
     public int[] characterAppearance; //Gender,Skincolor,hair,haircolor
@@ -21,9 +17,6 @@ public class PlayerData : MonoBehaviour {
 
     [Header("Player Wealth")]
     public int gold;
-
-    [Header("Menu Manager")]
-    public GameMenuManager gameMenuManager;
 
     [Header("Inventory")]
     public List<Item> inventoryItem = new List<Item>();
@@ -49,28 +42,26 @@ public class PlayerData : MonoBehaviour {
 
     private void Awake()
     {
-        //Get Script
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
-        gameMenuManager = GameObject.FindGameObjectWithTag("GameMenuManager").GetComponent<GameMenuManager>();
-        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
-        quest = GameObject.FindGameObjectWithTag("Quest").GetComponent<Quest>();
-        inventoryBox = GameObject.FindGameObjectWithTag("InventoryBox").GetComponent<InventoryBox>();
-
-        //DEVELOPERMODE
-        if (DEVELOPERMODE == true)
-        {
-            gameDataBase.saveSlot = 0;
-        }
+        //singleton
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
     }
 
     void Start()
     {
+        //DEVELOPERMODE
+        if (DEVELOPERMODE == true)
+        {
+            GameDataBase.instance.saveSlot = 0;
+        }
+
         questListIndex = -1;
 
         //Set Default
-        inventory.inventoryView.SetActive(false);
-        quest.questView.SetActive(false);
+        Inventory.instance.inventoryView.SetActive(false);
+        Quest.instance.questView.SetActive(false);
 
         //characterstats
         gold = 1250;
@@ -91,7 +82,7 @@ public class PlayerData : MonoBehaviour {
 
     public void SavePlayer()
     {
-        SaveSystem.SavePlayer(this, gameDataBase.saveSlot.ToString());
+        SaveSystem.SavePlayer(GameDataBase.instance.saveSlot.ToString());
     }
 
     public void LoadPlayer(string spawnLocationName)
@@ -119,17 +110,17 @@ public class PlayerData : MonoBehaviour {
             //Apply Appearance
             try
             {
-                body[0] = GameObject.Instantiate(gameDataBase.genderType[characterAppearance[0]], spawnLocation.transform.position, spawnLocation.transform.rotation, null);
-                body[0].GetComponent<Renderer>().material.color = gameDataBase.skinColor[characterAppearance[1]];
+                body[0] = GameObject.Instantiate(GameDataBase.instance.genderType[characterAppearance[0]], spawnLocation.transform.position, spawnLocation.transform.rotation, null);
+                body[0].GetComponent<Renderer>().material.color = GameDataBase.instance.skinColor[characterAppearance[1]];
                 if (characterAppearance[0] == 0)
                 {
-                    body[1] = GameObject.Instantiate(gameDataBase.maleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
+                    body[1] = GameObject.Instantiate(GameDataBase.instance.maleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
                 }
                 else
                 {
-                    body[1] = GameObject.Instantiate(gameDataBase.femaleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
+                    body[1] = GameObject.Instantiate(GameDataBase.instance.femaleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
                 }
-                body[1].GetComponent<Renderer>().material.color = gameDataBase.hairColor[characterAppearance[3]];
+                body[1].GetComponent<Renderer>().material.color = GameDataBase.instance.hairColor[characterAppearance[3]];
             }
             catch
             {
@@ -175,22 +166,20 @@ public class PlayerData : MonoBehaviour {
 
     public void AddNewQuestToList(CollectionQuest cq)
     {
-        Instantiate(questListPrefab, quest.questContent.transform);
-        int a = quest.questContent.transform.childCount - 1; //last quest (new addded)
-        quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
-        quest.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
-        quest.questMaxIndex++;
+        Instantiate(questListPrefab, Quest.instance.questContent.transform);
+        int a = Quest.instance.questContent.transform.childCount - 1; //last quest (new addded)
+        Quest.instance.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
+        Quest.instance.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
     }
 
     public void RemoveQuestList(CollectionQuest cq)
     {
-        for (int i = 0; i < quest.questContent.transform.childCount; i++)
+        for (int i = 0; i < Quest.instance.questContent.transform.childCount; i++)
         {
-            if (quest.questContent.transform.GetChild(i).GetComponent<QuestIndicator>().questID == cq.id)
+            if (Quest.instance.questContent.transform.GetChild(i).GetComponent<QuestIndicator>().questID == cq.id)
             {
-                Destroy(quest.questContent.transform.GetChild(i).gameObject);
-                quest.questMaxIndex--;
-                quest.RefreshQuest();
+                Destroy(Quest.instance.questContent.transform.GetChild(i).gameObject);
+                Quest.instance.RefreshQuestDetail(cq.id);
                 break;
             }
         }
@@ -242,9 +231,9 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             bool thereIsSpace = false;
-            for (int i = 0; i < inventory.inventoryIndicator.Length; i++)
+            for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
             {
-                if (inventory.inventoryIndicator[i].item == null)
+                if (Inventory.instance.inventoryIndicator[i].item == null)
                 {
                     thereIsSpace = true;
                     break;
@@ -269,7 +258,7 @@ public class PlayerData : MonoBehaviour {
         }
         //item tersebut di refresh kedalam inventory
         //Debug.Log(item.name + " , total = " + inventoryItem.Count);
-        inventory.RefreshInventory();
+        Inventory.instance.RefreshInventory();
     }
 
     public void AddItemToBox(Item item)
@@ -300,7 +289,7 @@ public class PlayerData : MonoBehaviour {
         }
         //item tersebut di refresh kedalam inventory
         //Debug.Log(item.name + " , total = " + inventoryBoxItem.Count);
-        inventoryBox.RefreshInventoryBox();
+        InventoryBox.instance.RefreshInventoryBox();
     }
 
     public void CheckNewItem(Item addedItem)

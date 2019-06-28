@@ -5,9 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour {
-
-    public SoundList soundList;
-    public InputSetup inputSetup;
     public Transform ddolGamePrefab;
 
     public int menuNumber;
@@ -18,7 +15,6 @@ public class MainMenuScript : MonoBehaviour {
     public GameObject[] menu1Nav;
 
     [Header("Save System")]
-    public GameDataBase gameDataBase;
     public Text[] saveSlotText;
 
     [Header("Scene Name")]
@@ -27,13 +23,6 @@ public class MainMenuScript : MonoBehaviour {
     [Header("Navigator")]
     public int navigatorNum;
     public bool canNav;
-
-    private void Awake()
-    {
-        gameDataBase = GameObject.FindGameObjectWithTag("GameDataBase").GetComponent<GameDataBase>();
-        inputSetup = GameObject.FindGameObjectWithTag("InputSetup").GetComponent<InputSetup>();
-        soundList = GameObject.FindGameObjectWithTag("SoundList").GetComponent<SoundList>();
-    }
 
     // Use this for initialization
     void Start() {
@@ -50,27 +39,27 @@ public class MainMenuScript : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(inputSetup.back))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(InputSetup.instance.back))
         {
             if (menuNumber > 0)
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 menuNumber--;
                 LoadMenu();
             }            
         }
 
-        if (Input.GetKeyDown(inputSetup.select))
+        if (Input.GetKeyDown(InputSetup.instance.select))
         {
-            soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
             DoSelect(menuNumber, navigatorNum);
         }
 
         if (menuNumber == 1)
         {
-            if (Input.GetKeyDown(inputSetup.deleteSave))
+            if (Input.GetKeyDown(InputSetup.instance.deleteSave))
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 SeleteSlot(navigatorNum);
             }
         }
@@ -84,9 +73,9 @@ public class MainMenuScript : MonoBehaviour {
     void DoSelect(int menuNum, int navNum) {
         if (menuNum == 0)
         {
-            if (Input.GetKeyDown(inputSetup.select) && navigatorNum == 0)
+            if (Input.GetKeyDown(InputSetup.instance.select) && navigatorNum == 0)
             {
-                soundList.UIAudioSource.PlayOneShot(soundList.UISelectClip);
+                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
                 menuNumber = 1;
                 LoadMenu();
             }
@@ -100,7 +89,7 @@ public class MainMenuScript : MonoBehaviour {
     void DoNavigate() {
         if (Input.GetAxis("LeftJoystickVertical") == -1 || Input.GetAxis("D-Pad Down") == 1 || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             if (menuNumber == 0)
             {
                 StartNavMenu(menu0Nav, true);
@@ -112,7 +101,7 @@ public class MainMenuScript : MonoBehaviour {
         }
         if (Input.GetAxis("LeftJoystickVertical") == 1 || Input.GetAxis("D-Pad Up") == 1 || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            soundList.UIAudioSource.PlayOneShot(soundList.UINavClip);
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
             if (menuNumber == 0)
             {
                 StartNavMenu(menu0Nav, false);
@@ -208,10 +197,10 @@ public class MainMenuScript : MonoBehaviour {
     
     public void SaveSlot(int x)
     {
-        gameDataBase.saveSlot = x;
+        GameDataBase.instance.saveSlot = x;
         Instantiate(ddolGamePrefab);
 
-        if (gameDataBase.saveSlotExist[x] == true)
+        if (GameDataBase.instance.saveSlotExist[x] == true)
         {
             SceneManager.LoadScene(sceneNameMenu1[0]);
         }
@@ -225,7 +214,7 @@ public class MainMenuScript : MonoBehaviour {
     {
         SaveSystem.DeletePlayer(x.ToString());
         saveSlotText[x].text = "Empty Game";
-        gameDataBase.saveSlotExist[x] = false;
+        GameDataBase.instance.saveSlotExist[x] = false;
         Debug.Log("Delete successful");
     }
 }
