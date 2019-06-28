@@ -13,9 +13,10 @@ public class CharacterInteraction : MonoBehaviour
     public Interactable tempInteractable;
 
     public bool hideInteractButton;
+    public bool buttonShowed;
+    public bool isRaycasting;
 
     [Header("RayCast Settings")]
-    public bool isRaycasting;
     public float maxRayDistance;
     public Vector3 interactRaycastOffset;
 
@@ -34,27 +35,28 @@ public class CharacterInteraction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isRaycasting = false;
+        buttonShowed = false;
+        isRaycasting = true;
         hideInteractButton = true;
         HideButton();
     }
 
     private void Update()
     {
-        if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
+        if (UIManager.instance.uiState == UIManager.UIState.Gameplay && !CharacterInput.instance.combatMode)
         {
-            if (!UsableItem.instance.isSelectingItem)
+            if (!UsableItem.instance.isSelectingItem && isRaycasting)
             {
                 InteractionRayCasting();
             }
 
-            if (isRaycasting)
-            {
-                if (hideInteractButton)
-                    HideButton();
-                else
-                    ShowButton();
-            }
+            if (hideInteractButton)
+                HideButton();
+            else
+                ShowButton();
+        }
+        else {
+            HideButton();
         }
     }
 
@@ -63,7 +65,6 @@ public class CharacterInteraction : MonoBehaviour
         Ray ray = new Ray(transform.position + interactRaycastOffset, transform.forward + interactRaycastOffset);
         Debug.DrawLine(transform.position + interactRaycastOffset, transform.position + interactRaycastOffset + transform.forward * maxRayDistance, Color.red);
         RaycastHit hit;
-        isRaycasting = true;
 
         if (Physics.Raycast(ray, out hit, maxRayDistance))
         {
@@ -88,15 +89,15 @@ public class CharacterInteraction : MonoBehaviour
         }
         catch
         {
-            hideInteractButton = true;
         }
     }
 
     public void TalkToObject(Interactable interactable)
     {
-        HideButton();
+        hideInteractButton = true;
         NPC thisNPC = interactable.gameObject.GetComponent<NPC>();
         int totalDialogueOption = thisNPC.activeCollectionQuest.Count;
+
         if (thisNPC.isAShop == true)
             totalDialogueOption += 1;
 
@@ -112,14 +113,22 @@ public class CharacterInteraction : MonoBehaviour
 
     public void ShowButton()
     {
-        InteractableIndicator.instance.interactText.gameObject.SetActive(true);
-        InteractableIndicator.instance.interactButton.gameObject.SetActive(true);
-        UIManager.instance.eventSystem.SetSelectedGameObject(InteractableIndicator.instance.interactButton.gameObject);
+        if (buttonShowed == false)
+        {
+            InteractableIndicator.instance.interactText.gameObject.SetActive(true);
+            InteractableIndicator.instance.interactButton.gameObject.SetActive(true);
+            UIManager.instance.eventSystem.SetSelectedGameObject(InteractableIndicator.instance.interactButton.gameObject);
+            buttonShowed = true;
+        }
     }
 
     public void HideButton()
     {
-        InteractableIndicator.instance.interactText.gameObject.SetActive(false);
-        InteractableIndicator.instance.interactButton.gameObject.SetActive(false);
+        if (buttonShowed == true)
+        {
+            InteractableIndicator.instance.interactText.gameObject.SetActive(false);
+            InteractableIndicator.instance.interactButton.gameObject.SetActive(false);
+            buttonShowed = false;
+        }
     }
 }

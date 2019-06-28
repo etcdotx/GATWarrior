@@ -72,7 +72,7 @@ public class GameMenuManager : MonoBehaviour
     void OpenCloseMenu() {
         if (!cantOpenMenu)
         {
-            if (Input.GetKeyDown(InputSetup.instance.openGameMenu)) //tombol start
+            if (Input.GetKeyDown(InputSetup.instance.start)) //tombol start
             {
                 SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
                 if (menuState == MenuState.noMenu)

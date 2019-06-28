@@ -37,7 +37,7 @@ public class InputSetup : MonoBehaviour
     public KeyCode lockEnemy;
 
     [Header("START")]
-    public KeyCode openGameMenu;
+    public KeyCode start;
     // Start is called before the first frame update
 
     private void Awake()
@@ -79,6 +79,6 @@ public class InputSetup : MonoBehaviour
         lockEnemy = KeyCode.Joystick1Button9;
 
         //start
-        openGameMenu = KeyCode.Joystick1Button7;
+        start = KeyCode.Joystick1Button7;
     }
 }

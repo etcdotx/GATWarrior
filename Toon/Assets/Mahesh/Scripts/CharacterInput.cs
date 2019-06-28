@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterInput : MonoBehaviour
 {
+    public static CharacterInput instance;
+
     public Camera mainCamera;
     public Vector3 inputAxis;
     public Animator anim;
@@ -27,6 +29,11 @@ public class CharacterInput : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         cameraMovement = mainCamera.GetComponent<CameraMovement>();
     }
@@ -47,37 +54,40 @@ public class CharacterInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetInputAxis();
 
-        if (cameraMovement.isLocking)
+        if (UIManager.instance.uiState == UIManager.UIState.Gameplay || UIManager.instance.uiState == UIManager.UIState.InventoryAndSave)
         {
-            Vector3 lookTarget = cameraMovement.monsterTarget.transform.position;
-            lookTarget.y = transform.position.y;
-            transform.LookAt(lookTarget);
-        }
-        else if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0 && !isRolling && !turningBack)
-        {
-            if (Input.GetAxis("RT Button") > 0)
+            GetInputAxis();
+            if (cameraMovement.isLocking)
             {
-                speedMultiplier = 2;
-                Mathf.Lerp(speedMultiplier, 2, Time.deltaTime * speedMultiplierLerp);
+                Vector3 lookTarget = cameraMovement.monsterTarget.transform.position;
+                lookTarget.y = transform.position.y;
+                transform.LookAt(lookTarget);
             }
-            else
+            else if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0 && !isRolling && !turningBack)
             {
-                speedMultiplier = 1;
+                if (Input.GetAxis("RT Button") > 0)
+                {
+                    speedMultiplier = 2;
+                    Mathf.Lerp(speedMultiplier, 2, Time.deltaTime * speedMultiplierLerp);
+                }
+                else
+                {
+                    speedMultiplier = 1;
+                }
+                Rotate();
             }
-            Rotate();
-        }
 
-        if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
-        {
-            Roll();
-            DrawOrSheathe();
-            Attack();
-            Block();
+            if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
+            {
+                Roll();
+                DrawOrSheathe();
+                Attack();
+                Block();
 
-            if (!cameraMovement.isLocking)
-                TurnBack();
+                if (!cameraMovement.isLocking)
+                    TurnBack();
+            }
         }
     }
 

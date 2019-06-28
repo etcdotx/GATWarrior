@@ -11,14 +11,7 @@ public class Conversation : MonoBehaviour
     [Header("Util")]
     public NPC target;
     public Dialogue dialogue;
-    public List<CollectionQuest> colQuestList = new List<CollectionQuest>();
-    public List<DialogueOption> dialogueOptionList = new List<DialogueOption>();
-    public DialogueOption selectDialogueOption;
     public Dialogue npcDialog;
-    public bool isTalking;
-    public bool inputHold;
-    public bool haveDialogOption;
-    public int questID;
     public int dialNum;
 
     [Header("UI")]
@@ -27,10 +20,7 @@ public class Conversation : MonoBehaviour
     public GameObject dialogueOptionContent;
     public Scrollbar dialogueOptionScrollbar;
     public TextMeshProUGUI conversationText;
-
-    [Header("Input")]
-    public Vector3 inputAxis;
-    public int dialogueOptionIndex;
+    public Button conversationButton;
 
     private void Awake()
     {
@@ -43,79 +33,35 @@ public class Conversation : MonoBehaviour
         dialogueOptionContent = dialogueOptionView.transform.Find("DialogueOptionViewPort").Find("DialogueOptionContent").gameObject;
         dialogueOptionScrollbar = dialogueOptionView.transform.Find("DialogueOptionScrollbar").GetComponent<Scrollbar>();
         conversationText = transform.GetChild(0).Find("ConversationText").GetComponent<TextMeshProUGUI>();
+        conversationButton = transform.GetChild(0).Find("ConversationButton").GetComponent<Button>();
     }
 
     public void Start()
     {
         dialogueOptionView.SetActive(false);
         conversationText.gameObject.SetActive(false);
-        isTalking = false;
-        haveDialogOption = false;
+        conversationButton.gameObject.SetActive(false);
+        conversationButton.interactable = false;
     }
 
-    public void Update()
+    public void ContinueTalking()
     {
-        //GetInputAxis();
-        if (inputHold == false && isTalking)
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
+        NextDialogue();
+        if (dialogue != null)
         {
-            if (haveDialogOption == true)
-            {
-                if (inputAxis.y == 1 || inputAxis.y == -1)
-                {
-                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
-                    StartCoroutine(InputHold());
-                    ChooseDialogue();
-                }
-                if (Input.GetKeyDown(InputSetup.instance.continueTalk))
-                {
-                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                    ConfirmDialogSelection();
-                    if (dialogue != null)
-                    {
-                        if (dialNum == dialogue.dialogue.Length - 1)
-                            InteractableIndicator.instance.interactText.text = "End";
-                        else
-                            InteractableIndicator.instance.interactText.text = "Continue";
-                    }
-                }
-                if (Input.GetKeyDown(InputSetup.instance.back))
-                {
-                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                    CancelTalk();
-                }
-            }
-            else if (haveDialogOption == false)
-            {
-                Talking();
-            }
-        }
-    }
-
-    void Talking()
-    {
-        if (Input.GetKeyDown(KeyCode.Joystick1Button1))
-        {
-            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-            NextDialogue();
-            StartCoroutine(InputHold());
-            if (dialogue != null)
-            {
-                if (dialNum == dialogue.dialogue.Length - 1)
-                    InteractableIndicator.instance.interactText.text = "End";
-                else if (dialNum < dialogue.dialogue.Length - 1)
-                    InteractableIndicator.instance.interactText.text = "Continue";
-            }
+            if (dialNum == dialogue.dialogue.Length - 1)
+                InteractableIndicator.instance.interactText.text = "End";
+            else if (dialNum < dialogue.dialogue.Length - 1)
+                InteractableIndicator.instance.interactText.text = "Continue";
         }
     }
 
     public void StartNewDialogue(NPC target, List<CollectionQuest> cqList, Dialogue npcDialog, string optionDialog, bool haveDialogOption)
     {
-        isTalking = true;
         this.target = target;
         this.npcDialog = npcDialog;
-        this.haveDialogOption = haveDialogOption;
         ShowUI(haveDialogOption);
-        StartCoroutine(InputHold());
 
         if (haveDialogOption)
         {
@@ -128,73 +74,50 @@ public class Conversation : MonoBehaviour
             dialogue = this.npcDialog;
             conversationText.text = npcDialog.dialogue[dialNum];
         }
-        //ScrollOption();
     }
 
-    void ConfirmDialogSelection()
+    public void SelectTalkOption() {
+        dialogue = this.npcDialog;
+        conversationText.text = dialogue.dialogue[dialNum];
+        dialogueOptionView.SetActive(false);
+    }
+
+    public void SelectShopOption()
     {
-        StartCoroutine(InputHold());
-        SelectDialogue();
+        CancelTalk();
+        Shop.instance.OpenShop(target);
+    }
+    public void SelectQuestOption(CollectionQuest dialogueQuest) {
+        CheckQuest(dialogueQuest);
+        dialogueOptionView.SetActive(false);
     }
 
-    void SelectDialogue()
-    {
-        if (dialogueOptionList[dialogueOptionIndex].isTalk)
-        {
-            dialogue = this.npcDialog;
-            conversationText.text = dialogue.dialogue[dialNum];
-            dialogueOptionView.SetActive(false);
-            haveDialogOption = false;
-        }
-        else if (dialogueOptionList[dialogueOptionIndex].isShop)
-        {
-            CancelTalk();
-            Shop.instance.OpenShop(target);
-        }
-        else if (dialogueOptionList[dialogueOptionIndex].isQuest)
-        {
-            CheckQuest();
-            dialogueOptionView.SetActive(false);
-            haveDialogOption = false;
-        }
-    }
-
-    void CheckQuest()
+    void CheckQuest(CollectionQuest dialogueQuest)
     {
         bool checkExist = false;
         for (int j = 0; j < PlayerData.instance.collectionQuest.Count; j++)
         {
-            if (PlayerData.instance.collectionQuest[j].id == dialogueOptionList[dialogueOptionIndex].collectionQuest.id)
+            if (PlayerData.instance.collectionQuest[j].id == dialogueQuest.id)
             {
                 checkExist = true;
                 if (PlayerData.instance.collectionQuest[j].isComplete)
                 {
                     Debug.Log("Quest is complete");
-                    SetQuestCompleteDialogue();
+                    SetQuestCompleteDialogue(dialogueQuest);
+
                     PlayerData.instance.collectionQuest[j].QuestComplete();
                     Inventory.instance.RefreshInventory();
-                    for (int b = 0; b < Quest.instance.collectionQuestActive.Count; b++)
-                    {
-                        if (Quest.instance.collectionQuestActive[b].id == PlayerData.instance.collectionQuest[j].id)
-                        {
-                            Quest.instance.collectionQuestActive.RemoveAt(b);
-                            break;
-                        }
-                    }
-                    for (int i = 0; i < target.activeCollectionQuest.Count; i++)
-                    {
-                        if (target.activeCollectionQuest[i].id == dialogueOptionList[dialogueOptionIndex].collectionQuest.id)
-                        {
-                            target.activeCollectionQuest.RemoveAt(i);
-                            break;
-                        }
-                    }
+
+
+                    RemoveActiveQuest(dialogueQuest);
+                    RemoveNPCQuest(dialogueQuest);
+
                     PlayerData.instance.AddCollectionQuestComplete(PlayerData.instance.collectionQuest[j]);
                     Quest.instance.ActivateQuest();
                     break;
                 }
                 else {
-                    SetQuestDialogue();
+                    SetQuestDialogue(dialogueQuest);
                 }
                 break;
             }
@@ -207,22 +130,47 @@ public class Conversation : MonoBehaviour
 
         if (!checkExist)
         {
-            PlayerData.instance.AddQuest(dialogueOptionList[dialogueOptionIndex].collectionQuest);
-            SetQuestDialogue();
+            PlayerData.instance.AddQuest(dialogueQuest);
+            SetQuestDialogue(dialogueQuest);
         }
     }
 
-    void SetQuestDialogue()
+    void RemoveActiveQuest(CollectionQuest dialogueQuest)
     {
+        for (int i = 0; i < Quest.instance.collectionQuestActive.Count; i++)
+        {
+            if (Quest.instance.collectionQuestActive[i].id == dialogueQuest.id)
+            {
+                Quest.instance.collectionQuestActive.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
+    void RemoveNPCQuest(CollectionQuest dialogueQuest) {
+        for (int i = 0; i < target.activeCollectionQuest.Count; i++)
+        {
+            if (target.activeCollectionQuest[i].id == dialogueQuest.id)
+            {
+                target.activeCollectionQuest.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
+    void SetQuestDialogue(CollectionQuest dialogueQuest)
+    {
+        dialogueOptionView.SetActive(false);
         dialogue = null;
-        dialogue = dialogueOptionContent.transform.GetChild(dialogueOptionIndex).GetComponent<DialogueOption>().collectionQuest.startDialogue;
+        dialogue = dialogueQuest.startDialogue;
         conversationText.text = dialogue.dialogue[dialNum];
     }
 
-    void SetQuestCompleteDialogue()
+    void SetQuestCompleteDialogue(CollectionQuest dialogueQuest)
     {
+        dialogueOptionView.SetActive(false);
         dialogue = null;
-        dialogue = dialogueOptionContent.transform.GetChild(dialogueOptionIndex).GetComponent<DialogueOption>().collectionQuest.endDialogue;
+        dialogue = dialogueQuest.endDialogue;
         conversationText.text = dialogue.dialogue[dialNum];
     }
 
@@ -234,40 +182,32 @@ public class Conversation : MonoBehaviour
 
     void InstantiateDialogueOption(List<CollectionQuest> cqList)
     {
-        for (int i = 0; i < cqList.Count; i++)
-        {
-            CollectionQuest newCol = ScriptableObject.CreateInstance<CollectionQuest>();
-            newCol.Duplicate(cqList[i]);
-
-            colQuestList.Add(newCol);
-        }
-
         //for normal dialogue
         DialogueOption talkDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
         talkDialogueOption.optionText.text = "Talk";
         talkDialogueOption.isTalk = true;
-        dialogueOptionList.Add(talkDialogueOption);
-        //for shop
+        UIManager.instance.eventSystem.SetSelectedGameObject(talkDialogueOption.gameObject);
 
+        //for shop
         if (target.isAShop)
         {
             DialogueOption shopDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
             shopDialogueOption.optionText.text = "Buy";
             shopDialogueOption.isShop = true;
-            dialogueOptionList.Add(shopDialogueOption);
         }
 
         //for questdialogue
-        for (int i = 0; i < colQuestList.Count; i++)
+        for (int i = 0; i < cqList.Count; i++)
         {
             DialogueOption newDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
-            newDialogueOption.collectionQuest = colQuestList[i];
-            newDialogueOption.optionText.text = colQuestList[i].title;
+            newDialogueOption.collectionQuest = cqList[i];
+            newDialogueOption.optionText.text = cqList[i].title;
             newDialogueOption.isQuest = true;
             newDialogueOption.questIndicatorNew.SetActive(true);
             newDialogueOption.questIndicatorComplete.SetActive(false);
 
             for (int j = 0; j < PlayerData.instance.collectionQuest.Count; j++)
+            {
                 if (PlayerData.instance.collectionQuest[j].id == newDialogueOption.collectionQuest.id)
                 {
                     PlayerData.instance.collectionQuest[j].CheckProgress();
@@ -280,58 +220,24 @@ public class Conversation : MonoBehaviour
                     else
                         break;
                 }
-            dialogueOptionList.Add(newDialogueOption);
+            }
         }
-
-        //set cursor
-        for (int i = 1; i < dialogueOptionList.Count; i++)
-            dialogueOptionContent.transform.GetChild(i).GetComponent<DialogueOption>().cursor.SetActive(false);
     }
 
-    #region UTILITY
-    IEnumerator InputHold()
-    {
-        inputHold = true;
-        yield return new WaitForSeconds(0.15f);
-        inputHold = false;
-    }
     void ShowUI(bool haveOption)
     {
         InteractableIndicator.instance.interactText.gameObject.SetActive(true);
         conversationText.gameObject.SetActive(true);
-        InteractableIndicator.instance.interactButton.gameObject.SetActive(true);
+        conversationButton.gameObject.SetActive(true);
 
         if (haveOption == true)
             dialogueOptionView.SetActive(true);
     }
-    void GetInputAxis()
-    {
-        inputAxis.y = Input.GetAxisRaw("D-Pad Up");
-        inputAxis.x = Input.GetAxisRaw("D-Pad Right");
-    }
-    void ChooseDialogue()
-    {
-        if (inputAxis.y == -1)
-            if (dialogueOptionIndex < dialogueOptionList.Count-1)
-                dialogueOptionIndex++;
-        if (inputAxis.y == 1)
-            if (dialogueOptionIndex > 0)
-                dialogueOptionIndex--;
-        ResetCursor();
-    }
-    void CancelTalk()
-    {
-        StartCoroutine(InputHold());
-        dialogueOptionView.SetActive(false);
-        haveDialogOption = false;
-        EndDialog();
-    }
-    void ResetCursor()
-    {
-        for (int i = 0; i < dialogueOptionList.Count; i++)
-            dialogueOptionList[i].cursor.SetActive(false);
 
-        dialogueOptionList[dialogueOptionIndex].cursor.SetActive(true);
+    public void CancelTalk()
+    {
+        dialogueOptionView.SetActive(false);
+        EndDialog();
     }
 
     public void NextDialogue()
@@ -349,22 +255,21 @@ public class Conversation : MonoBehaviour
 
     public void EndDialog()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        isTalking = false;
-
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
         DestroyOption();
         ClearList();
-        InteractableIndicator.instance.interactButton.gameObject.SetActive(false);
+        conversationButton.gameObject.SetActive(false);
         InteractableIndicator.instance.interactText.gameObject.SetActive(false);
         conversationText.gameObject.SetActive(false);
+
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+        UIManager.instance.StartGamePlayState();
     }
+
     void ClearList()
     {
         dialNum = 0;
-        dialogueOptionIndex = 0;
         dialogue = null;
-        dialogueOptionList.Clear();
-        colQuestList.Clear();
+        DestroyOption();
     }
-    #endregion
 }

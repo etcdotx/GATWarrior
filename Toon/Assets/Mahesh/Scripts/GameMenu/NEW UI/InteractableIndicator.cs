@@ -26,7 +26,9 @@ public class InteractableIndicator : MonoBehaviour
             if (tempInteractable.isTalking)
             {
                 CharacterInteraction.instance.TalkToObject(tempInteractable);
+
                 UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Conversation));
+                UIManager.instance.ExitGamePlayState();
             }
             else if (tempInteractable.isCollectable)
             {

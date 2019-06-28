@@ -50,27 +50,48 @@ public class UIManager : MonoBehaviour
 
     void GameplayState()
     {
-        if (Input.GetKeyDown(InputSetup.instance.openGameMenu))
+        if (Input.GetKeyDown(InputSetup.instance.start))
         {
+            ExitGamePlayState();
+            StartCoroutine(ChangeState(UIState.InventoryAndSave));
+
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+
             Inventory.instance.inventoryView.SetActive(true);
             Quest.instance.questView.SetActive(true);
             UsableItem.instance.usableItemView.SetActive(false);
-            StartCoroutine(ChangeState(UIState.InventoryAndSave));
+
+            if (Quest.instance.questContent.transform.childCount > 0)
+            {
+                eventSystem.SetSelectedGameObject(Quest.instance.questContent.transform.GetChild(0).gameObject);
+                Debug.Log(Quest.instance.questContent.transform.GetChild(0).gameObject.name);
+            }
+
             eventSystem.SetSelectedGameObject(inventoryFirstSelect);
-            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
         }
     }
 
     void InventoryAndSaveState()
     {
-        if (Input.GetKeyDown(InputSetup.instance.openGameMenu))
+        if (Input.GetKeyDown(InputSetup.instance.start))
         {
+            StartGamePlayState();
+            StartCoroutine(ChangeState(UIState.Gameplay));
+
+            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+
             Inventory.instance.inventoryView.SetActive(false);
             Quest.instance.questView.SetActive(false);
             UsableItem.instance.usableItemView.SetActive(true);
-            StartCoroutine(ChangeState(UIState.Gameplay));
-            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
         }
+    }
+
+    public void StartGamePlayState() {
+        CharacterInteraction.instance.isRaycasting = true;
+    }
+
+    public void ExitGamePlayState() {
+        CharacterInteraction.instance.isRaycasting = false;
     }
 
     void ConversationState() {
