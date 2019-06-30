@@ -14,15 +14,10 @@ public class Shop : MonoBehaviour
     public int shopRowIndex;
     public int shopList;
     public int maxShopList;
-    public int minRange;
-    public int maxRange;
-    public float padding;
-    public bool inShop;
 
     public GameObject shopView;
     public GameObject shopViewPort;
     public GameObject shopContent;
-
     public GameObject shopIndicatorPrefab;
     public List<ShopIndicator> shopIndicator = new List<ShopIndicator>();
     public List<Item> shopItem = new List<Item>();
@@ -31,7 +26,7 @@ public class Shop : MonoBehaviour
     public TextMeshProUGUI gold;
 
     [Header("Shop Description")]
-    public ShopDescription shopDescription;
+    public ItemDescription itemDescription;
 
     [Header("Buy")]
     public BuyConfirmation buyConfirmation;
@@ -49,7 +44,7 @@ public class Shop : MonoBehaviour
 
         shopView = transform.GetChild(0).Find("ShopView").gameObject;
         shopViewPort = shopView.transform.Find("ShopViewPort").gameObject;
-        shopDescription = shopView.transform.Find("ShopDescription").GetComponent<ShopDescription>();
+        itemDescription = shopView.transform.Find("ItemDescription").GetComponent<ItemDescription>();
         buyConfirmation = shopView.transform.Find("BuyConfirmation").GetComponent<BuyConfirmation>();
         sendToBoxConfirmation = shopView.transform.Find("SendToBoxConfirmation").GetComponent<SendToBoxConfirmation>();
         gold = shopView.transform.Find("GoldIndicator").transform.Find("Gold").GetComponent<TextMeshProUGUI>();
@@ -64,7 +59,6 @@ public class Shop : MonoBehaviour
         buyConfirmation.gameObject.SetActive(false);
         sendToBoxConfirmation.gameObject.SetActive(false);
         maxRow = gridLayoutGroup.constraintCount;
-        padding = gridLayoutGroup.spacing.x;
         isBuying = false;
     }
 
@@ -168,7 +162,7 @@ public class Shop : MonoBehaviour
         gold.text = PlayerData.instance.gold.ToString();
         buyConfirmation.gameObject.SetActive(false);
         isBuying = false;
-        shopDescription.RefreshDescription();
+        //shopDescription.RefreshDescription();
     }
 
     public void ConfirmSend() {
@@ -176,7 +170,7 @@ public class Shop : MonoBehaviour
         gold.text = PlayerData.instance.gold.ToString();
         sendToBoxConfirmation.gameObject.SetActive(false);
         isSending = false;
-        shopDescription.RefreshDescription();
+        //shopDescription.RefreshDescription();
     }
 
     public void CancelBuy() {
@@ -188,103 +182,15 @@ public class Shop : MonoBehaviour
 
     public void ShopSelection()
     {
-        if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
-        {
-            if (shopRowIndex < maxRange-1)
-            {
-                shopRowIndex++;
-            }
-            else
-            {
-                shopRowIndex = minRange;
-            }
-        }
-        else if (GameMenuManager.instance.inputAxis.y == 1) // keatas
-        {
-            if (shopRowIndex > minRange)
-            {
-                shopRowIndex--;
-            }
-            else
-            {
-                shopRowIndex = maxRange-1;
-            }
-        }
-        if (GameMenuManager.instance.inputAxis.x == -1) // kekiri
-        {
-            if (maxShopList > 1)
-            {
-                if (shopList > 0)
-                {
-                    gridLayoutGroup.padding.left += (int)padding;
-                    //shopContent.transform.position += new Vector3(-padding, 0, 0);
-                    shopList--;
-                    minRange -= maxRow;
-                    maxRange = minRange + maxRow;
-                    if (maxRange > shopItem.Count)
-                        maxRange = shopItem.Count;
-                    shopRowIndex = minRange;
-                }
-                else
-                {
-                    gridLayoutGroup.padding.left = -(int)padding * (maxShopList - 1);
-                    shopList = maxShopList - 1;
-                    minRange = shopList * maxRow;
-                    maxRange = shopItem.Count;
-                    shopRowIndex = minRange;
-                }
-            }
-        }
-        else if (GameMenuManager.instance.inputAxis.x == 1) //kekanan
-        {
-            if (maxShopList > 1)
-            {
-                if (shopList < maxShopList - 1)
-                {
-                    gridLayoutGroup.padding.left += -(int)padding;
-                    shopList++;
-                    minRange += maxRow;
-                    maxRange += maxRow;
-                    if (maxRange > shopItem.Count)
-                        maxRange = shopItem.Count;
-                    shopRowIndex = minRange;
-                }
-                else
-                {
-                    gridLayoutGroup.padding.left = 0;
-                    shopList = 0;
-                    minRange = 0;
-                    maxRange = maxRow;
-                    if (maxRange > shopItem.Count)
-                        maxRange = shopItem.Count;
-                    shopRowIndex = minRange;
-                }
-            }
-        }
-        MarkShopSelection();
-    }
-
-    void MarkShopSelection() {
-        for (int i = 0; i < shopIndicator.Count; i++)
-        {
-            shopIndicator[i].selectedIndicator.SetActive(false);
-        }
-        shopIndicator[shopRowIndex].selectedIndicator.SetActive(true);
-
-        //gua gatau kenapa harus gini biar bisa geser ke next tab
-        shopContent.SetActive(false);
-        shopContent.SetActive(true);
-        //gua gatau kenapa harus gini biar bisa geser ke next tab
-
-        shopDescription.item = shopIndicator[shopRowIndex].item;
-        shopDescription.RefreshDescription();
     }
 
     public void OpenShop(NPC target)
     {
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Shop));
         shopIndicator.Clear();
         shopItem.Clear();
         gold.text = PlayerData.instance.gold.ToString();
+
         for (int i = 0; i < target.shopItem.Count; i++)
         {
             Item temp = target.shopItem[i];
@@ -294,18 +200,18 @@ public class Shop : MonoBehaviour
             if (temp.itemType != null)
                 if (temp.itemType.ToLower().Equals("seed".ToLower()))
                     temp2.plantID = temp.plantID;
+
             shopItem.Add(temp2);
         }
-        ResetRange();        
+         
         AddShopIndicator();
 
         GameMenuManager.instance.menuState = GameMenuManager.MenuState.shopMenu;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        inShop = true;
         PlayerStatus.instance.healthIndicator.SetActive(false);
         InventoryBox.instance.inventoryBoxView.SetActive(true);
-        InventoryBox.instance.MarkInventoryBox();
+        //InventoryBox.instance.MarkInventoryBox();
         shopView.SetActive(true);
     }
 
@@ -314,19 +220,9 @@ public class Shop : MonoBehaviour
         RemoveShopIndicator();
         GameMenuManager.instance.menuState = GameMenuManager.MenuState.noMenu;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        inShop = false;
         PlayerStatus.instance.healthIndicator.SetActive(true);
         InventoryBox.instance.inventoryBoxView.SetActive(false);
         shopView.SetActive(false);
-    }
-
-    void ResetRange() {
-        maxShopList = (shopItem.Count / maxRow) + 1;
-        minRange = 0;
-        maxRange = maxRow;
-        if (maxRange > shopItem.Count)
-            maxRange = shopItem.Count;
-        shopRowIndex = 0;
     }
 
     void AddShopIndicator()
@@ -338,10 +234,9 @@ public class Shop : MonoBehaviour
             shopIndicator[i].item = shopItem[i + (maxRow * shopList)];
             shopIndicator[i].RefreshIndicator();
         }
-        MarkShopSelection();
     }
 
-    void RemoveShopIndicator()
+    public void RemoveShopIndicator()
     {
         shopIndicator.Clear();
         shopItem.Clear();

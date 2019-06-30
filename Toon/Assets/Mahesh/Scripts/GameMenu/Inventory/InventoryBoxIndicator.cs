@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDeselectHandler
+public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDeselectHandler
 {
     public int itemID;
     public Item item;
     public Image itemImage;
+
     public bool isSelected;
     public bool marked;
     public GameObject markIndicator;
@@ -28,20 +29,19 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
                 if (Input.GetKeyDown(InputSetup.instance.X))
                 {
                     if (UIManager.instance.uiState == UIManager.UIState.InventoryAndInventoryBox)
-                        Inventory.instance.SetInitialQuantityToPut();
+                        InventoryBox.instance.SetInitialQuantityToPut();
                 }
             }
         }
     }
 
-    public void RefreshInventory()
+    public void RefreshInventoryBox()
     {
         if (item != null)
         {
             if (item.quantity == 0)
             {
-                PlayerData.instance.inventoryItem.Remove(item);
-                UsableItem.instance.isUsingItem = false;
+                PlayerData.instance.inventoryBoxItem.Remove(item);
                 MakeEmpty();
             }
             else
@@ -63,10 +63,12 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
 
     public void MakeEmpty()
     {
-        try {
+        try
+        {
             Debug.Log(item.itemName + " removed");
-        } catch { }
-        PlayerData.instance.inventoryItem.Remove(item);
+        }
+        catch { }
+        PlayerData.instance.inventoryBoxItem.Remove(item);
         item = null;
         itemID = 0;
         itemImage.overrideSprite = null;
@@ -76,13 +78,13 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
 
     public void OnCancel(BaseEventData eventData)
     {
-        if (Inventory.instance.isSwapping)
-        {
-            Inventory.instance.CancelSwap();
-        }
-        else if (InventoryBox.instance.isSwapping)
+        if (InventoryBox.instance.isSwapping)
         {
             InventoryBox.instance.CancelSwap();
+        }
+        else if (Inventory.instance.isSwapping)
+        {
+            Inventory.instance.CancelSwap();
         }
         else
         {
@@ -93,38 +95,34 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
     public void OnSelect(BaseEventData eventData)
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
-        Inventory.instance.inventoryItemDescription.item = item;
-        Inventory.instance.inventoryItemDescription.RefreshDescription();
+        InventoryBox.instance.inventoryBoxItemDescription.item = item;
+        InventoryBox.instance.inventoryBoxItemDescription.RefreshDescription();
 
 
-        Inventory.instance.lastSelectedInventory = gameObject;
-        Inventory.instance.temporaryItem = null;
-        Inventory.instance.temporaryItem = item;
+        InventoryBox.instance.lastSelectedInventory = gameObject;
+        InventoryBox.instance.temporaryItem = null;
+        InventoryBox.instance.temporaryItem = item;
 
-        if (UIManager.instance.uiState == UIManager.UIState.InventoryAndSave)
+        if (UIManager.instance.uiState == UIManager.UIState.InventoryAndInventoryBox)
         {
-            Inventory.instance.inventoryAndSaveButton.SetActive(true);
-        }
-        else if (UIManager.instance.uiState == UIManager.UIState.InventoryAndInventoryBox)
-        {
-            Inventory.instance.inventoryAndInventoryBoxButton.SetActive(true);
+            InventoryBox.instance.inventoryAndInventoryBoxButton.SetActive(true);
         }
         isSelected = true;
+        Debug.Log("in");
     }
 
-    public void SwapInventory()
+    public void SwapInventoryBox()
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-        if (!Inventory.instance.isSwapping)
-            Inventory.instance.Select1stItem(this);
+        if (!InventoryBox.instance.isSwapping)
+            InventoryBox.instance.Select1stItem(this);
         else
-            Inventory.instance.Select2ndItem(this);
+            InventoryBox.instance.Select2ndItem(this);
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
-        Inventory.instance.inventoryAndSaveButton.SetActive(false);
-        Inventory.instance.inventoryAndInventoryBoxButton.SetActive(false);
+        InventoryBox.instance.inventoryAndInventoryBoxButton.SetActive(false);
     }
 }

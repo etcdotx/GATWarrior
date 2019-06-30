@@ -109,6 +109,7 @@ public class CharacterInteraction : MonoBehaviour
             Conversation.instance.StartNewDialogue(thisNPC, null, thisNPC.npcDialog, null, false);
         }
     }
+
     public void CollectObject()
     {
         //mengecek id dari item tersebut

@@ -56,5 +56,6 @@ public class DialogueOption : MonoBehaviour, ISelectHandler, ICancelHandler
             Conversation.instance.SelectShopOption();
         else if (isQuest)
             Conversation.instance.SelectQuestOption(collectionQuest);
+
     }
 }

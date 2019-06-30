@@ -29,21 +29,17 @@ public class InteractableIndicator : MonoBehaviour
                 if (tempInteractable.isTalking)
                 {
                     CharacterInteraction.instance.TalkToObject(tempInteractable);
-
-                    StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Conversation));
-                    UIManager.instance.ExitGamePlayState();
-                    UIManager.instance.StartConversationState();
+                    UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Conversation));
                 }
                 else if (tempInteractable.isCollectable)
                 {
                     CharacterInteraction.instance.gatherTarget = tempInteractable;
                     CharacterInteraction.instance.animator.SetTrigger("gather");
-                    StartCoroutine(CharacterInteraction.instance.Gather());
+                    UIManager.instance.StartCoroutine(CharacterInteraction.instance.Gather());
                 }
                 else if (tempInteractable.isItemBox)
                 {
-                    GameMenuManager.instance.OpenInventoryBoxMenu();
-                    SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
+                    UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.InventoryAndInventoryBox));
                 }
             }
         } catch { }

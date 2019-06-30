@@ -45,16 +45,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startGame: {fileID: 0}
   cm: {fileID: 0}
-  inventory: {fileID: 0}
-  quest: {fileID: 0}
-  inventoryBox: {fileID: 0}
   characterAppearance: 00000000000000000000000000000000
   character: {fileID: 0}
   body:
   - {fileID: 0}
   - {fileID: 0}
   gold: 0
-  gameMenuManager: {fileID: 0}
   inventoryItem: []
   inventoryBoxItem: []
   questListPrefab: {fileID: 8196887257004107974, guid: 67cd0da480ae4564da5b8dd9c53b7d92,
@@ -79,4 +75,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}
   - {fileID: 11400000, guid: 50220ef3a5945bf49bf3cc03aac905a6, type: 2}
   - {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
-  - {fileID: 11400000, guid: 5f3608179ef3af84cb6a7a3d4e6d5404, type: 2}

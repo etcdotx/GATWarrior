@@ -21,6 +21,7 @@ public class Conversation : MonoBehaviour
     public Scrollbar dialogueOptionScrollbar;
     public TextMeshProUGUI conversationText;
     public Button conversationButton;
+    public Text conversationButtonText;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class Conversation : MonoBehaviour
         dialogueOptionScrollbar = dialogueOptionView.transform.Find("DialogueOptionScrollbar").GetComponent<Scrollbar>();
         conversationText = transform.GetChild(0).Find("ConversationText").GetComponent<TextMeshProUGUI>();
         conversationButton = transform.GetChild(0).Find("ConversationButton").GetComponent<Button>();
+        conversationButtonText = transform.GetChild(0).Find("ConversationButtonText").GetComponent<Text>();
     }
 
     public void Start()
@@ -41,6 +43,7 @@ public class Conversation : MonoBehaviour
         dialogueOptionView.SetActive(false);
         conversationText.gameObject.SetActive(false);
         conversationButton.gameObject.SetActive(false);
+        conversationButtonText.gameObject.SetActive(false);
         conversationButton.interactable = false;
     }
 
@@ -51,9 +54,9 @@ public class Conversation : MonoBehaviour
         if (dialogue != null)
         {
             if (dialNum == dialogue.dialogue.Length - 1)
-                InteractableIndicator.instance.interactText.text = "End";
+                conversationButtonText.text = "End";
             else if (dialNum < dialogue.dialogue.Length - 1)
-                InteractableIndicator.instance.interactText.text = "Continue";
+                conversationButtonText.text = "Continue";
         }
     }
 
@@ -66,7 +69,7 @@ public class Conversation : MonoBehaviour
         if (haveDialogOption)
         {
             InstantiateDialogueOption(cqList);
-            InteractableIndicator.instance.interactText.text = "Choose";
+            conversationButtonText.text = "Choose";
             conversationText.text = optionDialog;
         }
         else
@@ -79,7 +82,7 @@ public class Conversation : MonoBehaviour
     public void SelectTalkOption() {
         dialogue = this.npcDialog;
         conversationText.text = dialogue.dialogue[dialNum];
-        dialogueOptionView.SetActive(false);
+        StartSelectedDialogue();
     }
 
     public void SelectShopOption()
@@ -89,7 +92,17 @@ public class Conversation : MonoBehaviour
     }
     public void SelectQuestOption(CollectionQuest dialogueQuest) {
         CheckQuest(dialogueQuest);
+        StartSelectedDialogue();
+    }
+
+    void StartSelectedDialogue()
+    {
         dialogueOptionView.SetActive(false);
+
+        if (dialNum == dialogue.dialogue.Length - 1)
+            conversationButtonText.text = "End";
+        else if (dialNum < dialogue.dialogue.Length - 1)
+            conversationButtonText.text = "Continue";
     }
 
     void CheckQuest(CollectionQuest dialogueQuest)
@@ -226,9 +239,9 @@ public class Conversation : MonoBehaviour
 
     void ShowUI(bool haveOption)
     {
-        InteractableIndicator.instance.interactText.gameObject.SetActive(true);
         conversationText.gameObject.SetActive(true);
         conversationButton.gameObject.SetActive(true);
+        conversationButtonText.gameObject.SetActive(true);
 
         if (haveOption == true)
             dialogueOptionView.SetActive(true);
@@ -255,17 +268,9 @@ public class Conversation : MonoBehaviour
 
     public void EndDialog()
     {
-        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
         DestroyOption();
         ClearList();
-        conversationButton.gameObject.SetActive(false);
-        conversationButton.interactable = false;
-        InteractableIndicator.instance.interactText.gameObject.SetActive(false);
-        conversationText.gameObject.SetActive(false);
-
         UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
-        UIManager.instance.StartGamePlayState();
-        UIManager.instance.ExitConversationState();
     }
 
     void ClearList()

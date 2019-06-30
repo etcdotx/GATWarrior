@@ -59,10 +59,6 @@ public class PlayerData : MonoBehaviour {
 
         questListIndex = -1;
 
-        //Set Default
-        Inventory.instance.inventoryView.SetActive(false);
-        Quest.instance.questView.SetActive(false);
-
         //characterstats
         gold = 1250;
 
@@ -73,7 +69,7 @@ public class PlayerData : MonoBehaviour {
         }
         for (int i = 0; i < itemBoxToAdd.Count; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 25; j++)
             {
                 AddItemToBox(itemBoxToAdd[i]);
             }

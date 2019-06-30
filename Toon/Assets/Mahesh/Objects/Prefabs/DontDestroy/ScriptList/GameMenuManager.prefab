@@ -52,7 +52,6 @@ MonoBehaviour:
   maxRange: 0
   padding: 0
   inShop: 0
-  shopUI: {fileID: 0}
   shopView: {fileID: 0}
   shopViewPort: {fileID: 0}
   shopContent: {fileID: 0}
@@ -126,8 +125,6 @@ MonoBehaviour:
   slider: {fileID: 0}
   inventoryQuantitySlider: {fileID: 0}
   isSettingQuantity: 0
-  swapIndex1: 0
-  swapIndex2: 0
 --- !u!1 &7865212618385263042
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427512fc4e649ef469f75124630c7322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryBoxUI: {fileID: 0}
   inventoryBoxView: {fileID: 0}
   inventoryBoxViewPort: {fileID: 0}
   inventoryBoxContent: {fileID: 0}
@@ -238,7 +234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83794b118fb969743a828900d6e85b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundList: {fileID: 0}
   cantOpenMenu: 0
   inputAxis: {x: 0, y: 0, z: 0}
   pointerInputHold: 0
@@ -308,8 +303,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectionQuestActive: []
   npcAvailable: []
-  questIndex: 0
-  questMaxIndex: 0
   questView: {fileID: 0}
   questContent: {fileID: 0}
   questViewScrollbar: {fileID: 0}

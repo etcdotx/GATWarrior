@@ -1,7 +1,19 @@
 fileFormatVersion: 2
-guid: 2ac714afccada6b4a9d1a172066dc54d
+guid: 2e05ba484f331c544b81710191a69639
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -8263662870404102251
+    second: xbox-buttons-set_0
+  - first:
+      213: -3575500514336386658
+    second: xbox-buttons-set_1
+  - first:
+      213: 75698652400538888
+    second: xbox-buttons-set_2
+  - first:
+      213: -7317582493073358254
+    second: xbox-buttons-set_3
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -40,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -115,11 +127,95 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: xbox-buttons-set_0
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 343
+        width: 170
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8b2cfb87b573b24baf2920a605c9559
+      internalID: -8263662870404102251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xbox-buttons-set_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 171
+        width: 169
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e61da55cf03364b47bb879d0a95a695e
+      internalID: -3575500514336386658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xbox-buttons-set_2
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 171
+        width: 169
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1aea46f4039e71a48b34027640a7d63f
+      internalID: 75698652400538888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xbox-buttons-set_3
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 0
+        width: 170
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54b698c336650774bb847d3339950594
+      internalID: -7317582493073358254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b972bcfba1f9346498bb1c7f907056af
+    spriteID: f834dd98080b8a245b4de81e84ee4f62
     internalID: 0
     vertices: []
     indices: 

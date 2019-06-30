@@ -45,12 +45,7 @@ public class QuestIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDe
         }
         else
         {
-            Inventory.instance.inventoryView.SetActive(false);
-            Quest.instance.questView.SetActive(false);
-            UsableItem.instance.usableItemView.SetActive(true);
             UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
-            UIManager.instance.StartGamePlayState();
-            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
         }
     }
 

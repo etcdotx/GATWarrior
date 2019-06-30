@@ -7,16 +7,15 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
 
+    public ItemDescription inventoryItemDescription;
+    public GameObject inventoryAndSaveButton;
+    public GameObject inventoryAndInventoryBoxButton;
+
     [Header("Inventory Settings")]
-    public int inventoryColumn;
-    public int inventoryRow;
-    public int inventoryColumnIndex;
-    public int inventoryRowIndex;
-    public int inventoryViewPortChildCount;
     public GameObject inventoryView;
     public GameObject inventoryViewPort;
     public InventoryIndicator[] inventoryIndicator;
-    public InventoryIndicator[,] inventoryIndicatorPos; //5 column
+    public GameObject lastSelectedInventory;
 
     public InventoryIndicator invenSwap1;
     public InventoryIndicator invenSwap2;
@@ -25,13 +24,6 @@ public class Inventory : MonoBehaviour
 
     public bool isSwapping;
     public Item temporaryItem;
-    public GameObject slider;
-    public Slider inventoryQuantitySlider;
-    public bool isSettingQuantity;
-
-    //[Header("Swap Setting")]
-    //public int swapIndex1;
-    //public int swapIndex2;
 
     private void Awake()
     {
@@ -43,6 +35,9 @@ public class Inventory : MonoBehaviour
 
         inventoryView = transform.GetChild(0).Find("InventoryView").gameObject;
         inventoryViewPort = inventoryView.transform.Find("InventoryViewPort").gameObject;
+        inventoryItemDescription = inventoryView.transform.Find("InventoryItemDescription").GetComponent<ItemDescription>();
+        inventoryAndSaveButton = inventoryView.transform.Find("InventoryAndSaveButton").gameObject;
+        inventoryAndInventoryBoxButton = inventoryView.transform.Find("InventoryAndInventoryBoxButton").gameObject;
 
         int h = inventoryViewPort.transform.childCount;
         inventoryIndicator = new InventoryIndicator[h];
@@ -50,30 +45,14 @@ public class Inventory : MonoBehaviour
         {
             inventoryIndicator[i] = inventoryViewPort.transform.GetChild(i).GetComponent<InventoryIndicator>();
         }
-        slider = inventoryView.transform.Find("Slider").gameObject;
-        inventoryQuantitySlider = slider.transform.Find("InventoryQuantitySlider").GetComponent<Slider>();
-
-        inventoryViewPortChildCount = inventoryViewPort.transform.childCount;
-        inventoryColumn = inventoryViewPort.GetComponent<GridLayoutGroup>().constraintCount;
-        inventoryRow = inventoryViewPortChildCount / inventoryColumn;
-        inventoryIndicatorPos = new InventoryIndicator[inventoryRow, inventoryColumn];
-        inventoryColumnIndex = 0;
-        inventoryRowIndex = 0;
-        int c = 0;
-        for (int i = 0; i < inventoryRow; i++)
-        {
-            for (int j = 0; j < inventoryColumn; j++)
-            {
-                inventoryIndicatorPos[i, j] = inventoryViewPort.transform.GetChild(c).GetComponent<InventoryIndicator>();
-                c++;
-            }
-        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        slider.SetActive(false);
+        inventoryItemDescription.gameObject.SetActive(true);
+        inventoryView.SetActive(false);
+        inventoryAndSaveButton.SetActive(false);
+        inventoryAndInventoryBoxButton.SetActive(false);
     }
 
     public void Select1stItem(InventoryIndicator inventoryIndicator1) {
@@ -129,48 +108,21 @@ public class Inventory : MonoBehaviour
         invenSwap1.markIndicator.SetActive(false);
     }
 
-    public void PutIntoInventoryBox()
-    {
-        if (!isSettingQuantity && !isSwapping)
-        {
-            SetInitialQuantityToPut();
-        }
-        else if (isSettingQuantity)
-        {
-            InventoryBox.instance.PlaceItem(temporaryItem, (int)inventoryQuantitySlider.value);
-            slider.SetActive(false);
-            isSettingQuantity = false;
-        }
-    }
-
     public void SetInitialQuantityToPut()
     {
-        if (inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex].item != null)
+        if (temporaryItem != null)
         {
-            inventoryQuantitySlider.value = 1;
-            temporaryItem = inventoryIndicatorPos[inventoryRowIndex, inventoryColumnIndex].item;
-            slider.SetActive(true);
-            inventoryQuantitySlider.minValue = 1;
-            inventoryQuantitySlider.maxValue = temporaryItem.quantity;
-            inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
-            isSettingQuantity = true;
+            TradeIndicator.instance.sliderState = TradeIndicator.SliderState.InventoryToInventoryBox;
+            TradeIndicator.instance.slider.minValue = 1;
+            TradeIndicator.instance.slider.value = 1;
+            TradeIndicator.instance.slider.maxValue = temporaryItem.quantity;
+            TradeIndicator.instance.slider.gameObject.SetActive(true);
+            UIManager.instance.eventSystem.SetSelectedGameObject(TradeIndicator.instance.slider.gameObject);
         }
         else
         {
             Debug.Log("no item");
         }
-    }
-
-    public void IncreaseQuantityToPut()
-    {
-        inventoryQuantitySlider.value += 1;
-        inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
-    }
-
-    public void DecreaseQuantityToPut()
-    {
-        inventoryQuantitySlider.value -= 1;
-        inventoryQuantitySlider.transform.Find("Text").GetComponent<Text>().text = inventoryQuantitySlider.value.ToString();
     }
 
     public void PlaceItem(Item newItem, int quantity)

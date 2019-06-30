@@ -110,3 +110,4 @@ MonoBehaviour:
   interactText: Open
   readAble: []
   isTalking: 0
+  isItemBox: 1

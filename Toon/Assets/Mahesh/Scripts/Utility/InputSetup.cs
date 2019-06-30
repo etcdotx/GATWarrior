@@ -16,6 +16,7 @@ public class InputSetup : MonoBehaviour
     public KeyCode buy;
 
     [Header("X")]
+    public KeyCode X;
     public KeyCode sheatheWeapon;
     public KeyCode deleteSave;
     public KeyCode putInventory;
@@ -63,6 +64,7 @@ public class InputSetup : MonoBehaviour
         buy = KeyCode.Joystick1Button1;
 
         //X
+        X = KeyCode.Joystick1Button2;
         sheatheWeapon = KeyCode.Joystick1Button2;
         deleteSave = KeyCode.Joystick1Button2;
         putInventory = KeyCode.Joystick1Button2;

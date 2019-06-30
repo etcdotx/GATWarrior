@@ -29,18 +29,19 @@ public class Quest : MonoBehaviour
             Destroy(gameObject);
         else
             instance = this;
+
+        questView = transform.GetChild(0).Find("QuestView").gameObject;
+        questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
+        questViewScrollbar = questView.transform.Find("QuestViewScrollbar").GetComponent<Scrollbar>();
+        questDetail = questView.transform.Find("QuestDetail").gameObject;
+        questDescription = questDetail.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        questObjective = questDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        questView = transform.GetChild(0).Find("QuestView").gameObject;
-        questContent = questView.transform.Find("QuestViewPort").transform.Find("QuestContent").gameObject;
-        questViewScrollbar = questView.transform.Find("QuestViewScrollbar").GetComponent<Scrollbar>();
-        questDetail = questView.transform.Find("QuestDetail").gameObject;
-
-        questDescription = questDetail.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        questObjective = questDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        questView.SetActive(false);
         questDescription.text = "";
         questObjective.text = "";
 
