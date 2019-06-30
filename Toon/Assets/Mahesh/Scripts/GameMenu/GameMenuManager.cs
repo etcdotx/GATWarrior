@@ -93,10 +93,6 @@ public class GameMenuManager : MonoBehaviour
         {
             if (menuNumber == 0) //itembox
             {
-                if (!Shop.instance.isBuying && !Shop.instance.isSending)
-                    Shop.instance.ShopSelection();
-                else
-                    Shop.instance.ManageQuantity();
 
             }
         }
@@ -112,14 +108,6 @@ public class GameMenuManager : MonoBehaviour
     void ButtonInput() {
         if (!buttonInputHold)
         {
-            if (menuState == MenuState.shopMenu)
-                ButtonOnShop();
-
-            else if (menuState == MenuState.startMenu)
-                ButtonOnStartMenu();
-
-            else if (menuState == MenuState.inventoryBoxMenu)
-                ButtonOnInventoryBox();
         }
     }
 
@@ -134,48 +122,6 @@ public class GameMenuManager : MonoBehaviour
 
         if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
         {
-        }
-    }
-
-    void ButtonOnShop() {
-        if (menuNumber==0)//shop
-        {
-            if (Input.GetKeyDown(InputSetup.instance.select))
-            {
-                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                StartCoroutine(ButtonInputHold());
-                if (!Shop.instance.isBuying && !Shop.instance.isSending)
-                    Shop.instance.BuySelectedItem();
-                else if (Shop.instance.isBuying)
-                    Shop.instance.ConfirmBuy();
-                else if (Shop.instance.isSending)
-                    Shop.instance.ConfirmSend();
-            }
-            if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
-            {
-                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                StartCoroutine(ButtonInputHold());
-                if (!Shop.instance.isBuying && !Shop.instance.isSending)
-                    Shop.instance.CloseShop();
-                else if(Shop.instance.isBuying || Shop.instance.isSending)
-                    Shop.instance.CancelBuy();
-            }
-            if (Input.GetKeyDown(InputSetup.instance.sendToBox))
-            {
-                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                StartCoroutine(ButtonInputHold());
-                if (!Shop.instance.isBuying && !Shop.instance.isSending)
-                    Shop.instance.SendSelectedItem();
-            }
-        }
-        if (menuNumber == 1)
-        {
-            if (Input.GetKeyDown(InputSetup.instance.back)) //tombol back
-            {
-                SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-                StartCoroutine(ButtonInputHold());
-                Shop.instance.CloseShop();
-            }
         }
     }
 

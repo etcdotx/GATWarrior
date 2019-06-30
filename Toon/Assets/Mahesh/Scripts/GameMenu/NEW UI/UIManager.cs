@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
@@ -9,6 +10,8 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public EventSystem eventSystem;
     public UIState uiState;
+
+    public TextMeshProUGUI itemFullNotification;
 
     public enum UIState {
         Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation
@@ -27,7 +30,8 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiState = UIState.Gameplay;   
+        uiState = UIState.Gameplay;
+        itemFullNotification.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -240,5 +244,13 @@ public class UIManager : MonoBehaviour
     {
         CharacterInteraction.instance.animator.SetFloat("floatX", 0);
         CharacterInteraction.instance.animator.SetFloat("floatY", 0);
+    }
+
+    public IEnumerator ItemFullNotification(string itemName)
+    {
+        itemFullNotification.text = "You cannot carry more "+itemName+".";
+        itemFullNotification.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2);
+        itemFullNotification.gameObject.SetActive(false);
     }
 }

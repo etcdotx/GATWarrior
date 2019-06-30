@@ -89,6 +89,7 @@ public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandl
         else
         {
             UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+            isSelected = false;
         }
     }
 

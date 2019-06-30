@@ -21,18 +21,14 @@ public class Shop : MonoBehaviour
     public GameObject shopIndicatorPrefab;
     public List<ShopIndicator> shopIndicator = new List<ShopIndicator>();
     public List<Item> shopItem = new List<Item>();
+    public GameObject lastSelected;
+    public GameObject buttons;
 
     [Header("Gold")]
     public TextMeshProUGUI gold;
 
     [Header("Shop Description")]
     public ItemDescription itemDescription;
-
-    [Header("Buy")]
-    public BuyConfirmation buyConfirmation;
-    public SendToBoxConfirmation sendToBoxConfirmation;
-    public bool isBuying;
-    public bool isSending;
 
     private void Awake()
     {
@@ -45,10 +41,9 @@ public class Shop : MonoBehaviour
         shopView = transform.GetChild(0).Find("ShopView").gameObject;
         shopViewPort = shopView.transform.Find("ShopViewPort").gameObject;
         itemDescription = shopView.transform.Find("ItemDescription").GetComponent<ItemDescription>();
-        buyConfirmation = shopView.transform.Find("BuyConfirmation").GetComponent<BuyConfirmation>();
-        sendToBoxConfirmation = shopView.transform.Find("SendToBoxConfirmation").GetComponent<SendToBoxConfirmation>();
         gold = shopView.transform.Find("GoldIndicator").transform.Find("Gold").GetComponent<TextMeshProUGUI>();
         shopContent = shopViewPort.transform.Find("ShopContent").gameObject;
+        buttons = shopView.transform.Find("Buttons").gameObject;
         gridLayoutGroup = shopContent.GetComponent<GridLayoutGroup>();
     }
 
@@ -56,45 +51,34 @@ public class Shop : MonoBehaviour
     void Start()
     {
         shopView.SetActive(false);
-        buyConfirmation.gameObject.SetActive(false);
-        sendToBoxConfirmation.gameObject.SetActive(false);
+        buttons.SetActive(false);
         maxRow = gridLayoutGroup.constraintCount;
-        isBuying = false;
     }
 
-    public void BuySelectedItem()
+    public void BuySelectedItem(ShopIndicator shopIndicator)
     {
+        //check apakah item tersebut di inventory full atau tidak
         for (int i = 0; i < PlayerData.instance.inventoryItem.Count; i++)
         {
-            if (PlayerData.instance.inventoryItem[i].id == shopIndicator[shopRowIndex].item.id)
+            if (PlayerData.instance.inventoryItem[i].id == shopIndicator.item.id)
             {
-                if (PlayerData.instance.inventoryItem[i].quantity < PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
-                {
-                    if (PlayerData.instance.gold >= PlayerData.instance.inventoryItem[i].price)
-                    {
-                        isBuying = true;
-                        buyConfirmation.gameObject.SetActive(true);
-                        buyConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item);
-                        return;
-                    }
-                    else {
-                        Debug.Log("not enough money");
-                        return;
-                    }
-                }
-                else
+                if (PlayerData.instance.inventoryItem[i].quantity >= PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
                     Debug.Log("item full");
                     return;
                 }
+                else {
+                    break;
+                }
             }
         }
 
-        if (PlayerData.instance.gold >= shopIndicator[shopRowIndex].item.price)
+        //check uangnya
+        if (PlayerData.instance.gold >= shopIndicator.item.price)
         {
-            isBuying = true;
-            buyConfirmation.gameObject.SetActive(true);
-            buyConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item);
+            lastSelected = shopIndicator.gameObject;
+            BuyConfirmation.instance.view.SetActive(true);
+            BuyConfirmation.instance.InitiateBuyConfirmation(shopIndicator.item);
         }
         else
         {
@@ -102,86 +86,18 @@ public class Shop : MonoBehaviour
         }
     }
 
-    public void SendSelectedItem()
+    public void SendSelectedItem(ShopIndicator shopIndicator)
     {
-        if (PlayerData.instance.gold >= shopIndicator[shopRowIndex].item.price)
+        if (PlayerData.instance.gold >= shopIndicator.item.price)
         {
-            isSending = true;
-            sendToBoxConfirmation.gameObject.SetActive(true);
-            sendToBoxConfirmation.InitiateConfirmation(shopIndicator[shopRowIndex].item);
+            lastSelected = shopIndicator.gameObject;
+            BuyConfirmation.instance.view.SetActive(true);
+            BuyConfirmation.instance.InitiateSendConfirmation(shopIndicator.item);
         }
         else
         {
             Debug.Log("not enough money");
         }
-    }
-
-    public void ManageQuantity() {
-        if (isBuying)
-        {
-            if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
-            {
-                buyConfirmation.DecreaseQuantity();
-            }
-            else if (GameMenuManager.instance.inputAxis.y == 1)
-            {
-                buyConfirmation.IncreaseQuantity();
-            }
-            if (GameMenuManager.instance.inputAxis.x == -1) // kebawah
-            {
-                buyConfirmation.SetMinQuantity();
-            }
-            else if (GameMenuManager.instance.inputAxis.x == 1)
-            {
-                buyConfirmation.SetMaxQuantity();
-            }
-        }
-        else if (isSending)
-        {
-            if (GameMenuManager.instance.inputAxis.y == -1) // kebawah
-            {
-                sendToBoxConfirmation.DecreaseQuantity();
-            }
-            else if (GameMenuManager.instance.inputAxis.y == 1)
-            {
-                sendToBoxConfirmation.IncreaseQuantity();
-            }
-            if (GameMenuManager.instance.inputAxis.x == -1) // kebawah
-            {
-                sendToBoxConfirmation.SetMinQuantity();
-            }
-            else if (GameMenuManager.instance.inputAxis.x == 1)
-            {
-                sendToBoxConfirmation.SetMaxQuantity();
-            }
-        }
-    }
-
-    public void ConfirmBuy() {
-        buyConfirmation.ConfirmBuy();
-        gold.text = PlayerData.instance.gold.ToString();
-        buyConfirmation.gameObject.SetActive(false);
-        isBuying = false;
-        //shopDescription.RefreshDescription();
-    }
-
-    public void ConfirmSend() {
-        sendToBoxConfirmation.ConfirmSend();
-        gold.text = PlayerData.instance.gold.ToString();
-        sendToBoxConfirmation.gameObject.SetActive(false);
-        isSending = false;
-        //shopDescription.RefreshDescription();
-    }
-
-    public void CancelBuy() {
-        isBuying = false;
-        isSending = false;
-        buyConfirmation.gameObject.SetActive(false);
-        sendToBoxConfirmation.gameObject.SetActive(false);
-    }
-
-    public void ShopSelection()
-    {
     }
 
     public void OpenShop(NPC target)
@@ -213,16 +129,6 @@ public class Shop : MonoBehaviour
         InventoryBox.instance.inventoryBoxView.SetActive(true);
         //InventoryBox.instance.MarkInventoryBox();
         shopView.SetActive(true);
-    }
-
-    public void CloseShop()
-    {
-        RemoveShopIndicator();
-        GameMenuManager.instance.menuState = GameMenuManager.MenuState.noMenu;
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        PlayerStatus.instance.healthIndicator.SetActive(true);
-        InventoryBox.instance.inventoryBoxView.SetActive(false);
-        shopView.SetActive(false);
     }
 
     void AddShopIndicator()

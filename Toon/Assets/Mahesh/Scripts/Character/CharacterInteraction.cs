@@ -122,6 +122,7 @@ public class CharacterInteraction : MonoBehaviour
                 if (PlayerData.instance.inventoryItem[i].quantity == PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
                     Debug.Log("you cannot carry more " + item.itemName);
+                    UIManager.instance.StartCoroutine(UIManager.instance.ItemFullNotification(item.itemName));
                     return;
                 }
                 else
@@ -205,4 +206,5 @@ public class CharacterInteraction : MonoBehaviour
         isGathering = false;
         animator.ResetTrigger("gather");
     }
+
 }

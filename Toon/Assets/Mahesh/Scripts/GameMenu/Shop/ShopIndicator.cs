@@ -12,6 +12,18 @@ public class ShopIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDes
     public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI priceText;
     public GameObject selectedIndicator;
+    public bool isSelected;
+
+    private void Update()
+    {
+        if (isSelected)
+        {
+            if (Input.GetKeyDown(InputSetup.instance.X))
+            {
+                Shop.instance.SendSelectedItem(this);
+            }
+        }
+    }
 
     public void RefreshIndicator()
     {
@@ -21,12 +33,17 @@ public class ShopIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDes
     }
     public void OnCancel(BaseEventData eventData)
     {
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
         UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+        isSelected = false;
+        Shop.instance.buttons.SetActive(false);
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         selectedIndicator.SetActive(false);
+        isSelected = false;
+        Shop.instance.buttons.SetActive(false);
     }
 
     public void OnSelect(BaseEventData eventData)
@@ -35,5 +52,18 @@ public class ShopIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDes
         Shop.instance.itemDescription.item = item;
         Shop.instance.itemDescription.RefreshDescription();
         selectedIndicator.SetActive(true);
+        isSelected = true;
+        Shop.instance.buttons.SetActive(true);
+
+        int a = transform.GetSiblingIndex();
+        int b = a / 7;
+        Debug.Log(b);
+        Shop.instance.shopContent.GetComponent<RectTransform>().anchoredPosition = new Vector3(-b * 410, 0, 0);
     }
+
+    public void BuyItem() {
+        Shop.instance.BuySelectedItem(this);
+    }
+
+
 }
