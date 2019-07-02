@@ -321,9 +321,9 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3771417483832892462}
   m_Enabled: 1
-  m_AgentTypeID: -1372625422
+  m_AgentTypeID: 0
   m_Radius: 0.98
-  m_Speed: 3.5
+  m_Speed: 0.05
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -362,6 +362,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
+  anim: {fileID: 0}
+  wanderingType: 1
+  minWanderTime: 1
+  maxWanderTime: 3
+  isWandering: 0
+  curWanderingTime: 0
+  minWanderRadius: 1
+  maxWanderRadius: 2
+  wanderingRadius: 0
+  waitingType: 1
+  minWaitTime: 1
+  maxWaitTime: 5
 --- !u!1 &3828963712284484703
 GameObject:
   m_ObjectHideFlags: 0

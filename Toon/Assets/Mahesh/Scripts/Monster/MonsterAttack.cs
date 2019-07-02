@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class MonsterAttack : MonoBehaviour
 {
     public MonsterStatus monsterStatus;
-    public MonsterMovement monsterMovement;
+    public NewMonsterMovement monsterMovement;
     public NavMeshAgent agent;
 
     public int maxAttackNum;
@@ -21,7 +21,7 @@ public class MonsterAttack : MonoBehaviour
     private void Awake()
     {
         monsterStatus = GetComponent<MonsterStatus>();
-        monsterMovement = GetComponent<MonsterMovement>();
+        monsterMovement = GetComponent<NewMonsterMovement>();
         agent = GetComponent<NavMeshAgent>();
     }
 

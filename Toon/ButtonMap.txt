@@ -1,0 +1,40 @@
+build ada di folder D:\Mahesh\Build\Toon.exe
+
+control :
+
+default mode
+
+A = Roll*
+X = Pake item
+Y = Keluarin senjata -> combat mode
+Start = buka inventory
+B = Interaction (ngobrol/buka inventorybox)
+RT = Lari
+LT = Lock camera
+RB = block
+LB + X/B -> Pilih item
+
+analog kiri = jalan
+analog kanan = camera
+===================
+combat mode
+
+A = roll
+X = masukkin senjata -> default mode
+Y = attack1**
+B = attack2**
+start = buka inventory
+RT = Lari
+LT = Lock camera
+LB + X/B -> Pilih item
+
+
+
+note:
+* roll cmn bisa kedepan abis diganti mechanicnya
+** attack bisa di chain input mix jadi combo
+*** interaction cuman bisa di default mode -> seperti ngambil droppan musuh yang abis dibunuh
+**** siang/malem sama rumput di build dimatiin soalnya lag disini
+***** di unity project pc ini banyak aset yang ilang, soalnya pc lab gabisa baca blend file(harus fbx) sedangkan project ini masih mix format export 3D nya
+****** ai enemy lagi di rombak ulang supaya pake full root motion bukan script motion, makanya di rombak lagi buat nge prefent movement sliping
+*******contoh environment,shader, dll ada di komputer 14, cmn blm paling baru soalnya gadikerjain lagi disitu krn pc lab gakuat
