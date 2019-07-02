@@ -76,6 +76,13 @@ public class Conversation : MonoBehaviour
         {
             dialogue = this.npcDialog;
             conversationText.text = npcDialog.dialogue[dialNum];
+            conversationButton.gameObject.SetActive(true);
+            if (dialNum == dialogue.dialogue.Length - 1)
+                conversationButtonText.text = "End";
+            else if (dialNum < dialogue.dialogue.Length - 1)
+                conversationButtonText.text = "Continue";
+            conversationButton.interactable = true;
+            UIManager.instance.eventSystem.SetSelectedGameObject(Conversation.instance.conversationButton.gameObject);
         }
     }
 

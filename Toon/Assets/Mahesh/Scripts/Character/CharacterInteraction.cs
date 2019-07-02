@@ -122,7 +122,7 @@ public class CharacterInteraction : MonoBehaviour
                 if (PlayerData.instance.inventoryItem[i].quantity == PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
                     Debug.Log("you cannot carry more " + item.itemName);
-                    UIManager.instance.StartCoroutine(UIManager.instance.ItemFullNotification(item.itemName));
+                    UIManager.instance.warningNotification(item.itemName, UIManager.WarningState.itemFull);
                     return;
                 }
                 else

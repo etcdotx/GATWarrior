@@ -568,6 +568,7 @@ GameObject:
   - component: {fileID: 7335094597042426441}
   - component: {fileID: 6486213674667118460}
   - component: {fileID: 3973888529757626199}
+  - component: {fileID: 3921965514960866429}
   m_Layer: 10
   m_Name: SlimeMonster
   m_TagString: Monster
@@ -645,8 +646,6 @@ MonoBehaviour:
   player: {fileID: 0}
   monsterMovement: {fileID: 0}
   monsterAttack: {fileID: 0}
-  characterCombat: {fileID: 0}
-  characterInput: {fileID: 0}
   interactable: {fileID: 0}
   col: {fileID: 0}
   agent: {fileID: 0}
@@ -709,7 +708,7 @@ MonoBehaviour:
   canBeFall: 1
   isRotating: 0
   newTargetPos: {x: 0, y: 0, z: 0}
-  moveWithAgent: 0
+  moveWithAgent: 1
   wanderingType: 1
   awareType: 0
 --- !u!114 &1182508063124109344
@@ -750,10 +749,11 @@ MonoBehaviour:
   isCollectable: 1
   items:
   - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}
-  - {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
+  - {fileID: 11400000, guid: 4731b9f1b4434f940b224f5a47cb5294, type: 2}
   interactText: Skin
   readAble: []
   isTalking: 0
+  isItemBox: 0
 --- !u!114 &6486213674667118460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,6 +789,28 @@ CapsuleCollider:
   m_Height: 2.3220224
   m_Direction: 1
   m_Center: {x: -0.00000009056208, y: 1.0780813, z: 0.013804453}
+--- !u!195 &3921965514960866429
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8373654110775583404}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &8448964014961711837
 GameObject:
   m_ObjectHideFlags: 0

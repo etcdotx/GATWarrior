@@ -10,6 +10,7 @@ public class SoundList : MonoBehaviour
     public AudioClip UINavClip;
     public AudioClip UISelectClip;
     public AudioClip OpenInventoryClip;
+    public AudioClip CoinSound;
 
     private void Awake()
     {

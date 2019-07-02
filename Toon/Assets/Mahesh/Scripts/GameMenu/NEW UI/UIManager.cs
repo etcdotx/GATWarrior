@@ -11,7 +11,12 @@ public class UIManager : MonoBehaviour
     public EventSystem eventSystem;
     public UIState uiState;
 
-    public TextMeshProUGUI itemFullNotification;
+    [Header("Warning Notification")]
+    public TextMeshProUGUI warning;
+
+    public enum WarningState {
+        itemFull, notEnoughMoney
+    }
 
     public enum UIState {
         Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation
@@ -31,7 +36,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         uiState = UIState.Gameplay;
-        itemFullNotification.gameObject.SetActive(false);
+        warning.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -64,7 +69,8 @@ public class UIManager : MonoBehaviour
     void StartGamePlayState()
     {
         CharacterInteraction.instance.isRaycasting = true;
-
+        PlayerStatus.instance.healthIndicator.SetActive(true);
+        UsableItem.instance.usableItemView.SetActive(true);
     }
 
     void ExitGamePlayState()
@@ -140,9 +146,6 @@ public class UIManager : MonoBehaviour
         Conversation.instance.conversationButton.interactable = false;
         Conversation.instance.conversationButtonText.gameObject.SetActive(false);
         Conversation.instance.conversationText.gameObject.SetActive(false);
-
-        UsableItem.instance.usableItemView.SetActive(true);
-        PlayerStatus.instance.healthIndicator.SetActive(true);
     }
 
     #endregion
@@ -171,14 +174,12 @@ public class UIManager : MonoBehaviour
         InventoryBox.instance.temporaryItem = null;
 
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.OpenInventoryClip);
-
-        PlayerStatus.instance.healthIndicator.SetActive(true);
-        UsableItem.instance.usableItemView.SetActive(true);
         Inventory.instance.inventoryView.SetActive(false);
         InventoryBox.instance.inventoryBoxView.SetActive(false);
     }
     #endregion
 
+    #region shop
     public void ShopState() {
 
     }
@@ -190,12 +191,12 @@ public class UIManager : MonoBehaviour
     }
 
     public void ExitShopState() {
-        PlayerStatus.instance.healthIndicator.SetActive(true);
-        UsableItem.instance.usableItemView.SetActive(true);
         Shop.instance.shopView.SetActive(false);
         Shop.instance.RemoveShopIndicator();
         InventoryBox.instance.inventoryBoxView.SetActive(false);
     }
+
+    #endregion
 
     public IEnumerator ChangeState(UIState nextState)
     {
@@ -246,11 +247,23 @@ public class UIManager : MonoBehaviour
         CharacterInteraction.instance.animator.SetFloat("floatY", 0);
     }
 
-    public IEnumerator ItemFullNotification(string itemName)
+    public void warningNotification(string itemName, WarningState warningState) {
+        StopCoroutine("showNotif");
+        StartCoroutine(showNotif(itemName, warningState));
+    }
+
+    public IEnumerator showNotif(string itemName, WarningState warningState)
     {
-        itemFullNotification.text = "You cannot carry more "+itemName+".";
-        itemFullNotification.gameObject.SetActive(true);
+        if (warningState == WarningState.itemFull)
+        {
+            warning.text = "You cannot carry more " + itemName + ".";
+        }
+        else if (warningState == WarningState.notEnoughMoney)
+        {
+            warning.text = "Not enough money to buy " + itemName + ".";
+        }
+        warning.gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        itemFullNotification.gameObject.SetActive(false);
+        warning.gameObject.SetActive(false);
     }
 }

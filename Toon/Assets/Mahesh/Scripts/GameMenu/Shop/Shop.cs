@@ -64,6 +64,7 @@ public class Shop : MonoBehaviour
             {
                 if (PlayerData.instance.inventoryItem[i].quantity >= PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
+                    UIManager.instance.warningNotification(shopIndicator.item.itemName, UIManager.WarningState.itemFull);
                     Debug.Log("item full");
                     return;
                 }
@@ -82,6 +83,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
+            UIManager.instance.warningNotification(shopIndicator.item.itemName, UIManager.WarningState.notEnoughMoney);
             Debug.Log("not enough money");
         }
     }
@@ -96,6 +98,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
+            UIManager.instance.warningNotification(shopIndicator.item.itemName, UIManager.WarningState.notEnoughMoney);
             Debug.Log("not enough money");
         }
     }
@@ -119,10 +122,8 @@ public class Shop : MonoBehaviour
 
             shopItem.Add(temp2);
         }
-         
-        AddShopIndicator();
 
-        GameMenuManager.instance.menuState = GameMenuManager.MenuState.shopMenu;
+        AddShopIndicator();
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         PlayerStatus.instance.healthIndicator.SetActive(false);

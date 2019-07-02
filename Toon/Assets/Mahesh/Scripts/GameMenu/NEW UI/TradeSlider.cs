@@ -8,6 +8,7 @@ public class TradeSlider : MonoBehaviour, ISubmitHandler, ICancelHandler
     public void OnSubmit(BaseEventData eventData)
     {
         gameObject.SetActive(false);
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
         if (TradeIndicator.instance.sliderState == TradeIndicator.SliderState.InventoryToInventoryBox)
         {
             InventoryBox.instance.PlaceItem(Inventory.instance.temporaryItem, TradeIndicator.instance.qty);

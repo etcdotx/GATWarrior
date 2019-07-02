@@ -20,7 +20,7 @@ public class BuySlider : MonoBehaviour, ISubmitHandler, ICancelHandler
 
     public void OnSubmit(BaseEventData eventData)
     {
-        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
+        SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.CoinSound);
         if (BuyConfirmation.instance.confirmationState == BuyConfirmation.ConfirmationState.Buy)
             BuyConfirmation.instance.ConfirmBuy();
         else if (BuyConfirmation.instance.confirmationState == BuyConfirmation.ConfirmationState.SendToBox)

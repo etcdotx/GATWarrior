@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 2
   itemImage: {fileID: 21300000, guid: 7c0e99a506c655a4b852adab55a1a774, type: 3}
   itemName: Hi Potion
-  description: A Hi Potion
+  description: A potion that will fill your hp by half.
   quantity: 1
   maxQuantityOnInventory: 10
   price: 100

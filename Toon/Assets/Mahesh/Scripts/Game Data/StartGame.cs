@@ -24,7 +24,6 @@ public class StartGame : MonoBehaviour
     private void Start()
     {
         CheckScene();
-        GameMenuManager.instance.cantOpenMenu = false;
 
         //DEVELOPERMODE
         if (PlayerData.instance.DEVELOPERMODE == true)

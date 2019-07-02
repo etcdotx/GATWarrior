@@ -9,6 +9,7 @@ public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandl
     public int itemID;
     public Item item;
     public Image itemImage;
+    public Text text;
 
     public bool isSelected;
     public bool marked;
@@ -16,6 +17,7 @@ public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandl
 
     private void Start()
     {
+        text = transform.Find("Text").GetComponent<Text>();
         markIndicator.SetActive(false);
         isSelected = false;
     }
@@ -47,11 +49,11 @@ public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandl
             else
             {
                 itemImage.overrideSprite = item.itemImage;
-                transform.GetChild(0).GetComponent<Text>().text = item.quantity.ToString();
-                transform.GetChild(0).gameObject.SetActive(true);
+                text.text = item.quantity.ToString();
+                text.gameObject.SetActive(true);
                 if (item.isASingleTool)
                 {
-                    transform.GetChild(0).gameObject.SetActive(false);
+                    text.gameObject.SetActive(false);
                 }
             }
         }
@@ -72,8 +74,8 @@ public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandl
         item = null;
         itemID = 0;
         itemImage.overrideSprite = null;
-        transform.GetChild(0).GetComponent<Text>().text = 0.ToString();
-        transform.GetChild(0).gameObject.SetActive(false);
+        text.text = 0.ToString();
+        text.gameObject.SetActive(false);
     }
 
     public void OnCancel(BaseEventData eventData)
