@@ -40,7 +40,8 @@ ScriptedImporter:
     generateAllOutputs: 0
     generateMipMaps: 1
     preset: " <sbspreset pkgurl=\"pkg://ground_medieval_pavement\" label=\"\" >\n
-      </sbspreset>\n"
+      \ <presetinput identifier=\"$outputsize\" uid=\"3290921157\" type=\"8\" value=\"-2147483648,-2147483648\"
+      />\n </sbspreset>\n"
     shaderName: Standard
     outputNames: baseColor,normal,metallic,ambientOcclusion,height
     texturePackingList:
@@ -121,10 +122,10 @@ ScriptedImporter:
     inputTextureMap: []
     targetSettingList:
     - label: 
-      bLockRatio: 1
-      textureWidth: 256
-      textureHeight: 256
+      bLockRatio: 0
+      textureWidth: 0
+      textureHeight: 0
       textureFormat: 0
-      bGenerateOnLoad: 1
+      bGenerateOnLoad: 0
     material: {fileID: 2100000, guid: 970d2be4099c09f43a6e6a18eedc1012, type: 3}
     generatedTextures: []
