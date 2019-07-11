@@ -71,7 +71,7 @@ Material:
     - _BumpScale: 1
     - _CloudCutoff: 0.04
     - _CloudSoftness: 0.65
-    - _CloudSpeed: 0.36
+    - _CloudSpeed: 0.1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -95,9 +95,9 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     - _cloudHeight: 5
-    - _midYValue: 28.6
+    - _midYValue: 28.599998
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Ground: {r: 0.76964104, g: 0.9369111, b: 0.90546316, a: 1}
-    - _Sky: {r: 0.3474632, g: 0.5386404, b: 0.57380897, a: 1}
+    - _Ground: {r: 0.7847472, g: 0.9577942, b: 0.89142627, a: 1}
+    - _Sky: {r: 0.47797453, g: 0.62218237, b: 0.6411247, a: 1}

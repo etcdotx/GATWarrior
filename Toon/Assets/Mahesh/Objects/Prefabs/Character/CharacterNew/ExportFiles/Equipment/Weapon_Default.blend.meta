@@ -6,7 +6,17 @@ ModelImporter:
   - first:
       74: 1989289236423521904
     second: Default Take
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Weapon_MIni_Bot__Weapon_MIni
+    second: {fileID: 2100000, guid: 87d1345dc90e2e1439a304a6aabc98bd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Weapon_Mini_Top__Weapon_MIni
+    second: {fileID: 2100000, guid: 024c06d168bdf614fbd27df0a89c54c1, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

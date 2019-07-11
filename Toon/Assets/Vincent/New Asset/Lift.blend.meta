@@ -51,7 +51,17 @@ ModelImporter:
   - first:
       95: 9500000
     second: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lift__Lift
+    second: {fileID: 2100000, guid: 827af5ac43502034cb65d4fd53397b84, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tempat_Lift__Tempat_Lift_Diffuse_Color
+    second: {fileID: 2100000, guid: 8d60b9d8239418f45afd5626d2077ad6, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

@@ -34,14 +34,22 @@ public class SunAndMoon : MonoBehaviour {
         _minute = 0;
         hour.text = _hour.ToString();
         minute.text = _minute.ToString();
-        InvokeRepeating("f_TimeCycle",0,0.05f);
-
+        StartCoroutine(e_timecycle());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    IEnumerator e_timecycle() {
+        do
+        {
+            f_TimeCycle();
+            yield return new WaitForSecondsRealtime(1);
+        } while (true);
+    }
+
 
     void f_TimeCycle() {
         _minute++;
@@ -68,7 +76,7 @@ public class SunAndMoon : MonoBehaviour {
         }
 
         //Morning
-        if((_hour >=5 && _hour < 7) && RenderSettings.sun.intensity <1)
+        if((_hour >=5 && _hour < 8) && RenderSettings.sun.intensity <1)
         {
             RenderSettings.sun.intensity += 1f * Time.fixedDeltaTime;
             if (RenderSettings.sun.intensity > 1) {

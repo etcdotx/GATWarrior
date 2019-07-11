@@ -51,7 +51,17 @@ ModelImporter:
   - first:
       95: 9500000
     second: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main_Bottom__Main_Bottom
+    second: {fileID: 2100000, guid: c0674447e13ec0349abbc3d19fdae27a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material__Pondasi_Bawah_png
+    second: {fileID: 2100000, guid: 73dc9eb2a03a84d44b1eb815ea5d0922, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

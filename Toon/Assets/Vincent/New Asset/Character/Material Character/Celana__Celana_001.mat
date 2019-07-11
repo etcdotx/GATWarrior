@@ -8,9 +8,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Celana__Celana_001
-  m_Shader: {fileID: 4800000, guid: f39be965467f72b46b7335c2022e0f12, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_Shader: {fileID: 4800000, guid: 6e6d6e98b3e0e8e498a9bfd614b4d611, type: 3}
+  m_ShaderKeywords: _USESPECULARDABS_ON
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -20,6 +20,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 938408571315009429c09a806b2932de, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AlbedoMap:
         m_Texture: {fileID: 2800000, guid: 938408571315009429c09a806b2932de, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -51,6 +55,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 938408571315009429c09a806b2932de, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MetalicSmoothnessMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -71,6 +79,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: f09d1bdafeca13f4cb764552f4a70433, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AllRoundMultiply: 1
     - _AmbientMultiplier: 0
@@ -78,6 +90,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FresnelPower: 1.5
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -91,14 +104,22 @@ Material:
     - _ShadowDarkness: 0.4081948
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpecularSize: 0.5
+    - _SpecularStrength: 0.5
     - _SrcBlend: 1
+    - _ToggleSwitch0: 0
     - _Tone: 3
     - _UVSec: 0
+    - _UseNormalMap: 0
+    - _UseSpecularDabs: 1
     - _ZWrite: 1
+    - __dirty: 0
     m_Colors:
     - _AmbientColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
     - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    - _Color0: {r: 0, g: 0.042857148, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _EmmisionColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecularColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 0}

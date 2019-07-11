@@ -147,7 +147,52 @@ ModelImporter:
   - first:
       95: 9500000
     second: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base__Base
+    second: {fileID: 2100000, guid: fddbee1ea39065745bd4933798b76a99, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_001__Cerobong
+    second: {fileID: 2100000, guid: 97be6fff3269fa949ae029ee62513551, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_002__Door1
+    second: {fileID: 2100000, guid: fe20b53b90699eb43b9b02146e075a91, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_003__Window_Roof
+    second: {fileID: 2100000, guid: af4eda53d8f927e44ab8b0c0bc1e1095, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_004__Window1
+    second: {fileID: 2100000, guid: 7ebf5bfa90f8f2247bf79593cf518176, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_005__Window_Roof_001
+    second: {fileID: 2100000, guid: 6dc7a62b78fe13f4f8f178aa2253b0fd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_006__hiasan
+    second: {fileID: 2100000, guid: 30ac7933564c1c84f89191baad2e5f29, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material__Woods
+    second: {fileID: 2100000, guid: 9a4bb6888234d6b47847ed74671ad9ee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof__Roof
+    second: {fileID: 2100000, guid: 6b006cc63abc7b2498bf5c20c3dd03b2, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
