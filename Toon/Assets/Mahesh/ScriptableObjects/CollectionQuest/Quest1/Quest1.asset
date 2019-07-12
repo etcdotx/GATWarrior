@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceID: 1
   id: 1
-  chainQuestID: 020000000300000004000000
-  colAmount: 5
+  chainQuestID: 02000000
+  colAmount: 3
   curAmount: 0
-  itemToCollect: {fileID: 11400000, guid: 9e79df2187e94524da321b593a07976f, type: 2}
-  title: Help collect annoying cube!
+  itemToCollect: {fileID: 11400000, guid: 4731b9f1b4434f940b224f5a47cb5294, type: 2}
+  title: The blue slime
   verb: Collect
   resourcePath: 
-  description: Collect 5 Cube
+  description: Collect 3 Slime Skin from blue slime
   isComplete: 0
   isOptional: 0
   startDialogue: {fileID: 11400000, guid: 8292cc74e0820944eb9b0be2858c73c5, type: 2}

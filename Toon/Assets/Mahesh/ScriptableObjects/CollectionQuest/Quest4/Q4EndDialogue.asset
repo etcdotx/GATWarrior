@@ -10,10 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 894e57c9b13143841bfd49ffe419c39f, type: 3}
-  m_Name: Q1StartDialogue
+  m_Name: Q4EndDialogue
   m_EditorClassIdentifier: 
   dialogue:
-  - Hey
-  - Can u help me
-  - I need you to kill some blue slime
-  - But it will cause a trouble for u
+  - Thank you so much!

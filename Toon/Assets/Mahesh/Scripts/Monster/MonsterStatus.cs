@@ -88,11 +88,14 @@ public class MonsterStatus : MonoBehaviour
             StopCoroutine(ResetCount());
             StartCoroutine(ResetCount());
 
-            //bool checkForce = CheckForce(attackNum);
 
             if (monsterMovement.canBeInterrupted == true && !monsterAttack.isAttacking)
             {
-                animator.SetTrigger("attacked");
+                bool fall = CheckForce(attackNum);
+                if (!fall)
+                {
+                    animator.SetTrigger("attacked");
+                }
             }
 
             if (hp <= 0)
@@ -100,6 +103,19 @@ public class MonsterStatus : MonoBehaviour
                 isDead = true;
             }
         }
+    }
+    public bool CheckForce(int attackNum)
+    {
+        if (!monsterAttack.isAttacking)
+        {
+            if (attackNum == 3)
+            {
+                transform.LookAt(monsterAttack.target);
+                animator.SetTrigger("fall");
+                return true;
+            }
+        }
+        return false;
     }
 
     IEnumerator ResetCount() {

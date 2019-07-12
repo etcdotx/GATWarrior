@@ -15,14 +15,14 @@ MonoBehaviour:
   sourceID: 1
   id: 3
   chainQuestID: 
-  colAmount: 7
+  colAmount: 3
   curAmount: 0
   itemToCollect: {fileID: 11400000, guid: d7023ddf8efc92b48bd9c7535b0af61a, type: 2}
-  title: Collect 7 Slime
+  title: Collect 3 Slime
   verb: Collect
   resourcePath: 
-  description: Collect 7 Slime
+  description: Collect 3 slime from red slime
   isComplete: 0
   isOptional: 0
-  startDialogue: {fileID: 11400000, guid: 1a02a323d8b57c547add8efa854d332c, type: 2}
-  endDialogue: {fileID: 11400000, guid: dbb8cf2014a6be748bcf92a6f7ed1d90, type: 2}
+  startDialogue: {fileID: 11400000, guid: 9cde44d560cc75b45bfb699131932682, type: 2}
+  endDialogue: {fileID: 11400000, guid: 9d6292d9b45d8164683881c8c6855812, type: 2}

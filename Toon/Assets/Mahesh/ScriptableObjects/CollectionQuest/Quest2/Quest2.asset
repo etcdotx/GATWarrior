@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d2a7092a9785441894e06d3feedcee, type: 3}
   m_Name: Quest2
   m_EditorClassIdentifier: 
-  sourceID: 2
+  sourceID: 1
   id: 2
-  chainQuestID: 
-  colAmount: 5
-  curAmount: 6
-  itemToCollect: {fileID: 11400000, guid: 335ca529d5ec8284f9ae0f17520c6f00, type: 2}
-  title: Help gather sphere!
+  chainQuestID: 0300000004000000
+  colAmount: 3
+  curAmount: 0
+  itemToCollect: {fileID: 11400000, guid: e57c5f3da26838041863a644240f6b91, type: 2}
+  title: The Green Slime
   verb: Gather
   resourcePath: 
-  description: Mystery sphere from the town
+  description: Collect Slime Skin+ from green slime
   isComplete: 0
   isOptional: 0
   startDialogue: {fileID: 11400000, guid: 1a02a323d8b57c547add8efa854d332c, type: 2}

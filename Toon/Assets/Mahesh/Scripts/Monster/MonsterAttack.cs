@@ -11,12 +11,18 @@ public class MonsterAttack : MonoBehaviour
     Animator animator;
     BoxCollider hitbox;
 
-    [Header("Attack Settings")]
     public Transform target;
     public bool isAttacking;
+    [Header("Normal Attack Settings")]
     public int attackNum;
     public float[] damage; //damage for attacknum
     int bonusAttack; //for chain attack
+
+    [Header("Special Attack Settings")]
+    public bool haveSpecialAttack;
+    public int specialAttackChance; //chance to special attack
+    public int specialAttackNum;
+    public float[] specialAttackDamage;
 
     [Header("Attack Aggro (Choose 1)")]
     public bool passive; //gak nyerang musuh
@@ -81,8 +87,26 @@ public class MonsterAttack : MonoBehaviour
     public IEnumerator Combat() {
         float attackInterval = Random.Range(minAttackInterval, maxAttackInterval);
         yield return new WaitForSeconds(attackInterval);
-        attackNum = Random.Range(0, damage.Length - 1);
-        Attack(attackNum);
+        if (haveSpecialAttack)
+        {
+            int getSpecialChance = Random.Range(1, 100);
+            Debug.Log(getSpecialChance);
+            if (getSpecialChance <= specialAttackChance)
+            {
+                specialAttackNum = Random.Range(0, specialAttackDamage.Length - 1);
+                SpecialAttack(attackNum);
+            }
+            else
+            {
+                attackNum = Random.Range(0, damage.Length - 1);
+                Attack(attackNum);
+            }
+        }
+        else
+        {
+            attackNum = Random.Range(0, damage.Length - 1);
+            Attack(attackNum);
+        }
         isAttacking = true;
     }
 
@@ -95,6 +119,35 @@ public class MonsterAttack : MonoBehaviour
             transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform);
             animator.SetTrigger("attack");
             attackCount++;
+        }
+        else if (num == 1)
+        {
+            bonusAttack = Random.Range(0, 2);
+            agent.SetDestination(GameObject.FindGameObjectWithTag("Player").transform.position);
+            transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform);
+            animator.SetTrigger("attack2");
+            attackCount++;
+        }
+        else if (num == 1)
+        {
+            bonusAttack = Random.Range(0, 2);
+            agent.SetDestination(GameObject.FindGameObjectWithTag("Player").transform.position);
+            transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform);
+            animator.SetTrigger("attack3");
+            attackCount++;
+        }
+    }
+
+    public void SpecialAttack(int num)
+    {
+        if (num == 0)
+        {
+            bonusAttack = Random.Range(0, 2);
+            agent.SetDestination(GameObject.FindGameObjectWithTag("Player").transform.position);
+            transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform);
+            animator.SetTrigger("specialAttack");
+            attackCount++;
+            Debug.Log(gameObject.name + " use special attack!");
         }
     }
 
@@ -138,6 +191,9 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// wajib ada ini atau reset attack di animasi
+    /// </summary>
     public void CheckMultipleAttack()
     {
         if (bonusAttack == 0)
@@ -155,5 +211,16 @@ public class MonsterAttack : MonoBehaviour
             attackCount++;
             bonusAttack--;
         }
+    }
+
+    /// <summary>
+    /// wajib ada ini atau checkmultiple attack di animasi
+    /// </summary>
+    public void ResetAttack()
+    {
+        attackCount = 0;
+        isAttacking = false;
+        startAttack = false;
+        monsterMovement.curWanderingTime = 0;
     }
 }

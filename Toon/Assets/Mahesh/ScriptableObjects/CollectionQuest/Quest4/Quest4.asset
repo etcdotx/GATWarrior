@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d2a7092a9785441894e06d3feedcee, type: 3}
   m_Name: Quest4
   m_EditorClassIdentifier: 
-  sourceID: 1
+  sourceID: 2
   id: 4
   chainQuestID: 
-  colAmount: 7
+  colAmount: 1
   curAmount: 0
-  itemToCollect: {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
-  title: Collect apples
+  itemToCollect: {fileID: 11400000, guid: d26903ae3782cea409550bf032be50f6, type: 2}
+  title: Kill the flying monster!
   verb: Collect
   resourcePath: 
-  description: Collect 7 Apples
+  description: Collect Sphere eye
   isComplete: 0
   isOptional: 0
-  startDialogue: {fileID: 11400000, guid: 8292cc74e0820944eb9b0be2858c73c5, type: 2}
-  endDialogue: {fileID: 11400000, guid: ae199680f67489e4ca73a7f030454882, type: 2}
+  startDialogue: {fileID: 11400000, guid: 3d16fc209b1de5744a980f34a4579ae2, type: 2}
+  endDialogue: {fileID: 11400000, guid: bce112188b4a5574b8801a77132037f5, type: 2}

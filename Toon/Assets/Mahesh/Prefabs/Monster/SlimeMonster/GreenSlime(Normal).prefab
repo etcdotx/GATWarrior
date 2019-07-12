@@ -308,14 +308,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3771417483832892462}
   serializedVersion: 2
-  m_Mass: 5
+  m_Mass: 40
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!195 &3146159619582512804
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -335,7 +335,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.38
-  m_BaseOffset: 0
+  m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!136 &8594522460336546261
@@ -394,6 +394,10 @@ MonoBehaviour:
   attackNum: 0
   damage:
   - 5
+  haveSpecialAttack: 0
+  specialAttackChance: 0
+  specialAttackNum: 0
+  specialAttackDamage: []
   passive: 0
   aggressive: 0
   playerOnSight: 0
@@ -448,9 +452,9 @@ MonoBehaviour:
   isInteractable: 0
   isCollectable: 1
   items:
-  - {fileID: 11400000, guid: 4731b9f1b4434f940b224f5a47cb5294, type: 2}
-  - {fileID: 11400000, guid: d367a1d2bad9afa4086a5176b31c02e8, type: 2}
-  interactText: 
+  - {fileID: 11400000, guid: e57c5f3da26838041863a644240f6b91, type: 2}
+  - {fileID: 11400000, guid: 525d30b376b0c5843a25e5cc13d60b06, type: 2}
+  interactText: Skin
   readAble: []
   isTalking: 0
   isItemBox: 0
