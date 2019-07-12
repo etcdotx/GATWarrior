@@ -283,7 +283,7 @@ MonoBehaviour:
   interactable: {fileID: 0}
   agent: {fileID: 0}
   enemyID: 0
-  maxHp: 20
+  maxHp: 100
   dieTime: 0
   hp: 0
   playerAttack: 
