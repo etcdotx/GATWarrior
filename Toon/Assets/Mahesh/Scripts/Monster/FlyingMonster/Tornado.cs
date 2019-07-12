@@ -9,13 +9,13 @@ public class Tornado : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += transform.forward * speed;
+        transform.position += transform.forward * speed *Time.fixedDeltaTime;
     }
 
     private void OnTriggerStay(Collider collision)

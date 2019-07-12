@@ -102,12 +102,12 @@ Material:
     - _XZ_Wave: 0.17
     - _Y_Wave: 0.18
     - _ZWrite: 1
-    - __dirty: 0
+    - __dirty: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Grass: {r: 0.71966654, g: 1, b: 0.6556604, a: 1}
     - _Gravity: {r: 2, g: -10, b: 2, a: 0}
     - _NormalMap: {r: 0, g: 0.18552965, b: 1, a: 0}
-    - _PlayerPosition: {r: 16.489, g: 10.62, b: 40.611, a: 0}
+    - _PlayerPosition: {r: 16.489, g: 10.62, b: 32.43953, a: 0}
     - _Root: {r: 0.5033678, g: 0.53773576, b: 0.19023669, a: 1}

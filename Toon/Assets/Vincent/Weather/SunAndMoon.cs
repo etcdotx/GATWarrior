@@ -50,7 +50,7 @@ public class SunAndMoon : MonoBehaviour {
         do
         {
             f_TimeCycle();
-            yield return new WaitForSecondsRealtime(0.2f);
+            yield return new WaitForSecondsRealtime(1f);
         } while (true);
     }
 
