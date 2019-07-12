@@ -22,6 +22,7 @@ public class SunAndMoon : MonoBehaviour {
     public Gradient _DayNightSkyColor;
     public Gradient _DayNightHorizonColor;
     public Gradient _FogColor;
+    public Gradient _CloudColor;
 
     private const float MINUTE = 1;
     private const float HOUR = 60 * MINUTE;
@@ -29,11 +30,14 @@ public class SunAndMoon : MonoBehaviour {
 
     public Material cloudMat;
 
+    public Light _LMoon;
+
     void Start () {
         _hour = 6;
         _minute = 0;
         hour.text = _hour.ToString();
         minute.text = _minute.ToString();
+        _LMoon = _Moon.GetComponent<Light>();
         StartCoroutine(e_timecycle());
 	}
 	
@@ -46,7 +50,7 @@ public class SunAndMoon : MonoBehaviour {
         do
         {
             f_TimeCycle();
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(0.2f);
         } while (true);
     }
 
@@ -69,9 +73,10 @@ public class SunAndMoon : MonoBehaviour {
         //Night
         if ((_hour >= 17 && _hour < 19) && RenderSettings.sun.intensity > 0) {
             RenderSettings.sun.intensity -= 0.5f * Time.fixedDeltaTime;
-            if (_Pstars.isPlaying == false) {
-                _Pstars.Play();
-                _Pcloud.Stop();
+            _LMoon.intensity += 0.5f * Time.fixedDeltaTime;
+            if (_LMoon.intensity > 1)
+            {
+                _LMoon.intensity = 1;
             }
         }
 
@@ -79,6 +84,7 @@ public class SunAndMoon : MonoBehaviour {
         if((_hour >=5 && _hour < 8) && RenderSettings.sun.intensity <1)
         {
             RenderSettings.sun.intensity += 1f * Time.fixedDeltaTime;
+            _LMoon.intensity -= 0.5f * Time.fixedDeltaTime;
             if (RenderSettings.sun.intensity > 1) {
                 RenderSettings.sun.intensity = 1;
             }
@@ -96,7 +102,7 @@ public class SunAndMoon : MonoBehaviour {
 
         RenderSettings.skybox.SetColor("_SkyTint", _DayNightSkyColor.Evaluate(t_dot));
         RenderSettings.skybox.SetColor("_GroundColor", _DayNightSkyColor.Evaluate(t_dot));
-        cloudMat.SetColor("_Sky", _DayNightSkyColor.Evaluate(t_dot));
+        cloudMat.SetColor("_Sky", _CloudColor.Evaluate(t_dot));
         cloudMat.SetColor("_Ground", _DayNightHorizonColor.Evaluate(t_dot));
         RenderSettings.fogColor = _FogColor.Evaluate(t_dot);
 
