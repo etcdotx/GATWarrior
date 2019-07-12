@@ -17,7 +17,6 @@ public class InventoryBoxIndicator : MonoBehaviour, ISelectHandler, ICancelHandl
 
     private void Start()
     {
-        text = transform.Find("Text").GetComponent<Text>();
         markIndicator.SetActive(false);
         isSelected = false;
     }
