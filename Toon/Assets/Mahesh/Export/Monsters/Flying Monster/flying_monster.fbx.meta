@@ -15,7 +15,27 @@ ModelImporter:
   - first:
       74: 9123675476771670050
     second: Armature|fly
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eye_black
+    second: {fileID: 2100000, guid: 14a88d3a88816d14baeb7a49047b74b1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eye_white
+    second: {fileID: 2100000, guid: 88094617698e6ca43a60ea7221e2b578, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: feet
+    second: {fileID: 2100000, guid: e8af2d2c1bc6a3a48838eb70f9d8e8ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wing
+    second: {fileID: 2100000, guid: 6aeadcfb78f132f47bfb8b2226a77e40, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -58,7 +78,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -87,7 +107,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -116,7 +136,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
@@ -209,7 +229,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: center
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1

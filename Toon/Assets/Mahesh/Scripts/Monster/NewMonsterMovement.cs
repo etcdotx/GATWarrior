@@ -5,8 +5,13 @@ using UnityEngine.AI;
 public class NewMonsterMovement : MonoBehaviour
 {
 
-    public NavMeshAgent agent;
-    public Animator anim;
+    NavMeshAgent agent;
+    Animator animator;
+    MonsterAttack monsterAttack;
+
+    [Header("Movement Settings")]
+    public bool canMove; //jika dia bisa berpindah posisi
+    public bool canBeInterrupted;
 
     [Header("Wandering")]
     public bool wanderingType; // on jika dia adalah tipe yang bisa wandering / bergerak2 tidak ditempat
@@ -15,8 +20,7 @@ public class NewMonsterMovement : MonoBehaviour
 
     [SerializeField]
     bool isWandering; // mengecek jika dia lagi wandering atau tidak
-    [SerializeField]
-    float curWanderingTime; // sudah berapa lama dia wandering
+    public float curWanderingTime; // sudah berapa lama dia wandering
 
     [Header("Wander Radius")]
     public float minWanderRadius; //min wander radius
@@ -33,7 +37,8 @@ public class NewMonsterMovement : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
+        monsterAttack = GetComponent<MonsterAttack>();
     }
 
     private void Start()
@@ -44,19 +49,26 @@ public class NewMonsterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isWandering)
+        if (canMove)
         {
-            if (curWanderingTime > 0)
-                curWanderingTime -= Time.deltaTime;
-            else
+            if (isWandering && !monsterAttack.isAttacking)
             {
-                isWandering = false;
-                anim.SetBool("isMove", false);
-                StartCoroutine(SetDestination());
+                if (curWanderingTime > 0)
+                    curWanderingTime -= Time.deltaTime;
+                else
+                {
+                    isWandering = false;
+                    animator.SetBool("isMove", false);
+                    StartCoroutine(SetDestination());
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Reset destination untuk wandering
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SetDestination()
     {
         float randWaitTime = 0;
@@ -72,19 +84,28 @@ public class NewMonsterMovement : MonoBehaviour
 
         //menghitung radius wandering
         wanderingRadius = Random.Range(minWanderRadius, maxWanderRadius);
-        Vector3 destination = RandomNavmeshLocation(wanderingRadius);
+        Vector3 destination = RandomNavmeshLocation(wanderingRadius, transform);
+        if (monsterAttack.onCombat)
+        {
+            destination = RandomNavmeshLocation(wanderingRadius, monsterAttack.target);
+        }
 
         //set wandering time baru
         curWanderingTime = Random.Range(minWanderTime, maxWanderTime);        
         agent.SetDestination(destination);
 
-        anim.SetBool("isMove", true);
+        animator.SetBool("isMove", true);
         isWandering = true;
     }
 
-    public Vector3 RandomNavmeshLocation(float radius)
+    /// <summary>
+    /// Pilih random point secara sphere dari titik gameobject
+    /// </summary>
+    /// <param name="radius"></param>
+    /// <returns></returns>
+    public Vector3 RandomNavmeshLocation(float radius, Transform center)
     {
-        Vector3 randomDirection = transform.position + (Random.insideUnitSphere * radius);
+        Vector3 randomDirection = center.position + (Random.insideUnitSphere * radius);
         NavMeshHit hit;
         Vector3 finalPosition = Vector3.zero;
         if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1))

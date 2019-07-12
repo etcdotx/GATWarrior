@@ -39,7 +39,7 @@ public class WeaponStatus : MonoBehaviour
 
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
             monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
-            Debug.Log(other.name + " damaged");
+            Debug.Log(other.name);
         }
     }
 

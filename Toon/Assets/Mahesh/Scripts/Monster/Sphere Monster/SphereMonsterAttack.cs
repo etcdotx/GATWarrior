@@ -35,7 +35,7 @@ public class SphereMonsterAttack : MonoBehaviour
         if (monsterStatus.hp > 0)
             if (monsterAttack.isAttacking && canAttack && !monsterMovement.isInterrupted && !monsterMovement.isFalling)
             {
-                monsterAttack.attackNum = Random.Range(1, monsterAttack.maxAttackNum);
+                monsterAttack.attackNum = Random.Range(1, monsterAttack.damage.Length);
                 Attack(monsterAttack.attackNum);
                 canAttack = false;
             }
@@ -99,7 +99,7 @@ public class SphereMonsterAttack : MonoBehaviour
         {
             monsterAttack.attackNum = 0;
             monsterAttack.isAttacking = false;
-            monsterStatus.canAttack = true;
+
             if (monsterMovement.moveWithAgent)
                 agent.isStopped = false;
             canAttack = true;

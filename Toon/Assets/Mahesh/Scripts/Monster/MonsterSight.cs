@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class MonsterSight : MonoBehaviour
 {
-    public MonsterMovement monsterMovement;
+    public MonsterAttack monsterAttack;
+    public float fieldOfViewAngle;
     private void Start()
     {
-        monsterMovement = GetComponentInParent<MonsterMovement>();
+        monsterAttack = GetComponentInParent<MonsterAttack>();
     }
 
     private void OnTriggerStay(Collider other)
@@ -17,9 +18,10 @@ public class MonsterSight : MonoBehaviour
             Vector3 direction = other.transform.position - transform.position;
             float angle = Vector3.Angle(direction, transform.forward);
 
-            if (angle < monsterMovement.fieldOfViewAngle * 0.5)
+            if (angle < fieldOfViewAngle * 0.5)
             {
-                monsterMovement.playerOnSight = true;
+                monsterAttack.playerOnSight = true;
+                monsterAttack.target = other.transform;
             }
         }
     }

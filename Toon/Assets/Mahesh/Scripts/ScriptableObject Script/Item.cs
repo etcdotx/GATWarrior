@@ -114,6 +114,13 @@ public class Item : ScriptableObject
             PlayerStatus.instance.RefreshHp();
             return;
         }
+        if (itemName.ToLower().Equals("Apple".ToLower()))
+        {
+            quantity--;
+            PlayerStatus.instance.curHealth += 20;
+            PlayerStatus.instance.RefreshHp();
+            return;
+        }
     }
 
     void UseSeed() {
@@ -137,7 +144,7 @@ public class Item : ScriptableObject
     {
         if (itemType != null)
         {
-            if (itemType.ToLower().Equals("consumable".ToLower()))
+            if (itemType.ToLower().Equals("consumable".ToLower()) && PlayerStatus.instance.curHealth<PlayerStatus.instance.maxHealth)
             {
                 return true;
             }

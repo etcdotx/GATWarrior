@@ -4974,6 +4974,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage:
   - 0
-  - 3
   - 5
-  - 7
+  - 10
+  - 15
