@@ -14276,7 +14276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  dps: 5
+  dps: 0.5
 --- !u!114 &-6916370733118530188
 MonoBehaviour:
   m_ObjectHideFlags: 0

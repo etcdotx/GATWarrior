@@ -114,10 +114,17 @@ public class Item : ScriptableObject
             PlayerStatus.instance.RefreshHp();
             return;
         }
+        if (itemName.ToLower().Equals("hipotion".ToLower()))
+        {
+            quantity--;
+            PlayerStatus.instance.curHealth += 50;
+            PlayerStatus.instance.RefreshHp();
+            return;
+        }
         if (itemName.ToLower().Equals("Apple".ToLower()))
         {
             quantity--;
-            PlayerStatus.instance.curHealth += 20;
+            PlayerStatus.instance.curHealth += 10;
             PlayerStatus.instance.RefreshHp();
             return;
         }

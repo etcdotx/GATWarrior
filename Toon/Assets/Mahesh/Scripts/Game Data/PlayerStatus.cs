@@ -22,17 +22,19 @@ public class PlayerStatus : MonoBehaviour
             instance = this;
 
         playerStatusView = transform.GetChild(0).Find("PlayerStatusView").gameObject;
+        curHealth = maxHealth;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         playerStatusView.SetActive(true);
-        curHealth = maxHealth;
         RefreshHp();
     }
 
     public void RefreshHp() {
         curHealthImg.fillAmount = curHealth / maxHealth;
+        if (curHealth < 0)
+            curHealth = 0;
     }
 }

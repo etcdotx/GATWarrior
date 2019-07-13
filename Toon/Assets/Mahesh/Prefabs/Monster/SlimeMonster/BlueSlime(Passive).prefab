@@ -395,6 +395,7 @@ MonoBehaviour:
   damage:
   - 5
   haveSpecialAttack: 0
+  specialAttackChance: 0
   specialAttackNum: 0
   specialAttackDamage: []
   passive: 1
@@ -436,6 +437,7 @@ MonoBehaviour:
   itemDropPercentage: 
   dropTime: 
   itemDropped: 
+  nameSpawn: blue
 --- !u!114 &2546142769898436143
 MonoBehaviour:
   m_ObjectHideFlags: 0

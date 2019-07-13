@@ -27,6 +27,9 @@ public class CharacterInput : MonoBehaviour
     public GameObject fakeWeapon;
     public GameObject trueWeapon;
 
+    [Header("usableItem")]
+    public Item selectedItem;
+
     private void Awake()
     {
         if (instance != null)
@@ -97,14 +100,14 @@ public class CharacterInput : MonoBehaviour
     void GetInputAxis()
     {
         inputAxis.x = Input.GetAxis("LeftJoystickHorizontal");
-        inputAxis.y = Input.GetAxis("LeftJoystickVertical"); 
+        inputAxis.y = Input.GetAxis("LeftJoystickVertical");
 
         anim.SetFloat("floatX", inputAxis.x * speedMultiplier);
         anim.SetFloat("floatY", inputAxis.y * speedMultiplier);
     }
 
     void CalculateDirection()
-    {        
+    {
         angle = Mathf.Atan2(inputAxis.x, inputAxis.y);
         angle = Mathf.Rad2Deg * angle;
         transform.localRotation = Quaternion.Euler(0, angle, 0);
@@ -112,7 +115,7 @@ public class CharacterInput : MonoBehaviour
 
     void Rotate()
     {
-        targetRotation = Quaternion.Euler(0, mainCamera.transform.eulerAngles.y+rotateDamp, 0);
+        targetRotation = Quaternion.Euler(0, mainCamera.transform.eulerAngles.y + rotateDamp, 0);
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
 
@@ -137,19 +140,11 @@ public class CharacterInput : MonoBehaviour
     {
         if (Input.GetKeyDown(InputSetup.instance.attack) && !combatMode)
         {
-            anim.SetBool("cantBeInterrupted", true);
-            anim.SetBool("combatMode", true);
-            cameraMovement.characterInCombat = true;
-            //rotateDamp = 5;
-            StartCoroutine(ChangeMode());
+            anim.SetTrigger("changeCombatMode");
         }
         else if (Input.GetKeyDown(InputSetup.instance.sheatheWeapon) && combatMode)
         {
-            anim.SetBool("cantBeInterrupted", true);
-            anim.SetBool("combatMode", false);
-            cameraMovement.characterInCombat = false;
-            //rotateDamp = 0;
-            StartCoroutine(ChangeMode());
+            anim.SetTrigger("changeCombatMode");
         }
     }
 
@@ -179,13 +174,14 @@ public class CharacterInput : MonoBehaviour
         }
     }
 
-    IEnumerator ChangeMode() {
-        yield return new WaitForSeconds(0.5f);
+    void ChangeMode() {
         if (combatMode)
             combatMode = false;
         else
             combatMode = true;
-        anim.SetBool("cantBeInterrupted", false);
+
+        anim.SetBool("combatMode", combatMode);
+        cameraMovement.characterInCombat = combatMode;
     }
 
     IEnumerator TurningBack()
@@ -206,6 +202,9 @@ public class CharacterInput : MonoBehaviour
     {
         anim.ResetTrigger("lightAttack");
         anim.ResetTrigger("heavyAttack");
+        anim.ResetTrigger("changeCombatMode");
+        anim.ResetTrigger("drink");
+        anim.ResetTrigger("roll");
     }
 
     void LightAttack()
@@ -227,5 +226,15 @@ public class CharacterInput : MonoBehaviour
     {
         fakeWeapon.SetActive(true);
         trueWeapon.SetActive(false);
+    }
+
+    public void useItem ()
+    {
+        selectedItem.Use();
+        for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
+        {
+            Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
+        }
+        Inventory.instance.RefreshInventory();
     }
 }

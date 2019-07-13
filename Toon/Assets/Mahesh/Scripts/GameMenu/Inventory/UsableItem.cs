@@ -5,6 +5,7 @@ using UnityEngine;
 public class UsableItem : MonoBehaviour
 {
     public static UsableItem instance;
+    public Animator animator;
 
     public GameObject player;
 
@@ -31,6 +32,7 @@ public class UsableItem : MonoBehaviour
             instance = this;
 
         player = GameObject.FindGameObjectWithTag("Player");
+        animator = player.GetComponent<Animator>();
         usableItemView = transform.GetChild(0).Find("UsableItemView").gameObject;
         usableItemViewPort = usableItemView.transform.Find("UsableItemViewPort").gameObject;
         usableItemContent = usableItemViewPort.transform.Find("UsableItemContent").gameObject;
@@ -69,23 +71,21 @@ public class UsableItem : MonoBehaviour
             isSelectingItem = false;
         }
 
-        if (Input.GetKeyDown(InputSetup.instance.useItem) && isItemUsable == true && isSelectingItem == false)
+        if (!CharacterInput.instance.combatMode)
         {
-            SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-            Debug.Log("useitem");
-            UseItem();
+            if (Input.GetKeyDown(InputSetup.instance.useItem) && isItemUsable == true && isSelectingItem == false)
+            {
+                Debug.Log("useitem");
+                UseItem();
+            }
         }
     }
 
     public void UseItem()
     {
         isUsingItem = true;
-        selectedItem.Use();
-        for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
-        {
-            Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
-        }
-        Inventory.instance.RefreshInventory();
+        CharacterInput.instance.selectedItem = selectedItem;
+        animator.SetTrigger("drink"); //trigger make item di animator masuk ke charinput useitem
     }
 
     public void SlideItem(bool isRight)

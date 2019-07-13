@@ -437,6 +437,7 @@ MonoBehaviour:
   itemDropPercentage: 
   dropTime: 
   itemDropped: 
+  nameSpawn: red
 --- !u!114 &2546142769898436143
 MonoBehaviour:
   m_ObjectHideFlags: 0

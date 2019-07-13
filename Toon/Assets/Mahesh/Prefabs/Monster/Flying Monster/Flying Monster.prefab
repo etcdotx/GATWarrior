@@ -294,6 +294,7 @@ MonoBehaviour:
   itemDropPercentage: 
   dropTime: 
   itemDropped: 
+  nameSpawn: fly
 --- !u!114 &8296172669245780141
 MonoBehaviour:
   m_ObjectHideFlags: 0

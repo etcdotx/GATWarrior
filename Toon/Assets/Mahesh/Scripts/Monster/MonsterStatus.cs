@@ -33,6 +33,8 @@ public class MonsterStatus : MonoBehaviour
     public int[] dropTime;
     public int[] itemDropped;
 
+    [Header("temp alpha")]
+    public string nameSpawn; //blue/green/red/fly
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -125,6 +127,9 @@ public class MonsterStatus : MonoBehaviour
 
     IEnumerator Dying()
     {
+        //alpha
+        EndlessSpawn.instance.Spawn(nameSpawn);
+
         isDead = false;
         gameObject.tag = "Untagged";
         monsterMovement.StopAllCoroutines();
