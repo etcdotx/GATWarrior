@@ -42,7 +42,7 @@ public class CharacterInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (UIManager.instance.uiState == UIManager.UIState.Gameplay && !CharacterInput.instance.combatMode)
+        if (UIManager.instance.uiState == UIState.Gameplay && !CharacterInput.instance.combatMode)
         {
             if (!UsableItem.instance.isSelectingItem && isRaycasting)
             {

@@ -105,7 +105,7 @@ public class Shop : MonoBehaviour
 
     public void OpenShop(NPC target)
     {
-        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Shop));
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Shop));
         shopIndicator.Clear();
         shopItem.Clear();
         gold.text = PlayerData.instance.gold.ToString();

@@ -277,7 +277,7 @@ public class Conversation : MonoBehaviour
     {
         DestroyOption();
         ClearList();
-        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Gameplay));
     }
 
     void ClearList()

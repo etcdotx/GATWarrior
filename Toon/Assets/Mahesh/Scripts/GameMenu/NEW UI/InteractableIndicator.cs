@@ -29,7 +29,7 @@ public class InteractableIndicator : MonoBehaviour
                 if (tempInteractable.isTalking)
                 {
                     CharacterInteraction.instance.TalkToObject(tempInteractable);
-                    UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Conversation));
+                    UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Conversation));
                 }
                 else if (tempInteractable.isCollectable)
                 {
@@ -39,7 +39,7 @@ public class InteractableIndicator : MonoBehaviour
                 }
                 else if (tempInteractable.isItemBox)
                 {
-                    UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.InventoryAndInventoryBox));
+                    UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.InventoryAndInventoryBox));
                 }
             }
         } catch { }

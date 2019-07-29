@@ -28,7 +28,7 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
             {
                 if (Input.GetKeyDown(InputSetup.instance.X))
                 {
-                    if (UIManager.instance.uiState == UIManager.UIState.InventoryAndInventoryBox)
+                    if (UIManager.instance.uiState == UIState.InventoryAndInventoryBox)
                         Inventory.instance.SetInitialQuantityToPut();
                 }
             }
@@ -87,7 +87,7 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
         }
         else
         {
-            UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+            UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Gameplay));
             isSelected = false;
         }
     }
@@ -103,11 +103,11 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
         Inventory.instance.temporaryItem = null;
         Inventory.instance.temporaryItem = item;
 
-        if (UIManager.instance.uiState == UIManager.UIState.InventoryAndSave)
+        if (UIManager.instance.uiState == UIState.InventoryAndSave)
         {
             Inventory.instance.inventoryAndSaveButton.SetActive(true);
         }
-        else if (UIManager.instance.uiState == UIManager.UIState.InventoryAndInventoryBox)
+        else if (UIManager.instance.uiState == UIState.InventoryAndInventoryBox)
         {
             Inventory.instance.inventoryAndInventoryBoxButton.SetActive(true);
         }

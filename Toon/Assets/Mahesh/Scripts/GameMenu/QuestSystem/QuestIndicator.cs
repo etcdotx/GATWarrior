@@ -45,7 +45,7 @@ public class QuestIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDe
         }
         else
         {
-            UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+            UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Gameplay));
         }
     }
 

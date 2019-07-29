@@ -41,7 +41,7 @@ public class CameraMovement : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetAxisRaw("LT Button") == 1)
+        if (Input.GetAxisRaw("LT Button") > 0)
         {
             CameraLock();
         }

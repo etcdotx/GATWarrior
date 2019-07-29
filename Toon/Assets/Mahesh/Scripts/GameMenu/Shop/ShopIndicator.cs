@@ -34,7 +34,7 @@ public class ShopIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDes
     public void OnCancel(BaseEventData eventData)
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
-        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIManager.UIState.Gameplay));
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Gameplay));
         isSelected = false;
         Shop.instance.buttons.SetActive(false);
     }

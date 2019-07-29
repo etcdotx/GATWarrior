@@ -30,6 +30,9 @@ public class CharacterInput : MonoBehaviour
     [Header("usableItem")]
     public Item selectedItem;
 
+    [Header("Run")]
+    bool isRunning;
+
     private void Awake()
     {
         if (instance != null)
@@ -57,19 +60,22 @@ public class CharacterInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (UIManager.instance.uiState == UIManager.UIState.Gameplay || UIManager.instance.uiState == UIManager.UIState.InventoryAndSave)
+        if (UIManager.instance.uiState == UIState.Gameplay || UIManager.instance.uiState == UIState.InventoryAndSave)
         {
             GetInputAxis();
+
             if (cameraMovement.isLocking)
             {
                 Vector3 lookTarget = cameraMovement.monsterTarget.transform.position;
                 lookTarget.y = transform.position.y;
                 transform.LookAt(lookTarget);
             }
-            else if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0 && !isRolling && !turningBack)
+
+            if (Mathf.Abs(inputAxis.x) > 0 || Mathf.Abs(inputAxis.y) > 0 && !isRolling && !turningBack)
             {
                 if (Input.GetAxis("RT Button") > 0)
                 {
+                    isRunning = true;
                     speedMultiplier = 2;
                     Mathf.Lerp(speedMultiplier, 2, Time.deltaTime * speedMultiplierLerp);
                 }
@@ -78,14 +84,15 @@ public class CharacterInput : MonoBehaviour
                     speedMultiplier = 1;
                 }
 
-                if (!CharacterInteraction.instance.isGathering)
+                if (!CharacterInteraction.instance.isGathering && !cameraMovement.isLocking)
                 {
                     Rotate();
                 }
             }
 
-            if (UIManager.instance.uiState == UIManager.UIState.Gameplay)
+            if (UIManager.instance.uiState == UIState.Gameplay) //kalau lagi ga savestate
             {
+                isRunning = false;
                 Roll();
                 DrawOrSheathe();
                 Attack();
@@ -104,6 +111,11 @@ public class CharacterInput : MonoBehaviour
 
         anim.SetFloat("floatX", inputAxis.x * speedMultiplier);
         anim.SetFloat("floatY", inputAxis.y * speedMultiplier);
+
+        if (Mathf.Abs(anim.GetFloat("floatY")) >= Mathf.Abs(anim.GetFloat("floatX")))
+            anim.SetFloat("movementSpeed", Mathf.Abs(anim.GetFloat("floatY")));
+        else
+            anim.SetFloat("movementSpeed", Mathf.Abs(anim.GetFloat("floatX")));
     }
 
     void CalculateDirection()

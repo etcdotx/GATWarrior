@@ -5,6 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
+public enum UIState
+{
+    Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation
+}
+
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
@@ -16,10 +21,6 @@ public class UIManager : MonoBehaviour
 
     public enum WarningState {
         itemFull, notEnoughMoney
-    }
-
-    public enum UIState {
-        Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation
     }
 
     private void Awake()
