@@ -116,6 +116,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &7518212694859015218
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9072187616490687762}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4739117, y: 0.29212046, z: 1.4541899}
+  m_Center: {x: -0.082840264, y: 0.03178151, z: 0.11332953}
 --- !u!95 &7774567278490150431
 Animator:
   serializedVersion: 3
@@ -147,19 +160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f52fb2663ac984f8446670f641d2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &7518212694859015218
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9072187616490687762}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4739117, y: 0.29212046, z: 1.4541899}
-  m_Center: {x: -0.082840264, y: 0.03178151, z: 0.11332953}
 --- !u!1 &9072187616544216065
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +760,12 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -6640467691440118969, guid: 4e5d6a26e2fe2d349815d6e03326c055,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 4654e21127a885448a4babe65f088403,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e5d6a26e2fe2d349815d6e03326c055, type: 3}
 --- !u!4 &9072187616161675800 stripped
@@ -815,6 +821,12 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.2533397
       objectReference: {fileID: 0}
+    - target: {fileID: -5732152421289142069, guid: c44668d3970c3c243bce5f00364a416e,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 4654e21127a885448a4babe65f088403,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c44668d3970c3c243bce5f00364a416e, type: 3}
 --- !u!4 &9072187616491180336 stripped

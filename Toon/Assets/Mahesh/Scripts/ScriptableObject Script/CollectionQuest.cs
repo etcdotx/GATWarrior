@@ -65,6 +65,7 @@ public class CollectionQuest : ScriptableObject
         {
             isComplete = false;
         }
+        CurrentQuestUI.instance.Refresh();
     }
 
     public void QuestComplete()
@@ -92,6 +93,7 @@ public class CollectionQuest : ScriptableObject
         catch {
             Debug.Log("This quest doesnt have chain quest");
         }
+        CurrentQuestUI.instance.Refresh();
     }
 
     public override string ToString()

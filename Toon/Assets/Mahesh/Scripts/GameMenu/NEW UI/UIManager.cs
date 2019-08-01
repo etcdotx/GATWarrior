@@ -74,6 +74,7 @@ public class UIManager : MonoBehaviour
         CharacterInteraction.instance.isRaycasting = true;
         PlayerStatus.instance.healthIndicator.SetActive(true);
         UsableItem.instance.usableItemView.SetActive(true);
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(true);
     }
 
     void ExitGamePlayState()
@@ -108,6 +109,7 @@ public class UIManager : MonoBehaviour
         Inventory.instance.inventoryView.SetActive(false);
         Quest.instance.questView.SetActive(false);
         UsableItem.instance.usableItemView.SetActive(true);
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(true);
     }
 
     void StartInventoryAndSaveState()
@@ -117,7 +119,7 @@ public class UIManager : MonoBehaviour
         Inventory.instance.inventoryView.SetActive(true);
         Quest.instance.questView.SetActive(true);
         UsableItem.instance.usableItemView.SetActive(false);
-
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(false);
         if (Quest.instance.questContent.transform.childCount > 0)
         {
             eventSystem.SetSelectedGameObject(Quest.instance.questContent.transform.GetChild(0).gameObject);
@@ -137,6 +139,7 @@ public class UIManager : MonoBehaviour
     void StartConversationState()
     {
         UsableItem.instance.usableItemView.SetActive(false);
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(false);
         PlayerStatus.instance.healthIndicator.SetActive(false);
         StopMovement();
     }
@@ -165,6 +168,7 @@ public class UIManager : MonoBehaviour
 
         PlayerStatus.instance.healthIndicator.SetActive(false);
         UsableItem.instance.usableItemView.SetActive(false);
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(false);
         Inventory.instance.inventoryView.SetActive(true);
         InventoryBox.instance.inventoryBoxView.SetActive(true);
         eventSystem.SetSelectedGameObject(InventoryBox.instance.inventoryBoxViewPort.transform.GetChild(0).gameObject);
@@ -190,6 +194,7 @@ public class UIManager : MonoBehaviour
     public void StartShopState() {
         PlayerStatus.instance.healthIndicator.SetActive(false);
         UsableItem.instance.usableItemView.SetActive(false);
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(false);
         eventSystem.SetSelectedGameObject(Shop.instance.shopContent.transform.GetChild(0).gameObject);
     }
 

@@ -265,6 +265,7 @@ public class Conversation : MonoBehaviour
         if (dialNum == dialogue.dialogue.Length-1)
         {
             EndDialog();
+            CurrentQuestUI.instance.Refresh();
         }
         else
         {

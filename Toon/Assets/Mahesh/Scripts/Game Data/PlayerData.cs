@@ -57,7 +57,6 @@ public class PlayerData : MonoBehaviour {
         {
             gold = 1250;
 
-
             //additem awal2
             for (int i = 0; i < itemToAdd.Count; i++)
             {
@@ -147,7 +146,7 @@ public class PlayerData : MonoBehaviour {
         //memasukkan quest list kedalam ui  
         AddNewQuestToUI(newQuest);
         //mengecek status quest baru
-        CheckNewQuestProgress(newQuest); 
+        CheckNewQuestProgress(newQuest);
     }
 
     public void AddNewQuestToUI(CollectionQuest cq)
