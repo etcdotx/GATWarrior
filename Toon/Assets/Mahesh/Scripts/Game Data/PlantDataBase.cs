@@ -6,6 +6,7 @@ public class PlantDataBase : MonoBehaviour
 {
     public static PlantDataBase instance;
 
+    //menyimpan data setiap plant yang sudah ditanam
     public GameObject[] plantState1;
     public GameObject[] plantState2;
     public GameObject[] plantState3;

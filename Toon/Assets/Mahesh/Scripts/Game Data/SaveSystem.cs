@@ -3,20 +3,21 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem {
-    //public static string saveFileName;
+
     public static void SavePlayer(string saveSlotNumber) {
         try
         {
             BinaryFormatter formatter = new BinaryFormatter();
             string path = Application.persistentDataPath + "/player" + saveSlotNumber + ".savegame";
-            FileStream stream = new FileStream(path, FileMode.Create);
+            FileStream stream = File.Create(path);
+            Debug.Log(path);
 
             PlayerSaveData data = new PlayerSaveData();
-
             formatter.Serialize(stream, data);
             stream.Close();
-            Debug.Log("Save ok");
-        } catch {
+        }
+        catch
+        {
             Debug.Log("Save Failed");
         }
     }

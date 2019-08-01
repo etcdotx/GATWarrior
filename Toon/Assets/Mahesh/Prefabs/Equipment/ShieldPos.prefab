@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2062624067636853263}
   - component: {fileID: 3982068726999164459}
-  - component: {fileID: 3257540430252841176}
   m_Layer: 11
   m_Name: ShieldPos
   m_TagString: Shield
@@ -45,16 +44,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.15195113, y: 0.13986821, z: 0.0078961225}
   m_Center: {x: 0.0004008607, y: -0.0015399515, z: -5.517277e-10}
---- !u!114 &3257540430252841176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288834899831641371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2b6627e5576464f8ef2f4e16206e53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterStatus: {fileID: 0}

@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class WeaponDetail : MonoBehaviour
 {
+    //damage reference dari jenis weapon
     public float[] damage;
 }

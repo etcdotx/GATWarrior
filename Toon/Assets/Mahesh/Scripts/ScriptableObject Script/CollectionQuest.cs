@@ -21,23 +21,6 @@ public class CollectionQuest : ScriptableObject
     public Dialogue startDialogue;
     public Dialogue endDialogue;
 
-    public CollectionQuest(int sourceID, int id, List<int> chainQuestID, int colAmount, Item itemToCollect, 
-        string title, string verb, string description, bool isOptional, Dialogue startDialogue, Dialogue endDialogue)
-    {
-        this.sourceID = sourceID;
-        this.id = id;
-        this.chainQuestID = chainQuestID;
-        this.colAmount = colAmount;
-        this.itemToCollect = itemToCollect;
-        this.title = title;
-        this.verb = verb;
-        this.description = description;
-        this.isOptional = isOptional;
-        this.startDialogue = startDialogue;
-        this.endDialogue = endDialogue;
-        //CheckProgress();
-    }
-
     public void Duplicate(CollectionQuest cq) {
         this.sourceID = cq.sourceID;
         this.id = cq.id;
@@ -99,10 +82,10 @@ public class CollectionQuest : ScriptableObject
         try
         {
             for (int i = 0; i < chainQuestID.Count; i++)
-                for (int j = 0; j < QuestDataBase.collectionQuest.Count; j++)
-                    if (chainQuestID[i] == QuestDataBase.collectionQuest[j].id)
+                for (int j = 0; j < GameDataBase.instance.colQuestList.Length; j++)
+                    if (chainQuestID[i] == GameDataBase.instance.colQuestList[j].id)
                     {
-                        Quest.instance.collectionQuestActive.Add(QuestDataBase.collectionQuest[j]);
+                        Quest.instance.collectionQuestActive.Add(GameDataBase.instance.colQuestList[j]);
                         break;
                     }
         }

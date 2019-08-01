@@ -19,6 +19,9 @@ public class InteractableIndicator : MonoBehaviour
             instance = this;
     }
 
+    /// <summary>
+    /// dipanggil dari button gameobject
+    /// </summary>
     public void Interact()
     {
         try

@@ -69,8 +69,7 @@ public class SphereMonsterAttack : MonoBehaviour
                     }
                 }
                 monsterAttack.attackSuccess.Add(monsterAttack.attackNum);
-                CharacterStatus characterStatus = c.GetComponent<Shield>().characterStatus;
-                characterStatus.Blocked(damage);
+                CharacterStatus.instance.Blocked(damage, transform.position);
                 Debug.Log(c.transform.name + " blocked");
             }
 

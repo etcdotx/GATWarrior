@@ -47,6 +47,7 @@ MonoBehaviour:
   UINavClip: {fileID: 8300000, guid: da9cb904ea2a4f44897c17980912272c, type: 3}
   UISelectClip: {fileID: 8300000, guid: 5d3d01297ac8d844d85de4b5536d09f2, type: 3}
   OpenInventoryClip: {fileID: 8300000, guid: f67b6f2b61a0df74d8aa37908ca8d8b4, type: 3}
+  CoinSound: {fileID: 8300000, guid: 8d74fb4811b2e7d4083ca08dd73cd925, type: 3}
 --- !u!1 &2743078067367900229
 GameObject:
   m_ObjectHideFlags: 0

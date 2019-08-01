@@ -19,6 +19,7 @@ public class Quest : MonoBehaviour
     public Scrollbar questViewScrollbar;
 
     [Header("Quest Detail")]
+    public GameObject questListPrefab;
     public GameObject questDetail;
     public TextMeshProUGUI questDescription;
     public TextMeshProUGUI questObjective;
@@ -46,7 +47,7 @@ public class Quest : MonoBehaviour
         questObjective.text = "";
 
         //add first quest
-        collectionQuestActive.Add(QuestDataBase.collectionQuest[0]);
+        collectionQuestActive.Add(GameDataBase.instance.colQuestList[0]);
         ActivateQuest();
     }
 

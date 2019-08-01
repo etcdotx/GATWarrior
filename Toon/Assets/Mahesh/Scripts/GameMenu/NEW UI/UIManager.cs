@@ -10,6 +10,11 @@ public enum UIState
     Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation
 }
 
+public enum WarningState
+{
+    itemFull, notEnoughMoney, inventoryFull
+}
+
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
@@ -19,9 +24,6 @@ public class UIManager : MonoBehaviour
     [Header("Warning Notification")]
     public TextMeshProUGUI warning;
 
-    public enum WarningState {
-        itemFull, notEnoughMoney
-    }
 
     private void Awake()
     {
@@ -244,8 +246,8 @@ public class UIManager : MonoBehaviour
 
     void StopMovement()
     {
-        CharacterInteraction.instance.animator.SetFloat("floatX", 0);
-        CharacterInteraction.instance.animator.SetFloat("floatY", 0);
+        CharacterInput.instance.animator.SetFloat("floatX", 0);
+        CharacterInput.instance.animator.SetFloat("floatY", 0);
     }
 
     public void warningNotification(string itemName, WarningState warningState) {
@@ -262,6 +264,10 @@ public class UIManager : MonoBehaviour
         else if (warningState == WarningState.notEnoughMoney)
         {
             warning.text = "Not enough money to buy " + itemName + ".";
+        }
+        else if (warningState == WarningState.inventoryFull)
+        {
+            warning.text = "Inventory full.";
         }
         warning.gameObject.SetActive(true);
         yield return new WaitForSeconds(2);

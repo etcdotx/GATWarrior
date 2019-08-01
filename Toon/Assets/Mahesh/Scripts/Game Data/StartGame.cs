@@ -30,7 +30,9 @@ public class StartGame : MonoBehaviour
         {
             GameDataBase.instance.saveSlot = 0;
         }
-        PlayerData.instance.LoadPlayer(selectSpawnLocationName);
+
+        if(!GameDataBase.instance.newGame)
+            PlayerData.instance.LoadPlayer(selectSpawnLocationName);
     }
 
     void CheckScene()

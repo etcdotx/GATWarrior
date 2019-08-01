@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum ItemType {
+    consumable, tool, seed, material
+}
+
 [CreateAssetMenu(fileName = "New Item", menuName = "Database/Item")]
 public class Item : ScriptableObject
 {
+    public ItemType itemType;
     public int id; //start dari 1
     public Sprite itemImage;
     public string itemName;
@@ -22,47 +27,48 @@ public class Item : ScriptableObject
     public bool isUsable;
     public bool isConsumable;
     public bool isASingleTool;
-    public string itemType;
 
     [Header("If item type = plant ")]
     public int plantID;
 
     [Header("Do not fill below this")]
-    public bool isOnInventory;
-    public bool isOnItemBox;
+    public bool isOnInventory; //untuk nanti di refresh di inventory
+    public bool isOnInventoryBox; //untuk nanti di refresh di inventorybox
 
-    public Item(int id, Sprite itemImage, string itemName, string description, int maxQuantityOnInventory,int price, bool isUsable, bool isConsumable, bool isASingleTool, string itemType)
+    public void Duplicate(Item item)
     {
         quantity = 1;
-        this.id = id;
-        this.itemImage = itemImage;
-        this.itemName = itemName;
-        this.description = description;
-        this.maxQuantityOnInventory = maxQuantityOnInventory;
-        this.price = price;
-        this.isUsable = isUsable;
-        this.isConsumable = isConsumable;
-        this.isASingleTool = isASingleTool;
-        this.itemType = itemType;
+        this.id = item.id;
+        this.itemImage = item.itemImage;
+        this.itemName = item.itemName;
+        this.description = item.description;
+        this.maxQuantityOnInventory = item.maxQuantityOnInventory;
+        this.price = item.price;
+        this.isUsable = item.isUsable;
+        this.isConsumable = item.isConsumable;
+        this.isASingleTool = item.isASingleTool;
+        this.itemType = item.itemType;
+        this.plantID = item.plantID;
         isOnInventory = false;
-        isOnItemBox = false;
+        isOnInventoryBox = false;
     }
 
-    public void Use() {
-        if (itemType != null)
+    /// <summary>
+    /// Function untuk menggunakan item
+    /// </summary>
+    public void Use()
+    {
+        if (itemType == ItemType.tool) //jika item jenis tool
         {
-            if (itemType.ToLower().Equals("tool".ToLower()))
-            {
-                UseTool();
-            }
-            else if (itemType.ToLower().Equals("consumable".ToLower()))
-            {
-                UseConsumable();
-            }
-            else if (itemType.ToLower().Equals("seed".ToLower()))
-            {
-                UseSeed();
-            }
+            UseTool();
+        }
+        else if (itemType == ItemType.consumable)//jika item jenis tool
+        {
+            UseConsumable();
+        }
+        else if (itemType == ItemType.seed)//jika item jenis tool
+        {
+            UseSeed();
         }
     }
 
@@ -70,34 +76,28 @@ public class Item : ScriptableObject
     {
         if (itemName.ToLower().Equals("hoe".ToLower()))
         {
-            if (PlayerData.instance.stateNearSoil == true)
+            for (int i = 0; i < Soils.instance.soilID.Length; i++)
             {
-                for (int i = 0; i < Soils.instance.soilID.Length; i++)
+                if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
                 {
-                    if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
-                    {
-                        Soils.instance.canBeHooed[i] = false;
-                        PlantTrigger.instance.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = Soils.instance.soilHooed;
-                        break;
-                    }
+                    Soils.instance.canBeHooed[i] = false;
+                    PlantTrigger.instance.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = Soils.instance.soilHooed;
+                    break;
                 }
             }
             return;
         }
         else if (itemName.ToLower().Equals("waterscoop".ToLower()))
         {
-            if (PlayerData.instance.stateNearSoil == true)
+            for (int i = 0; i < Soils.instance.soilID.Length; i++)
             {
-                for (int i = 0; i < Soils.instance.soilID.Length; i++)
+                if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
                 {
-                    if (PlantTrigger.instance.target.GetComponent<Soil>().soilID == Soils.instance.soilID[i])
+                    if (Soils.instance.canBeHooed[i] == false)
                     {
-                        if (Soils.instance.canBeHooed[i] == false)
-                        {
-                            Soils.instance.needWater[i] = false;
-                            PlantTrigger.instance.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = Soils.instance.soilWet;
-                            break;
-                        }
+                        Soils.instance.needWater[i] = false;
+                        PlantTrigger.instance.target.GetComponent<Soil>().soil.GetComponent<MeshRenderer>().material.color = Soils.instance.soilWet;
+                        break;
                     }
                 }
             }
@@ -149,16 +149,16 @@ public class Item : ScriptableObject
 
     public bool IsItemUsable()
     {
-        if (itemType != null)
+        if (itemType == ItemType.consumable && PlayerStatus.instance.curHealth < PlayerStatus.instance.maxHealth)
         {
-            if (itemType.ToLower().Equals("consumable".ToLower()) && PlayerStatus.instance.curHealth<PlayerStatus.instance.maxHealth)
+            return true;
+        }
+        if (itemType == ItemType.tool)
+        {
+            if (itemName.ToLower().Equals("hoe".ToLower()) || itemName.ToLower().Equals("waterscoop".ToLower()) ||
+                itemName.ToLower().Equals("seed".ToLower()))
             {
-                return true;
-            }
-            if (itemName.ToLower().Equals("hoe".ToLower()) || itemType.ToLower().Equals("waterscoop".ToLower()) || 
-                itemType.ToLower().Equals("seed".ToLower()))
-            {
-                if (PlayerData.instance.stateNearSoil == true)
+                if (PlantTrigger.instance.target != null)
                     return true;
             }
         }

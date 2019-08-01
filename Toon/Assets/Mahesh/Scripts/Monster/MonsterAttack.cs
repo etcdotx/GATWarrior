@@ -167,8 +167,7 @@ public class MonsterAttack : MonoBehaviour
                     }
                 }
                 attackSuccess.Add(attackCount);
-                CharacterStatus characterStatus = c.GetComponent<Shield>().characterStatus;
-                characterStatus.Blocked(damage[attackNum]);
+                CharacterStatus.instance.Blocked(damage[attackNum], transform.position);
                 Debug.Log(c.transform.name + " blocked");
             }
 
@@ -184,8 +183,7 @@ public class MonsterAttack : MonoBehaviour
                     }
                 }
                 attackSuccess.Add(attackCount);
-                CharacterStatus characterStatus = c.GetComponent<CharacterStatus>();
-                characterStatus.Damaged(damage[attackNum], transform.position);
+                CharacterStatus.instance.Damaged(damage[attackNum], transform.position);
                 Debug.Log(c.transform.name + " Damaged by " + damage);
             }
         }

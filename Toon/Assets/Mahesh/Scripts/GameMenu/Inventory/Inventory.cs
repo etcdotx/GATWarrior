@@ -144,11 +144,8 @@ public class Inventory : MonoBehaviour
 
         if (isItemExist == false)
         {
-            Item newItemIn = new Item(newItem.id, newItem.itemImage, newItem.itemName, newItem.description, newItem.maxQuantityOnInventory, 
-                newItem.price, newItem.isUsable, newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
-            if (newItem.itemType != null)
-                if (newItem.itemType.ToLower().Equals("seed".ToLower()))
-                    newItemIn.plantID = newItem.plantID;
+            Item newItemIn = ScriptableObject.CreateInstance<Item>();
+            newItemIn.Duplicate(newItem);
 
             newItemIn.quantity = quantity;
             PlayerData.instance.inventoryItem.Add(newItemIn);

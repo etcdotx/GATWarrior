@@ -5,99 +5,104 @@ using Cinemachine;
 using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour {
+    public static CameraMovement instance;
 
-    public GameObject player;
+    /// <summary>
+    /// target group untuk locking, dipake sama lookat cenemytarget
+    /// </summary>
     public CinemachineTargetGroup ctg;
+
+    //normal camera tanpa locking
     public CinemachineFreeLook cameraNormal;
+    //camera ketika lagi fight
     public CinemachineFreeLook cameraFight;
-    public CinemachineFreeLook cameraTurnBack;
+    //kalo lg targeting bareng target group
     public CinemachineVirtualCamera cenemytarget;
 
-    [Header("Camera Lock")]
-    public bool isLocking;
-    public int monsterNum;
-    public bool getMonster;
-    public Transform monsterTarget;
-    public GameObject[] nearestMonster;
-    public GameObject targetIndicator;
+    /// <summary>
+    /// camera ketika lagi ngadep kebelakang ("dpad down")
+    /// dipanggil di function character input pada ienumerator turning back
+    /// </summary>
+    public CinemachineFreeLook cameraTurnBack;
 
-    public bool characterInCombat;
-    public bool turningBack;
+    /// <summary>
+    /// ketika lock, dipanggil characterinput supaya player ngadep ke monstertarget
+    /// characterinput tidak bisa rotate ketika sedang locking
+    /// </summary>
+    public bool isLocking;
+
+    //dipake untuk characterinput supaya player tetep liat ke arah monster
+    public Transform monsterTarget;
+    //indicator ketika locking
+    public GameObject targetIndicator; 
+
+    [SerializeField]
+    //mencari monster terdekat disekitar
+    GameObject[] nearestMonster;
+    //monster number untuk select monster dari nearestmonster
+    int monsterNum;
+    //ketika sedang cari monster
+    bool getMonster;
+    //ketika selesai locking
+    bool endLock; 
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
     }
 
     private void Start()
     {
+        cameraNormal.gameObject.SetActive(true);
+        cameraFight.gameObject.SetActive(false);
+        cenemytarget.gameObject.SetActive(false);
         cameraTurnBack.gameObject.SetActive(false);
-        characterInCombat = false;
 
-        cameraNormal.Priority = 3;
-        cameraFight.Priority = 2;
-        cenemytarget.Priority = 1;
+        //set cameratarget ke grouptarget
+        cenemytarget.LookAt = ctg.transform;
     }
 
     private void Update()
     {
+        //locking
         if (Input.GetAxisRaw("LT Button") > 0)
         {
             CameraLock();
         }
-        else
+        else if(endLock)
         {
+            //endLock jadi false supaya tidak nge run function ini terus
+            endLock = false;
+            //matiin indicatornya
             targetIndicator.SetActive(false);
+            //get monster jadiin false supaya bisa start locking lagi
             getMonster = false;
+            //kondisi locking=false
             isLocking = false;
-
-            if (characterInCombat)
-            {
-                cameraNormal.gameObject.SetActive(false);
-                cameraFight.gameObject.SetActive(true);
-                cenemytarget.gameObject.SetActive(false);
-
-                //cameraNormal.Priority = 2;
-                //cameraFight.Priority = 3;
-                //cenemytarget.Priority = 1;
-            }
-            else
-            {
-                cameraNormal.gameObject.SetActive(true);
-                cameraFight.gameObject.SetActive(false);
-                cenemytarget.gameObject.SetActive(false);
-                //cameraNormal.Priority = 3;
-                //cameraFight.Priority = 2;
-                //cenemytarget.Priority = 1;
-            }
+            ResetCamera();
         }
     }
 
     void CameraLock()
     {
-        if (getMonster == false)
+        if (getMonster == false) //function pertama yang dipanggil sebelum locking
         {
-            monsterTarget = null;
-            monsterNum = 0;
-            nearestMonster = GameObject.FindGameObjectsWithTag("Monster");
+            //getmonster jadi true supaya tidak nge run function ini terus
             getMonster = true;
-
-            cameraNormal.gameObject.SetActive(false);
-            cameraFight.gameObject.SetActive(false);
-            cenemytarget.gameObject.SetActive(true);
+            //endlock true untuk reset nanti setelah lepas input lt button
+            endLock = true; 
+            GetMonster();
         }
-        if (nearestMonster.Length != 0)
+        //jika ada monster yang ditemukan
+        if (nearestMonster.Length != 0) 
         {
-            targetIndicator.SetActive(true);
-            isLocking = true;
-            for (int i = 0; i < nearestMonster.Length; i++)
-            {
-                if (nearestMonster[i].GetComponent<MonsterStatus>().hp <= 0)
-                {
-                    nearestMonster = GameObject.FindGameObjectsWithTag("Monster");
-                    monsterNum = 0;
-                }
-            }
+            //tanda jika sedang targeting
+            isLocking = true; 
+
+            //untuk ganti target
             if (Input.GetKeyDown(KeyCode.Joystick1Button1))
             {
                 monsterNum++;
@@ -106,38 +111,62 @@ public class CameraMovement : MonoBehaviour {
                     monsterNum = 0;
                 }
             }
-
-            //ctg.m_Targets[1].target = nearestMonster[monsterNum].transform;
-            cenemytarget.LookAt = nearestMonster[monsterNum].transform;
+            //set value monster target
             monsterTarget = nearestMonster[monsterNum].transform;
+            //masukkin monster ke target kedua target group
+            ctg.m_Targets[1].target = nearestMonster[monsterNum].transform; 
 
+            //target indicator settings
             Vector3 targetScreenPoint = Camera.main.WorldToScreenPoint(nearestMonster[monsterNum].transform.position);
             targetIndicator.transform.position = targetScreenPoint;
+            targetIndicator.SetActive(true);
         }
         else {
+            //jika tidak ada monster yang ditemukan
             getMonster = false;
             isLocking = false;
+            ResetCamera();
+        }
+    }
 
-            if (characterInCombat)
+    /// <summary>
+    /// function untuk mengubah camera
+    /// </summary>
+    public void ResetCamera()
+    {
+        if (!isLocking)
+        {
+            if (CharacterInput.instance.combatMode)
             {
                 cameraNormal.gameObject.SetActive(false);
                 cameraFight.gameObject.SetActive(true);
                 cenemytarget.gameObject.SetActive(false);
-
-                //cameraNormal.Priority = 2;
-                //cameraFight.Priority = 3;
-                //cenemytarget.Priority = 1;
             }
             else
             {
                 cameraNormal.gameObject.SetActive(true);
                 cameraFight.gameObject.SetActive(false);
                 cenemytarget.gameObject.SetActive(false);
-                //cameraNormal.Priority = 3;
-                //cameraFight.Priority = 2;
-                //cenemytarget.Priority = 1;
             }
         }
     }
 
+    /// <summary>
+    /// Untuk memulai mencari monster
+    /// function ini dipanggil juga saat ada monster yang mati
+    /// </summary>
+    public void GetMonster()
+    {
+        if (isLocking) 
+        {
+            monsterTarget = null; 
+            monsterNum = 0; 
+            nearestMonster = GameObject.FindGameObjectsWithTag("Monster");
+
+            //set camera menjadi targetmode
+            cameraNormal.gameObject.SetActive(false);
+            cameraFight.gameObject.SetActive(false);
+            cenemytarget.gameObject.SetActive(true);
+        }
+    }
 }

@@ -8,7 +8,7 @@ public class CharacterInput : MonoBehaviour
 
     public Camera mainCamera;
     public Vector3 inputAxis;
-    public Animator anim;
+    public Animator animator;
     public float angle;
     public Quaternion targetRotation;
     public CameraMovement cameraMovement;
@@ -30,9 +30,6 @@ public class CharacterInput : MonoBehaviour
     [Header("usableItem")]
     public Item selectedItem;
 
-    [Header("Run")]
-    bool isRunning;
-
     private void Awake()
     {
         if (instance != null)
@@ -40,11 +37,11 @@ public class CharacterInput : MonoBehaviour
         else
             instance = this;
 
+        animator = GetComponent<Animator>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         cameraMovement = mainCamera.GetComponent<CameraMovement>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         speedMultiplier = 1;
@@ -57,7 +54,6 @@ public class CharacterInput : MonoBehaviour
         trueWeapon.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (UIManager.instance.uiState == UIState.Gameplay || UIManager.instance.uiState == UIState.InventoryAndSave)
@@ -75,7 +71,6 @@ public class CharacterInput : MonoBehaviour
             {
                 if (Input.GetAxis("RT Button") > 0)
                 {
-                    isRunning = true;
                     speedMultiplier = 2;
                     Mathf.Lerp(speedMultiplier, 2, Time.deltaTime * speedMultiplierLerp);
                 }
@@ -92,7 +87,6 @@ public class CharacterInput : MonoBehaviour
 
             if (UIManager.instance.uiState == UIState.Gameplay) //kalau lagi ga savestate
             {
-                isRunning = false;
                 Roll();
                 DrawOrSheathe();
                 Attack();
@@ -109,13 +103,13 @@ public class CharacterInput : MonoBehaviour
         inputAxis.x = Input.GetAxis("LeftJoystickHorizontal");
         inputAxis.y = Input.GetAxis("LeftJoystickVertical");
 
-        anim.SetFloat("floatX", inputAxis.x * speedMultiplier);
-        anim.SetFloat("floatY", inputAxis.y * speedMultiplier);
+        animator.SetFloat("floatX", inputAxis.x * speedMultiplier);
+        animator.SetFloat("floatY", inputAxis.y * speedMultiplier);
 
-        if (Mathf.Abs(anim.GetFloat("floatY")) >= Mathf.Abs(anim.GetFloat("floatX")))
-            anim.SetFloat("movementSpeed", Mathf.Abs(anim.GetFloat("floatY")));
+        if (Mathf.Abs(animator.GetFloat("floatY")) >= Mathf.Abs(animator.GetFloat("floatX")))
+            animator.SetFloat("movementSpeed", Mathf.Abs(animator.GetFloat("floatY")));
         else
-            anim.SetFloat("movementSpeed", Mathf.Abs(anim.GetFloat("floatX")));
+            animator.SetFloat("movementSpeed", Mathf.Abs(animator.GetFloat("floatX")));
     }
 
     void CalculateDirection()
@@ -144,7 +138,7 @@ public class CharacterInput : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button0) && !isRolling)
         {
-            anim.SetTrigger("roll");
+            animator.SetTrigger("roll");
         }
     }
 
@@ -152,11 +146,11 @@ public class CharacterInput : MonoBehaviour
     {
         if (Input.GetKeyDown(InputSetup.instance.attack) && !combatMode)
         {
-            anim.SetTrigger("changeCombatMode");
+            animator.SetTrigger("changeCombatMode");
         }
         else if (Input.GetKeyDown(InputSetup.instance.sheatheWeapon) && combatMode)
         {
-            anim.SetTrigger("changeCombatMode");
+            animator.SetTrigger("changeCombatMode");
         }
     }
 
@@ -165,11 +159,11 @@ public class CharacterInput : MonoBehaviour
         {
             if (Input.GetKeyDown(InputSetup.instance.attack))
             {
-                anim.SetTrigger("lightAttack");
+                animator.SetTrigger("lightAttack");
             }
             if (Input.GetKeyDown(InputSetup.instance.attack2))
             {
-                anim.SetTrigger("heavyAttack");
+                animator.SetTrigger("heavyAttack");
             }
         }
     }
@@ -178,11 +172,11 @@ public class CharacterInput : MonoBehaviour
     {
         if (Input.GetKey(InputSetup.instance.block))
         {
-            anim.SetBool("block", true);
+            animator.SetBool("block", true);
         }
         else if (Input.GetKeyUp(InputSetup.instance.block))
         {
-            anim.SetBool("block", false);
+            animator.SetBool("block", false);
         }
     }
 
@@ -192,19 +186,19 @@ public class CharacterInput : MonoBehaviour
         else
             combatMode = true;
 
-        anim.SetBool("combatMode", combatMode);
-        cameraMovement.characterInCombat = combatMode;
+        animator.SetBool("combatMode", combatMode);
+        CameraMovement.instance.ResetCamera();
     }
 
     IEnumerator TurningBack()
     {
         cameraMovement.cameraTurnBack.gameObject.SetActive(true);
-        if (anim.GetFloat("floatY") > 1)
-            anim.SetFloat("floatTurn", 1);
+        if (animator.GetFloat("floatY") > 1)
+            animator.SetFloat("floatTurn", 1);
         else
-            anim.SetFloat("floatTurn", 0);
+            animator.SetFloat("floatTurn", 0);
 
-        anim.SetTrigger("turn180");
+        animator.SetTrigger("turn180");
         yield return new WaitForSeconds(1f);
         cameraMovement.cameraTurnBack.gameObject.SetActive(false);
         turningBack = false;
@@ -212,11 +206,11 @@ public class CharacterInput : MonoBehaviour
 
     void ResetTrigger()
     {
-        anim.ResetTrigger("lightAttack");
-        anim.ResetTrigger("heavyAttack");
-        anim.ResetTrigger("changeCombatMode");
-        anim.ResetTrigger("drink");
-        anim.ResetTrigger("roll");
+        animator.ResetTrigger("lightAttack");
+        animator.ResetTrigger("heavyAttack");
+        animator.ResetTrigger("changeCombatMode");
+        animator.ResetTrigger("drink");
+        animator.ResetTrigger("roll");
     }
 
     void LightAttack()

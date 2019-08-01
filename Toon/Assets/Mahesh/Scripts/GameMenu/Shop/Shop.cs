@@ -64,7 +64,7 @@ public class Shop : MonoBehaviour
             {
                 if (PlayerData.instance.inventoryItem[i].quantity >= PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
-                    UIManager.instance.warningNotification(shopIndicator.item.itemName, UIManager.WarningState.itemFull);
+                    UIManager.instance.warningNotification(shopIndicator.item.itemName, WarningState.itemFull);
                     Debug.Log("item full");
                     return;
                 }
@@ -83,7 +83,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            UIManager.instance.warningNotification(shopIndicator.item.itemName, UIManager.WarningState.notEnoughMoney);
+            UIManager.instance.warningNotification(shopIndicator.item.itemName, WarningState.notEnoughMoney);
             Debug.Log("not enough money");
         }
     }
@@ -98,7 +98,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            UIManager.instance.warningNotification(shopIndicator.item.itemName, UIManager.WarningState.notEnoughMoney);
+            UIManager.instance.warningNotification(shopIndicator.item.itemName, WarningState.notEnoughMoney);
             Debug.Log("not enough money");
         }
     }
@@ -113,13 +113,8 @@ public class Shop : MonoBehaviour
         for (int i = 0; i < target.shopItem.Count; i++)
         {
             Item temp = target.shopItem[i];
-            Item temp2 = new Item(temp.id, temp.itemImage, temp.itemName,
-                temp.description, temp.maxQuantityOnInventory, temp.price, temp.isUsable, 
-                temp.isConsumable, temp.isASingleTool, temp.itemType);
-            if (temp.itemType != null)
-                if (temp.itemType.ToLower().Equals("seed".ToLower()))
-                    temp2.plantID = temp.plantID;
-
+            Item temp2 = ScriptableObject.CreateInstance<Item>();
+            temp2.Duplicate(temp);
             shopItem.Add(temp2);
         }
 

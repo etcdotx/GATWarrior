@@ -11,23 +11,24 @@ public class GameDataBase: MonoBehaviour {
     public MainMenuScript mms;
     public int saveSlot;
     public bool[] saveSlotExist;
-
-    [Header("Character Appearance")]
-    public GameObject[] genderType;
-    public Color32[] skinColor;
-    public GameObject[] maleHairType;
-    public GameObject[] femaleHairType;
-    public Color32[] hairColor;
+    public bool newGame;
 
     [Header("Quest")]
+    //Masukkan quest yang dipakai di game
     public CollectionQuest[] colQuestList;
+    //dictionary ada supaya bisa dipanggil dengan performance tanpa for
+    public Dictionary<int, CollectionQuest> colQuestDictionary = new Dictionary<int, CollectionQuest>();
 
     [Header("Item")]
-    public Item[] Consumables;
-    public Item[] Ingredients;
-    public Item[] Materials;
-    public Item[] Plants;
-    public Item[] Tools;
+    //Masukkan item list yang ada di game
+    public Item[] consumable;
+    public Item[] materials;
+    public Item[] plants;
+    public Item[] tools;
+    List<Item> itemList = new List<Item>();
+
+    //dictionary ada supaya bisa dipanggil dengan performance tanpa for
+    public Dictionary<int, Item> itemDictionary = new Dictionary<int, Item>();
 
     public void Awake()
     {
@@ -38,79 +39,67 @@ public class GameDataBase: MonoBehaviour {
             instance = this;
 
         CheckSaveSlot();
-        AddItem();
-        AddCollectionQuest();  
+        AddDictionary();
     }
 
+    private void Start()
+    {
+        newGame = false;
+    }
+
+    /// <summary>
+    /// untuk ngecek jika ada save data atau tidak
+    /// </summary>
     void CheckSaveSlot() {
         try
         {
             mms = GameObject.Find("MainMenuScript").GetComponent<MainMenuScript>();
-        }
-        catch { }
-        for (int i = 0; i < saveSlotExist.Length; i++)
-        {
-            string txt = i.ToString();
-            string path = Application.persistentDataPath + "/player" + txt + ".savegame";
-            if (File.Exists(path))
+            for (int i = 0; i < saveSlotExist.Length; i++)
             {
-                saveSlotExist[i] = true;
-                try
+                string txt = i.ToString();
+                string path = Application.persistentDataPath + "/player" + txt + ".savegame";
+                if (File.Exists(path))
                 {
+                    saveSlotExist[i] = true;
                     mms.saveSlotText[i].text = "Exist";
                 }
-                catch { }
             }
         }
+        catch {
+            //Debug.Log("no mainmenuscript");
+        }       
     }
 
-    //source 1 = npc1, location = rumah
-    //source 2 = npc2, location = rumah
+    void AddDictionary() {
+        AddItem();
 
-    #region CollectionQuest
-    public void AddCollectionQuest()
-    {
-        if (QuestDataBase.collectionQuest == null)
-            QuestDataBase.collectionQuest = new List<CollectionQuest>();
-
-        addQuestSource1();
-    }
-
-    public void addQuestSource1()
-    {
         for (int i = 0; i < colQuestList.Length; i++)
         {
-            QuestDataBase.collectionQuest.Add(colQuestList[i]);
+            colQuestDictionary.Add(colQuestList[i].id, colQuestList[i]);
+        }
+
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            itemDictionary.Add(itemList[i].id, itemList[i]);
         }
     }
-    #endregion
 
-    #region Item
-    void AddItem()
-    {
-        if (ItemDataBase.item == null)
-            ItemDataBase.item = new List<Item>();
-
-        for (int i = 0; i <Consumables.Length; i++)
+    void AddItem() {
+        for (int i = 0; i < consumable.Length; i++)
         {
-            ItemDataBase.item.Add(Consumables[i]);
+            itemList.Add(consumable[i]);
         }
-        for (int i = 0; i < Ingredients.Length; i++)
+        for (int i = 0; i < materials.Length; i++)
         {
-            ItemDataBase.item.Add(Ingredients[i]);
+            itemList.Add(materials[i]);
         }
-        for (int i = 0; i < Materials.Length; i++)
+        for (int i = 0; i < tools.Length; i++)
         {
-            ItemDataBase.item.Add(Materials[i]);
+            itemList.Add(tools[i]);
         }
-        for (int i = 0; i < Plants.Length; i++)
+        for (int i = 0; i < plants.Length; i++)
         {
-            ItemDataBase.item.Add(Plants[i]);
-        }
-        for (int i = 0; i < Tools.Length; i++)
-        {
-            ItemDataBase.item.Add(Tools[i]);
+            itemList.Add(plants[i]);
         }
     }
-    #endregion
 }

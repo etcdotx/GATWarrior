@@ -178,12 +178,8 @@ public class InventoryBox : MonoBehaviour
 
         if (isItemExist == false)
         {
-            Item newItemInBox = new Item(newItem.id, newItem.itemImage, newItem.itemName,
-                newItem.description, newItem.maxQuantityOnInventory, newItem.price, newItem.isUsable, 
-                newItem.isConsumable, newItem.isASingleTool, newItem.itemType);
-            if (newItem.itemType != null)
-                if (newItem.itemType.ToLower().Equals("seed".ToLower()))
-                    newItemInBox.plantID = newItem.plantID;
+            Item newItemInBox = ScriptableObject.CreateInstance<Item>();
+            newItemInBox.Duplicate(newItem);
 
             newItemInBox.quantity = quantity;
             PlayerData.instance.inventoryBoxItem.Add(newItemInBox);
@@ -212,11 +208,11 @@ public class InventoryBox : MonoBehaviour
                 {
                     for (int j = 0; j < PlayerData.instance.inventoryBoxItem.Count; j++)
                     {
-                        if (PlayerData.instance.inventoryBoxItem[j].isOnItemBox == false)
+                        if (PlayerData.instance.inventoryBoxItem[j].isOnInventoryBox == false)
                         {
                             inventoryBoxIndicator[i].item = PlayerData.instance.inventoryBoxItem[j];
                             inventoryBoxIndicator[i].itemID = PlayerData.instance.inventoryBoxItem[j].id;
-                            PlayerData.instance.inventoryBoxItem[j].isOnItemBox = true;
+                            PlayerData.instance.inventoryBoxItem[j].isOnInventoryBox = true;
                             break;
                         }
                     }

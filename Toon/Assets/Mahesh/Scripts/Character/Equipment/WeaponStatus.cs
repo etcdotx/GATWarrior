@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class WeaponStatus : MonoBehaviour
 {
-    public GameObject player;
-    public WeaponDetail weaponDetail;
-    public BoxCollider boxCol;
-    public float[] attackDamage;
-    public int attackCount; //darianimasi
+    GameObject player;
+    //weapon detail sesuai weaponnya
+    WeaponDetail weaponDetail;
+    //damage reference diambil dari weapon detail
+    float[] attackDamage; 
 
+    /// <summary>
+    /// di set dari animasi
+    /// sebagai penanda untuk monsterstatus receive damageinfo
+    /// </summary>
+    public int attackCount;
+
+    //prefab hitindicator
     public GameObject hitIndicatorPrefab;
-    public GameObject hitIndicatorLocation;
-    public Vector3 hitPosition;
+    //posisi hit untuk spawn hit indicator
+    Vector3 hitPosition;
 
-    // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        boxCol = GetComponent<BoxCollider>();
-
         RefreshWeapon();
     }
 
+    /// <summary>
+    /// Untuk mengambil reference damage dari weapon
+    /// </summary>
     void RefreshWeapon()
     {
         weaponDetail = transform.GetChild(1).GetComponent<WeaponDetail>();
@@ -30,21 +37,30 @@ public class WeaponStatus : MonoBehaviour
         attackDamage = weaponDetail.damage;
     }
 
+    /// <summary>
+    /// script damage dari collider
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Monster"))
         {
-            //Debug.Log(other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position));
+            //agar player menghadap ke monster ketika memukul kena
+            player.transform.LookAt(other.transform); 
+
+            //ambil hit position untuk di spawn
             hitPosition = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
 
+            //musuh menerima damage
             MonsterStatus monsterStatus = other.gameObject.GetComponent<MonsterStatus>();
             monsterStatus.ReceiveDamageInfo(attackCount, attackDamage[attackCount], this);
-            Debug.Log(other.name);
         }
     }
 
+    /// <summary>
+    /// jika hit success, maka akan spawn hit indicator
+    /// </summary>
     public void HitSuccessful() {
-        //Debug.Log(hitPosition);
         Instantiate(hitIndicatorPrefab, hitPosition, Quaternion.identity, null);
     }
 }

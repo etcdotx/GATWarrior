@@ -5,45 +5,61 @@ using UnityEngine.UI;
 
 public class CharacterStatus : MonoBehaviour
 {
-    [Header("Player Status")]
-    public string playerName;
-    public Animator anim;
+    public static CharacterStatus instance;
 
-    public List<MonsterAttack> monsterAttack = new List<MonsterAttack>();
-    public bool isDamaged;
+    
+    //dipangil ketika sedang terkena serangan atau blocking
+    public Animator animator;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        anim = GetComponent<Animator>();
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
     }
 
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    /// <summary>
+    /// function ketika terkena damage
+    /// </summary>
+    /// <param name="dmg">menentukan damage yang diterima</param>
+    /// <param name="sourceVec">menentukan animasi terserang dari arah sumber</param>
     public void Damaged(float dmg, Vector3 sourceVec)
     {
-        anim.SetFloat("damagedPosY", 0);
-        anim.SetFloat("damagedPosX", 0);
+        animator.SetFloat("damagedPosY", 0);
+        animator.SetFloat("damagedPosX", 0);
         Vector3 impact = sourceVec - transform.position;
         if (Mathf.Abs(impact.x) > Mathf.Abs(impact.z))
         {
             if (impact.x > 0)
-                anim.SetFloat("damagedPosX", 1);
+                animator.SetFloat("damagedPosX", 1);
             else if (impact.x < 0)
-                anim.SetFloat("damagedPosX", -1);
+                animator.SetFloat("damagedPosX", -1);
         }
         else {
             if (impact.y > 0)
-                anim.SetFloat("damagedPosY", 1);
+                animator.SetFloat("damagedPosY", 1);
             else if (impact.y < 0)
-                anim.SetFloat("damagedPosY", -1);
+                animator.SetFloat("damagedPosY", -1);
         }
 
-        anim.SetTrigger("damaged");
+        animator.SetTrigger("damaged");
         PlayerStatus.instance.curHealth -= dmg;
         PlayerStatus.instance.RefreshHp();
     }
 
-    public void Blocked(float dmg)
+    /// <summary>
+    /// function ketika sedang blocking
+    /// </summary>
+    /// <param name="dmg">menentukan damage yang diterima</param>
+    /// <param name="sourceVec">menentukan animasi terserang dari arah sumber</param>
+    public void Blocked(float dmg, Vector3 sourceVec)
     {
-        anim.SetTrigger("blocking");
+        animator.SetTrigger("blocking");
     }
 }

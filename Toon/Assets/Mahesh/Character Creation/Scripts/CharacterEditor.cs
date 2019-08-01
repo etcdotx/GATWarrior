@@ -236,14 +236,14 @@ public class CharacterEditor : MonoBehaviour
                 ApplyChange(ApperanceDetail.Hair_Type, 0);
                 ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
 
-                PlayerData.instance.characterAppearance[0] = genderIndex;
+                //PlayerData.instance.characterAppearance[0] = genderIndex;
                 break;
 
             case ApperanceDetail.Skin_Color:
                 activeGender.GetComponent<Renderer>().material.color = skinColor[id];
 
                 skinColorText.text = skinColorName[id];
-                PlayerData.instance.characterAppearance[1] = skinColorIndex;
+                //PlayerData.instance.characterAppearance[1] = skinColorIndex;
                 break;
 
             case ApperanceDetail.Hair_Type:
@@ -264,13 +264,13 @@ public class CharacterEditor : MonoBehaviour
 
                 activeHair.transform.SetParent(activeGender.transform.Find(hairParent));
                 ApplyChange(ApperanceDetail.Hair_Color, hairColorIndex);
-                PlayerData.instance.characterAppearance[2] = hairIndex;
+                //PlayerData.instance.characterAppearance[2] = hairIndex;
                 break;
 
             case ApperanceDetail.Hair_Color:
                 activeHair.GetComponent<Renderer>().material.color = hairColor[id];
                 hairColorText.text = hairColorName[id];
-                PlayerData.instance.characterAppearance[3] = hairColorIndex;
+                //PlayerData.instance.characterAppearance[3] = hairColorIndex;
                 break;
 
             case ApperanceDetail.Eye_Type:
@@ -284,7 +284,7 @@ public class CharacterEditor : MonoBehaviour
 
     public void ConfirmCharacterCreation()
     {
-        PlayerData.instance.SavePlayer();
+        //PlayerData.instance.SavePlayer();
         SceneManager.LoadScene(sceneName);
     }
 }

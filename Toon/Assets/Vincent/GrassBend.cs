@@ -8,6 +8,7 @@ public class GrassBend : MonoBehaviour
     public Material mat;
     public string pos;
     public Transform player;
+
     // Start is called before the first frame update
 
     private void LateUpdate()
@@ -20,5 +21,4 @@ public class GrassBend : MonoBehaviour
             Debug.Log("Test");
         }
     }
-
 }

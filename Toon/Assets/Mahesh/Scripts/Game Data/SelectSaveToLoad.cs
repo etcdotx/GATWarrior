@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class SelectSaveToLoad : MonoBehaviour
 {
-    public MainMenuScript mms;
+    MainMenuScript mms;
+
+    /// <summary>
+    /// dipakai dibutton untuk select file yang mau di load
+    /// </summary>
     public int x;
 
     private void Start()

@@ -6,43 +6,38 @@ using UnityEngine.UI;
 public class PlayerData : MonoBehaviour {
     public static PlayerData instance;
 
-    [Header("Script List")]
-    public StartGame startGame;
-    public CameraMovement cm;
-
-    [Header("Player Data")]
-    public int[] characterAppearance; //Gender,Skincolor,hair,haircolor
-    public GameObject character;
-    public GameObject[] body;// 0 Gender, 1 Hair
+    StartGame startGame;
 
     [Header("Player Wealth")]
-    public int gold;
+    public int gold; //gold player
 
     [Header("Inventory")]
+    //item yang ada di inventory player
     public List<Item> inventoryItem = new List<Item>();
-    public List<Item> inventoryBoxItem = new List<Item>();
+    //item yang ada di inventory box player
+    public List<Item> inventoryBoxItem = new List<Item>(); 
 
     [Header("Quest")]
-    public GameObject questListPrefab;
-    public int questListIndex;
+    //quest yang player sudah ambil
     public List<CollectionQuest> collectionQuest = new List<CollectionQuest>();
-    public List<CollectionQuest> collectionQuestComplete = new List<CollectionQuest>();
-    public List<int> finishedCollectionQuestID = new List<int>();
+    //quest yang sudah player selesaikan
+    public List<CollectionQuest> collectionQuestComplete = new List<CollectionQuest>(); 
 
     [Header("Player State")]
-    public GameObject charPrefab;
-    public bool stateNearSoil;
-    public bool stateHpNotMax;
+    //ketika player darahnya habis
+    public bool stateHpNotMax; 
 
     [Header("FOR DEVELOPMENT")]
     public bool DEVELOPERMODE;
     public bool dontloadCharacter;
+
+    //item yang ingin dikasih ke inventory pada awal game
     public List<Item> itemToAdd = new List<Item>();
-    public List<Item> itemBoxToAdd = new List<Item>();
+    //item yang ingin dikasih ke inventory box pada awal game
+    public List<Item> itemBoxToAdd = new List<Item>(); 
 
     private void Awake()
     {
-        //singleton
         if (instance != null)
             Destroy(gameObject);
         else
@@ -55,32 +50,44 @@ public class PlayerData : MonoBehaviour {
         if (DEVELOPERMODE == true)
         {
             GameDataBase.instance.saveSlot = 0;
+            GameDataBase.instance.newGame = false;
         }
 
-        questListIndex = -1;
-
-        //characterstats
-        gold = 1250;
-
-        //additem
-        for (int i = 0; i < itemToAdd.Count; i++)
+        if (GameDataBase.instance.newGame)
         {
-            AddItem(itemToAdd[i]);
-        }
-        for (int i = 0; i < itemBoxToAdd.Count; i++)
-        {
-            for (int j = 0; j < 25; j++)
+            gold = 1250;
+
+
+            //additem awal2
+            for (int i = 0; i < itemToAdd.Count; i++)
             {
-                AddItemToBox(itemBoxToAdd[i]);
+                AddItem(itemToAdd[i]);
             }
+            for (int i = 0; i < itemBoxToAdd.Count; i++)
+            {
+                for (int j = 0; j < 25; j++)
+                {
+                    AddItemToBox(itemBoxToAdd[i]);
+                }
+            }
+
+            Debug.Log("new game");
+            SavePlayer();
         }
     }
 
+    /// <summary>
+    /// script untuk melakukan save game
+    /// </summary>
     public void SavePlayer()
     {
         SaveSystem.SavePlayer(GameDataBase.instance.saveSlot.ToString());
     }
 
+    /// <summary>
+    /// Script untuk load player
+    /// </summary>
+    /// <param name="spawnLocationName"></param>
     public void LoadPlayer(string spawnLocationName)
     {
         //start on new game/scene
@@ -88,97 +95,67 @@ public class PlayerData : MonoBehaviour {
 
         try
         {
-            //PlayerSaveData data = SaveSystem.LoadPlayer(gameDataBase.saveSlot.ToString());
-            //characterAppearance = new int[data.characterAppearance.Length];
-            //for (int i = 0; i < characterAppearance.Length; i++)
-            //{
-            //    characterAppearance[i] = data.characterAppearance[i];
-            //}
-        } catch(UnityException ex)
+            PlayerSaveData data = SaveSystem.LoadPlayer(GameDataBase.instance.saveSlot.ToString());
+
+            for (int i = 0; i < data.collectionQuestID.Count; i++)
+            {
+                collectionQuest.Add(GameDataBase.instance.colQuestDictionary[data.collectionQuestID[i]]);
+            }
+            for (int i = 0; i < data.collectionQuestCompleteID.Count; i++)
+            {
+                collectionQuestComplete.Add(GameDataBase.instance.colQuestDictionary[data.collectionQuestCompleteID[i]]);
+            }
+            for (int i = 0; i < data.inventoryItemID.Count; i++)
+            {
+                AddItem(GameDataBase.instance.itemDictionary[data.inventoryItemID[i]]);
+                //inventoryItem.Add(GameDataBase.instance.itemDictionary[data.inventoryItemID[i]]);
+            }
+            for (int i = 0; i < data.inventoryBoxItemID.Count; i++)
+            {
+                AddItemToBox(GameDataBase.instance.itemDictionary[data.inventoryBoxItemID[i]]);
+                //inventoryBoxItem.Add(GameDataBase.instance.itemDictionary[data.inventoryBoxItemID[i]]);
+            }
+
+            Debug.Log("load complete");
+        }
+        catch
         {
-            Debug.Log(ex);
+            Debug.Log("error catching data, some item may not exist");
         }
 
         //Collect Appearance Data
 
         if (dontloadCharacter == false)
         {
-            //Apply Appearance
-            try
-            {
-                body[0] = GameObject.Instantiate(GameDataBase.instance.genderType[characterAppearance[0]], spawnLocation.transform.position, spawnLocation.transform.rotation, null);
-                body[0].GetComponent<Renderer>().material.color = GameDataBase.instance.skinColor[characterAppearance[1]];
-                if (characterAppearance[0] == 0)
-                {
-                    body[1] = GameObject.Instantiate(GameDataBase.instance.maleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
-                }
-                else
-                {
-                    body[1] = GameObject.Instantiate(GameDataBase.instance.femaleHairType[characterAppearance[2]], GameObject.FindGameObjectWithTag("PlayerHead").transform);
-                }
-                body[1].GetComponent<Renderer>().material.color = GameDataBase.instance.hairColor[characterAppearance[3]];
-            }
-            catch
-            {
-                Debug.Log("error");
-            }
+            //load data
         }
         else {
             //Instantiate(charPrefab, spawnLocation.transform.position, spawnLocation.transform.rotation, null);
             Debug.Log("Start without instantiate");
         }
 
-        do {
-            try
-            {
-                //Get
-                cm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>();
-                character = GameObject.FindGameObjectWithTag("Player");
-                startGame = GameObject.Find("StartGame").GetComponent<StartGame>();
-
-                //Modify
-                cm.player = character;
-                character.GetComponent<Rigidbody>().isKinematic = false;
-                //character.transform.localScale = startGame.characterScale;
-            }
-            catch {
-                Debug.Log("There is no camera or a character or a start game script");
-            }
-        } while (cm == null);
+        startGame = GameObject.Find("StartGame").GetComponent<StartGame>();
     }
 
     public void AddQuest(CollectionQuest cq)
     {
-        //memasukkan quest baru kedalam ke quest yang dimiliki player
         CollectionQuest newQuest = ScriptableObject.CreateInstance<CollectionQuest>();
         newQuest.Duplicate(cq);
 
+        //add quest kedalam quest yang player miliki       
         collectionQuest.Add(newQuest);
-        //memasukkan quest list kedalam ui
-        AddNewQuestToList(newQuest);
+        //memasukkan quest list kedalam ui  
+        AddNewQuestToUI(newQuest);
         //mengecek status quest baru
-        CheckNewQuestProgress(newQuest);
+        CheckNewQuestProgress(newQuest); 
     }
 
-    public void AddNewQuestToList(CollectionQuest cq)
+    public void AddNewQuestToUI(CollectionQuest cq)
     {
-        Instantiate(questListPrefab, Quest.instance.questContent.transform);
-        int a = Quest.instance.questContent.transform.childCount - 1; //last quest (new addded)
-        Quest.instance.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questText.text = cq.title;
-        Quest.instance.questContent.transform.GetChild(a).GetComponent<QuestIndicator>().questID = cq.id;
-    }
-
-    public void RemoveQuestList(CollectionQuest cq)
-    {
-        for (int i = 0; i < Quest.instance.questContent.transform.childCount; i++)
-        {
-            if (Quest.instance.questContent.transform.GetChild(i).GetComponent<QuestIndicator>().questID == cq.id)
-            {
-                Destroy(Quest.instance.questContent.transform.GetChild(i).gameObject);
-                Quest.instance.RefreshQuestDetail(cq.id);
-                break;
-            }
-        }
+        //instantiate prefab quest ui indicator 
+        QuestIndicator qi = Instantiate(Quest.instance.questListPrefab, Quest.instance.questContent.transform).GetComponent<QuestIndicator>();
+        qi.questText.text = cq.title;
+        qi.questID = cq.id;
     }
 
     public void CheckNewQuestProgress(CollectionQuest newQuest)
@@ -192,61 +169,63 @@ public class PlayerData : MonoBehaviour {
                 break;
             }
         }
-        //for (int i = 0; i < inventoryBoxItem.Count; i++)
-        //{
-        //    if (newQuest.itemToCollect.name == inventoryBoxItem[i].name)
-        //    {
-        //        newQuest.curAmount += inventoryBoxItem[i].quantity;
-        //        break;
-        //    }
-        //}
+
+        //check jika questnya sudah selesai atau belum
         newQuest.CheckProgress();
     }
 
-    public void AddItem(Item item)
+    /// <summary>
+    /// function untuk add item ke player inventory
+    /// </summary>
+    /// <param name="item">item yang ditambah</param>
+    public bool AddItem(Item item)
     {
         bool itemExist=false;
         for (int i = 0; i < inventoryItem.Count; i++)
         {
-            if (inventoryItem[i].id == item.id)
+            //jika item yang ditambah sudah ada diinventory
+            if (inventoryItem[i].id == item.id) 
             {
-                if (inventoryItem[i].quantity == inventoryItem[i].maxQuantityOnInventory)
+                //jika item nya sudah max
+                if (inventoryItem[i].quantity == inventoryItem[i].maxQuantityOnInventory) 
                 {
                     Debug.Log("Max quantity of " + item.itemName + " = " + inventoryItem[i].quantity + ".");
-                    return;
+                    return false;
                 }
-                //jika item tersebut sudah ada dan kuantiti != maxkuantiti di inven, kuantiti ditambah
-                inventoryItem[i].quantity++;
+                //item dijadiin exist supaya ga run function yang dibawah
                 itemExist = true;
+                //kuantiti ditambah
+                inventoryItem[i].quantity++;
                 //cek item tersebut ke quest yang exist
-                CheckNewItem(inventoryItem[i]);
+                CheckNewItem(inventoryItem[i]); 
                 break;
             }
         }
 
         if (itemExist == false)
         {
-            bool thereIsSpace = false;
+            //check apakah inventory masih cukup untuk tambah item baru
+            bool thereIsSpace = false; 
             for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
             {
+                // jika ada slot yang kosong
                 if (Inventory.instance.inventoryIndicator[i].item == null)
                 {
                     thereIsSpace = true;
                     break;
                 }
             }
-            if (!thereIsSpace)
+            //jika tidak ada slot
+            if (!thereIsSpace) 
             {
-                Debug.Log("item full");
-                return;
+                UIManager.instance.warningNotification(null, WarningState.inventoryFull);
+                Debug.Log("item space is full");
+                return false;
             }
 
             //item baru ditambah kedalam list player
-            Item newItem = new Item(item.id, item.itemImage, item.itemName, item.description, item.maxQuantityOnInventory, item.price,
-                item.isUsable, item.isConsumable, item.isASingleTool, item.itemType);
-            if (item.itemType != null)
-                if (item.itemType.ToLower().Equals("seed".ToLower()))
-                    newItem.plantID = item.plantID;
+            Item newItem = ScriptableObject.CreateInstance<Item>();
+            newItem.Duplicate(item);
 
             inventoryItem.Add(newItem);
             //cek item tersebut ke quest yang exist
@@ -255,8 +234,13 @@ public class PlayerData : MonoBehaviour {
         //item tersebut di refresh kedalam inventory
         //Debug.Log(item.name + " , total = " + inventoryItem.Count);
         Inventory.instance.RefreshInventory();
+        return true;
     }
 
+    /// <summary>
+    /// function untuk add item ke item box
+    /// </summary>
+    /// <param name="item">item yang ditambah</param>
     public void AddItemToBox(Item item)
     {
         bool itemExist = false;
@@ -275,11 +259,8 @@ public class PlayerData : MonoBehaviour {
         if (itemExist == false)
         {
             //item baru ditambah kedalam list player
-            Item newItem = new Item(item.id, item.itemImage, item.itemName, item.description, item.maxQuantityOnInventory, item.price,
-                item.isUsable, item.isConsumable, item.isASingleTool, item.itemType);
-            if (item.itemType != null)
-                if (item.itemType.ToLower().Equals("seed".ToLower()))
-                    newItem.plantID = item.plantID;
+            Item newItem = ScriptableObject.CreateInstance<Item>();
+            newItem.Duplicate(item);
 
             inventoryBoxItem.Add(newItem);
         }
@@ -288,6 +269,10 @@ public class PlayerData : MonoBehaviour {
         InventoryBox.instance.RefreshInventoryBox();
     }
 
+    /// <summary>
+    /// check item baru apakah dia berhubungan dengan quest yang ada
+    /// </summary>
+    /// <param name="addedItem"></param>
     public void CheckNewItem(Item addedItem)
     {
         for (int i = 0; i < collectionQuest.Count; i++)
@@ -305,11 +290,17 @@ public class PlayerData : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// function untuk memasukkan quest yang sudah selesai
+    /// </summary>
+    /// <param name="cqc"></param>
     public void AddCollectionQuestComplete(CollectionQuest cqc)
     {
         RemoveQuestList(cqc);
         collectionQuest.Remove(cqc);
         bool colQuestExist = false;
+
+        //karena diperkirakan akan ada repeatable quest
         for (int k = 0; k < collectionQuestComplete.Count; k++)
         {
             //jika quest yang sudah selesai, sudah ada di dalam koleksi quest yang sudah selesai, tidak dimasukkan
@@ -328,6 +319,23 @@ public class PlayerData : MonoBehaviour {
             collectionQuestComplete.Add(newQuestCom);
             //AddCompleteQuestList(newQuestCom);
             Debug.Log("Collection Quest Complete : " + collectionQuestComplete.Count);
+        }
+    }
+
+    /// <summary>
+    /// remove quest yang sudah selesai dari ui
+    /// </summary>
+    /// <param name="cq"></param>
+    public void RemoveQuestList(CollectionQuest cq)
+    {
+        for (int i = 0; i < Quest.instance.questContent.transform.childCount; i++)
+        {
+            if (Quest.instance.questContent.transform.GetChild(i).GetComponent<QuestIndicator>().questID == cq.id)
+            {
+                Destroy(Quest.instance.questContent.transform.GetChild(i).gameObject);
+                Quest.instance.RefreshQuestDetail(cq.id);
+                break;
+            }
         }
     }
 }
