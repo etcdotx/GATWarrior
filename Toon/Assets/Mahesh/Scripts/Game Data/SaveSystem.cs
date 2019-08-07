@@ -4,10 +4,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem {
 
+    /// <summary>
+    /// function untuk save data
+    /// </summary>
+    /// <param name="saveSlotNumber">untuk penamaan slot file</param>
     public static void SavePlayer(string saveSlotNumber) {
         try
         {
             BinaryFormatter formatter = new BinaryFormatter();
+            //nama file yang dibuat
             string path = Application.persistentDataPath + "/player" + saveSlotNumber + ".savegame";
             FileStream stream = File.Create(path);
             Debug.Log(path);
@@ -22,6 +27,11 @@ public static class SaveSystem {
         }
     }
     
+    /// <summary>
+    /// function untuk load data
+    /// </summary>
+    /// <param name="saveSlotNumber">untuk pilih nama savefilenya(load slotnya)</param>
+    /// <returns></returns>
     public static PlayerSaveData LoadPlayer(string saveSlotNumber)
     {
         string path = Application.persistentDataPath + "/player"+ saveSlotNumber + ".savegame";
@@ -30,7 +40,6 @@ public static class SaveSystem {
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
-
             PlayerSaveData data = formatter.Deserialize(stream) as PlayerSaveData;
 
             return data;
@@ -42,6 +51,10 @@ public static class SaveSystem {
         }
     }
 
+    /// <summary>
+    /// function untuk delete data
+    /// </summary>
+    /// <param name="saveSlotNumber">untuk pilih nomor savean yang ingin di delete</param>
     public static void DeletePlayer(string saveSlotNumber)
     {
         string path = Application.persistentDataPath + "/player" + saveSlotNumber + ".savegame";

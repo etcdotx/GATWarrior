@@ -239,7 +239,7 @@ public class CharacterInput : MonoBehaviour
         selectedItem.Use();
         for (int i = 0; i < Inventory.instance.inventoryIndicator.Length; i++)
         {
-            Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().RefreshInventory();
+            Inventory.instance.inventoryIndicator[i].GetComponent<InventoryIndicator>().Refresh();
         }
         Inventory.instance.RefreshInventory();
     }

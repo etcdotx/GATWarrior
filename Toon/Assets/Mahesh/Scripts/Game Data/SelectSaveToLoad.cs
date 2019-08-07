@@ -6,9 +6,7 @@ public class SelectSaveToLoad : MonoBehaviour
 {
     MainMenuScript mms;
 
-    /// <summary>
-    /// dipakai dibutton untuk select file yang mau di load
-    /// </summary>
+    [Header("Nomor untuk save yang ingin di load")]
     public int x;
 
     private void Start()
@@ -16,6 +14,9 @@ public class SelectSaveToLoad : MonoBehaviour
         mms = GameObject.Find("MainMenuScript").GetComponent<MainMenuScript>();
     }
 
+    /// <summary>
+    /// dipakai dibutton untuk select file yang mau di load
+    /// </summary>
     public void LoadGame() {
         mms.SaveSlot(x);
     }

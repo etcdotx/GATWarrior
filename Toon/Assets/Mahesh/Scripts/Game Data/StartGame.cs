@@ -5,13 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
-    public GameObject character;
+    //untuk nama spawn locationnya ketika player di spawn
+    string selectSpawnLocationName;
 
-    public string selectSpawnLocationName;
-    public Vector3 characterScale;
-    public static string curScene;
-    public static string newScene;
+    /// <summary>
+    /// nentuin spawn position ketika pindah scene
+    /// dengan cara mengetahui sumber scene sebelumnya dan scene selanjutnya
+    /// 
+    /// harusnya bisa diganti dengan method loadscene dengan membawa position (not implemented)
+    /// </summary>
+    static string curScene;
+    static string newScene;
 
+    /// <summary>
+    /// set nama-nama string sesuai dengan nama scene
+    /// </summary>
     [Header("Scene Name")]
     public string Rumah;
     public string HutanAman;
@@ -26,7 +34,7 @@ public class StartGame : MonoBehaviour
         CheckScene();
 
         //DEVELOPERMODE
-        if (PlayerData.instance.DEVELOPERMODE == true)
+        if (GameDataBase.instance.DEBUGMODE == true)
         {
             GameDataBase.instance.saveSlot = 0;
         }
@@ -35,6 +43,9 @@ public class StartGame : MonoBehaviour
             PlayerData.instance.LoadPlayer(selectSpawnLocationName);
     }
 
+    /// <summary>
+    /// function untuk check kalau pindah scene dan nentuin spawn posnya
+    /// </summary>
     void CheckScene()
     {
         if (curScene == null)

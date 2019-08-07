@@ -94,9 +94,8 @@ MonoBehaviour:
   itemID: 0
   item: {fileID: 0}
   itemImage: {fileID: 235932343551062925}
-  text: {fileID: 235932343566939600}
+  quantityText: {fileID: 235932343566939600}
   isSelected: 0
-  marked: 0
   markIndicator: {fileID: 6979918313499053908}
 --- !u!114 &4248839661781681035
 MonoBehaviour:

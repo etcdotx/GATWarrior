@@ -6,12 +6,21 @@ using UnityEngine.UI;
 
 public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDeselectHandler
 {
+    //item id untuk ngerefresh indicatornya
     public int itemID;
+
+    /// <summary>
+    /// untuk swap indicator
+    /// untuk ngelihat detail item
+    /// </summary>
     public Item item;
+    //untuk gambar di indicator, public untuk drag n drop
     public Image itemImage;
-    public Text text;
+    //quantity text, public untuk drag n drop
+    public Text quantityText;
+    //kondisi jika sedang selected
     public bool isSelected;
-    public bool marked;
+    //dipake kalau sedang di submit (ingin di swap), public untuk drag n drop
     public GameObject markIndicator;
 
     private void Start()
@@ -22,6 +31,7 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
 
     private void Update()
     {
+        //jika sedang dipilih indicatornya
         if (isSelected)
         {
             if (!InventoryBox.instance.isSwapping && !Inventory.instance.isSwapping)
@@ -35,7 +45,11 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
         }
     }
 
-    public void RefreshInventory()
+    /// <summary>
+    /// function yang dipanggil saat inventorybox sedang di refresh
+    /// untuk merefresh setiap indicatornya
+    /// </summary>
+    public void Refresh()
     {
         if (item != null)
         {
@@ -48,11 +62,11 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
             else
             {
                 itemImage.overrideSprite = item.itemImage;
-                text.text = item.quantity.ToString();
-                text.gameObject.SetActive(true);
+                quantityText.text = item.quantity.ToString();
+                quantityText.gameObject.SetActive(true);
                 if (item.isASingleTool)
                 {
-                    text.gameObject.SetActive(false);
+                    quantityText.gameObject.SetActive(false);
                 }
             }
         }
@@ -62,17 +76,22 @@ public class InventoryIndicator : MonoBehaviour, ISelectHandler, ICancelHandler,
         }
     }
 
+    /// <summary>
+    /// function untuk kosongin indicator jika quantity 0 atau tidak ada itemnya
+    /// </summary>
     public void MakeEmpty()
     {
-        try {
+        //trycatch jika masih ada itemnya namun quantity 0
+        try
+        {
             Debug.Log(item.itemName + " removed");
         } catch { }
         PlayerData.instance.inventoryItem.Remove(item);
         item = null;
         itemID = 0;
         itemImage.overrideSprite = null;
-        text.text = 0.ToString();
-        text.gameObject.SetActive(false);
+        quantityText.text = 0.ToString();
+        quantityText.gameObject.SetActive(false);
     }
 
     public void OnCancel(BaseEventData eventData)

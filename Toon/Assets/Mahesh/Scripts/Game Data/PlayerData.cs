@@ -26,10 +26,9 @@ public class PlayerData : MonoBehaviour {
     [Header("Player State")]
     //ketika player darahnya habis
     public bool stateHpNotMax; 
-
-    [Header("FOR DEVELOPMENT")]
-    public bool DEVELOPERMODE;
-    public bool dontloadCharacter;
+    
+    //DEBUGMODE
+    bool dontloadCharacter;
 
     //item yang ingin dikasih ke inventory pada awal game
     public List<Item> itemToAdd = new List<Item>();
@@ -46,11 +45,9 @@ public class PlayerData : MonoBehaviour {
 
     void Start()
     {
-        //DEVELOPERMODE
-        if (DEVELOPERMODE == true)
+        if (GameDataBase.instance.DEBUGMODE)
         {
-            GameDataBase.instance.saveSlot = 0;
-            GameDataBase.instance.newGame = false;
+            dontloadCharacter = true;
         }
 
         if (GameDataBase.instance.newGame)

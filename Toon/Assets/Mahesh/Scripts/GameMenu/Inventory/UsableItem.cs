@@ -5,24 +5,34 @@ using UnityEngine;
 public class UsableItem : MonoBehaviour
 {
     public static UsableItem instance;
-    public Animator animator;
 
-    public GameObject player;
+    Animator animator;
+    GameObject player;
 
     [Header("Indicator")]
+    //untuk di setactive true/false
     public GameObject usableItemView;
-    public GameObject usableItemViewPort;
-    public GameObject usableItemContent;
 
-    [Header("Container")]
-    public GameObject[] usableIndicator = new GameObject[3];
-
-    [Header("Data")]
-    public List<Item> usableItemList = new List<Item>();
-    public Item selectedItem;
-    public bool isItemUsable;
+    /// <summary>
+    /// viewport dan itemnya
+    /// </summary>
+    GameObject usableItemViewPort;
+    GameObject usableItemContent;
+    GameObject[] usableIndicator = new GameObject[3];
+    
+    //kondisi ketika dia sedang hold LB/L1(pilih item)
     public bool isSelectingItem;
+    
+    /// <summary>
+    /// kondisi ketika dia sedang menggunakan item
+    /// 1. dipakai ketika dia sedang pakai item lalu itemnya habis
+    /// 2. dipakai ketika refresh usableitem namun tidak sambil menggunakan item
+    /// </summary>
     public bool isUsingItem;
+
+    List<Item> usableItemList = new List<Item>();
+    Item selectedItem;
+    bool isItemUsable;
 
     private void Awake()
     {

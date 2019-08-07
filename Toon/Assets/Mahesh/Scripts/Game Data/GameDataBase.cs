@@ -7,6 +7,9 @@ using UnityEngine;
 public class GameDataBase: MonoBehaviour {
     public static GameDataBase instance;
 
+    [Header("Debug Mode")]
+    public bool DEBUGMODE;
+
     [Header("SaveSlot")]
     public MainMenuScript mms;
     public int saveSlot;
@@ -44,6 +47,12 @@ public class GameDataBase: MonoBehaviour {
 
     private void Start()
     {
+        //DEBUGMODE
+        if (DEBUGMODE == true)
+        {
+            saveSlot = 0;
+        }
+
         newGame = false;
     }
 

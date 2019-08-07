@@ -229,9 +229,7 @@ MonoBehaviour:
   itemID: 0
   item: {fileID: 0}
   itemImage: {fileID: 3906871997016516280}
-  text: {fileID: 3906871997000376549}
-  isSelected: 0
-  marked: 0
+  quantityText: {fileID: 3906871997000376549}
   markIndicator: {fileID: 6173426765024664161}
 --- !u!1 &6173426765024664161
 GameObject:

@@ -7,22 +7,44 @@ public class InventoryBox : MonoBehaviour
 {
     public static InventoryBox instance;
 
+    //item description pada menu inventory box
     public ItemDescription inventoryBoxItemDescription;
+    //indicator button guide pada menu inventory dan inventorybox
     public GameObject inventoryAndInventoryBoxButton;
 
-    [Header("UI Settings")]
+    [Header("Inventory Box Settings")]
+    //inventory box view untuk hide/show inventorybox
     public GameObject inventoryBoxView;
+    //inventorybox view port untuk tempat kumpulan inventorybox indicator
     public GameObject inventoryBoxViewPort;
+    //arraylist untuk total inventorybox indicator
     public InventoryBoxIndicator[] inventoryBoxIndicator;
+
+    /// <summary>
+    /// setelah melakukan function trade(konfirmasi kirim barang) atau function yang nantinya akan dibuat ...
+    /// ... maka pointer yang ditunjuk adalah item yang barusan ditrade
+    /// </summary>
     public GameObject lastSelectedInventory;
 
-    //swap
-    public InventoryBoxIndicator invenSwap1;
-    public InventoryBoxIndicator invenSwap2;
-    public Item itemSwap1;
-    public Item itemSwap2;
+    /// <summary>
+    /// untuk tukar menukar barang pada inventory view port
+    /// </summary>
+    InventoryBoxIndicator invenSwap1;
+    InventoryBoxIndicator invenSwap2;
+    Item itemSwap1;
+    Item itemSwap2;
 
+    /// <summary>
+    /// kondisi jika sedang swapping inventonrybox
+    /// jadi jika lagi swapping pada inventoryinventorybox, lalu mencet tombol back ...
+    /// ... maka di cancel swap dulu, baru di exit
+    /// </summary>
     public bool isSwapping;
+
+    /// <summary>
+    /// dipakai pada funtion onselect di inventorybox indicator
+    /// menyatakan bahwa item yang sedang diselect adalah item tersebut
+    /// </summary>
     public Item temporaryItem;
 
     private void Awake()
@@ -53,6 +75,10 @@ public class InventoryBox : MonoBehaviour
         RefreshInventoryBox();
     }
 
+    /// <summary>
+    /// function untuk select indicator pertama kali
+    /// </summary>
+    /// <param name="inventoryBoxIndicator">indicator pertama yang dipilih</param>
     public void Select1stItem(InventoryBoxIndicator inventoryBoxIndicator) {
         invenSwap1 = inventoryBoxIndicator;
         if (invenSwap1.item != null)
@@ -67,6 +93,11 @@ public class InventoryBox : MonoBehaviour
         isSwapping = true;
     }
 
+    /// <summary>
+    /// function untuk select indicator yang kedua
+    /// lalu indicator yang pertama dan kedua di swap
+    /// </summary>
+    /// <param name="inventoryBoxIndicator2">indicator kedua yang dipilih</param>
     public void Select2ndItem(InventoryBoxIndicator inventoryBoxIndicator2) {
         invenSwap2 = inventoryBoxIndicator2;
         if (invenSwap2.item != null)
@@ -82,6 +113,10 @@ public class InventoryBox : MonoBehaviour
         RefreshInventoryBox();
     }
 
+    /// <summary>
+    /// function swap
+    /// dilakukan setelah function Select1stItem dan Select2ndItem
+    /// </summary>
     void Swap() {
         if (itemSwap1 != null && itemSwap2 != null)
         {
@@ -100,6 +135,9 @@ public class InventoryBox : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function ketika tidak jadi swap
+    /// </summary>
     public void CancelSwap()
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
@@ -107,6 +145,10 @@ public class InventoryBox : MonoBehaviour
         invenSwap1.markIndicator.SetActive(false);
     }
 
+    /// <summary>
+    /// function untuk mereset tradeindicator (kirim ke inventory)
+    /// kalau dari inventory box ke inventory harus di cek dulu apakah inventory muat
+    /// </summary>
     public void SetInitialQuantityToPut()
     {
         if (temporaryItem != null)
@@ -160,6 +202,11 @@ public class InventoryBox : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function untuk inventory menaruh ke inventory box
+    /// </summary>
+    /// <param name="newItem">item yang dikirim dari inventory</param>
+    /// <param name="quantity">jumlah item</param>
     public void PlaceItem(Item newItem, int quantity)
     {
         bool isItemExist = false;
@@ -198,6 +245,9 @@ public class InventoryBox : MonoBehaviour
         RefreshInventoryBox();
     }
 
+    /// <summary>
+    /// untuk merefresh inventory box ketika ada perubahan item dll
+    /// </summary>
     public void RefreshInventoryBox()
     {
         for (int i = 0; i < inventoryBoxIndicator.Length; i++)
@@ -212,6 +262,8 @@ public class InventoryBox : MonoBehaviour
                         {
                             inventoryBoxIndicator[i].item = PlayerData.instance.inventoryBoxItem[j];
                             inventoryBoxIndicator[i].itemID = PlayerData.instance.inventoryBoxItem[j].id;
+
+                            //ditandai jika dia sudah ditaro
                             PlayerData.instance.inventoryBoxItem[j].isOnInventoryBox = true;
                             break;
                         }
@@ -222,7 +274,7 @@ public class InventoryBox : MonoBehaviour
                     //Debug.Log("There is no item in " + i + " inventory box.");
                 }
             }
-            inventoryBoxIndicator[i].RefreshInventoryBox();
+            inventoryBoxIndicator[i].Refresh();
         }
         UsableItem.instance.GetUsableItem();
     }
