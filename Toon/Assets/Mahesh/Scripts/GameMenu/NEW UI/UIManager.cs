@@ -67,6 +67,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// kondisi yang berhubungan dengan
+    /// 1. ketika sedang state tersebut
+    /// 2. ketika baru masuk state tersebut
+    /// 3. ketika keluar dari state tersebut
+    /// </summary>
+
     #region START GAME
     //GAMEPLAY STATE
     void StartGamePlayState()
@@ -206,6 +213,12 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
+    /// <summary>
+    /// function perpindahan state
+    /// </summary>
+    /// <param name="nextState">state selanjutnya</param>
+    /// <returns></returns>
     public IEnumerator ChangeState(UIState nextState)
     {
         switch (uiState) {
@@ -249,18 +262,33 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function yang membuat karakter diam tergantung dengan state jika dibutuhkan
+    /// </summary>
     void StopMovement()
     {
         CharacterInput.instance.animator.SetFloat("floatX", 0);
         CharacterInput.instance.animator.SetFloat("floatY", 0);
     }
 
-    public void warningNotification(string itemName, WarningState warningState) {
-        StopCoroutine("showNotif");
-        StartCoroutine(showNotif(itemName, warningState));
+    /// <summary>
+    /// function untuk menunjukkan warning di game
+    /// </summary>
+    /// <param name="itemName">item yang berkaitan</param>
+    /// <param name="warningState">kondisi warning</param>
+    public void WarningNotification(string itemName, WarningState warningState) {
+        StopCoroutine("ShowNotif");
+        StartCoroutine(ShowNotif(itemName, warningState));
     }
 
-    public IEnumerator showNotif(string itemName, WarningState warningState)
+    /// <summary>
+    /// ienumerator lanjutan dari warningnotif
+    /// akan automatis hilang tergantung durasi
+    /// </summary>
+    /// <param name="itemName">item yang berkaitan</param>
+    /// <param name="warningState">kondisi warning</param>
+    /// <returns></returns>
+    IEnumerator ShowNotif(string itemName, WarningState warningState)
     {
         if (warningState == WarningState.itemFull)
         {

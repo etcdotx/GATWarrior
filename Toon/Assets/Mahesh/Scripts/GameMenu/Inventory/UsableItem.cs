@@ -69,11 +69,13 @@ public class UsableItem : MonoBehaviour
             {
                 SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
                 SlideItem(true);
+                SelectItem();
             }
             if (Input.GetKeyDown(KeyCode.Joystick1Button2))
             {
                 SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
                 SlideItem(false);
+                SelectItem();
             }
         }
         if (Input.GetKeyUp(KeyCode.Joystick1Button4))
@@ -91,13 +93,22 @@ public class UsableItem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function untuk gunain item
+    /// </summary>
     public void UseItem()
     {
         isUsingItem = true;
         CharacterInput.instance.selectedItem = selectedItem;
-        animator.SetTrigger("drink"); //trigger make item di animator masuk ke charinput useitem
+
+        //trigger make item di animator masuk ke charinput useitem
+        animator.SetTrigger("drink");
     }
 
+    /// <summary>
+    /// function untuk slide item
+    /// </summary>
+    /// <param name="isRight">true = geser ke kanan</param>
     public void SlideItem(bool isRight)
     {
         for (int i = 0; i < usableIndicator.Length; i++)
@@ -128,9 +139,11 @@ public class UsableItem : MonoBehaviour
                 }
             }
         }
-        SelectItem();
     }
 
+    /// <summary>
+    /// setelah slide, maka item tersebut akan di select
+    /// </summary>
     void SelectItem()
     {
         if (usableItemList.Count > 0)
@@ -140,13 +153,18 @@ public class UsableItem : MonoBehaviour
         }
     }
     
-    //function ini dipanggil saat nge slide item dan juga jika ada trigger
-    //misalnya saat memegang plant dekat dengan soil
+    /// <summary>
+    /// function ini dipanggil saat nge slide usableitem dan juga jika ada trigger
+    /// misalnya saat memegang tool dekat dengan soilt
+    /// </summary>
     public void CheckIfItemIsUsable()
     {
         isItemUsable = selectedItem.IsItemUsable();
     }
 
+    /// <summary>
+    /// function untuk mengambil usable item dari inventory
+    /// </summary>
     public void GetUsableItem()
     {
         //is using item true kalo lagi make item, akan false kalo item yang dipake abis --> ada di inventoryindicator refreshinventory

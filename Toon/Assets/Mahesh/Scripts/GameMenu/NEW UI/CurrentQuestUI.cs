@@ -6,9 +6,13 @@ using TMPro;
 public class CurrentQuestUI : MonoBehaviour
 {
     public static CurrentQuestUI instance;
+    //prefab current quest yang akan di spawn
     public GameObject currentQuestPrefab;
+    //panel tempat kumpulan prefab
     public Transform currentQuestPanel;
+    //list prefab yang sudah dispawn
     public List<GameObject> currentQuest = new List<GameObject>();
+
     private void Awake()
     {
         if (instance != null)
@@ -17,6 +21,9 @@ public class CurrentQuestUI : MonoBehaviour
             instance = this;
     }
 
+    /// <summary>
+    /// function yang dipanggil ketika ada quest baru atau ada progress baru dari quest
+    /// </summary>
     public void Refresh() {
         foreach (GameObject g in currentQuest)
             Destroy(g);

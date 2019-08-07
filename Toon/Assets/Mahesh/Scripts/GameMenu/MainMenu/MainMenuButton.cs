@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// class untuk main menu button
+/// start / quit / credit
+/// </summary>
 public class MainMenuButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler
 {
     public ButtonName buttonName;
@@ -11,17 +15,10 @@ public class MainMenuButton : MonoBehaviour, ISelectHandler, IDeselectHandler, I
     public enum ButtonName {
         startgame, exitgame
     }
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         selectIndicator.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnSelect(BaseEventData eventData)

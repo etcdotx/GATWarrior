@@ -214,7 +214,7 @@ public class PlayerData : MonoBehaviour {
             //jika tidak ada slot
             if (!thereIsSpace) 
             {
-                UIManager.instance.warningNotification(null, WarningState.inventoryFull);
+                UIManager.instance.WarningNotification(null, WarningState.inventoryFull);
                 Debug.Log("item space is full");
                 return false;
             }

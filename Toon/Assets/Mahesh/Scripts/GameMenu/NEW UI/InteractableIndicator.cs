@@ -20,7 +20,8 @@ public class InteractableIndicator : MonoBehaviour
     }
 
     /// <summary>
-    /// dipanggil dari button gameobject
+    /// dipanggil dari button gameobject ketika suatu object memeliki script interactable ...
+    /// ... dan terkena raycast dari player
     /// </summary>
     public void Interact()
     {

@@ -18,6 +18,6 @@ public class SelectSaveToLoad : MonoBehaviour
     /// dipakai dibutton untuk select file yang mau di load
     /// </summary>
     public void LoadGame() {
-        mms.SaveSlot(x);
+        mms.LoadSlot(x);
     }
 }

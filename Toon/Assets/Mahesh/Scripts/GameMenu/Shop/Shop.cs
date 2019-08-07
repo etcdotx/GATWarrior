@@ -64,7 +64,7 @@ public class Shop : MonoBehaviour
             {
                 if (PlayerData.instance.inventoryItem[i].quantity >= PlayerData.instance.inventoryItem[i].maxQuantityOnInventory)
                 {
-                    UIManager.instance.warningNotification(shopIndicator.item.itemName, WarningState.itemFull);
+                    UIManager.instance.WarningNotification(shopIndicator.item.itemName, WarningState.itemFull);
                     Debug.Log("item full");
                     return;
                 }
@@ -83,7 +83,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            UIManager.instance.warningNotification(shopIndicator.item.itemName, WarningState.notEnoughMoney);
+            UIManager.instance.WarningNotification(shopIndicator.item.itemName, WarningState.notEnoughMoney);
             Debug.Log("not enough money");
         }
     }
@@ -98,7 +98,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            UIManager.instance.warningNotification(shopIndicator.item.itemName, WarningState.notEnoughMoney);
+            UIManager.instance.WarningNotification(shopIndicator.item.itemName, WarningState.notEnoughMoney);
             Debug.Log("not enough money");
         }
     }

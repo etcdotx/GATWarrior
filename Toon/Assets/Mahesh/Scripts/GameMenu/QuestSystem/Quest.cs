@@ -9,20 +9,29 @@ public class Quest : MonoBehaviour
     public static Quest instance;
 
     [Header("QuestDataBase")]
+    //quest active, yaitu yang bisa diambil / sedang dikerjakan
     public List<CollectionQuest> collectionQuestActive = new List<CollectionQuest>();
+    
+    // npc yang ada ketika saat menjalankan function activate quest
     public GameObject[] npcAvailable;
 
     [Header("Quest Menu Settings")]
+    //gameobject yang dipakai untuk show/.hide questnya
     public GameObject questView;
+    //tempat dari list quest yang ada
     public GameObject questContent;
-    //public GameObject questCompleteContent;
+    //untuk scrollquest ketika sedang menselect quest indicator
     public Scrollbar questViewScrollbar;
 
     [Header("Quest Detail")]
+    //prefab dari quest yang akan di spawn
     public GameObject questListPrefab;
-    public GameObject questDetail;
-    public TextMeshProUGUI questDescription;
-    public TextMeshProUGUI questObjective;
+    //game object yang berisi detail dari quest
+    GameObject questDetail;
+    //text deskripsi dari quest
+    TextMeshProUGUI questDescription;
+    //text tentang objective dari quest
+    TextMeshProUGUI questObjective;
 
     private void Awake()
     {
@@ -51,6 +60,10 @@ public class Quest : MonoBehaviour
         ActivateQuest();
     }
 
+    /// <summary>
+    /// quest untuk mengaktifkan activecollectionquest ke npc agar bisa diambil oleh player
+    /// dipanggil pada saat quest sudah selesai, sehingga muncul quest baru
+    /// </summary>
     public void ActivateQuest()
     {
         npcAvailable = GameObject.FindGameObjectsWithTag("NPC");
@@ -75,6 +88,10 @@ public class Quest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function untuk merefresh quest detail sesuai dengan quest indicator yang dipilih
+    /// </summary>
+    /// <param name="questID">id dari quest</param>
     public void RefreshQuestDetail(int questID)
     {
         questDescription.text = "";

@@ -31,6 +31,10 @@ public class BuySlider : MonoBehaviour, ISubmitHandler, ICancelHandler
         UIManager.instance.eventSystem.SetSelectedGameObject(Shop.instance.lastSelected);
     }
 
+    /// <summary>
+    /// dipanggil dari button on value changed, yaitu ketika value pada slider berubah
+    /// quantity -> quantity slider
+    /// </summary>
     public void RefreshDetail()
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);

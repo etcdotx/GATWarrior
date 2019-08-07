@@ -97,6 +97,7 @@ public class Conversation : MonoBehaviour
         CancelTalk();
         Shop.instance.OpenShop(target);
     }
+
     public void SelectQuestOption(CollectionQuest dialogueQuest) {
         CheckQuest(dialogueQuest);
         StartSelectedDialogue();

@@ -9,14 +9,16 @@ using TMPro;
 public class MainMenuScript : MonoBehaviour {
 
     public static MainMenuScript instance;
-    public Transform ddolGamePrefab;
 
     [Header("Save System")]
+    //text yang nanti akan tampil ketika sedang select save data
     public TextMeshProUGUI[] saveSlotText;
 
     [Header("Scene Name")]
+    //scene selanjutnya setelah loadgame
     public string gameScene;
 
+    //public karena drag n drop
     public EventSystem eventSystem;
     public GameObject firstSelectedLoadGame;
 
@@ -35,8 +37,7 @@ public class MainMenuScript : MonoBehaviour {
         else
             instance = this;
     }
-
-    // Use this for initialization
+    
     void Start()
     {
         backGroundLerping = false;
@@ -44,6 +45,7 @@ public class MainMenuScript : MonoBehaviour {
 
     private void Update()
     {
+        //perpindahan background dengan lerping
         if (backGroundLerping)
         {
             background.anchoredPosition = Vector3.Lerp(background.anchoredPosition, targetVector, Time.deltaTime * lerpingSpeed);
@@ -55,7 +57,11 @@ public class MainMenuScript : MonoBehaviour {
         }
     }
 
-    public void SaveSlot(int x)
+    /// <summary>
+    /// pilih saveslotnya
+    /// </summary>
+    /// <param name="x"></param>
+    public void LoadSlot(int x)
     {
         GameDataBase.instance.saveSlot = x;
         //Instantiate(ddolGamePrefab);
@@ -71,6 +77,10 @@ public class MainMenuScript : MonoBehaviour {
         StartCoroutine(LoadScene(gameScene));
     }
 
+    /// <summary>
+    /// function untuk delete save
+    /// </summary>
+    /// <param name="x">nomor slot savenya</param>
     public void DeleteSlot(int x)
     {
         SaveSystem.DeletePlayer(x.ToString());
@@ -79,6 +89,10 @@ public class MainMenuScript : MonoBehaviour {
         Debug.Log("Delete successful");
     }
 
+    /// <summary>
+    /// transisi di mainmenu
+    /// </summary>
+    /// <param name="isUp">isup = true masuk ke menu save data</param>
     public void MoveBackground(bool isUp) {
         if (isUp)
         {
@@ -93,6 +107,11 @@ public class MainMenuScript : MonoBehaviour {
         backGroundLerping = true;
     }
 
+    /// <summary>
+    /// loading screen
+    /// </summary>
+    /// <param name="sceneName">scene yang di load</param>
+    /// <returns></returns>
     public IEnumerator LoadScene(string sceneName)
     {
         LoadingScreen.instance.loadingImage.gameObject.SetActive(true);

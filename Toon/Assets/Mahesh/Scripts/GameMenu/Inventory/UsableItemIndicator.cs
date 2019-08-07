@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class UsableItemIndicator : MonoBehaviour
 {
+    //item pada usable item
     public Item item;
-    public int itemID;
-    public bool isSelected;
+    //image pada indicator
     public Image itemImage;
 
+    /// <summary>
+    /// function untuk refresh image ketika sedang milih usable item
+    /// </summary>
     public void RefreshUsableItem()
     {
         if (item == null)
