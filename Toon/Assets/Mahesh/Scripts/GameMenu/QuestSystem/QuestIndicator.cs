@@ -12,7 +12,7 @@ public class QuestIndicator : MonoBehaviour, ISelectHandler, ICancelHandler, IDe
     public float itemTotal;
     public GameObject markIndicator;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         itemTotal = transform.parent.childCount;

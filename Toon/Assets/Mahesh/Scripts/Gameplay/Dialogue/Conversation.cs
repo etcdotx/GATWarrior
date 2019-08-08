@@ -7,12 +7,15 @@ using TMPro;
 public class Conversation : MonoBehaviour
 {
     public static Conversation instance;
-
-    [Header("Util")]
-    public NPC target;
-    public Dialogue dialogue;
-    public Dialogue npcDialog;
-    public int dialNum;
+    
+    //dialogue yang muncul
+    Dialogue curDialogue;
+    //dialogue dari npc
+    Dialogue npcDialog;
+    //nomor dari dialogue yang dipilih (karena dialogue berbentuk array)
+    int dialNum;
+    //npc atau object yang sedang diajak conversation
+    NPC target;
 
     [Header("UI")]
     public GameObject dialogueOptionPrefab;
@@ -47,19 +50,30 @@ public class Conversation : MonoBehaviour
         conversationButton.interactable = false;
     }
 
+    /// <summary>
+    /// function untuk melanjutkan text yang muncul
+    /// </summary>
     public void ContinueTalking()
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
         NextDialogue();
-        if (dialogue != null)
+        if (curDialogue != null)
         {
-            if (dialNum == dialogue.dialogue.Length - 1)
+            if (dialNum == curDialogue.dialogue.Length - 1)
                 conversationButtonText.text = "End";
-            else if (dialNum < dialogue.dialogue.Length - 1)
+            else if (dialNum < curDialogue.dialogue.Length - 1)
                 conversationButtonText.text = "Continue";
         }
     }
 
+    /// <summary>
+    /// function untuk memulai percakapan
+    /// </summary>
+    /// <param name="target">target yang diajak ngomong</param>
+    /// <param name="cqList">quest jika dia punya</param>
+    /// <param name="npcDialog">dialog pasti dari npc tersebut</param>
+    /// <param name="optionDialog">dialog pertanyaan dia jika ada option</param>
+    /// <param name="haveDialogOption">jika dia punya opsi dialogue</param>
     public void StartNewDialogue(NPC target, List<CollectionQuest> cqList, Dialogue npcDialog, string optionDialog, bool haveDialogOption)
     {
         this.target = target;
@@ -74,45 +88,63 @@ public class Conversation : MonoBehaviour
         }
         else
         {
-            dialogue = this.npcDialog;
+            curDialogue = this.npcDialog;
             conversationText.text = npcDialog.dialogue[dialNum];
             conversationButton.gameObject.SetActive(true);
-            if (dialNum == dialogue.dialogue.Length - 1)
+            if (dialNum == curDialogue.dialogue.Length - 1)
                 conversationButtonText.text = "End";
-            else if (dialNum < dialogue.dialogue.Length - 1)
+            else if (dialNum < curDialogue.dialogue.Length - 1)
                 conversationButtonText.text = "Continue";
             conversationButton.interactable = true;
             UIManager.instance.eventSystem.SetSelectedGameObject(Conversation.instance.conversationButton.gameObject);
         }
     }
 
+    /// <summary>
+    /// function untuk memilih opsi dialogue
+    /// </summary>
     public void SelectTalkOption() {
-        dialogue = this.npcDialog;
-        conversationText.text = dialogue.dialogue[dialNum];
+        curDialogue = this.npcDialog;
+        conversationText.text = curDialogue.dialogue[dialNum];
         StartSelectedDialogue();
     }
 
+    /// <summary>
+    /// function untuk memilih opsi shop
+    /// </summary>
     public void SelectShopOption()
     {
         CancelTalk();
         Shop.instance.OpenShop(target);
     }
 
+    /// <summary>
+    /// function untuk memilih opsi berjenis quest
+    /// </summary>
+    /// <param name="dialogueQuest">quest yang dipilih</param>
     public void SelectQuestOption(CollectionQuest dialogueQuest) {
         CheckQuest(dialogueQuest);
         StartSelectedDialogue();
     }
 
+    /// <summary>
+    /// function ketika sudah memilih opsi yang memunculkan dialogue
+    /// </summary>
     void StartSelectedDialogue()
     {
         dialogueOptionView.SetActive(false);
 
-        if (dialNum == dialogue.dialogue.Length - 1)
+        if (dialNum == curDialogue.dialogue.Length - 1)
             conversationButtonText.text = "End";
-        else if (dialNum < dialogue.dialogue.Length - 1)
+        else if (dialNum < curDialogue.dialogue.Length - 1)
             conversationButtonText.text = "Continue";
     }
 
+    /// <summary>
+    /// lanjutan dari selectquestoption
+    /// function untuk ngecheck quest yang dipilih
+    /// </summary>
+    /// <param name="dialogueQuest">quest yang dipilih</param>
     void CheckQuest(CollectionQuest dialogueQuest)
     {
         bool checkExist = false;
@@ -130,8 +162,8 @@ public class Conversation : MonoBehaviour
                     Inventory.instance.RefreshInventory();
 
 
-                    RemoveActiveQuest(dialogueQuest);
-                    RemoveNPCQuest(dialogueQuest);
+                    RemoveCompleteQuest(dialogueQuest);
+                    RemoveQuestFromNpc(dialogueQuest);
 
                     PlayerData.instance.AddCollectionQuestComplete(PlayerData.instance.collectionQuest[j]);
                     Quest.instance.ActivateQuest();
@@ -156,11 +188,16 @@ public class Conversation : MonoBehaviour
         }
     }
 
-    void RemoveActiveQuest(CollectionQuest dialogueQuest)
+    /// <summary>
+    /// jika quest sudah selesai
+    /// maka quest akan di remove dari quest yang aktif pada instance Quest
+    /// </summary>
+    /// <param name="completeQuest">quest yang sudah selesai</param>
+    void RemoveCompleteQuest(CollectionQuest completeQuest)
     {
         for (int i = 0; i < Quest.instance.collectionQuestActive.Count; i++)
         {
-            if (Quest.instance.collectionQuestActive[i].id == dialogueQuest.id)
+            if (Quest.instance.collectionQuestActive[i].id == completeQuest.id)
             {
                 Quest.instance.collectionQuestActive.RemoveAt(i);
                 break;
@@ -168,10 +205,15 @@ public class Conversation : MonoBehaviour
         }
     }
 
-    void RemoveNPCQuest(CollectionQuest dialogueQuest) {
+    /// <summary>
+    /// jika quest sudah selesai
+    /// maka quest akan di remove dari npc
+    /// </summary>
+    /// <param name="completeQuest"></param>
+    void RemoveQuestFromNpc(CollectionQuest completeQuest) {
         for (int i = 0; i < target.activeCollectionQuest.Count; i++)
         {
-            if (target.activeCollectionQuest[i].id == dialogueQuest.id)
+            if (target.activeCollectionQuest[i].id == completeQuest.id)
             {
                 target.activeCollectionQuest.RemoveAt(i);
                 break;
@@ -179,34 +221,40 @@ public class Conversation : MonoBehaviour
         }
     }
 
-    void SetQuestDialogue(CollectionQuest dialogueQuest)
+    /// <summary>
+    /// function untuk menjadikan curDialogue menjadi start dialogue yang ada pada quest
+    /// </summary>
+    /// <param name="selectedQuest">quest yang dipilih</param>
+    void SetQuestDialogue(CollectionQuest selectedQuest)
     {
         dialogueOptionView.SetActive(false);
-        dialogue = null;
-        dialogue = dialogueQuest.startDialogue;
-        conversationText.text = dialogue.dialogue[dialNum];
+        curDialogue = null;
+        curDialogue = selectedQuest.startDialogue;
+        conversationText.text = curDialogue.dialogue[dialNum];
     }
 
-    void SetQuestCompleteDialogue(CollectionQuest dialogueQuest)
+    /// <summary>
+    /// function untuk menjadikan curDialogue menjadi end dialogue yang ada pada quest
+    /// </summary>
+    /// <param name="selectedQuest">quest yang dipilih</param>
+    void SetQuestCompleteDialogue(CollectionQuest selectedQuest)
     {
         dialogueOptionView.SetActive(false);
-        dialogue = null;
-        dialogue = dialogueQuest.endDialogue;
-        conversationText.text = dialogue.dialogue[dialNum];
+        curDialogue = null;
+        curDialogue = selectedQuest.endDialogue;
+        conversationText.text = curDialogue.dialogue[dialNum];
     }
 
-    void DestroyOption()
-    {
-        for (int i = 0; i < dialogueOptionContent.transform.childCount; i++)
-            Destroy(dialogueOptionContent.transform.GetChild(i).gameObject);
-    }
-
+    /// <summary>
+    /// function untuk nge spawn dialogue option
+    /// </summary>
+    /// <param name="cqList">quest list dari target</param>
     void InstantiateDialogueOption(List<CollectionQuest> cqList)
     {
         //for normal dialogue
         DialogueOption talkDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
         talkDialogueOption.optionText.text = "Talk";
-        talkDialogueOption.isTalk = true;
+        talkDialogueOption.dialogueType = DialogueOption.DialogueType.Talk;
         UIManager.instance.eventSystem.SetSelectedGameObject(talkDialogueOption.gameObject);
 
         //for shop
@@ -214,7 +262,7 @@ public class Conversation : MonoBehaviour
         {
             DialogueOption shopDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
             shopDialogueOption.optionText.text = "Buy";
-            shopDialogueOption.isShop = true;
+            talkDialogueOption.dialogueType = DialogueOption.DialogueType.Shop;
         }
 
         //for questdialogue
@@ -223,7 +271,7 @@ public class Conversation : MonoBehaviour
             DialogueOption newDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
             newDialogueOption.collectionQuest = cqList[i];
             newDialogueOption.optionText.text = cqList[i].title;
-            newDialogueOption.isQuest = true;
+            talkDialogueOption.dialogueType = DialogueOption.DialogueType.Quest;
             newDialogueOption.questIndicatorNew.SetActive(true);
             newDialogueOption.questIndicatorComplete.SetActive(false);
 
@@ -245,6 +293,10 @@ public class Conversation : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function untuk show ui
+    /// </summary>
+    /// <param name="haveOption">jika memiliki opsi</param>
     void ShowUI(bool haveOption)
     {
         conversationText.gameObject.SetActive(true);
@@ -255,15 +307,22 @@ public class Conversation : MonoBehaviour
             dialogueOptionView.SetActive(true);
     }
 
+    /// <summary>
+    /// funtion untuk tidak jadi berbicara
+    /// </summary>
     public void CancelTalk()
     {
         dialogueOptionView.SetActive(false);
         EndDialog();
     }
 
+    /// <summary>
+    /// lanjutan dari continuetalk()
+    /// untuk mengganti dialog
+    /// </summary>
     public void NextDialogue()
     {
-        if (dialNum == dialogue.dialogue.Length-1)
+        if (dialNum == curDialogue.dialogue.Length-1)
         {
             EndDialog();
             CurrentQuestUI.instance.Refresh();
@@ -271,21 +330,36 @@ public class Conversation : MonoBehaviour
         else
         {
             dialNum++;
-            conversationText.text = dialogue.dialogue[dialNum];
+            conversationText.text = curDialogue.dialogue[dialNum];
         }
     }
 
+    /// <summary>
+    /// function ketika dialogue sudah habis
+    /// </summary>
     public void EndDialog()
     {
-        DestroyOption();
         ClearList();
         UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Gameplay));
     }
 
+    /// <summary>
+    /// function untuk mendestroy option
+    /// </summary>
     void ClearList()
     {
         dialNum = 0;
-        dialogue = null;
+        curDialogue = null;
         DestroyOption();
+    }
+
+    /// <summary>
+    /// lanjutan dari clear list
+    /// untuk menghapus option yang ada pada ui ketika selesai berdialogue
+    /// </summary>
+    void DestroyOption()
+    {
+        for (int i = 0; i < dialogueOptionContent.transform.childCount; i++)
+            Destroy(dialogueOptionContent.transform.GetChild(i).gameObject);
     }
 }

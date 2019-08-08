@@ -5,23 +5,34 @@ using UnityEngine.EventSystems;
 
 public class DialogueOption : MonoBehaviour, ISelectHandler, ICancelHandler
 {
+    public enum DialogueType
+    {
+        Shop,Talk,Quest
+    }
+
+    //quest yang ada di dialogue
     public CollectionQuest collectionQuest;
-    public bool isShop;
-    public bool isTalk;
-    public bool isQuest;
+    //jenis dialoguenya
+    public DialogueType dialogueType;
+    //indicator quest kalau questnya belum selesai
     public GameObject questIndicatorNew;
+    //indicator quest kalau questnya sudah selesai
     public GameObject questIndicatorComplete;
+    //judul yang ada pada dialogue
     public TextMeshProUGUI optionText;
 
-    public float itemNum;
-    public float itemTotal;
+    //urutan keberapa pada hierarchy
+    float siblingIndex;
+    //ada berapa sibling dari parentnya
+    public float totalSibling;
 
     private void Start()
     {
-        itemTotal = transform.parent.childCount;
-        itemNum = transform.GetSiblingIndex();
+        totalSibling = transform.parent.childCount;
+        siblingIndex = transform.GetSiblingIndex();
     }
 
+    //kalau tidak jadi memilih option
     public void OnCancel(BaseEventData eventData)
     {
         Conversation.instance.CancelTalk();
@@ -32,17 +43,21 @@ public class DialogueOption : MonoBehaviour, ISelectHandler, ICancelHandler
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UINavClip);
 
         //set the scrollbar position by selected item
-        if (itemNum == 1)
-            itemNum = 0;
+        if (siblingIndex == 1)
+            siblingIndex = 0;
 
-        Conversation.instance.dialogueOptionScrollbar.value = 1.0f - (itemNum / itemTotal);
+        Conversation.instance.dialogueOptionScrollbar.value = 1.0f - (siblingIndex / totalSibling);
 
-        if (itemNum == transform.parent.childCount - 1)
+        if (siblingIndex == transform.parent.childCount - 1)
             Conversation.instance.dialogueOptionScrollbar.value = 0f;
-        else if (itemNum == 0)
+        else if (siblingIndex == 0)
             Conversation.instance.dialogueOptionScrollbar.value = 1.0f;
     }
 
+    /// <summary>
+    /// ada pada button
+    /// function jika opsi dipilih
+    /// </summary>
     public void SelectDialogue()
     {
         SoundList.instance.UIAudioSource.PlayOneShot(SoundList.instance.UISelectClip);
@@ -50,12 +65,11 @@ public class DialogueOption : MonoBehaviour, ISelectHandler, ICancelHandler
         Conversation.instance.conversationButton.interactable = true;
         UIManager.instance.eventSystem.SetSelectedGameObject(Conversation.instance.conversationButton.gameObject);
 
-        if (isTalk)
+        if (dialogueType == DialogueType.Talk)
             Conversation.instance.SelectTalkOption();
-        else if (isShop)
+        else if (dialogueType == DialogueType.Shop)
             Conversation.instance.SelectShopOption();
-        else if (isQuest)
+        else if (dialogueType == DialogueType.Quest)
             Conversation.instance.SelectQuestOption(collectionQuest);
-
     }
 }

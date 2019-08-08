@@ -27,6 +27,8 @@ public class Soils : MonoBehaviour
             Destroy(gameObject);
         else
             instance = this;
+
+        FindPlant();
     }
 
     private void Update()
@@ -49,7 +51,11 @@ public class Soils : MonoBehaviour
 
     }
 
-    public void FindPlant() {
+    /// <summary>
+    /// function pertamakali untuk nyari object
+    /// </summary>
+    public void FindPlant()
+    {
         plantNode = new GameObject[transform.childCount];
         plantNodeSoil = new Soil[transform.childCount];
         plantID = new int[transform.childCount];
@@ -74,6 +80,11 @@ public class Soils : MonoBehaviour
         count = 5;
     }
 
+    /// <summary>
+    /// function yang dipake ketika player menggunakan item
+    /// </summary>
+    /// <param name="soilID">soil yang di select</param>
+    /// <param name="plantID">plant id yang ditanam</param>
     public void StartPlanting(int soilID, int plantID) {
         for (int i = 0; i < plantNode.Length; i++)
         {
@@ -87,6 +98,11 @@ public class Soils : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// function supaya plantnya bisa numbuh
+    /// currently masih diupdate supaya bisa di debug
+    /// </summary>
+    /// <param name="soilID"></param>
     public void GrowPlant(int soilID) {
         for (int i = 0; i < plantNode.Length; i++)
         {
