@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public enum UIState
 {
-    Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation
+    Gameplay, InventoryAndSave, InventoryAndInventoryBox, Shop, Conversation, Timeline
 }
 
 public enum WarningState
@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
     /// 3. ketika keluar dari state tersebut
     /// </summary>
 
-    #region START GAME
+    #region Gameplay
     //GAMEPLAY STATE
     void StartGamePlayState()
     {
@@ -213,6 +213,26 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    #region Timeline
+
+    public void TimelineState() {
+
+    }
+
+    public void StartTimeLineState() {
+        Shop.instance.shopView.SetActive(false);
+        Inventory.instance.inventoryView.SetActive(false);
+        InventoryBox.instance.inventoryBoxView.SetActive(false);
+        UsableItem.instance.usableItemView.SetActive(false);
+        CurrentQuestUI.instance.currentQuestPanel.gameObject.SetActive(false);
+        Quest.instance.questView.SetActive(false);
+        PlayerStatus.instance.healthIndicator.SetActive(false);
+        CharacterInteraction.instance.isRaycasting = false;
+    }
+
+    public void ExitTimeLineState() { }
+
+    #endregion
 
     /// <summary>
     /// function perpindahan state
@@ -237,6 +257,9 @@ public class UIManager : MonoBehaviour
             case UIState.Shop:
                 ExitShopState();
                 break;
+            case UIState.Timeline:
+                ExitTimeLineState();
+                break;
         }
 
         yield return new WaitForSeconds(0f);
@@ -258,6 +281,9 @@ public class UIManager : MonoBehaviour
                 break;
             case UIState.Shop:
                 StartShopState();
+                break;
+            case UIState.Timeline:
+                StartTimeLineState();
                 break;
         }
     }

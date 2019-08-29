@@ -24,7 +24,7 @@ public class MonsterAttack : MonoBehaviour
     public int specialAttackNum;
     public float[] specialAttackDamage;
 
-    [Header("Attack Aggro (Choose 1)")]
+    [Header("Attack Aggro (Choose or No)")] //jika gadipilih, nyerang ketika diserang
     public bool passive; //gak nyerang musuh
     public bool aggressive; //liat musuh lgsg nyerang
 
