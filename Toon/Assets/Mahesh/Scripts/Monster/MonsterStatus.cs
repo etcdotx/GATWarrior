@@ -9,9 +9,11 @@ public class MonsterStatus : MonoBehaviour
     public Animator animator;
     public Rigidbody rigid;
     public NewMonsterMovement monsterMovement;
-    public MonsterAttack monsterAttack;
+    public IMonsterAttack monsterAttack;
     public Interactable interactable;
     public NavMeshAgent agent;
+
+    Collider collider;
 
     [Header("Setup")]
     public int enemyID;
@@ -39,10 +41,11 @@ public class MonsterStatus : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         monsterMovement = GetComponent<NewMonsterMovement>();
-        monsterAttack = GetComponent<MonsterAttack>();
+        monsterAttack = GetComponent<IMonsterAttack>();
         rigid = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         interactable = GetComponent<Interactable>();
+        collider = GetComponent<Collider>();
     }
 
     // Start is called before the first frame update
@@ -128,12 +131,11 @@ public class MonsterStatus : MonoBehaviour
     IEnumerator Dying()
     {
         //alpha
-        EndlessSpawn.instance.Spawn(nameSpawn);
+        //EndlessSpawn.instance.Spawn(nameSpawn);
 
         isDead = false;
         gameObject.tag = "Untagged";
         monsterMovement.StopAllCoroutines();
-        monsterAttack.StopAllCoroutines();
         agent.isStopped = true;
         monsterMovement.canMove = false;
         animator.SetBool("isMove", false);
@@ -141,6 +143,7 @@ public class MonsterStatus : MonoBehaviour
         yield return new WaitForSeconds(dieTime);
         rigid.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
         interactable.isInteractable = true;
+        collider.isTrigger = true;
         StartCoroutine(DestroyThis());
     }
 

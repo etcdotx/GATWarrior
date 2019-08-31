@@ -253,9 +253,9 @@ GameObject:
   - component: {fileID: 3146159619582512804}
   - component: {fileID: 8594522460336546261}
   - component: {fileID: 993176687795403176}
-  - component: {fileID: 3994311047801016558}
   - component: {fileID: 8507723539463243986}
   - component: {fileID: 2546142769898436143}
+  - component: {fileID: -8778879663952144060}
   m_Layer: 10
   m_Name: BlueSlime(Passive)
   m_TagString: Monster
@@ -377,36 +377,6 @@ MonoBehaviour:
   waitingType: 1
   minWaitTime: 1
   maxWaitTime: 5
---- !u!114 &3994311047801016558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3771417483832892462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d4c3f0945f05f41a9c75e166fa9ddd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  isAttacking: 0
-  attackNum: 0
-  damage:
-  - 5
-  haveSpecialAttack: 0
-  specialAttackChance: 0
-  specialAttackNum: 0
-  specialAttackDamage: []
-  passive: 1
-  aggressive: 0
-  playerOnSight: 0
-  onCombat: 0
-  minAttackInterval: 3
-  maxAttackInterval: 5
-  attackSuccess: 
-  startAttack: 0
-  attackCount: 0
 --- !u!114 &8507723539463243986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,11 +392,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   rigid: {fileID: 0}
   monsterMovement: {fileID: 0}
-  monsterAttack: {fileID: 0}
   interactable: {fileID: 0}
   agent: {fileID: 0}
   enemyID: 0
-  maxHp: 100
+  maxHp: 30
   dieTime: 0
   hp: 0
   playerAttack: 
@@ -459,6 +428,32 @@ MonoBehaviour:
   readAble: []
   isTalking: 0
   isItemBox: 0
+--- !u!114 &-8778879663952144060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771417483832892462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6972585267b264789e6c9148a8ba83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackNum: 0
+  damage:
+  - 5
+  haveSpecialAttack: 0
+  specialAttackChance: 0
+  specialAttackNum: 0
+  specialAttackDamage: []
+  isPassive: 1
+  isAggressive: 0
+  minAttackInterval: 3
+  maxAttackInterval: 5
+  attackSuccess: 
+  startAttack: 0
+  attackCount: 0
 --- !u!1 &3828963712284484703
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,7 +541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb37c94e7145bc34fa38c31eb5266ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterAttack: {fileID: 0}
   fieldOfViewAngle: 180
 --- !u!1 &4639822746041239387
 GameObject:

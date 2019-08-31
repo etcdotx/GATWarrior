@@ -20,6 +20,7 @@ public class CollectionQuest : ScriptableObject
 
     public Dialogue startDialogue;
     public Dialogue endDialogue;
+    public bool QuestEvent;
 
     public void Duplicate(CollectionQuest cq) {
         this.sourceID = cq.sourceID;
@@ -33,6 +34,7 @@ public class CollectionQuest : ScriptableObject
         this.isOptional = cq.isOptional;
         this.startDialogue = cq.startDialogue;
         this.endDialogue = cq.endDialogue;
+        this.QuestEvent = cq.QuestEvent;
     }
 
     public string GetGameObjectName() {
@@ -99,5 +101,12 @@ public class CollectionQuest : ScriptableObject
     public override string ToString()
     {
         return curAmount + "/" + colAmount + " " + itemToCollect.itemName + " " +verb + "ed.";
+    }
+
+    public void QuestCompleteEvent() {
+        if (id == 3)
+        {
+            SpawnSlimeKing.instance.StartEvent();
+        }
     }
 }

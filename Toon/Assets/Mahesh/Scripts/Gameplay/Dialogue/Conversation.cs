@@ -26,6 +26,11 @@ public class Conversation : MonoBehaviour
     public Button conversationButton;
     public Text conversationButtonText;
 
+    /// <summary>
+    /// untuk quest complete
+    /// </summary>
+    public CollectionQuest completedQuest; 
+
     private void Awake()
     {
         if (instance != null)
@@ -79,6 +84,7 @@ public class Conversation : MonoBehaviour
         this.target = target;
         this.npcDialog = npcDialog;
         ShowUI(haveDialogOption);
+        completedQuest = null;
 
         if (haveDialogOption)
         {
@@ -161,6 +167,8 @@ public class Conversation : MonoBehaviour
                     PlayerData.instance.collectionQuest[j].QuestComplete();
                     Inventory.instance.RefreshInventory();
 
+                    completedQuest = ScriptableObject.CreateInstance<CollectionQuest>();
+                    completedQuest.Duplicate(PlayerData.instance.collectionQuest[j]);
 
                     RemoveCompleteQuest(dialogueQuest);
                     RemoveQuestFromNpc(dialogueQuest);
@@ -262,7 +270,7 @@ public class Conversation : MonoBehaviour
         {
             DialogueOption shopDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
             shopDialogueOption.optionText.text = "Buy";
-            talkDialogueOption.dialogueType = DialogueOption.DialogueType.Shop;
+            shopDialogueOption.dialogueType = DialogueOption.DialogueType.Shop;
         }
 
         //for questdialogue
@@ -271,7 +279,7 @@ public class Conversation : MonoBehaviour
             DialogueOption newDialogueOption = Instantiate(dialogueOptionPrefab, dialogueOptionContent.transform).GetComponent<DialogueOption>();
             newDialogueOption.collectionQuest = cqList[i];
             newDialogueOption.optionText.text = cqList[i].title;
-            talkDialogueOption.dialogueType = DialogueOption.DialogueType.Quest;
+            newDialogueOption.dialogueType = DialogueOption.DialogueType.Quest;
             newDialogueOption.questIndicatorNew.SetActive(true);
             newDialogueOption.questIndicatorComplete.SetActive(false);
 
@@ -339,6 +347,10 @@ public class Conversation : MonoBehaviour
     /// </summary>
     public void EndDialog()
     {
+        if (completedQuest!=null && completedQuest.QuestEvent)
+        {
+            completedQuest.QuestCompleteEvent();
+        }
         ClearList();
         UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Gameplay));
     }

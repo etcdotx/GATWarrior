@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1d2a7092a9785441894e06d3feedcee, type: 3}
+  m_Name: Quest5
+  m_EditorClassIdentifier: 
+  sourceID: 1
+  id: 5
+  chainQuestID: 
+  colAmount: 1
+  curAmount: 0
+  itemToCollect: {fileID: 11400000, guid: f4c9201f99afac24ea4a2278966231fe, type: 2}
+  title: Collect 1 Slime+
+  verb: Collect
+  resourcePath: 
+  description: Collect 1 slime from Slime King
+  isComplete: 0
+  isOptional: 0
+  startDialogue: {fileID: 11400000, guid: 8f36f58ebd120be4bb96cde3c1b2d0bb, type: 2}
+  endDialogue: {fileID: 11400000, guid: 0a5ea84093415cd42b87df6fc7093c84, type: 2}

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MonsterSight : MonoBehaviour
 {
-    public MonsterAttack monsterAttack;
+    public IMonsterAttack monsterAttack;
     public float fieldOfViewAngle;
     private void Start()
     {
-        monsterAttack = GetComponentInParent<MonsterAttack>();
+        monsterAttack = GetComponentInParent<IMonsterAttack>();
     }
 
     private void OnTriggerStay(Collider other)

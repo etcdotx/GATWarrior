@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class MonsterMovement : MonoBehaviour
 {
     public MonsterStatus monsterStatus;
-    public MonsterAttack monsterAttack;
     public Animator anim;
     private Transform target;
     public Rigidbody rigid;
@@ -69,7 +68,6 @@ public class MonsterMovement : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         monsterStatus = GetComponent<MonsterStatus>();
-        monsterAttack = GetComponent<MonsterAttack>();
         rigid = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();

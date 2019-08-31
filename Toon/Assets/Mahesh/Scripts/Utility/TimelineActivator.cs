@@ -5,6 +5,8 @@ using UnityEngine.Playables;
 
 public class TimelineActivator : MonoBehaviour
 {
+    public static TimelineActivator instance;
+
     [Header("Camera lerp")]
     public RectTransform topBorder;
     public RectTransform bottomBorder;
@@ -19,6 +21,14 @@ public class TimelineActivator : MonoBehaviour
         newGameTimeline
     }
 
+    private void Awake()
+    {
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+    }
+
     void Start()
     {
         topBorder.localScale = new Vector3(0, 0, 0);
@@ -29,12 +39,7 @@ public class TimelineActivator : MonoBehaviour
         {
             if (GameDataBase.instance.newGame)
             {
-                UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Timeline));
-                targetY = 1f;
-                lerping = true;
-                newGameTimeline.Play();
-
-                StartCoroutine(WaitTimelineDone(newGameTimeline, UIState.Gameplay));
+                StartTimeline(newGameTimeline);
             }
         }
     }
@@ -55,6 +60,15 @@ public class TimelineActivator : MonoBehaviour
         }
     }
 
+    public void StartTimeline(PlayableDirector playableDirector) {
+        UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(UIState.Timeline));
+        targetY = 1f;
+        lerping = true;
+        playableDirector.Play();
+
+        StartCoroutine(WaitTimelineDone(playableDirector, UIState.Gameplay));
+    }
+
     /// <summary>
     /// function ketika timeline selesai
     /// </summary>
@@ -62,7 +76,7 @@ public class TimelineActivator : MonoBehaviour
     /// <param name="targetState"></param>
     /// <returns></returns>
     IEnumerator WaitTimelineDone(PlayableDirector playableDirector, UIState targetState) {
-        yield return new WaitUntil(() => newGameTimeline.state != PlayState.Playing);
+        yield return new WaitUntil(() => playableDirector.state != PlayState.Playing);
         //yield return new WaitForSeconds((float)playableDirector.duration);
         UIManager.instance.StartCoroutine(UIManager.instance.ChangeState(targetState));
         targetY = 0f;

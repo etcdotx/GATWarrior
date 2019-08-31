@@ -47,7 +47,6 @@ public class Quest : MonoBehaviour
         questDescription = questDetail.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         questObjective = questDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
     }
-
     
     void Start()
     {

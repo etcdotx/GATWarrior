@@ -1,54 +1,146 @@
 fileFormatVersion: 2
 guid: 039ac41741991494d937fa9d04311f1d
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: Cerobong
-    100002: Door_Main
-    100004: Main_House
-    100006: //RootNode
-    100008: Window.001
-    100010: Window_Main
-    100012: WindowandRoof_Main
-    100014: WindowRoof
-    400000: Cerobong
-    400002: Door_Main
-    400004: Main_House
-    400006: //RootNode
-    400008: Window.001
-    400010: Window_Main
-    400012: WindowandRoof_Main
-    400014: WindowRoof
-    2100000: Material.002
-    2100002: Material.001
-    2100004: Material.003
-    2100006: Material.004
-    2100008: Material.005
-    2100010: Roof
-    2100012: Material
-    2100014: Material.006
-    2100016: Base
-    2300000: Cerobong
-    2300002: Door_Main
-    2300004: Main_House
-    2300006: Window.001
-    2300008: Window_Main
-    2300010: WindowandRoof_Main
-    2300012: WindowRoof
-    3300000: Cerobong
-    3300002: Door_Main
-    3300004: Main_House
-    3300006: Window.001
-    3300008: Window_Main
-    3300010: WindowandRoof_Main
-    3300012: WindowRoof
-    4300000: Door_Main
-    4300002: Cerobong
-    4300004: WindowRoof
-    4300006: WindowandRoof_Main
-    4300008: Window.001
-    4300010: Window_Main
-    4300012: Main_House
+  serializedVersion: 25
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Cerobong
+  - first:
+      1: 100002
+    second: Door_Main
+  - first:
+      1: 100004
+    second: Main_House
+  - first:
+      1: 100006
+    second: //RootNode
+  - first:
+      1: 100008
+    second: Window.001
+  - first:
+      1: 100010
+    second: Window_Main
+  - first:
+      1: 100012
+    second: WindowandRoof_Main
+  - first:
+      1: 100014
+    second: WindowRoof
+  - first:
+      4: 400000
+    second: Cerobong
+  - first:
+      4: 400002
+    second: Door_Main
+  - first:
+      4: 400004
+    second: Main_House
+  - first:
+      4: 400006
+    second: //RootNode
+  - first:
+      4: 400008
+    second: Window.001
+  - first:
+      4: 400010
+    second: Window_Main
+  - first:
+      4: 400012
+    second: WindowandRoof_Main
+  - first:
+      4: 400014
+    second: WindowRoof
+  - first:
+      21: 2100000
+    second: Material.002
+  - first:
+      21: 2100002
+    second: Material.001
+  - first:
+      21: 2100004
+    second: Material.003
+  - first:
+      21: 2100006
+    second: Material.004
+  - first:
+      21: 2100008
+    second: Material.005
+  - first:
+      21: 2100010
+    second: Roof
+  - first:
+      21: 2100012
+    second: Material
+  - first:
+      21: 2100014
+    second: Material.006
+  - first:
+      21: 2100016
+    second: Base
+  - first:
+      23: 2300000
+    second: Cerobong
+  - first:
+      23: 2300002
+    second: Door_Main
+  - first:
+      23: 2300004
+    second: Main_House
+  - first:
+      23: 2300006
+    second: Window.001
+  - first:
+      23: 2300008
+    second: Window_Main
+  - first:
+      23: 2300010
+    second: WindowandRoof_Main
+  - first:
+      23: 2300012
+    second: WindowRoof
+  - first:
+      33: 3300000
+    second: Cerobong
+  - first:
+      33: 3300002
+    second: Door_Main
+  - first:
+      33: 3300004
+    second: Main_House
+  - first:
+      33: 3300006
+    second: Window.001
+  - first:
+      33: 3300008
+    second: Window_Main
+  - first:
+      33: 3300010
+    second: WindowandRoof_Main
+  - first:
+      33: 3300012
+    second: WindowRoof
+  - first:
+      43: 4300000
+    second: Door_Main
+  - first:
+      43: 4300002
+    second: Cerobong
+  - first:
+      43: 4300004
+    second: WindowRoof
+  - first:
+      43: 4300006
+    second: WindowandRoof_Main
+  - first:
+      43: 4300008
+    second: Window.001
+  - first:
+      43: 4300010
+    second: Window_Main
+  - first:
+      43: 4300012
+    second: Main_House
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -82,7 +174,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
@@ -91,18 +183,19 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -111,10 +204,11 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -124,6 +218,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

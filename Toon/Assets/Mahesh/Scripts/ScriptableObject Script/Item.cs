@@ -114,7 +114,7 @@ public class Item : ScriptableObject
             PlayerStatus.instance.RefreshHp();
             return;
         }
-        if (itemName.ToLower().Equals("hipotion".ToLower()))
+        if (itemName.ToLower().Equals("hi potion".ToLower()))
         {
             quantity--;
             PlayerStatus.instance.curHealth += 50;

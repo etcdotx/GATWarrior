@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceID: 1
   id: 1
-  chainQuestID: 02000000
+  chainQuestID: 0200000005000000
   colAmount: 3
   curAmount: 0
   itemToCollect: {fileID: 11400000, guid: 4731b9f1b4434f940b224f5a47cb5294, type: 2}
@@ -26,3 +26,4 @@ MonoBehaviour:
   isOptional: 0
   startDialogue: {fileID: 11400000, guid: 8292cc74e0820944eb9b0be2858c73c5, type: 2}
   endDialogue: {fileID: 11400000, guid: ae199680f67489e4ca73a7f030454882, type: 2}
+  QuestEvent: 0

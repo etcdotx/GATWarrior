@@ -31,7 +31,7 @@ public class UsableItem : MonoBehaviour
     public bool isUsingItem;
 
     List<Item> usableItemList = new List<Item>();
-    Item selectedItem;
+    public Item selectedItem; //item yang lagi di select
     bool isItemUsable;
 
     private void Awake()

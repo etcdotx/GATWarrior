@@ -170,7 +170,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 08a2f079b9b45a44bae3a6c9ee389a82, type: 2}
+  - {fileID: 2100000, guid: 5a338fbc2e6d33945a9054b30afc542b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -253,11 +253,11 @@ GameObject:
   - component: {fileID: 3146159619582512804}
   - component: {fileID: 8594522460336546261}
   - component: {fileID: 993176687795403176}
-  - component: {fileID: 3994311047801016558}
   - component: {fileID: 8507723539463243986}
   - component: {fileID: 2546142769898436143}
+  - component: {fileID: -7084634476794395217}
   m_Layer: 10
-  m_Name: RedSlime(Aggressive)
+  m_Name: YellowSlime(Aggressive)
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,36 +377,6 @@ MonoBehaviour:
   waitingType: 1
   minWaitTime: 1
   maxWaitTime: 5
---- !u!114 &3994311047801016558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3771417483832892462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d4c3f0945f05f41a9c75e166fa9ddd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  isAttacking: 0
-  attackNum: 0
-  damage:
-  - 5
-  haveSpecialAttack: 0
-  specialAttackChance: 0
-  specialAttackNum: 0
-  specialAttackDamage: []
-  passive: 0
-  aggressive: 1
-  playerOnSight: 0
-  onCombat: 0
-  minAttackInterval: 2
-  maxAttackInterval: 4
-  attackSuccess: 
-  startAttack: 0
-  attackCount: 0
 --- !u!114 &8507723539463243986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,7 +392,6 @@ MonoBehaviour:
   animator: {fileID: 0}
   rigid: {fileID: 0}
   monsterMovement: {fileID: 0}
-  monsterAttack: {fileID: 0}
   interactable: {fileID: 0}
   agent: {fileID: 0}
   enemyID: 0
@@ -459,6 +428,32 @@ MonoBehaviour:
   readAble: []
   isTalking: 0
   isItemBox: 0
+--- !u!114 &-7084634476794395217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771417483832892462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6972585267b264789e6c9148a8ba83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackNum: 0
+  damage:
+  - 5
+  haveSpecialAttack: 0
+  specialAttackChance: 0
+  specialAttackNum: 0
+  specialAttackDamage: []
+  isPassive: 0
+  isAggressive: 1
+  minAttackInterval: 4
+  maxAttackInterval: 10
+  attackSuccess: 
+  startAttack: 0
+  attackCount: 0
 --- !u!1 &3828963712284484703
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,7 +541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb37c94e7145bc34fa38c31eb5266ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterAttack: {fileID: 0}
   fieldOfViewAngle: 180
 --- !u!1 &4639822746041239387
 GameObject:

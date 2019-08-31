@@ -21,6 +21,8 @@ public class CharacterInput : MonoBehaviour
     public bool combatMode;
     public bool turningBack;
 
+    public float rollCooldown;
+
     public AudioSource lightAttack;
     public AudioSource heavyAttack;
 
@@ -136,10 +138,17 @@ public class CharacterInput : MonoBehaviour
 
     void Roll()
     {
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0) && !isRolling)
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) && !isRolling && rollCooldown==0)
         {
             animator.SetTrigger("roll");
+            rollCooldown = 1;
+            StartCoroutine(RollCooldown());
         }
+    }
+
+    IEnumerator RollCooldown() {
+        yield return new WaitForSeconds(0.75f);
+        rollCooldown = 0;
     }
 
     void DrawOrSheathe()

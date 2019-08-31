@@ -7,7 +7,7 @@ public class NewMonsterMovement : MonoBehaviour
 
     NavMeshAgent agent;
     Animator animator;
-    MonsterAttack monsterAttack;
+    IMonsterAttack monsterAttack;
 
     [Header("Movement Settings")]
     public bool canMove; //jika dia bisa berpindah posisi
@@ -38,7 +38,7 @@ public class NewMonsterMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        monsterAttack = GetComponent<MonsterAttack>();
+        monsterAttack = GetComponent<IMonsterAttack>();
     }
 
     private void Start()
