@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceID: 1
   id: 3
-  chainQuestID: 
+  chainQuestID: 05000000
   colAmount: 3
   curAmount: 0
   itemToCollect: {fileID: 11400000, guid: d7023ddf8efc92b48bd9c7535b0af61a, type: 2}

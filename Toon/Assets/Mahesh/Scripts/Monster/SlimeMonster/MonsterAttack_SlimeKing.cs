@@ -41,6 +41,8 @@ public class MonsterAttack_SlimeKing : MonoBehaviour, IMonsterAttack
     public bool startAttack;
     public int attackCount;
 
+    public GameObject endGame;
+
 
     /// <summary>
     /// 1. green slime
@@ -63,6 +65,7 @@ public class MonsterAttack_SlimeKing : MonoBehaviour, IMonsterAttack
         aggressive = isAggressive;
         isAttacking = false;
         hitbox.enabled = false;
+        endGame.SetActive(false);
     }
 
     public void Update()
@@ -92,6 +95,9 @@ public class MonsterAttack_SlimeKing : MonoBehaviour, IMonsterAttack
             {
                 CheckAttackCollider();
             }
+        }
+        else {
+            endGame.SetActive(true);
         }
 
         if (onCombat)

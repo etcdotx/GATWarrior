@@ -433,8 +433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb5b7f8f9c02bab4eadf66cecd77baf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ddolGamePrefab: {fileID: 8212134358250303648, guid: 20a75f552e5f4134baedf69ea3adc324,
-    type: 3}
   saveSlotText:
   - {fileID: 48807609}
   - {fileID: 65522019}
