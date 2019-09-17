@@ -645,10 +645,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: ad00986c-2baa-492f-a4ae-4f29f6120597
+  cloudProjectId: e1870dc7-7a07-4cff-9eaf-400a8c6534a3
   framebufferDepthMemorylessMode: 0
-  projectName: Toon
-  organizationId: etcdot
+  projectName: Brave of the Wildlands
+  organizationId: maheshputra
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
