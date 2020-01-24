@@ -1,6 +1,6 @@
 # GATWarrior
 
-Game : https://github.com/etcdotx/GATWarrior/archive/v1.0.zip
+Game : https://drive.google.com/open?id=1AgsFTmfd25TlkWe7yRo2BCz-1kdKYE9G
 
 Mahendra Trianto Putra (Gameplay Programmer)
 
