@@ -7,3 +7,17 @@ Mahendra Trianto Putra (Gameplay Programmer)
 Vincent Kaiuman (Technical Artist + Enviorment Programmer)
 
 Control:
+
+Y : Weapon/Attack
+
+X : Item use
+
+RT: Run
+
+RB: Shield
+
+A: Dodge
+
+LT: Lock
+
+LB+X/B : Change item
